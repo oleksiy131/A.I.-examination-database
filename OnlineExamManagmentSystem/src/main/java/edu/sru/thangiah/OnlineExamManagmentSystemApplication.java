@@ -10,7 +10,7 @@ public class OnlineExamManagmentSystemApplication {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
 		System.out.println("OEMS DEMO");
 		
-		System.out.println("test commit...");
+		System.out.println("This is a pull requesting test !!!");
 	}
 
 }
