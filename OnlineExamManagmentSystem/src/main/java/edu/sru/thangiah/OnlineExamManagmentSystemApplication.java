@@ -8,6 +8,7 @@ public class OnlineExamManagmentSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
+		System.out.println("OEMS DEMO");
 	}
 
 }
