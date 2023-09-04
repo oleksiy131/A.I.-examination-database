@@ -22,34 +22,34 @@ import edu.sru.thangiah.oems.repository.StudentRepository;
 public class StudentController {
 	//set up a UserRepositoty variable
 
-	private StudentRepository userRepository;
+	private StudentRepository studentRepository;
     
 	//create an UserRepository instance - instantiation (new) is done by Spring
-    public StudentController(StudentRepository userRepository) {
-		this.userRepository = userRepository;
+    public StudentController(StudentRepository studentRepository) {
+		this.studentRepository = studentRepository;
 	}
     
     //Mapping for the /index URL when initiated through Tomcat
     @RequestMapping({"/index"})
     public String showUserList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        return "index";
+        model.addAttribute("students", studentRepository.findAll());
+        return "users";
     }
 
     //Mapping for the /signup URL - calls the add-user HTML, to add a user
 	@RequestMapping({"/signup"})
     public String showSignUpForm(Student user) {
-        return "add-user";
+        return "signup_form";
     }
     
 	//Mapping for the /signup URL - to add a user
     @RequestMapping({"/adduser"})
     public String addUser(@Validated Student user, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "add-user";
+            return "registration_success";
         }
         
-        userRepository.save(user);
+        studentRepository.save(user);
         return "redirect:/index";
     }
     
@@ -57,7 +57,7 @@ public class StudentController {
     //Mapping for the /edit/user URL to edit a user 
     @GetMapping("/edit/{id}")
     public String showUpdateForm(@PathVariable("id") long id, Model model) {
-    	Student student = userRepository.findById(id)
+    	Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
         
         model.addAttribute("student", student);
@@ -73,16 +73,16 @@ public class StudentController {
             return "update-student";
         }
             
-        userRepository.save(student);
+        studentRepository.save(student);
         return "redirect:/index";
     }
     
     //Mapping for the /delete/id URL to delete a user     
     @GetMapping("/delete/{id}")
     public String deleteStudent(@PathVariable("id") long id, Model model) {
-    	Student student = userRepository.findById(id)
+    	Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid student Id:" + id));
-        userRepository.delete(student);
+    	studentRepository.delete(student);
         return "redirect:/index";
     }
 }
