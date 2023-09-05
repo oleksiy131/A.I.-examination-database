@@ -20,35 +20,56 @@ public class Administrator {
     private String AdministratorUsername;
     @NonNull
     private String AdministratorPassword;
+    @NonNull
+    private String FirstName;
+    @NonNull
+    private String LastName;
     
-    // Getter for Administrator ID
-    public Long getAdministratorID() {
+    //Getter for AdministratorID
+	public Long getAdministratorID() {
 		return AdministratorID;
-			
 	}
-    
-    // Setter for Administrator ID
-	public void setAdministratorID(Long AdministratorID) {
-		this.AdministratorID = AdministratorID;
+	//Setter for AdministratorID
+	public void setAdministratorID(Long administratorID) {
+		AdministratorID = administratorID;
 	}
 	
-    // Getter for Administrator Username
+	//Getter for AdministratorUsername
 	public String getAdministratorUsername() {
 		return AdministratorUsername;
 	}
-	
-    // Setter for Administrator Username
-	public void setAdministratorUsernamee(String AdministratorUsername) {
-		this.AdministratorUsername = AdministratorUsername;
+	//Setter for AdministratorUsername
+	public void setAdministratorUsername(String administratorUsername) {
+		AdministratorUsername = administratorUsername;
 	}
-    // Getter for Administrator Password
+	
+	//Getter for AdministratorPassword
 	public String getAdministratorPassword() {
 		return AdministratorPassword;
 	}
-    // Setter for Administrator Password
-	public void setAdministratorPassword(String AdministratorPassword) {
-		this.AdministratorPassword = AdministratorPassword;
+	//Setter for AdministratorPassword
+	public void setAdministratorPassword(String administratorPassword) {
+		AdministratorPassword = administratorPassword;
 	}
+	
+	//Getter for First Name
+	public String getFirstName() {
+		return FirstName;
+	}
+	//Setter for First Name 
+	public void setFirstName(String firstName) {
+		FirstName = firstName;
+	}
+	
+	//Getter for Last Name
+	public String getLastName() {
+		return LastName;
+	}
+	//Getter for Last Name
+	public void setLastName(String lastName) {
+		LastName = lastName;
+	}
+    
 
     // Constructors, getters, and setters, will eventually add more 
 }
