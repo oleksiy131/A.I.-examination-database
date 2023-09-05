@@ -6,7 +6,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
     </head>
 
     <body>
@@ -80,13 +80,12 @@
 
     </body>
 
-	<!-- this iframe references the sidepanel view to include it into the main screen view-->
+	<!-- this iframe references the sidepanel view to include it into the main screen view -->
     <iframe 
-    id = "sidebariframe"
-    src="sidebar.html" 
+    th:src="@{sidebar.html}"
     frameborder="1"
     width="25%"
-    height="670">
-    </iframe>
-    
+    height="670"/>
+ 
+   
 </html>
