@@ -8,20 +8,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-/*
- * Structure for the database to hold the information on the user
- * 
- * @Entity, @Id and @Generated value should be from the javax.persistence library
- * @NonNull is from the org.springwork library 
- * 
- * As the User class is designated as a @Entity, the JPA (Java Persistence API), which is Hibernate, will be able to perform CRUD 
- * (Create, Read, Update, Delete) operations on the domain entities.
- * 
- * The name and e-mail have been constrained to @NoNull values and allows the Hibernate Validator for validating the constrained
- * fields before persisting or updating an entity to the database.
- */
-
-
 @Entity
 public class Student {
     
