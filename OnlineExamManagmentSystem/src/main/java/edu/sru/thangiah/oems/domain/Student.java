@@ -24,6 +24,7 @@ public class Student {
     @NonNull
     private String password;
     
+
     @NonNull
     private String username;
     
@@ -60,6 +61,7 @@ public class Student {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 
 	public String getUsername() {
 		return username;
