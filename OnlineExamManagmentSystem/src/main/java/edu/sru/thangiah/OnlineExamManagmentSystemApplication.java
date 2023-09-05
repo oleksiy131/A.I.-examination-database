@@ -12,5 +12,4 @@ public class OnlineExamManagmentSystemApplication {
 		
 		System.out.println("This is a pull requesting test !!!");
 	}
-
 }
