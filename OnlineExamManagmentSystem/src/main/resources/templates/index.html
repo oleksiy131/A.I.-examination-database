@@ -1,19 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Homepage</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Welcome to the examination software</title>
+    <!--  -->
 </head>
 <body>
-    <div class="container text-center">
-        <h1>Please Select an Option!</h1>
-        <h3><a th:href="@{/users}">List of Users</a></h3>
-        <h3><a th:href="@{/register}">Register</a></h3>
-        <h3><a th:href="@{/login}">Login</a></h3>
-    </div>
-     
+    <h2>Welcome to the Examination Software</h2>
+    <p>Please select your role:</p>
+    
+    <form action="/select-role" method="post">
+        <label for="role">Role:</label>
+        <select id="role" name="role">
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+            <option value="admin">Administrator</option>
+        </select><br><br>
+        
+        <input type="submit" value="Submit">
+    </form>
 </body>
 </html>
