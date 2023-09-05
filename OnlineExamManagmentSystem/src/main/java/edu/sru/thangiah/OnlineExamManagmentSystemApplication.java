@@ -17,5 +17,4 @@ public class OnlineExamManagmentSystemApplication {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
 		
 	}
-
 }

@@ -1,19 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Homepage</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Welcome to My Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            margin: 100px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
-    <div class="container text-center">
-        <h1>Please Select an Option!</h1>
-        <h3><a th:href="@{/users}">List of Users</a></h3>
-        <h3><a th:href="@{/register}">Register</a></h3>
-        <h3><a th:href="@{/login}">Login</a></h3>
+    <div class="container">
+        <h1>Welcome to My Application</h1>
+        <p>This is the homepage of our application. You can navigate to the following sections:</p>
+        <ul>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            <!-- Add more links to different parts of your application as needed -->
+        </ul>
     </div>
-     
 </body>
 </html>
