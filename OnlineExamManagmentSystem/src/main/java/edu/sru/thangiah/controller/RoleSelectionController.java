@@ -17,7 +17,7 @@ public class RoleSelectionController {
         } else if ("instructor".equals(selectedRole)) {
             return "redirect:/instructorlogin"; // Redirect Instructor to login page
         } else if ("admin".equals(selectedRole)) {
-            return "redirect:/adminlogin"; // Redirect Administrator to login page
+            return "redirect:/administratorlogin"; // Redirect Administrator to login page
         } else {
             // Handle invalid or unrecognized roles here (e.g., show an error message)
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid role selected");

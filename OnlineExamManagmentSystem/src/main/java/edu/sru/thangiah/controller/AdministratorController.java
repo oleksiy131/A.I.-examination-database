@@ -4,11 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class InstructorController {
+public class AdministratorController {
 
-    @GetMapping("/instructorlogin")
+    @GetMapping("/administratorlogin")
     public String showLoginPage() {
-        return "instructorlogin"; // Return the login.html template
+        return "administratorlogin"; // Return the login.html template
     }
 
 }
