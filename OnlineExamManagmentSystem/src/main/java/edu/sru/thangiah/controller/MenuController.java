@@ -7,7 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MenuController {
 	@RequestMapping("/navbar")
-    public String showLoginPage() {
-        return "navbar"; // Return the login.html template
+    public String showMainScreen() {
+        return "navbar"; 
+    }
+	
+	@RequestMapping("/sidebar")
+    public String showSidebar() {
+        return "sidebar"; 
+    }
+	
+	@RequestMapping("/exit")
+    public String exitProgram() {
+        return "index"; 
     }
 }
