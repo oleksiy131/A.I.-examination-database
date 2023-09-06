@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import edu.sru.thangiah.oems.domain.Administrator;
-import edu.sru.thangiah.oems.repository.AdministratorRepository;
+
+import edu.sru.thangiah.domain.Administrator;
+import edu.sru.thangiah.repository.AdministratorRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 

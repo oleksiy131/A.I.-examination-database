@@ -1,8 +1,8 @@
-package edu.sru.thangiah.oems.repository;
+package edu.sru.thangiah.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import edu.sru.thangiah.oems.domain.Student;
+import edu.sru.thangiah.domain.Student;
 
 
 

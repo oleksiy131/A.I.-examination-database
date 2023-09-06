@@ -1,4 +1,4 @@
-package edu.sru.thangiah.oems.domain;
+package edu.sru.thangiah.domain;
 
 
 import org.springframework.lang.NonNull;
@@ -8,8 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
 @Entity
-public class Student {
+public class Instructor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -61,7 +62,6 @@ public class Student {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 
 	public String getUsername() {
 		return username;

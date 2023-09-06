@@ -6,10 +6,11 @@
 
 
 
-package edu.sru.thangiah.oems.repository;
+package edu.sru.thangiah.repository;
 
-import edu.sru.thangiah.oems.domain.Administrator;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import edu.sru.thangiah.domain.Administrator;
 
 public interface AdministratorRepository extends JpaRepository<Administrator, Long> {
     // Add custom query methods here:

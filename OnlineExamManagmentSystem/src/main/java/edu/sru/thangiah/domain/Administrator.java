@@ -1,4 +1,4 @@
-package edu.sru.thangiah.oems.domain;
+package edu.sru.thangiah.domain;
 
 
 import org.springframework.lang.NonNull;
@@ -8,9 +8,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
 @Entity
-public class Instructor {
+public class Administrator {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,10 +23,6 @@ public class Instructor {
     
     @NonNull
     private String password;
-    
-
-    @NonNull
-    private String username;
     
     
 
@@ -62,17 +57,12 @@ public class Instructor {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
 	
 	
 
     // standard constructors / setters / getters / toString
 }
+/* Java Persistence is the API for the management for persistence and object/relational mapping.   */
+/* https://docs.oracle.com/javaee/7/api/javax/persistence/package-summary.html#package.description */
+/* */
+/* */
