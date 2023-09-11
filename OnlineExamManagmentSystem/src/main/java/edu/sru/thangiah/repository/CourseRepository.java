@@ -10,5 +10,5 @@ import edu.sru.thangiah.domain.Course;
 
 public interface CourseRepository extends CrudRepository<Course, Long> {
 	
-	List<Course> findByCourseNameContaining(String name);
+	List<Course> findByIdContaining(Long Id);
 }
