@@ -1,10 +1,18 @@
 package edu.sru.thangiah.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.StudentRepository;
+
+@RestController
+@RequestMapping("/student/course")
 public class StudentController {
+	
+	private StudentRepository studentRepository;
+	private CourseRepository courseRepository;
 
     @GetMapping("/studentlogin")
     public String showLoginPage() {
@@ -15,4 +23,6 @@ public class StudentController {
     public String showRegistrationPage() {
         return "register"; // Return the register.html template
     }
+    
+    
 }
