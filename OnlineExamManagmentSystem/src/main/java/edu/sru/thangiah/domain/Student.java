@@ -1,28 +1,42 @@
 package edu.sru.thangiah.domain;
 
 
-import javax.persistence.JoinTable;
+import java.util.Set;
 
 import org.springframework.lang.NonNull;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.JoinColumn;
+import jakarta.persistence.Table;
+import jakarta.persistence.criteria.Fetch;
 
 @Entity
+@Table(name = "STUDENT_TBL")
+
 public class Student {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long studentId;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "STUDENT_COURSE_TABLE", 
+    joinColumns = {
+    		@JoinColumn(name = "student_id", referencedColumnName = "studentId")
+    },
+    inverseJoinColumns = {
+    		@JoinColumn(name = "course_id", referencedColumnName = "id")
+    })
+    
+    private Set<Course> courses;
     
     @NonNull
     @Column (name = "first_name")

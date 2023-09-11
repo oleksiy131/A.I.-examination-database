@@ -14,6 +14,7 @@ import jakarta.persistence.ManyToMany;
 
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.JoinColumn;
@@ -109,6 +110,19 @@ public class Instructor {
 	public void setCreditsTaught(float creditsTaught) {
 		this.creditsTaught = creditsTaught;
 	}
+	
+	public void addTeachingCourse(Course course) {
+	    teachingCourses.add(course);
+	}
+
+	public void removeTeachingCourse(Course course) {
+	    teachingCourses.remove(course);
+	}
+
+	public LinkedList<Course> getTeachingCourses() {
+	    return teachingCourses;
+	}
+
     
 	
 	
