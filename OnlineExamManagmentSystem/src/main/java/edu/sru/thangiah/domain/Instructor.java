@@ -3,6 +3,7 @@ package edu.sru.thangiah.domain;
 
 import org.springframework.lang.NonNull;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,66 +14,88 @@ import jakarta.persistence.Id;
 public class Instructor {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long instructorId;
     
     @NonNull
-    private String name;
+    @Column(name = "first_name")
+    private String instructorFirstName;
     
     @NonNull
-    private String email;
+    @Column(name = "last_name")
+    private String instructorLastName;
     
     @NonNull
-    private String password;
+    @Column(name = "email")
+    private String instructorEmail;
     
-
     @NonNull
-    private String username;
+    @Column(name = "password")
+    private String instructorPassword;
     
+    @NonNull 
+    @Column(name = "username")
+    private String instructorUsername;
     
+    @NonNull 
+    @Column(name = "credits_taught")
+    private float creditsTaught;
 
-	public long getId() {
-		return id;
+	public long getInstructorId() {
+		return instructorId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setInstructorId(long instructorId) {
+		this.instructorId = instructorId;
 	}
 
-	public String getName() {
-		return name;
+	public String getInstructorFirstName() {
+		return instructorFirstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setInstructorFirstName(String instructorFirstName) {
+		this.instructorFirstName = instructorFirstName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getInstructorLastName() {
+		return instructorLastName;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setInstructorLastName(String instructorLastName) {
+		this.instructorLastName = instructorLastName;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getInstructorEmail() {
+		return instructorEmail;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setInstructorEmail(String instructorEmail) {
+		this.instructorEmail = instructorEmail;
 	}
 
-	public String getUsername() {
-		return username;
+	public String getInstructorPassword() {
+		return instructorPassword;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setInstructorPassword(String instructorPassword) {
+		this.instructorPassword = instructorPassword;
 	}
-	
-	
-	
 
+	public String getInstructorUsername() {
+		return instructorUsername;
+	}
+
+	public void setInstructorUsername(String instructorUsername) {
+		this.instructorUsername = instructorUsername;
+	}
+
+	public float getCreditsTaught() {
+		return creditsTaught;
+	}
+
+	public void setCreditsTaught(float creditsTaught) {
+		this.creditsTaught = creditsTaught;
+	}
+    
     // standard constructors / setters / getters / toString
 }

@@ -3,6 +3,7 @@ package edu.sru.thangiah.domain;
 
 import org.springframework.lang.NonNull;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,67 +13,88 @@ import jakarta.persistence.Id;
 public class Student {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long studentId;
     
     @NonNull
-    private String name;
+    @Column (name = "first_name")
+    private String studentFirstName;
     
     @NonNull
-    private String email;
+    @Column (name = "last_name")
+    private String studentLastName;
     
     @NonNull
-    private String password;
+    @Column (name = "email")
+    private String studentEmail;
     
-
     @NonNull
-    private String username;
+    @Column (name = "password")
+    private String studentPassword;
     
+    @NonNull
+    @Column (name = "username")
+    private String studentUsername;
     
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	
-	
-
+    @NonNull
+    @Column (name = "enrolled_credits")
+    private float creditsTaken;
+    
     // standard constructors / setters / getters / toString
+
+	public long getStudentId() {
+		return studentId;
+	}
+
+	public void setStudentId(long studentId) {
+		this.studentId = studentId;
+	}
+
+	public String getStudentFirstName() {
+		return studentFirstName;
+	}
+
+	public void setStudentFirstName(String studentFirstName) {
+		this.studentFirstName = studentFirstName;
+	}
+
+	public String getStudentLastName() {
+		return studentLastName;
+	}
+
+	public void setStudentLastName(String studentLastName) {
+		this.studentLastName = studentLastName;
+	}
+
+	public String getStudentEmail() {
+		return studentEmail;
+	}
+
+	public void setStudentEmail(String studentEmail) {
+		this.studentEmail = studentEmail;
+	}
+
+	public String getStudentPassword() {
+		return studentPassword;
+	}
+
+	public void setStudentPassword(String studentPassword) {
+		this.studentPassword = studentPassword;
+	}
+
+	public String getStudentUsername() {
+		return studentUsername;
+	}
+
+	public void setStudentUsername(String studentUsername) {
+		this.studentUsername = studentUsername;
+	}
+
+	public float getCreditsTaken() {
+		return creditsTaken;
+	}
+
+	public void setCreditsTaken(float creditsTaken) {
+		this.creditsTaken = creditsTaken;
+	}
 }
