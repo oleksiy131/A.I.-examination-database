@@ -1,6 +1,8 @@
 package edu.sru.thangiah.domain;
 
 
+import javax.persistence.JoinTable;
+
 import org.springframework.lang.NonNull;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.JoinColumn;
+
 
 
 @Entity
@@ -97,5 +106,18 @@ public class Instructor {
 		this.creditsTaught = creditsTaught;
 	}
     
+	@ManyToMany
+    @JoinTable(
+        name = "instructor_teaching_class", //name of the join table
+        joinColumns = @JoinColumn(name = "instructorId"),  // The column in the join table linking to instructors
+        inverseJoinColumns = @JoinColumn(name = "teaching_class_id") // The column in the join table linking to teaching classes
+    )
+    private Set<TeachingClass> teachingClasses = new HashSet<>();
+
+	public Set<TeachingClass> getTeachingClasses() {
+		// TODO Auto-generated method stub
+		return teachingClasses;
+	}
+	
     // standard constructors / setters / getters / toString
 }
