@@ -3,6 +3,7 @@ package edu.sru.thangiah.domain;
 
 import org.springframework.lang.NonNull;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,50 +13,75 @@ import jakarta.persistence.Id;
 public class Administrator {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long adminId;
     
     @NonNull
-    private String name;
+    @Column (name = "first_name")
+    private String adminFirstName;
     
     @NonNull
-    private String email;
+    @Column (name = "last_name")
+    private String adminLastName;
     
     @NonNull
-    private String password;
+    @Column (name = "email")
+    private String adminEmail;
     
+    @NonNull
+    @Column (name = "password")
+    private String adminPassword;
     
+    @NonNull
+    @Column (name = "username")
+    private String adminUsername;
 
-	public long getId() {
-		return id;
+	public long getAdminId() {
+		return adminId;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setAdminId(long adminId) {
+		this.adminId = adminId;
 	}
 
-	public String getName() {
-		return name;
+	public String getAdminFirstName() {
+		return adminFirstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setAdminFirstName(String adminFirstName) {
+		this.adminFirstName = adminFirstName;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getAdminLastName() {
+		return adminLastName;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setAdminLastName(String adminLastName) {
+		this.adminLastName = adminLastName;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getAdminEmail() {
+		return adminEmail;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setAdminEmail(String adminEmail) {
+		this.adminEmail = adminEmail;
+	}
+
+	public String getAdminPassword() {
+		return adminPassword;
+	}
+
+	public void setAdminPassword(String adminPassword) {
+		this.adminPassword = adminPassword;
+	}
+
+	public String getAdminUsername() {
+		return adminUsername;
+	}
+
+	public void setAdminUsername(String adminUsername) {
+		this.adminUsername = adminUsername;
 	}
 	
 	
