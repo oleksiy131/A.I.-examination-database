@@ -55,6 +55,12 @@ public class AdministratorController {
         // Save the Administrator object to the repository and return the saved user.
         return administratorRepository.save(administrator);
     }
+    
+    @GetMapping("/exams")
+    public String examsPage() {
+        // Implement your logic to display the list of exams here
+        return "exams"; // This should be the name of your HTML template for the exams page
+    }
 
 }
 
