@@ -33,6 +33,8 @@ public class OnlineExamManagmentSystemApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
 		
+		
+		
 	}
 }
 
