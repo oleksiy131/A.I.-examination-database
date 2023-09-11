@@ -10,20 +10,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.sru.thangiah.domain.TeachingClass;
-import edu.sru.thangiah.service.InstructorService;
+import edu.sru.thangiah.domain.Course;
 
 @RestController
 @RequestMapping("/instructors")
 public class InstructorController {
 
-    @Autowired
-    private InstructorService instructorService;
 
-    @GetMapping("/{instructorId}/teaching-classes")
-    public ResponseEntity<Set<TeachingClass>> getTeachingClasses(@PathVariable Long instructorId) {
-        Set<TeachingClass> teachingClasses = instructorService.getTeachingClasses(instructorId);
-        return ResponseEntity.ok(teachingClasses);
-    }
 }
 

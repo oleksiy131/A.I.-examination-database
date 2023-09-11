@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import javax.persistence.JoinColumn;
@@ -25,6 +26,9 @@ public class Instructor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long instructorId;
+    
+    @NonNull
+    private LinkedList<Course> teachingCourses = new LinkedList<>();
     
     @NonNull
     @Column(name = "first_name")
@@ -106,18 +110,7 @@ public class Instructor {
 		this.creditsTaught = creditsTaught;
 	}
     
-	@ManyToMany
-    @JoinTable(
-        name = "instructor_teaching_class", //name of the join table
-        joinColumns = @JoinColumn(name = "instructorId"),  // The column in the join table linking to instructors
-        inverseJoinColumns = @JoinColumn(name = "teaching_class_id") // The column in the join table linking to teaching classes
-    )
-    private Set<TeachingClass> teachingClasses = new HashSet<>();
-
-	public Set<TeachingClass> getTeachingClasses() {
-		// TODO Auto-generated method stub
-		return teachingClasses;
-	}
+	
 	
     // standard constructors / setters / getters / toString
 }

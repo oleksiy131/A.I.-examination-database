@@ -1,6 +1,8 @@
 package edu.sru.thangiah.domain;
 
 
+import javax.persistence.JoinTable;
+
 import org.springframework.lang.NonNull;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.JoinColumn;
 
 @Entity
 public class Student {
@@ -97,4 +105,11 @@ public class Student {
 	public void setCreditsTaken(float creditsTaken) {
 		this.creditsTaken = creditsTaken;
 	}
+	
+	
+
+    // Other student properties and methods
+
+	
+	
 }

@@ -9,12 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class TeachingClass {
+public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private String className;
+    private String courseName;
 
 	public Long getId() {
 		return id;
@@ -25,11 +25,11 @@ public class TeachingClass {
 	}
 
 	public String getClassName() {
-		return className;
+		return courseName;
 	}
 
 	public void setClassName(String className) {
-		this.className = className;
+		this.courseName = className;
 	}
     
     
