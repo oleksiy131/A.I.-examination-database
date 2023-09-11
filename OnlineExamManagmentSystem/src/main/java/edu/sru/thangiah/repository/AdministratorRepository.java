@@ -8,10 +8,11 @@
 
 package edu.sru.thangiah.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+
 import edu.sru.thangiah.domain.Administrator;
 
-public interface AdministratorRepository extends JpaRepository<Administrator, Long> {
+public interface AdministratorRepository extends CrudRepository<Administrator, Long> {
     // Add custom query methods here:
 }
 
