@@ -58,9 +58,14 @@ public class AdministratorController {
     
     @GetMapping("/exams")
     public String examsPage() {
-        // Implement your logic to display the list of exams here
-        return "exams"; // This should be the name of your HTML template for the exams page
+        // display the list of exams here
+        return "exams"; // the name of the HTML template for the exams page
     }
-
+    
+    @GetMapping("/classes")
+    public String classesPage() {
+        // displays the list of classes here
+        return "classes"; // the name of the HTML template for the classes page
+    }
 }
 
