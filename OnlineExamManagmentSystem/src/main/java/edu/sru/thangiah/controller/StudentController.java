@@ -56,6 +56,4 @@ public class StudentController
 		return courseRepository.findByIdContaining(id);
 	}
 	
-	
-	
 }
