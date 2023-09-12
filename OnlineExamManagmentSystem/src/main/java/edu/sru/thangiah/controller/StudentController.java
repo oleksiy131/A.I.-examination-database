@@ -30,12 +30,13 @@ public class StudentController
 		this.courseRepository = courseRepository; 
 	}
 	
+	
 	@PostMapping
 	public Student saveStudentWithCourse(@RequestBody Student student) {
 		return studentRepository.save(student);
 	}
 	
-	@GetMapping
+	@GetMapping("/students")
 	public List<Student> findAllStudents() {
 		return studentRepository.findAll();
 	}
