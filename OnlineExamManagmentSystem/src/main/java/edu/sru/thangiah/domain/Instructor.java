@@ -3,14 +3,20 @@ package edu.sru.thangiah.domain;
 
 import org.springframework.lang.NonNull;
 
+import edu.sru.thangiah.model.Roles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 
 @Entity
+@Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "instructorId"))
 public class Instructor {
     
     @Id
@@ -40,6 +46,11 @@ public class Instructor {
     @NonNull 
     @Column(name = "credits_taught")
     private float creditsTaught;
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
+
 
 	public long getInstructorId() {
 		return instructorId;
@@ -95,6 +106,14 @@ public class Instructor {
 
 	public void setCreditsTaught(float creditsTaught) {
 		this.creditsTaught = creditsTaught;
+	}
+
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
 	}
     
     // standard constructors / setters / getters / toString
