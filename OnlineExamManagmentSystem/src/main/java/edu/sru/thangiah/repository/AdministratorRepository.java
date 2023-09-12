@@ -8,10 +8,14 @@
 
 package edu.sru.thangiah.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import edu.sru.thangiah.domain.Administrator;
 
 public interface AdministratorRepository extends JpaRepository<Administrator, Long> {
     // Add custom query methods here:
+	Optional<Administrator> findByAdminUsername(String username);
+
 }
 
