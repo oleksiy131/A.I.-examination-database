@@ -75,5 +75,11 @@ public class AdministratorController {
         return "math-quiz"; // the name of the HTML template for the quiz page
     }
     
+    @GetMapping("/science-quiz")
+    public String scienceQuizPage() {
+        // displays the science quiz
+        return "science-quiz"; // the name of the HTML template for the quiz page
+    }
+    
 }
 
