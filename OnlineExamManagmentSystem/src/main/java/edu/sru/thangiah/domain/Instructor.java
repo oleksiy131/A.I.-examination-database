@@ -31,7 +31,7 @@ public class Instructor {
     private long instructorId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INSTRUCTOR_COURSE_TABLE", 
+    @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
     joinColumns = {
     		@JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
     },

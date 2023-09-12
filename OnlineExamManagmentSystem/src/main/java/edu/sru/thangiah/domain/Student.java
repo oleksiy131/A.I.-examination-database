@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.criteria.Fetch;
 
 @Entity
-@Table(name = "STUDENT_TBL")
+@Table(name = "STUDENTS")
 
 public class Student {
     
@@ -28,7 +28,7 @@ public class Student {
     private Long studentId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "STUDENT_COURSE_TABLE", 
+    @JoinTable(name = "STUDENT_AND_COURSES_TABLE", 
     joinColumns = {
     		@JoinColumn(name = "student_id", referencedColumnName = "studentId")
     },
