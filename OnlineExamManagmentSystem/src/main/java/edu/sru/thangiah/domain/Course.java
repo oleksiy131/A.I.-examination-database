@@ -35,11 +35,11 @@ public class Course {
 		this.id = id;
 	}
 
-	public String getClassName() {
+	public String getCourseName() {
 		return courseName;
 	}
 
-	public void setClassName(String className) {
+	public void setCourseName(String className) {
 		this.courseName = className;
 	}
     
