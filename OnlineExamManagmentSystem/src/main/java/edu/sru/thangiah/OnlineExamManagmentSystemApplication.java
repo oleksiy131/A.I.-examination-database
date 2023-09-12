@@ -29,9 +29,6 @@ import java.util.Set;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import edu.sru.thangiah.domain.Course;
-import edu.sru.thangiah.domain.Student;
-
 @SpringBootApplication
 public class OnlineExamManagmentSystemApplication {
 
