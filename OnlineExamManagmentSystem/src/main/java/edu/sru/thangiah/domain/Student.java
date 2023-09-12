@@ -3,13 +3,19 @@ package edu.sru.thangiah.domain;
 
 import org.springframework.lang.NonNull;
 
+import edu.sru.thangiah.model.Roles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(name = "student", uniqueConstraints = @UniqueConstraint(columnNames = "studentId"))
 public class Student {
     
     @Id
@@ -39,6 +45,11 @@ public class Student {
     @NonNull
     @Column (name = "enrolled_credits")
     private float creditsTaken;
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
+
     
     // standard constructors / setters / getters / toString
 
