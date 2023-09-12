@@ -19,7 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.criteria.Fetch;
 
 @Entity
-@Table(name = "STUDENTS")
+@Table(name = "STUDENT")
 
 public class Student {
     
