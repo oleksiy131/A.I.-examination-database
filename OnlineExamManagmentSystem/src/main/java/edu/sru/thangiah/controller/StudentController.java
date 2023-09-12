@@ -37,7 +37,7 @@ public class StudentController
 	
 	@GetMapping
 	public List<Student> findAllStudents() {
-		return (List<Student>) studentRepository.findAll();
+		return studentRepository.findAll();
 	}
 	
 	@GetMapping("/{studentId}")
@@ -46,12 +46,15 @@ public class StudentController
 	}
 	
 	@GetMapping("/find/{name}")
-	public List<Student> findBystudentFirstNameContaining(@PathVariable String name){
+	public List<Student> findStudentsContainingByStudentFirstName(@PathVariable String name){
 		return studentRepository.findBystudentFirstNameContaining(name);
 	}
 	
+	@GetMapping("/search")
 	public List<Course> findByIdContaining(@PathVariable Long id){
 		return courseRepository.findByIdContaining(id);
 	}
+	
+	
 	
 }

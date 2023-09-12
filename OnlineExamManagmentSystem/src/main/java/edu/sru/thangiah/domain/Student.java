@@ -25,7 +25,7 @@ public class Student {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long studentId;
+    private Long studentId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "STUDENT_COURSE_TABLE", 
@@ -35,7 +35,6 @@ public class Student {
     inverseJoinColumns = {
     		@JoinColumn(name = "course_id", referencedColumnName = "id")
     })
-    
     private Set<Course> courses;
     
     @NonNull
@@ -119,6 +118,8 @@ public class Student {
 	public void setCreditsTaken(float creditsTaken) {
 		this.creditsTaken = creditsTaken;
 	}
+	
+	
 	
 	
 
