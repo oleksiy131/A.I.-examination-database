@@ -13,6 +13,7 @@ import edu.sru.thangiah.repository.AdministratorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
@@ -67,5 +68,12 @@ public class AdministratorController {
         // displays the list of classes here
         return "classes"; // the name of the HTML template for the classes page
     }
+    
+    @GetMapping("/math-quiz")
+    public String mathQuizPage() {
+        // displays the math quiz
+        return "math-quiz"; // the name of the HTML template for the quiz page
+    }
+    
 }
 

@@ -56,4 +56,10 @@ public class StudentController
 		return courseRepository.findByIdContaining(id);
 	}
 	
+	@GetMapping("/math-quiz")
+    public String mathQuizPage() {
+        // displays the math quiz
+        return "math-quiz"; // the name of the HTML template for the quiz page
+    }
+	
 }
