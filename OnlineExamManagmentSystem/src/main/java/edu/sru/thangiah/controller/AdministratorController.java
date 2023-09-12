@@ -33,7 +33,7 @@ public class AdministratorController {
         return "administratorlogin"; // Return the administratorlogin.html template
     }
 
-    @PostMapping("/adminlogin")
+    @PostMapping("/index")
     public String adminLogin(
         @RequestParam("username") String username,
         @RequestParam("password") String password,
@@ -45,7 +45,7 @@ public class AdministratorController {
         } else {
             // Invalid credentials, display an error message
             redirectAttributes.addFlashAttribute("errorMessage", "Invalid credentials");
-            return "redirect:/administratorlogin";
+            return "redirect:/index";
         }
     }
 
