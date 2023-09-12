@@ -5,8 +5,10 @@ import javax.persistence.JoinTable;
 
 import org.springframework.lang.NonNull;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,8 +30,15 @@ public class Instructor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long instructorId;
     
-    @NonNull
-    private LinkedList<Course> teachingCourses = new LinkedList<>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "INSTRUCTOR_COURSE_TABLE", 
+    joinColumns = {
+    		@JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
+    },
+    inverseJoinColumns = {
+    		@JoinColumn(name = "course_id", referencedColumnName = "id")
+    })
+    private Set<Course> courses;
     
     @NonNull
     @Column(name = "first_name")
@@ -110,18 +119,16 @@ public class Instructor {
 	public void setCreditsTaught(float creditsTaught) {
 		this.creditsTaught = creditsTaught;
 	}
+
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
+	}
 	
-	public void addTeachingCourse(Course course) {
-	    teachingCourses.add(course);
-	}
-
-	public void removeTeachingCourse(Course course) {
-	    teachingCourses.remove(course);
-	}
-
-	public LinkedList<Course> getTeachingCourses() {
-	    return teachingCourses;
-	}
+	
 
     
 	
