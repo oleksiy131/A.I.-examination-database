@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student List</title>
+</head>
+<body>
+    <h1>Student List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Enrolled Credits</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Use Thymeleaf to iterate through the list of students -->
+            <tr th:each="student : ${students}">
+                <td th:text="${student.studentId}"></td>
+                <td th:text="${student.studentFirstName}"></td>
+                <td th:text="${student.studentLastName}"></td>
+                <td th:text="${student.studentEmail}"></td>
+                <td th:text="${student.studentUsername}"></td>
+                <td th:text="${student.creditsTaken}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

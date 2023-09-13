@@ -32,16 +32,24 @@ public class StudentController
 		this.courseRepository = courseRepository; 
 	}
 	
-	
+
+    @GetMapping("/students")
+    public String showStudentList(Model model) {
+        // Retrieve the list of students from the repository
+        List<Student> students = studentRepository.findAll();
+
+        // Add the list of students to the model for rendering in the HTML template
+        model.addAttribute("students", students);
+
+        // Return the name of the HTML template to be displayed
+        return "student-list";
+    }
+    
 	@PostMapping
 	public Student saveStudentWithCourse(@RequestBody Student student) {
 		return studentRepository.save(student);
 	}
 	
-	@GetMapping("/students")
-	public List<Student> findAllStudents() {
-		return studentRepository.findAll();
-	}
 	
 	@GetMapping("/{studentId}")
 	public Student findStudent(@PathVariable Long studentId) {

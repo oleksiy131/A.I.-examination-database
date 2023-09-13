@@ -14,6 +14,8 @@ import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,9 @@ public class AdministratorController {
 
     @Autowired
     private AdministratorRepository administratorRepository;
+    @Autowired
+	private StudentRepository studentRepository;
+
 
     @GetMapping("/administratorlogin")
     public String showLoginPage() {
@@ -92,6 +97,18 @@ public class AdministratorController {
     @GetMapping("/import")
     public String importStudents() {
         return "import-students"; // This corresponds to the name of your HTML file
+    }
+    
+    @GetMapping("/students")
+    public String showStudentList(Model model) {
+        // Retrieve the list of students from the repository
+        List<Student> students = studentRepository.findAll();
+
+        // Add the list of students to the model for rendering in the HTML template
+        model.addAttribute("students", students);
+
+        // Return the name of the HTML template to be displayed
+        return "student-list";
     }
 
    
