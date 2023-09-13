@@ -34,13 +34,13 @@ public class ExcelExportService {
             dataRow.createCell(2).setCellValue(student.getStudentLastName());
         }
 
-        // Save the workbook to a file
+        // Saves the workbook to a file
         String filePath = "C:\\Users\\oleks\\OneDrive\\Documents\\Fall2023\\Software Engineering\\Reports\\student_data.xlsx";
         try (FileOutputStream outputStream = new FileOutputStream(filePath)) {
             workbook.write(outputStream);
         }
 
-        // Close the workbook
+        // Closes the workbook
         workbook.close();
     }
 }

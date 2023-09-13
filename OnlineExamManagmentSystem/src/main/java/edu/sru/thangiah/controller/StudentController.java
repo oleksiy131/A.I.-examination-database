@@ -2,7 +2,9 @@ package edu.sru.thangiah.controller;
 
 import java.util.List;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,4 +63,29 @@ public class StudentController
         // displays the math quiz
         return "math-quiz"; // the name of the HTML template for the quiz page
     }
+	
+	 @PostMapping("/student/course/create")
+	    public String create(Student student, Model model) {
+	        // (assuming studentRepository is injected)
+	        studentRepository.save(student);
+
+	        model.addAttribute("message", "Student created successfully");
+
+	        // Redirect to a success page 
+	        return "redirect:/student/create"; // Redirect back to the form page
+	    }
+	 @PostMapping("/create")
+	 public String createStudent(@ModelAttribute Student student, Model model) {
+
+	     // (assuming studentRepository is injected)
+	     studentRepository.save(student);
+
+	    
+	     model.addAttribute("message", "Student created successfully");
+
+
+	     return "redirect:/student/course/create"; // Redirect back to the form page
+	 }
+
+
 }
