@@ -25,7 +25,7 @@ public class Student {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long studentId;
+    private Long studentId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "STUDENT_AND_COURSES_TABLE", 
@@ -61,8 +61,6 @@ public class Student {
     @Column (name = "enrolled_credits")
     private float creditsTaken;
     
-    // standard constructors / setters / getters / toString
-
 	public long getStudentId() {
 		return studentId;
 	}
@@ -119,7 +117,7 @@ public class Student {
 		this.creditsTaken = creditsTaken;
 	}
 
-	public Student(long studentId, String studentFirstName, String studentLastName, String studentEmail,
+	public Student(Long studentId, String studentFirstName, String studentLastName, String studentEmail,
 			String studentPassword, String studentUsername, float creditsTaken) {
 		super();
 		this.studentId = studentId;
