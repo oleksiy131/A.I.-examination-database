@@ -88,6 +88,11 @@ public class AdministratorController {
     public String showCreateStudentForm() {
         return "create-student"; // This corresponds to the name of your HTML file
     }
+    
+    @GetMapping("/import")
+    public String importStudents() {
+        return "import-students"; // This corresponds to the name of your HTML file
+    }
 
    
     

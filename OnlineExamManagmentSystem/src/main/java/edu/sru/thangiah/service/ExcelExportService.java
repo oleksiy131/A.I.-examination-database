@@ -24,6 +24,14 @@ public class ExcelExportService {
         headerRow.createCell(0).setCellValue("Student ID");
         headerRow.createCell(1).setCellValue("First Name");
         headerRow.createCell(2).setCellValue("Last Name");
+        headerRow.createCell(3).setCellValue("Email");
+        headerRow.createCell(4).setCellValue("Password");
+        headerRow.createCell(5).setCellValue("UserName");
+        headerRow.createCell(6).setCellValue("Credits Taken");
+
+
+
+
       
 
         int rowNum = 1;
@@ -32,6 +40,14 @@ public class ExcelExportService {
             dataRow.createCell(0).setCellValue(student.getStudentId());
             dataRow.createCell(1).setCellValue(student.getStudentFirstName());
             dataRow.createCell(2).setCellValue(student.getStudentLastName());
+            dataRow.createCell(3).setCellValue(student.getStudentEmail());
+            dataRow.createCell(4).setCellValue(student.getStudentPassword());
+            dataRow.createCell(5).setCellValue(student.getStudentUsername());
+            dataRow.createCell(6).setCellValue(student.getCreditsTaken());
+
+
+
+
         }
 
         // Saves the workbook to a file
