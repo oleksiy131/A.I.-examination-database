@@ -47,6 +47,8 @@
         }
 
         input[type="submit"] {
+            display: block;
+            margin: 20px auto;
             background-color: #3498db;
             color: #fff;
             padding: 10px 20px;
@@ -60,10 +62,21 @@
             background-color: #2980b9;
         }
 
-        #responseMessage {
-            text-align: center;
-            margin-top: 15px;
-            font-weight: bold;
+        /* Style for the Export button */
+        #exportButton {
+            display: block;
+            margin: 20px auto;
+            background-color: #3498db;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        #exportButton:hover {
+            background-color: #2980b9;
         }
     </style>
 </head>
@@ -91,14 +104,15 @@
         <input type="submit" value="Create Student">
     </form>
 
+    <!-- Add the Export button and JavaScript for redirection -->
+    <button id="exportButton">Export All Students to Excel</button>
+
     <script>
         $(document).ready(function () {
             $('#createStudentForm').submit(function (event) {
                 event.preventDefault();
-
                 // Serialize form data
                 var formData = $(this).serialize();
-
                 $.ajax({
                     type: 'POST',
                     url: '/student/course/create',
@@ -110,6 +124,12 @@
                         $('#responseMessage').text('Error: ' + error.responseText);
                     }
                 });
+            });
+
+            // Add click event for the Export button
+            $('#exportButton').click(function () {
+                // Redirect to the "/export/students" page
+                window.location.href = '/export/students';
             });
         });
     </script>
