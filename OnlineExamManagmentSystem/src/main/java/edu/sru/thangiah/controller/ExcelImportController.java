@@ -25,6 +25,6 @@ public class ExcelImportController {
         } catch (Exception e) {
             model.addAttribute("message", "Error importing students: " + e.getMessage());
         }
-        return "redirect:import/students"; // Redirect to the math quiz page
+        return "redirect:import/students"; // Redirect
     }
 }

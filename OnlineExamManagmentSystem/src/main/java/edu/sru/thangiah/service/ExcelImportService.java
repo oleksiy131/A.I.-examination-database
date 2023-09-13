@@ -22,10 +22,7 @@ public class ExcelImportService {
     }
 
     public void importStudentsFromExcel(MultipartFile file) throws IOException {
-        // You will need a library like Apache POI or a dedicated Excel parsing library
-        // to read data from the Excel file and convert it into Student objects.
-        // Here's a simplified example using Apache POI XSSF:
-
+       
         try (Workbook workbook = new XSSFWorkbook(file.getInputStream())) {
             Sheet sheet = workbook.getSheetAt(0); // Assuming data is in the first sheet
 
