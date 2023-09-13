@@ -3,13 +3,16 @@ package edu.sru.thangiah.controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Administrator;
+import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.AdministratorRepository;
+import edu.sru.thangiah.repository.StudentRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,6 +83,13 @@ public class AdministratorController {
         // displays the science quiz
         return "science-quiz"; // the name of the HTML template for the quiz page
     }
+    
+    @GetMapping("/create")
+    public String showCreateStudentForm() {
+        return "create-student"; // This corresponds to the name of your HTML file
+    }
+
+   
     
 }
 
