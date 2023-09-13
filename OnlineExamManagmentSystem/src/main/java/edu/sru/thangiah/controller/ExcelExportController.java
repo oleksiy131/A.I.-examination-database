@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,8 +32,19 @@ public class ExcelExportController {
             List<Student> students = studentRepository.findAll(); 
 
             if (students != null && !students.isEmpty()) {
-                excelExportService.exportStudentData(students);
-                return "Student data exported successfully!";
+                String filePath = "C:\\Users\\oleks\\OneDrive\\Documents\\Fall2023\\Software Engineering\\Reports\\student_data.xlsx";
+                
+                // Check if the file already exists
+                File file = new File(filePath);
+                boolean fileExists = file.exists();
+                
+                excelExportService.exportStudentData(students, filePath, fileExists);
+                
+                if (fileExists) {
+                    return "Student data updated successfully!";
+                } else {
+                    return "Student data exported successfully!";
+                }
             } else {
                 return "No students found to export!";
             }
