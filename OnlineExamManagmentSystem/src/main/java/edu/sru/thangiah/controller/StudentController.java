@@ -61,5 +61,4 @@ public class StudentController
         // displays the math quiz
         return "math-quiz"; // the name of the HTML template for the quiz page
     }
-	
 }
