@@ -11,15 +11,6 @@
  * Online Exam-taking software with different user permissions. 
  *
  * ----------------------------------------------------------------------------
- * Revision History:
- *
- * Date             Author          Description
- * ----------------------------------------------------------------------------
- * [9/5/2023]       [Oleksii]     	Login Page/Controllers/WebPageDesign
- * [9/5/2023]       [Seth]      	Domain files + TechLead  
- * [9/4/2023]       [Brent]    		Templates
- * [9/5/2023]       [Seth + Brent]  NAV-Bar 
- * ----------------------------------------------------------------------------
  */
 
 package edu.sru.thangiah;
