@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!-- Brent Kosior -->
+<!-- CPSC 488 -->
+<!-- ID: A01340397 -->
+<!-- https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp  -->
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    </head>
+
+    <body>
+        <!-- this div sets up a class called navbar that holds all the buttons --> 
+        <div class="navbar">
+            <div class = dropdown-nav>
+                <!-- file button --> 
+                <button class="dropbutton">File
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Logout</a>
+                    <a href="/exit">Exit</a>
+                </div>
+            </div>
+             <!-- management button -->  
+            <div class="dropdown-nav">
+                <button class="dropbutton">Management
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Accounts</a>
+                    <a href="#">Classes</a>
+                    <a href="#">Chapters</a>
+                    <a href="#">Exams</a>
+                    <a href="#">Change Password</a>
+                </div>
+            </div>
+            <div class = dropdown-nav>
+                <!-- computer literacy button --> 
+                <button class="dropbutton">Computer Literacy
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Exam Generator</a>
+                </div>
+            </div>
+            <div class = dropdown-nav>
+                <!-- grading button --> 
+                <button class="dropbutton">Grading
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Exam Grading</a>
+                </div>
+            </div>
+            <div class = dropdown-nav>
+                <!-- Reporting --> 
+                <button class="dropbutton">Reporting 
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Exam Information</a>
+                    <a href="#">IP Address</a>
+                </div>
+            </div>
+            <div class = dropdown-nav>
+                <!-- databasse button --> 
+                <button class="dropbutton">Database 
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Statistics</a>
+                </div>
+            </div>
+            <div class = dropdown-nav>
+                <!-- search options --> 
+                <button class="dropbutton">Search Options 
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">View Details</a>
+                </div>
+            </div>
+            
+        </div>
+        
+
+    </body>
+
+	<!-- this iframe references the sidepanel view to include it into the main screen view -->
+    <iframe 
+    src="/sidebar"
+    frameborder="1"
+    width="25%"
+    height="670"/>
+ 
+   
+</html>

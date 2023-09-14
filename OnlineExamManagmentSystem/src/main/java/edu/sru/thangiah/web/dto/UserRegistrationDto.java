@@ -1,5 +1,9 @@
 package edu.sru.thangiah.web.dto;
 
+import org.springframework.lang.NonNull;
+
+import jakarta.persistence.Column;
+
 public class UserRegistrationDto {
 	
 	private String firstName;
@@ -59,6 +63,11 @@ public class UserRegistrationDto {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getVerificationCode() {
+		
+		return null;
 	} 
 
 }

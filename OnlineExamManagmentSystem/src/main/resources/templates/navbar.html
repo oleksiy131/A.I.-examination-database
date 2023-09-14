@@ -2,78 +2,40 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-    <style>
-        /* Add custom styles for the navbar */
-        .navbar {
-            background-color: #52a7d1;
-            overflow: hidden;
-        }
-
-        .dropdown-nav {
-            float: left;
-            overflow: hidden;
-        }
-
-        .dropbutton {
-            background-color: #52a7d1;
-            color: white;
-            border: none;
-            cursor: pointer;
-            padding: 14px 16px;
-            font-size: 16px;
-        }
-
-        .dropdown-info {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-        }
-
-        .dropdown-nav:hover .dropdown-info {
-            display: block;
-        }
-
-        .dropdown-info a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        .dropdown-info a:hover {
-            background-color: #ddd;
-        }
-
-        iframe {
-            border: none;
-            width: 25%;
-            height: 670px;
-        }
-    </style>
+    
 </head>
+
+
+    <body>
+        <!-- this div sets up a class called navbar that holds all the buttons --> 
+        <div class="navbar">
+             <!-- management button -->  
+            <div class="dropdown-nav">
+                <button class="dropbutton">Management
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Accounts</a>
+                    <a href="/register">Create Account</a>
+                    <a href="#">Classes</a>
+                    <a href="#">Chapters</a>
+                    <a href="#">Exams</a>
+                    
+                </div>
 
 <body>
     <!-- This div sets up a class called navbar that holds all the buttons -->
     <div class="navbar">
-        <div class="dropdown-nav">
-            <!-- File button -->
-            <button class="dropbutton">File</button>
-            <div class="dropdown-info">
-                <a href="/exit">Logout</a>
-                <a href="/exit">Exit</a>
-            </div>
-        </div>
         <!-- Management button -->
         <div class="dropdown-nav">
             <button class="dropbutton">Management</button>
             <div class="dropdown-info">
                 <a href="#">Accounts</a>
+                <a href="/register">Create Account</a>
                 <a href="/classes">Classes</a>
                 <a href="#">Chapters</a>
                 <a href="/exams">Exams</a>
                 <a href="#">Change Password</a>
+
             </div>
         </div>
         <!-- Computer Literacy button -->
@@ -116,7 +78,16 @@
             <div class="dropdown-info">
                 <a href="#">View Details</a>
             </div>
-        </div>
+            <div class = profile-nav>
+                <!-- search options --> 
+                <button class="dropbutton">Account
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Change Password</a>
+                    <a href="/exit">Logout</a>
+                </div>
+            </div>
+
     </div>
 
     <!-- This iframe references the side panel view to include it into the main screen view -->
