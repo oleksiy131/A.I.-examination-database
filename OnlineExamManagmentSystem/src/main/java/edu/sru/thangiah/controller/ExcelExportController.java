@@ -34,7 +34,12 @@ public class ExcelExportController {
             List<Student> students = studentRepository.findAll(); 
 
             if (students != null && !students.isEmpty()) {
-                String filePath = "C:\\Users\\oleks\\OneDrive\\Documents\\Fall2023\\Software Engineering\\Reports\\student_data.xlsx";
+                // Get the user's downloads folder
+                String userHome = System.getProperty("user.home");
+                String downloadsDirectory = userHome + File.separator + "Downloads";
+                
+                // Define the file path in the downloads folder
+                String filePath = downloadsDirectory + File.separator + "student_data.xlsx";
                 
                 // Check if the file already exists
                 File file = new File(filePath);
