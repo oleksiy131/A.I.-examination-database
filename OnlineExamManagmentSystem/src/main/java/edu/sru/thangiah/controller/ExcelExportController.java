@@ -27,6 +27,8 @@ public class ExcelExportController {
 
     @GetMapping("/students")
     public String exportStudentData() {
+    	
+    	//Error Handling
         try {
             // Fetches the list of students from the repository
             List<Student> students = studentRepository.findAll(); 
