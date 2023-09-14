@@ -47,6 +47,12 @@ public class User {
     @Column(name = "username")
     private String username;
     
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+    
+    private boolean enabled;
+    
+    
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
     		name = "users_roles",
@@ -56,13 +62,14 @@ public class User {
     				name ="role_id", referencedColumnName = "id"))
     private Collection<Roles> roles;
 
-    public User(String firstName, String lastName, String email, String password, String username, String role) {
+    public User(String firstName, String lastName, String email, String password, String username, String role, String verificationCode) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
+        this.verificationCode = verificationCode;
         this.roles = Arrays.asList(new Roles(role));
     }
 
@@ -121,6 +128,26 @@ public class User {
 
 	public void setRoles(Collection<Roles> roles) {
 		this.roles = roles;
+	}
+
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 
 

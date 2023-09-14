@@ -5,23 +5,6 @@
     
 </head>
 
-
-    <body>
-        <!-- this div sets up a class called navbar that holds all the buttons --> 
-        <div class="navbar">
-             <!-- management button -->  
-            <div class="dropdown-nav">
-                <button class="dropbutton">Management
-                </button>
-                <div class="dropdown-info">
-                    <a href="#">Accounts</a>
-                    <a href="/register">Create Account</a>
-                    <a href="#">Classes</a>
-                    <a href="#">Chapters</a>
-                    <a href="#">Exams</a>
-                    
-                </div>
-
 <body>
     <!-- This div sets up a class called navbar that holds all the buttons -->
     <div class="navbar">
@@ -78,6 +61,7 @@
             <div class="dropdown-info">
                 <a href="#">View Details</a>
             </div>
+        </div>
             <div class = profile-nav>
                 <!-- search options --> 
                 <button class="dropbutton">Account
@@ -91,6 +75,12 @@
     </div>
 
     <!-- This iframe references the side panel view to include it into the main screen view -->
-    <iframe src="/sidebar" frameborder="0"></iframe>
+    <iframe 
+    id = "sidebariframe"
+    src="/sidebar" 
+    frameborder="1"
+    width="25%"
+    height="670">
+    </iframe>
 </body>
 </html>

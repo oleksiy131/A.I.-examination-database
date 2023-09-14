@@ -1,7 +1,7 @@
 package edu.sru.thangiah.controller;
 
 
-import java.io.UnsupportedEncodingException;
+//import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.UserRepository;
 //import org.springframework.web.bind.annotation.GetMapping;
-import edu.sru.thangiah.service.UserVerifyService;
-import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
+//import edu.sru.thangiah.service.UserVerifyService;
+//import jakarta.mail.MessagingException;
+//import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class MenuController {
@@ -49,7 +49,7 @@ public class MenuController {
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user) {
         userRepository.save(user);
-        return "redirect:index";
+        return "redirect:navbar";
     }
     
 /*
