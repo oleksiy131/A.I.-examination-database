@@ -1,6 +1,5 @@
 package edu.sru.thangiah.repository;
 
-import java.util.Optional;
 
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,3 +11,4 @@ public interface InstructorRepository extends CrudRepository<Instructor, Long> {
 	Optional<Instructor> findByInstructorUsername(String username);
 
 }
+
