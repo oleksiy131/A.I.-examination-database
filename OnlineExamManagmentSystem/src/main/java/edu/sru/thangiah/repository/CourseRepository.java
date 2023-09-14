@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.domain.Course;
 
 
 
-public interface StudentRepository extends JpaRepository<Student, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
 	
-	List<Student>findBystudentFirstNameContaining(String name);
+	List<Course> findByIdContaining(Long Id);
 }
