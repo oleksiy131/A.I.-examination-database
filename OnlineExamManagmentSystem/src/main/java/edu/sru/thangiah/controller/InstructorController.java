@@ -1,14 +1,18 @@
 package edu.sru.thangiah.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
+@RequestMapping("/instructors")
 public class InstructorController {
-
-    @GetMapping("/instructorlogin")
-    public String showLoginPage() {
-        return "instructorlogin"; // Return the login.html template
+	
+	@GetMapping("/math-quiz")
+    public String mathQuizPage() {
+        // displays the math quiz
+        return "math-quiz"; // the name of the HTML template for the quiz page
     }
 
 }
+

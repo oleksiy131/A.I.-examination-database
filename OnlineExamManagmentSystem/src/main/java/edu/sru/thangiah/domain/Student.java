@@ -1,20 +1,43 @@
 package edu.sru.thangiah.domain;
 
 
+import java.util.Set;
+
 import org.springframework.lang.NonNull;
 
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.criteria.Fetch;
 
 @Entity
+@Table(name = "STUDENT")
+
 public class Student {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long studentId;
+    private Long studentId;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "STUDENT_AND_COURSES_TABLE", 
+    joinColumns = {
+    		@JoinColumn(name = "student_id", referencedColumnName = "studentId")
+    },
+    inverseJoinColumns = {
+    		@JoinColumn(name = "course_id", referencedColumnName = "id")
+    })
+    private Set<Course> courses;
     
     @NonNull
     @Column (name = "first_name")
@@ -40,7 +63,6 @@ public class Student {
     @Column (name = "enrolled_credits")
     private float creditsTaken;
     
-    // standard constructors / setters / getters / toString
 
 	public long getStudentId() {
 		return studentId;
@@ -97,4 +119,21 @@ public class Student {
 	public void setCreditsTaken(float creditsTaken) {
 		this.creditsTaken = creditsTaken;
 	}
+
+	public Student(Long studentId, String studentFirstName, String studentLastName, String studentEmail,
+			String studentPassword, String studentUsername, float creditsTaken) {
+		super();
+		this.studentId = studentId;
+		this.studentFirstName = studentFirstName;
+		this.studentLastName = studentLastName;
+		this.studentEmail = studentEmail;
+		this.studentPassword = studentPassword;
+		this.studentUsername = studentUsername;
+		this.creditsTaken = creditsTaken;
+	}
+
+	public Student() {
+		
+	}
+	
 }

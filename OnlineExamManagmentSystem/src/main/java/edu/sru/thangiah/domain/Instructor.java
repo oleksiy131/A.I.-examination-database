@@ -1,21 +1,49 @@
 package edu.sru.thangiah.domain;
 
 
+import javax.persistence.JoinTable; 
+
 import org.springframework.lang.NonNull;
 
+import edu.sru.thangiah.model.Roles;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.JoinColumn;
+
 
 @Entity
+@Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "instructorId"))
 public class Instructor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long instructorId;
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
+    joinColumns = {
+    		@JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
+    },
+    inverseJoinColumns = {
+    		@JoinColumn(name = "course_id", referencedColumnName = "id")
+    })
+    private Set<Course> courses;
     
     @NonNull
     @Column(name = "first_name")
@@ -40,6 +68,11 @@ public class Instructor {
     @NonNull 
     @Column(name = "credits_taught")
     private float creditsTaught;
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
+
 
 	public long getInstructorId() {
 		return instructorId;
@@ -96,6 +129,19 @@ public class Instructor {
 	public void setCreditsTaught(float creditsTaught) {
 		this.creditsTaught = creditsTaught;
 	}
+
+
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
+	}
+	
+
     
+	
+	
     // standard constructors / setters / getters / toString
 }

@@ -3,13 +3,19 @@ package edu.sru.thangiah.domain;
 
 import org.springframework.lang.NonNull;
 
+import edu.sru.thangiah.model.Roles;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 @Entity
+@Table(name = "administrator", uniqueConstraints = @UniqueConstraint(columnNames = "adminId"))
 public class Administrator {
     
     @Id
@@ -36,6 +42,9 @@ public class Administrator {
     @Column (name = "username")
     private String adminUsername;
     
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
 
 	public long getAdminId() {
 		return adminId;
@@ -84,6 +93,15 @@ public class Administrator {
 	public void setAdminUsername(String adminUsername) {
 		this.adminUsername = adminUsername;
 	}
+
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+	
 	
 	
 
