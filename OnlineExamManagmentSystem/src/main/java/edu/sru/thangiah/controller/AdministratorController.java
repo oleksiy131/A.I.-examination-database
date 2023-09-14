@@ -108,7 +108,7 @@ public class AdministratorController {
     @GetMapping("/students")
     public String showStudentList(Model model) {
         // Retrieve the list of students from the repository
-        List<Student> students = studentRepository.findAll();
+        List<Student> students = (List<Student>) studentRepository.findAll();
 
         // Add the list of students to the model for rendering in the HTML template
         model.addAttribute("students", students);

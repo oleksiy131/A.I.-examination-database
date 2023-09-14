@@ -31,7 +31,7 @@ public class ExcelExportController {
     	//Error Handling
         try {
             // Fetches the list of students from the repository
-            List<Student> students = studentRepository.findAll(); 
+            List<Student> students = (List<Student>) studentRepository.findAll(); 
 
             if (students != null && !students.isEmpty()) {
                 // Get the user's downloads folder
