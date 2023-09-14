@@ -1,11 +1,8 @@
 package edu.sru.thangiah.service;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.web.dto.UserRegistrationDto;
