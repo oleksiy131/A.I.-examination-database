@@ -35,6 +35,7 @@ public class Administrator {
     @NonNull
     @Column (name = "username")
     private String adminUsername;
+    
 
 	public long getAdminId() {
 		return adminId;

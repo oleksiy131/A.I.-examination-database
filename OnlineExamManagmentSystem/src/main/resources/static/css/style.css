@@ -19,15 +19,22 @@
     float: left;
 }
 
+.profile-nav {
+	overflow: hidden;
+	float: right
+	}
+
 .dropbutton {
     font-size: 16px;
     color: white;
     padding: 14px 16px;
     background-color: inherit;
+    border: 0px;
 }
 
 .navbar a:hover,
-.dropdown-nav:hover .dropbutton {
+.dropdown-nav:hover .dropbutton,
+.profile-nav:hover{
     background-color: #019270;
 }
 
@@ -35,7 +42,8 @@
     display: none;
     position: absolute;
     background-color: #a5a5a5;
-    min-width: 160px;
+    padding: 5px;
+    min-width: 40px;
 }
 
 .dropdown-info a {
@@ -50,6 +58,7 @@
 }
 
 
-.dropdown-nav:hover .dropdown-info{
+.dropdown-nav:hover .dropdown-info,
+.profile-nav:hover .dropdown-info{
     display: block;
 }

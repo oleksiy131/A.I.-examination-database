@@ -12,25 +12,17 @@
     <body>
         <!-- this div sets up a class called navbar that holds all the buttons --> 
         <div class="navbar">
-            <div class = dropdown-nav>
-                <!-- file button --> 
-                <button class="dropbutton">File
-                </button>
-                <div class="dropdown-info">
-                    <a href="#">Logout</a>
-                    <a href="/exit">Exit</a>
-                </div>
-            </div>
              <!-- management button -->  
             <div class="dropdown-nav">
                 <button class="dropbutton">Management
                 </button>
                 <div class="dropdown-info">
                     <a href="#">Accounts</a>
+                    <a href="/register">Create Account</a>
                     <a href="#">Classes</a>
                     <a href="#">Chapters</a>
                     <a href="#">Exams</a>
-                    <a href="#">Change Password</a>
+                    
                 </div>
             </div>
             <div class = dropdown-nav>
@@ -74,7 +66,15 @@
                     <a href="#">View Details</a>
                 </div>
             </div>
-            
+            <div class = profile-nav>
+                <!-- search options --> 
+                <button class="dropbutton">Account
+                </button>
+                <div class="dropdown-info">
+                    <a href="#">Change Password</a>
+                    <a href="/exit">Logout</a>
+                </div>
+            </div>
         </div>
         
 
