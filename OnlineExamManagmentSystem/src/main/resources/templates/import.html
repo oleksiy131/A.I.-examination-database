@@ -1,0 +1,19 @@
+<!-- import.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Import2 -->
+</head>
+<body>
+    <!-- Display error/success messages if needed -->
+    <div th:if="${param.error == 'emptyfile'}">Please select a file to upload.22222</div>
+    <div th:if="${param.error == 'processing'}">Error processing the file.</div>
+    <div th:if="${param.success == 'true'}">File uploaded successfully.</div>
+    
+    <!-- Create the file upload form -->
+    <form method="post" action="/uploadExcel" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".xlsx, .xls">
+        <button type="submit">Upload2</button>
+    </form>
+</body>
+</html>
