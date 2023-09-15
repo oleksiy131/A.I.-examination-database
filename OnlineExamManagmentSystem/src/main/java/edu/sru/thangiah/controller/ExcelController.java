@@ -1,6 +1,5 @@
 package edu.sru.thangiah.controller;
 
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -9,19 +8,19 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.StudentRepository;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Controller
 public class ExcelController {
-    private final StudentRepository studentRepository; // Inject your repository here
+    private final StudentRepository studentRepository;
 
     public ExcelController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
     @PostMapping("/uploadExcel")
-    public String uploadExcel(@RequestParam("file") MultipartFile file) throws InvalidFormatException {
+    public String uploadExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
             // Handle empty file error
             return "redirect:/import?error=emptyfile";
@@ -32,10 +31,17 @@ public class ExcelController {
             Sheet sheet = workbook.getSheetAt(0); // Assuming the data is on the first sheet
 
             // Iterate through rows and columns to extract data
+         // Iterate through rows and columns to extract data
             for (Row row : sheet) {
+                if (row.getRowNum() == 0) {
+                    // Skip the header row
+                    continue;
+                }
+
                 Student student = new Student();
-                
+
                 // Handle each cell in the row
+             // Inside the for loop for iterating through rows and columns
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
                     if (cell != null) {
@@ -64,18 +70,22 @@ public class ExcelController {
                             case NUMERIC:
                                 // Cell contains a numeric value
                                 double numericValue = cell.getNumericCellValue();
-                                String stringValue = String.valueOf(numericValue);
                                 switch (i) {
-                                    // Handle numeric value for specific cells if needed
+                                    case 5:
+                                        // Assuming column 5 contains numeric value
+                                        student.setCreditsTaken((float) numericValue);
+                                        break;
+                                    // Handle numeric value for other cells if needed
                                 }
                                 break;
-                            // Handle other cell types if necessary (e.g., BOOLEAN, FORMULA)
                         }
                     }
                 }
 
+
                 studentRepository.save(student); // Save the student to the database
             }
+
 
             // Redirect to a success page
             return "redirect:/import?success=true";
