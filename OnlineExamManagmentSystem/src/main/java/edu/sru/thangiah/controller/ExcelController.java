@@ -10,6 +10,7 @@ import edu.sru.thangiah.repository.StudentRepository;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 
 @Controller
 public class ExcelController {
@@ -31,7 +32,6 @@ public class ExcelController {
             Sheet sheet = workbook.getSheetAt(0); // Assuming the data is on the first sheet
 
             // Iterate through rows and columns to extract data
-         // Iterate through rows and columns to extract data
             for (Row row : sheet) {
                 if (row.getRowNum() == 0) {
                     // Skip the header row
@@ -41,7 +41,6 @@ public class ExcelController {
                 Student student = new Student();
 
                 // Handle each cell in the row
-             // Inside the for loop for iterating through rows and columns
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
                     if (cell != null) {
@@ -82,10 +81,13 @@ public class ExcelController {
                     }
                 }
 
-
-                studentRepository.save(student); // Save the student to the database
+                // Check if a student with the same username already exists
+                Optional<Student> existingStudent = studentRepository.findByStudentUsername(student.getStudentUsername());
+                if (!existingStudent.isPresent()) {
+                    // Save the student to the database only if it doesn't exist
+                    studentRepository.save(student);
+                }
             }
-
 
             // Redirect to a success page
             return "redirect:/import?success=true";
