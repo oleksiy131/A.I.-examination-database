@@ -105,6 +105,11 @@ public class AdministratorController {
         return "import"; // This corresponds to the name of your HTML file
     }
     
+    @GetMapping("/upload-success")
+    public String uploadSuccess() {
+        return "upload-success"; // This corresponds to the name of your HTML file
+    }
+    
     
     @GetMapping("/students")
     public String showStudentList(Model model) {

@@ -90,7 +90,7 @@ public class ExcelController {
             }
 
             // Redirect to a success page
-            return "redirect:/import?success=true";
+            return "redirect:/upload-success";
         } catch (IOException e) {
             e.printStackTrace();
             // Handle file processing error
