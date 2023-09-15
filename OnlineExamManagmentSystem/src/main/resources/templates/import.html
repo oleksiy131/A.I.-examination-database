@@ -40,7 +40,7 @@
 
         label {
             display: inline-block;
-            background-color: #3498db;
+            background-color: #2ecc71;
             color: #fff;
             padding: 10px 20px;
             cursor: pointer;
@@ -74,16 +74,28 @@
             background-color: #27ae60;
             color: #fff;
         }
+
+        .info {
+            background-color: #808080;
+            color: #fff;
+            padding: 10px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>File Upload</h1>
-        
+
+        <!-- New message -->
+        <div class="info">
+            Please make sure the format of the Excel File is as follows: <br><br>FirstName LastName Email Password UserName CreditsTaken
+        </div>
+
         <div class="message error" th:if="${param.error == 'emptyfile'}">Please select a file to upload.</div>
         <div class="message error" th:if="${param.error == 'processing'}">Error processing the file.</div>
         <div class="message success" th:if="${param.success == 'true'}">File uploaded successfully.</div>
-        
+
         <!-- Create the file upload form -->
         <form method="post" action="/uploadExcel" enctype="multipart/form-data">
             <label for="file">Choose File</label>
