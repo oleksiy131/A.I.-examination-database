@@ -39,7 +39,7 @@ public class ExcelExportController {
                 String downloadsDirectory = userHome + File.separator + "Downloads";
                 
                 // Define the file path in the downloads folder
-                String filePath = downloadsDirectory + File.separator + "student_data.xlsx";
+                String filePath = downloadsDirectory + File.separator + "student_exported_data.xlsx";
                 
                 // Check if the file already exists
                 File file = new File(filePath);
