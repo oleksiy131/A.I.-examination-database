@@ -139,8 +139,20 @@ public class Instructor {
 		this.courses = courses;
 	}
 	
+	// Constructors
+    public Instructor() {
+    }
 
-    
+    public Instructor(String instructorFirstName, String instructorLastName, String instructorEmail,
+                      String instructorPassword, String instructorUsername, float creditsTaught) {
+        this.instructorFirstName = instructorFirstName;
+        this.instructorLastName = instructorLastName;
+        this.instructorEmail = instructorEmail;
+        this.instructorPassword = instructorPassword;
+        this.instructorUsername = instructorUsername;
+        this.creditsTaught = creditsTaught;
+    }
+	
 	
 	
     // standard constructors / setters / getters / toString

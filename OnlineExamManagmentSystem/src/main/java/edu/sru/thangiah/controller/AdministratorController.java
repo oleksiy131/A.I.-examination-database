@@ -95,9 +95,14 @@ public class AdministratorController {
         return "science-quiz"; // the name of the HTML template for the quiz page
     }
     
-    @GetMapping("/create")
+    @GetMapping("/create-student")
     public String showCreateStudentForm() {
         return "create-student"; // This corresponds to the name of your HTML file
+    }
+    
+    @GetMapping("/create-instructor")
+    public String showCreateInstructorForm() {
+        return "create-instructor"; // This corresponds to the name of your HTML file
     }
     
     @GetMapping("/import")
