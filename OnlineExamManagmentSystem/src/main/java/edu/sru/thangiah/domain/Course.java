@@ -52,6 +52,17 @@ public class Course {
 	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
+
+	public Set<Instructor> getInstructors() {
+		return instructors;
+	}
+
+	public void setInstructors(Set<Instructor> instructors) {
+		this.instructors = instructors;
+	}
+	
+	
+	
     
     
     

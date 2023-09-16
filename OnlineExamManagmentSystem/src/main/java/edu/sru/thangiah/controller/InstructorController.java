@@ -7,20 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 
 @RestController
 @RequestMapping("/instructor")
 public class InstructorController {
 
-    private final InstructorRepository instructorRepository;
+    private  InstructorRepository instructorRepository;
+    private  CourseRepository courseRepository;
 
-    public InstructorController(InstructorRepository instructorRepository) {
+
+    public InstructorController(InstructorRepository instructorRepository, CourseRepository courseRepository) {
         this.instructorRepository = instructorRepository;
+        this.courseRepository = courseRepository;
     }
-
+    
+ 
     @GetMapping("/list")
     public String showInstructorList(Model model) {
         List<Instructor> instructors = (List<Instructor>) instructorRepository.findAll();

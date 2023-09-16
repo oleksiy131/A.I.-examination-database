@@ -33,16 +33,16 @@ public class Instructor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long instructorId;
+    private Long instructorId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
-        joinColumns = {
-            @JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
-        },
-        inverseJoinColumns = {
-            @JoinColumn(name = "course_id", referencedColumnName = "id")
-        })
+    @JoinTable(
+        name = "INSTRUCTOR_COURSE",
+        joinColumns = @JoinColumn(name = "instructor_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    
+    
     private Set<Course> courses;
     
 
@@ -154,6 +154,10 @@ public class Instructor {
         this.instructorUsername = instructorUsername;
         this.creditsTaught = creditsTaught;
     }
+
+	public void setInstructorId(Long instructorId) {
+		this.instructorId = instructorId;
+	}
 	
 	
 	

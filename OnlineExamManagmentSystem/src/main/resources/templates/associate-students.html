@@ -19,7 +19,7 @@
 
         <label for="courseId">Select a Course:</label>
         <select id="courseId" name="courseId">
-            <!-- Use Thymeleaf each loop to iterate over a list of courses -->
+            <!-- Using Thymeleaf each loop to iterate over a list of courses -->
             <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
         </select>
 
