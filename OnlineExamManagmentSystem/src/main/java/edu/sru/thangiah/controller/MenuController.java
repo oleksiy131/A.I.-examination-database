@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.UserRepository;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import edu.sru.thangiah.service.UserVerifyService;
-//import jakarta.mail.MessagingException;
-//import jakarta.servlet.http.HttpServletRequest;
+import edu.sru.thangiah.service.EmailVerificationService;
 
 @Controller
 public class MenuController {
@@ -37,42 +34,31 @@ public class MenuController {
 
 	@Autowired
     private UserRepository userRepository;
+	
 
 	
 	// this will pull data from the user, the user enters this data on the register.html page
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User(null, null, null, null, null, null, null));
-        return "register";
-    }
+	@GetMapping("/register")
+	public String showRegistrationForm(Model model) {
+	    // Create a new User object with the required data
+	    User user = new User(null, null, null, null, null, null, null);
+
+	    // Add the user object to the model if needed for your view
+	    model.addAttribute("user", user);
+
+	    return "redirect:register";
+	}
     //this moves the data to the userRepository that stores the data in our SQL server.
     @PostMapping("/register")
     public String registerUser(@ModelAttribute User user) {
         userRepository.save(user);
-        return "redirect:navbar";
+        
+        //EmailVerifyController emailVerifyController = new EmailVerifyController(null);
+		// Pass the user object to the EmailVerifyController method
+	    EmailVerifyController.sendMail();
+        
+        return "navbar";
     }
     
-/*
-    @Autowired
-    private UserVerifyService service;
- 
-    /*
-     * this is still being worked on, its part of email verification.
-     * 
-     * 
-     * */
-    /*
-    @PostMapping("/register")
-    public String processRegister(User user, HttpServletRequest request)
-            throws UnsupportedEncodingException, MessagingException, javax.mail.MessagingException {
-        service.register(user, getSiteURL(request));
-        return "registration_success";
-    }
- 
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
-    }  
- */    
 }
 

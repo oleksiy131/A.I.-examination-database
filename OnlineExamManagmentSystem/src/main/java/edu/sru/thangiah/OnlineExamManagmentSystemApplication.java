@@ -21,12 +21,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class OnlineExamManagmentSystemApplication {
+	
 
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
 		
 		
 	}
+
+	
 }
 
 
