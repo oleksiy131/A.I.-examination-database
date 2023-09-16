@@ -37,13 +37,15 @@ public class Instructor {
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
-    joinColumns = {
-    		@JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
-    },
-    inverseJoinColumns = {
-    		@JoinColumn(name = "course_id", referencedColumnName = "id")
-    })
+        joinColumns = {
+            @JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
+        },
+        inverseJoinColumns = {
+            @JoinColumn(name = "course_id", referencedColumnName = "id")
+        })
     private Set<Course> courses;
+    
+
     
     @NonNull
     @Column(name = "first_name")

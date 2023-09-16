@@ -1,7 +1,9 @@
 package edu.sru.thangiah.controller;
 
-import java.util.List; 
+import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.sru.thangiah.domain.Course;
@@ -36,7 +39,7 @@ public class StudentController
     @GetMapping("/students")
     public String showStudentList(Model model) {
         // Retrieve the list of students from the repository
-        List<Student> students = (List<Student>) studentRepository.findAll();
+        List<Student> students = studentRepository.findAll();
 
         // Add the list of students to the model for rendering in the HTML template
         model.addAttribute("students", students);
@@ -94,6 +97,7 @@ public class StudentController
 
 	     return "redirect:/student/course/create"; // Redirect back to the form page
 	 }
+	
 
 
 }

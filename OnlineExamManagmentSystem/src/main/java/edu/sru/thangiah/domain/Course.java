@@ -25,6 +25,9 @@ public class Course {
     
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private Set<Student> students;
+    
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    private Set<Instructor> instructors;
 
 	public Long getId() {
 		return id;

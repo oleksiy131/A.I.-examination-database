@@ -39,6 +39,15 @@ public class Student {
     })
     private Set<Course> courses;
     
+ // Getter and setter for courses
+    public Set<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(Set<Course> courses) {
+        this.courses = courses;
+    }
+    
     @NonNull
     @Column (name = "first_name")
     private String studentFirstName;

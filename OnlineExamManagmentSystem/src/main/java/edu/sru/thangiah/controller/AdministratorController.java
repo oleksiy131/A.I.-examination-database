@@ -2,6 +2,8 @@ package edu.sru.thangiah.controller;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Administrator;
+import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.AdministratorRepository;
+import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 
 import java.util.List;
@@ -35,6 +39,8 @@ public class AdministratorController {
     private AdministratorRepository administratorRepository;
     @Autowired
 	private StudentRepository studentRepository;
+    @Autowired
+	private CourseRepository courseRepository;
 
 
     @GetMapping("/administratorlogin")
@@ -110,6 +116,21 @@ public class AdministratorController {
         return "import"; // This corresponds to the name of your HTML file
     }
     
+    @GetMapping("/associate")
+    public String associateStudentWithCourseForm(Model model) {
+        // Retrieve the list of students and courses from the repository
+        List<Student> students = studentRepository.findAll();
+        List<Course> courses = courseRepository.findAll();
+
+        // Add the lists of students and courses to the model for rendering in the HTML template
+        model.addAttribute("students", students);
+        model.addAttribute("courses", courses);
+
+        // Return the name of the HTML template for the form
+        return "associate-students";
+    }
+
+    
     @GetMapping("/upload-success")
     public String uploadSuccess() {
         return "upload-success"; // This corresponds to the name of your HTML file
@@ -127,8 +148,27 @@ public class AdministratorController {
         // Return the name of the HTML template to be displayed
         return "student-list";
     }
-
-   
     
+    
+	 @PostMapping("/student/course/associate")
+	 public ResponseEntity<String> associateStudentWithCourse(
+	      @RequestParam Long studentId,
+	      @RequestParam Long courseId,
+	      Model model) {
+	      // Retrieve the student and course entities from the repository
+	      Student student = studentRepository.findById(studentId).orElse(null);
+	      Course course = courseRepository.findById(courseId).orElse(null);
+
+	      // Check if both entities exist
+	      if (student != null && course != null) {
+	          // Add the course to the student's courses
+	          student.getCourses().add(course);
+	          studentRepository.save(student);
+	          return ResponseEntity.ok("Student associated with the course successfully");
+	      } else {
+	          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Student or course not found");
+	      }
+	 }
+
 }
 
