@@ -43,6 +43,4 @@ public class InstructorController {
         return instructorRepository.findById(instructorId).orElse(null);
     }
 
-    // Add other methods as needed, similar to the StudentController
-
 }
