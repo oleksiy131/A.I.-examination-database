@@ -115,6 +115,11 @@ public class AdministratorController {
         return "create-instructor"; // This corresponds to the name of your HTML file
     }
     
+    @GetMapping("/add-course")
+    public String showCreateCourseForm() {
+        return "add-course"; // This corresponds to the name of your HTML file
+    }
+    
     @GetMapping("/import")
     public String importStudents() {
         return "import"; // This corresponds to the name of your HTML file
