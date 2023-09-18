@@ -15,14 +15,17 @@ public class UserRegistrationDto {
 	private String password;
 	
 	private String username;
+	
+	private String verificationCode;
 
-	public UserRegistrationDto(String firstName, String lastName, String email, String password, String username) {
+	public UserRegistrationDto(String firstName, String lastName, String email, String password, String username, String verificationCode ) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.username = username;
+		this.verificationCode = verificationCode;
 	}
 
 	public String getFirstName() {
@@ -66,8 +69,12 @@ public class UserRegistrationDto {
 	}
 
 	public String getVerificationCode() {
-		
-		return null;
-	} 
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+
 
 }

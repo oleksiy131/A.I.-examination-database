@@ -1,6 +1,8 @@
 package edu.sru.thangiah.controller;
 
 
+import javax.mail.MessagingException;
+
 //import java.io.UnsupportedEncodingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.EmailVerificationService;
+import net.bytebuddy.utility.RandomString;
 
 @Controller
 public class MenuController {
@@ -46,18 +49,24 @@ public class MenuController {
 	    // Add the user object to the model if needed for your view
 	    model.addAttribute("user", user);
 
-	    return "redirect:register";
+	    return "register";
 	}
-    //this moves the data to the userRepository that stores the data in our SQL server.
+    //this moves the data to the userRepository that stores the data in our SQL server and passes the
+	//user data to EmailVerificationService to send a confirmation email
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute User user) {
+    public String registerUser(@ModelAttribute User user){
+    	
+    	String randomCode = RandomString.make(64);
+        user.setVerificationCode(randomCode);
+        user.setEnabled(false);
+    	
         userRepository.save(user);
         
-        //EmailVerifyController emailVerifyController = new EmailVerifyController(null);
+        EmailVerificationService emailVerifyservice = new EmailVerificationService();
 		// Pass the user object to the EmailVerifyController method
-	    EmailVerifyController.sendMail();
+        emailVerifyservice.sendMail(user);
         
-        return "navbar";
+        return "redirect:navbar";
     }
     
 }

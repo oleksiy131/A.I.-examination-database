@@ -48,6 +48,7 @@ public class User {
     private String username;
     
     @Column(name = "verification_code", length = 64)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private String verificationCode;
     
     private boolean enabled;
