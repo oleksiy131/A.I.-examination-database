@@ -4,6 +4,10 @@ import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.web.dto.UserRegistrationDto;
 
 public interface UserService {
-	User save(UserRegistrationDto registrationDto);
+    static User registerNewUserAccount(UserRegistrationDto userDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	void save(UserRegistrationDto registrationDto);
 }

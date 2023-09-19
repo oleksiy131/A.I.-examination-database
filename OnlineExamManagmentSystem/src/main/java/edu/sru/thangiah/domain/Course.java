@@ -18,13 +18,15 @@ import jakarta.persistence.Table;
 
 public class Course {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     private String courseName;
     
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
     private Set<Student> students;
+    
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    private Set<Instructor> instructors;
 
 	public Long getId() {
 		return id;
@@ -49,6 +51,17 @@ public class Course {
 	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
+
+	public Set<Instructor> getInstructors() {
+		return instructors;
+	}
+
+	public void setInstructors(Set<Instructor> instructors) {
+		this.instructors = instructors;
+	}
+	
+	
+	
     
     
     

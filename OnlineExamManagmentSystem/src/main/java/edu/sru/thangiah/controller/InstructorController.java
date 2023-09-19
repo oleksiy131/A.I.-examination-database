@@ -1,18 +1,52 @@
 package edu.sru.thangiah.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import edu.sru.thangiah.domain.Course;
+import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.InstructorRepository;
 
 @RestController
-@RequestMapping("/instructors")
+@RequestMapping("/instructor")
 public class InstructorController {
-	
-	@GetMapping("/math-quiz")
-    public String mathQuizPage() {
-        // displays the math quiz
-        return "math-quiz"; // the name of the HTML template for the quiz page
+
+    private  InstructorRepository instructorRepository;
+    private  CourseRepository courseRepository;
+
+
+    public InstructorController(InstructorRepository instructorRepository, CourseRepository courseRepository) {
+        this.instructorRepository = instructorRepository;
+        this.courseRepository = courseRepository;
+    }
+    
+ 
+    @GetMapping("/list")
+    public String showInstructorList(Model model) {
+        List<Instructor> instructors = (List<Instructor>) instructorRepository.findAll();
+        model.addAttribute("instructors", instructors);
+        return "instructor-list"; // Create an HTML template for instructor list
+    }
+
+    @PostMapping("/instructor/create")
+    public ResponseEntity<String> createInstructor(@RequestBody Instructor instructor) {
+        try {
+            Instructor savedInstructor = instructorRepository.save(instructor);
+            return ResponseEntity.ok("Instructor created successfully. Instructor ID: " + savedInstructor.getInstructorId());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating instructor: " + e.getMessage());
+        }
+    }
+    
+    @GetMapping("/{instructorId}")
+    public Instructor findInstructor(@PathVariable Long instructorId) {
+        return instructorRepository.findById(instructorId).orElse(null);
     }
 
 }
-

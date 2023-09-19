@@ -10,5 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // Add custom query methods here:
 	@SuppressWarnings("unchecked")
 	User save(User user);
+	
+	// Custom query method to find a user by verification code
+    User findByVerificationCode(String verificationCode);
 
 }
