@@ -15,10 +15,13 @@ import edu.sru.thangiah.domain.Administrator;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
+import edu.sru.thangiah.service.EmailService;
 
 import java.util.List;
 
@@ -45,6 +48,11 @@ public class AdministratorController {
 	private CourseRepository courseRepository;
     @Autowired
     private  InstructorRepository instructorRepository;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private  UserRepository userRepository;
+    
 
 
     @GetMapping("/administratorlogin")
@@ -216,6 +224,47 @@ public class AdministratorController {
 	          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Student or course not found");
 	      }
 	 }
+	 
+	 @GetMapping("/register")
+	    public String showRegistrationForm() {
+	        return "register"; // This maps to the register.html file
+	    }
+
+	    @PostMapping("/register")
+	    public String registerUser(
+	            @RequestParam String firstName,
+	            @RequestParam String lastName,
+	            @RequestParam String email,
+	            @RequestParam String password,
+	            @RequestParam String username,
+	            @RequestParam String role) {
+	        
+	        // Create a new user with the provided information
+	        User user = new User(firstName, lastName, email, password, username, role);
+	        
+	        // Save the user to the database using JpaRepository's save method
+	        userRepository.save(user);
+	        
+	        // Send a verification email
+	        sendVerificationEmail(user);
+
+	        // Redirect to a confirmation page or login page
+	        return "redirect:/registration-confirmation"; // You can customize this URL
+	    }
+	    
+	 // Send verification email to the user
+	    private void sendVerificationEmail(User user) {
+	        String subject = "Email Verification";
+	        String message = "Your verification code is: " + user.getVerificationCode();
+	        String recipientEmail = user.getEmail();
+
+	        try {
+	            emailService.sendEmail(recipientEmail, subject, message);
+	        } catch (Exception e) {
+	            // Handle the exception (e.g., log it)
+	        }
+	    }
+
 	 
 
 
