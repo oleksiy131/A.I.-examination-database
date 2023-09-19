@@ -1,14 +1,16 @@
 package edu.sru.thangiah.domain;
 
 
-import java.util.Set;
+import java.util.Set; 
 
 import org.springframework.lang.NonNull;
 
-
+import edu.sru.thangiah.model.User.Role;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,8 +20,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.criteria.Fetch;
-
 @Entity
 @Table(name = "STUDENT")
 
@@ -63,13 +63,37 @@ public class Student {
     @Column (name = "enrolled_credits")
     private float creditsTaken;
     
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
-	public long getStudentId() {
+	public Student(Long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
+			String studentEmail, String studentPassword, String studentUsername, float creditsTaken, Role role) {
+		super();
+		this.studentId = studentId;
+		this.courses = courses;
+		this.studentFirstName = studentFirstName;
+		this.studentLastName = studentLastName;
+		this.studentEmail = studentEmail;
+		this.studentPassword = studentPassword;
+		this.studentUsername = studentUsername;
+		this.creditsTaken = creditsTaken;
+		this.role = role;
+	}
+
+	public Long getStudentId() {
 		return studentId;
 	}
 
-	public void setStudentId(long studentId) {
+	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
+	}
+
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
 	}
 
 	public String getStudentFirstName() {
@@ -120,20 +144,13 @@ public class Student {
 		this.creditsTaken = creditsTaken;
 	}
 
-	public Student(Long studentId, String studentFirstName, String studentLastName, String studentEmail,
-			String studentPassword, String studentUsername, float creditsTaken) {
-		super();
-		this.studentId = studentId;
-		this.studentFirstName = studentFirstName;
-		this.studentLastName = studentLastName;
-		this.studentEmail = studentEmail;
-		this.studentPassword = studentPassword;
-		this.studentUsername = studentUsername;
-		this.creditsTaken = creditsTaken;
+	public Role getRole() {
+		return role;
 	}
 
-	public Student() {
-		
+	public void setRole(Role role) {
+		this.role = role;
 	}
-	
+
+    
 }

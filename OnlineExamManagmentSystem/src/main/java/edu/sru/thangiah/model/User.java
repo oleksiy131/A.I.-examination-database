@@ -1,20 +1,14 @@
 package edu.sru.thangiah.model;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import org.springframework.lang.NonNull;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -47,81 +41,112 @@ public class User {
     @Column(name = "username")
     private String username;
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-    		name = "users_roles",
-    		joinColumns = @JoinColumn(
-    				name = "user_id", referencedColumnName = "id"),
-    		inverseJoinColumns = @JoinColumn(
-    				name ="role_id", referencedColumnName = "id"))
-    private Collection<Roles> roles;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+    @Column(name = "verification_code")
+	private String verificationCode;
 
-    public User(String firstName, String lastName, String email, String password, String username, String role) {
-        super();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.username = username;
-        this.roles = Arrays.asList(new Roles(role));
+
+    public enum Role {
+        ROOT, ADMINISTRATOR, INSTRUCTOR, STUDENT
     }
 
 
-	public long getId() {
+	public User(Long id, String firstName, String lastName, String email, String password, String username, Role role,
+			String verificationCode) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.username = username;
+		this.role = role;
+		this.verificationCode = verificationCode;
+	}
+	
+	public User() {}
+
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	public String getFirstName() {
 		return firstName;
 	}
 
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+
 
 	public String getLastName() {
 		return lastName;
 	}
 
+
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
 
 	public String getEmail() {
 		return email;
 	}
 
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 
 	public String getPassword() {
 		return password;
 	}
 
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
 
 	public String getUsername() {
 		return username;
 	}
 
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-	public Collection<Roles> getRoles() {
-		return roles;
-	}
 
-	public void setRoles(Collection<Roles> roles) {
-		this.roles = roles;
+	public Role getRole() {
+		return role;
 	}
 
 
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+	
 }
+

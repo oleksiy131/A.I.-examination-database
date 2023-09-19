@@ -5,19 +5,22 @@ import javax.persistence.JoinTable;
 
 import org.springframework.lang.NonNull;
 
-
+import edu.sru.thangiah.model.User.Role;
+//import edu.sru.thangiah.model.User.Role;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.JoinColumn;
@@ -65,10 +68,24 @@ public class Instructor {
     @Column(name = "credits_taught")
     private float creditsTaught;
     
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
 
+	public Instructor(long instructorId, Set<Course> courses, String instructorFirstName, String instructorLastName,
+			String instructorEmail, String instructorPassword, String instructorUsername, float creditsTaught,
+			Role role) {
+		super();
+		this.instructorId = instructorId;
+		this.courses = courses;
+		this.instructorFirstName = instructorFirstName;
+		this.instructorLastName = instructorLastName;
+		this.instructorEmail = instructorEmail;
+		this.instructorPassword = instructorPassword;
+		this.instructorUsername = instructorUsername;
+		this.creditsTaught = creditsTaught;
+		this.role = role;
+	}
 
 	public long getInstructorId() {
 		return instructorId;
@@ -76,6 +93,14 @@ public class Instructor {
 
 	public void setInstructorId(long instructorId) {
 		this.instructorId = instructorId;
+	}
+
+	public Set<Course> getCourses() {
+		return courses;
+	}
+
+	public void setCourses(Set<Course> courses) {
+		this.courses = courses;
 	}
 
 	public String getInstructorFirstName() {
@@ -126,18 +151,14 @@ public class Instructor {
 		this.creditsTaught = creditsTaught;
 	}
 
-
-	public Set<Course> getCourses() {
-		return courses;
+	public Role getRole() {
+		return role;
 	}
 
-	public void setCourses(Set<Course> courses) {
-		this.courses = courses;
+	public void setRole(Role role) {
+		this.role = role;
 	}
-	
 
     
-	
-	
     // standard constructors / setters / getters / toString
 }

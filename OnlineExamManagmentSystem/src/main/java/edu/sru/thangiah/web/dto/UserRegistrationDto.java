@@ -1,6 +1,16 @@
 package edu.sru.thangiah.web.dto;
 
+
+import edu.sru.thangiah.model.User.Role;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 public class UserRegistrationDto {
+	
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 	
 	private String firstName;
 	
@@ -11,14 +21,30 @@ public class UserRegistrationDto {
 	private String password;
 	
 	private String username;
+	
+	private Role role;
+	
+	private String verificationCode;
 
-	public UserRegistrationDto(String firstName, String lastName, String email, String password, String username) {
+	public UserRegistrationDto(Long id, String firstName, String lastName, String email, String password,
+			String username, Role role, String verificationCode) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.username = username;
+		this.role = role;
+		this.verificationCode = verificationCode;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getFirstName() {
@@ -59,6 +85,23 @@ public class UserRegistrationDto {
 
 	public void setUsername(String username) {
 		this.username = username;
-	} 
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public String getVerificationCode() {
+		return verificationCode;
+	}
+
+	public void setVerificationCode(String verificationCode) {
+		this.verificationCode = verificationCode;
+	}
+	
 
 }

@@ -15,18 +15,45 @@
 
 package edu.sru.thangiah;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 
+import edu.sru.thangiah.model.User;
+import edu.sru.thangiah.repository.UserRepository;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@SpringBootApplication
-public class OnlineExamManagmentSystemApplication {
+
+@SpringBootApplication(exclude = UserDetailsServiceAutoConfiguration.class)
+ class OnlineExamManagmentSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
-		
-		
 	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	
+	@Bean
+	public CommandLineRunner setupDefaultUser() {
+	    return args -> {
+	        User root = new User(null, null, null, null, null, null, null, null);
+	        root.setUsername("root");
+	        root.setPassword(passwordEncoder.encode("software"));
+	        root.setRole(User.Role.ADMINISTRATOR);
+	        
+	        if (userRepository.findByUsername(root.getUsername()).isEmpty()) {
+	            userRepository.save(root);
+	        }
+	    };
+	}
+
 }
 
 

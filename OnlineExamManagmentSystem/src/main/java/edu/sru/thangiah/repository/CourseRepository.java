@@ -9,7 +9,7 @@ import edu.sru.thangiah.domain.Course;
 
 
 
-public interface CourseRepository extends JpaRepository<Course, Long> {
+public interface CourseRepository extends CrudRepository<Course, Long> {
 	
 	List<Course> findByIdContaining(Long Id);
 }

@@ -1,14 +1,16 @@
 package edu.sru.thangiah.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import java.util.Optional;
+
+import org.springframework.data.repository.CrudRepository;
 
 import edu.sru.thangiah.model.User;
 
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
     // Add custom query methods here:
 	@SuppressWarnings("unchecked")
 	User save(User user);
+	
+	Optional<User> findByUsername(String username);
 
 }

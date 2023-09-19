@@ -1,6 +1,7 @@
 package edu.sru.thangiah.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class StudentController
     @GetMapping("/students")
     public String showStudentList(Model model) {
         // Retrieve the list of students from the repository
-        List<Student> students = studentRepository.findAll();
+        List<Student> students = (List<Student>) studentRepository.findAll();
 
         // Add the list of students to the model for rendering in the HTML template
         model.addAttribute("students", students);
@@ -57,7 +58,7 @@ public class StudentController
 	}
 	
 	@GetMapping("/find/{name}")
-	public List<Student> findStudentsContainingByStudentFirstName(@PathVariable String name){
+	public Optional<Student> findStudentsContainingByStudentFirstName(@PathVariable String name){
 		return studentRepository.findBystudentFirstNameContaining(name);
 	}
 	

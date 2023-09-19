@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.User.Role;
 import edu.sru.thangiah.repository.StudentRepository;
 
 @Service
@@ -32,13 +33,14 @@ public class ExcelImportService {
                     continue;
                 }
 
-                Student student = new Student();
+                Student student = new Student(null, null, null, null, null, null, null, 0, null);
                 student.setStudentFirstName(row.getCell(0).getStringCellValue());
                 student.setStudentLastName(row.getCell(1).getStringCellValue());
                 student.setStudentEmail(row.getCell(2).getStringCellValue());
                 student.setStudentPassword(row.getCell(3).getStringCellValue());
                 student.setStudentUsername(row.getCell(4).getStringCellValue());
                 student.setCreditsTaken((float) row.getCell(5).getNumericCellValue());
+                student.setRole(Role.valueOf(row.getCell(6).getStringCellValue()));
 
                 // Save the student to the database
                 studentRepository.save(student);
