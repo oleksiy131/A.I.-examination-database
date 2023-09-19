@@ -249,12 +249,12 @@ public class AdministratorController {
 	        sendVerificationEmail(user);
 
 	        // Redirect to a confirmation page or login page
-	        return "redirect:/registration-confirmation"; // You can customize this URL
+	        return "redirect:/registration-confirmation"; // 
 	    }
 	    
 	    @GetMapping("/registration-confirmation")
 	    public String registerConfirm() {
-	        return "registration-confirmation"; // This corresponds to the name of your HTML file
+	        return "registration-confirmation"; // The HTML file
 	    }
 	    
 	 // Send verification email to the user
