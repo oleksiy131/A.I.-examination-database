@@ -2,6 +2,7 @@ package edu.sru.thangiah.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.springframework.lang.NonNull;
 
@@ -18,137 +19,137 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
-
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
-	
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @NonNull
     @Column(name = "first_name")
     private String firstName;
-    
+
     @NonNull
     @Column(name = "last_name")
     private String lastName;
-    
+
     @NonNull
     @Column(name = "email")
     private String email;
-    
+
     @NonNull
     @Column(name = "password")
     private String password;
-    
+
     @NonNull
     @Column(name = "username")
     private String username;
-    
-    @Column(name = "verification_code", length = 64)
+
+    @NonNull
+    @Column(name = "verification_code")
     private String verificationCode;
-    
-    private boolean enabled;
-    
-    
+
+    @NonNull
+    @Column(name = "verified")
+    private boolean verified;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
-    		name = "users_roles",
-    		joinColumns = @JoinColumn(
-    				name = "user_id", referencedColumnName = "id"),
-    		inverseJoinColumns = @JoinColumn(
-    				name ="role_id", referencedColumnName = "id"))
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
     private Collection<Roles> roles;
 
-    public User(String firstName, String lastName, String email, String password, String username, String role, String verificationCode) {
+    public User(String firstName, String lastName, String email, String password, String username, String role) {
         super();
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.username = username;
-        this.verificationCode = verificationCode;
         this.roles = Arrays.asList(new Roles(role));
+        this.verificationCode = generateVerificationCode();
+        this.verified = false; // Initialize as unverified
     }
 
+    // Generate a random verification code using UUID
+    private String generateVerificationCode() {
+        return UUID.randomUUID().toString();
+    }
 
-	public long getId() {
-		return id;
-	}
+    public String getVerificationCode() {
+        return verificationCode;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public String getPassword() {
-		return password;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public String getUsername() {
-		return username;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public Collection<Roles> getRoles() {
-		return roles;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public void setRoles(Collection<Roles> roles) {
-		this.roles = roles;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
+    public boolean isVerified() {
+        return verified;
+    }
 
-	public String getVerificationCode() {
-		return verificationCode;
-	}
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
 
+    public Collection<Roles> getRoles() {
+        return roles;
+    }
 
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
-	}
-
-
-	public boolean isEnabled() {
-		return enabled;
-	}
-
-
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-
-
+    public void setRoles(Collection<Roles> roles) {
+        this.roles = roles;
+    }
 }

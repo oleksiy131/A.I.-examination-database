@@ -8,23 +8,28 @@ import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.web.dto.UserRegistrationDto;
 
 @Service
-public class UserServiceImpl implements UserService{
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	
-	public UserServiceImpl(UserRepository userRepository) {
-		super();
-		this.userRepository = userRepository;
-	}
+public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public User registerNewUserAccount(UserRegistrationDto userDto) {
+        // Create a User object from the registration data
+        User user = new User(
+            userDto.getFirstName(),
+            userDto.getLastName(),
+            userDto.getEmail(),
+            userDto.getPassword(),
+            userDto.getUsername(),
+            "ROLE_USER"
+        );
+
+        // Save the user to the database
+        return userRepository.save(user);
+    }
 
 	@Override
-	public User save(UserRegistrationDto registrationDto) {
-		User user = new User(registrationDto.getFirstName(), registrationDto.getLastName(), registrationDto.getEmail(), registrationDto.getPassword(), 
-			    registrationDto.getUsername(), "ROLE_USER",registrationDto.getVerificationCode());
+	public void save(UserRegistrationDto registrationDto) {
+		// TODO Auto-generated method stub
 		
-		return userRepository.save(user);
 	}
-
 }
