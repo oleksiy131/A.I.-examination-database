@@ -1,16 +1,16 @@
 package edu.sru.thangiah.domain;
 
 
-import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNull; 
 
-import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -42,9 +42,21 @@ public class Administrator {
     @Column (name = "username")
     private String adminUsername;
     
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+    
+   
+	public Administrator(long adminId, String adminFirstName, String adminLastName, String adminEmail,
+			String adminPassword, String adminUsername, Role role) {
+		super();
+		this.adminId = adminId;
+		this.adminFirstName = adminFirstName;
+		this.adminLastName = adminLastName;
+		this.adminEmail = adminEmail;
+		this.adminPassword = adminPassword;
+		this.adminUsername = adminUsername;
+		this.role = role;
+	}
 
 	public long getAdminId() {
 		return adminId;
@@ -94,16 +106,13 @@ public class Administrator {
 		this.adminUsername = adminUsername;
 	}
 
-	public Roles getRole() {
+	public Role getRole() {
 		return role;
 	}
 
-	public void setRole(Roles role) {
+	public void setRole(Role role) {
 		this.role = role;
 	}
-	
-	
-	
 
     // standard constructors / setters / getters / toString
 }
