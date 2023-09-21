@@ -91,7 +91,11 @@
         <div class="info">
             Please make sure the format of the Excel File is as follows: <br><br>FirstName LastName Email Password UserName CreditsTaken
         </div>
+		 
+		<a href="/download/excel">Download Excel</a>
+		 
 
+		
         <div class="message error" th:if="${param.error == 'emptyfile'}">Please select a file to upload.</div>
         <div class="message error" th:if="${param.error == 'processing'}">Error processing the file.</div>
         <div class="message success" th:if="${param.success == 'true'}">File uploaded successfully.</div>
