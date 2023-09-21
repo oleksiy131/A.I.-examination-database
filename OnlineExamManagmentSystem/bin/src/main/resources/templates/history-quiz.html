@@ -1,0 +1,152 @@
+<!-- history-quiz.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+        }
+        .option {
+            margin: 10px 0;
+        }
+        label {
+            display: flex;
+            align-items: center;
+        }
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        #submitTestButton {
+            display: none;
+            margin-top: 20px;
+            background-color: #0073e6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #submitTestButton:hover {
+            background-color: #005bbf;
+        }
+        #testResult {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1> History Quiz</h1>
+        <div class="question" id="question">Question 1: When was the Declaration of Independence signed?</div>
+        <div class="options" id="options">
+            <label class="option">
+                <input type="radio" name="answer" value="1776"> 1776
+            </label>
+            <label class="option">
+                <input type="radio" name="answer" value="1865"> 1865
+            </label>
+            <label class="option">
+                <input type="radio" name="answer" value="1492"> 1492
+            </label>
+        </div>
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="result"></p>
+        <button id="submitTestButton" onclick="submitTest()">Submit Test</button>
+        <p id="testResult"></p>
+    </div>
+    <script>
+        const questions = [
+            { question: "Question 1: When was the Declaration of Independence signed?", options: ["1776", "1865", "1492"], answer: "1776" },
+            { question: "Question 2: Who was the first President of the United States?", options: ["Thomas Jefferson", "John Adams", "George Washington"], answer: "George Washington" },
+            { question: "Question 3: What year did World War II begin?", options: ["1914", "1939", "1945"], answer: "1939" },
+            { question: "Question 4: Who was the leader of the Civil Rights Movement in the 1960s?", options: ["Malcolm X", "Martin Luther King Jr.", "Rosa Parks"], answer: "Martin Luther King Jr." },
+            { question: "Question 5: When was the Magna Carta signed?", options: ["1215", "1492", "1776"], answer: "1215" },
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        function displayQuestion() {
+            const currentQuestion = questions[currentQuestionIndex];
+            document.getElementById("question").textContent = currentQuestion.question;
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+
+            currentQuestion.options.forEach((option, index) => {
+                const label = document.createElement("label");
+                label.className = "option";
+                label.innerHTML = `
+                    <input type="radio" name="answer" value="${option}"> ${option}
+                `;
+                optionsContainer.appendChild(label);
+            });
+
+            document.getElementById("result").textContent = "";
+        }
+
+        function checkAnswer() {
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                const currentQuestion = questions[currentQuestionIndex];
+                if (selectedAnswer.value === currentQuestion.answer) {
+                    document.getElementById("result").textContent = "Correct!";
+                    correctAnswers++;
+                } else {
+                    document.getElementById("result").textContent = "Incorrect. Try again.";
+                }
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion();
+                } else {
+                    document.getElementById("submitTestButton").style.display = "block";
+                }
+            } else {
+                document.getElementById("result").textContent = "Please select an answer.";
+            }
+        }
+
+        function submitTest() {
+            document.getElementById("submitTestButton").style.display = "none";
+            const totalQuestions = questions.length;
+            document.getElementById("testResult").textContent = `You got ${correctAnswers} out of ${totalQuestions} correct.`;
+            document.getElementById("testResult").style.display = "block";
+        }
+
+        displayQuestion();
+    </script>
+</body>
+</html>
