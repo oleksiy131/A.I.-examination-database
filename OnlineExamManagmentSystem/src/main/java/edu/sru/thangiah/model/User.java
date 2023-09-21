@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -69,7 +70,7 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);	//encode
         this.username = username;
         this.roles = Arrays.asList(new Roles(role));
         this.verificationCode = generateVerificationCode();
