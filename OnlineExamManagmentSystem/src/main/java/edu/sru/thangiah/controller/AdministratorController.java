@@ -123,10 +123,7 @@ public class AdministratorController {
         return "create-instructor"; // This corresponds to the name of your HTML file
     }
     
-    @GetMapping("/add-course")
-    public String showCreateCourseForm() {
-        return "add-course"; // This corresponds to the name of your HTML file
-    }
+    
     
     @GetMapping("/import")
     public String importStudents() {
@@ -162,28 +159,7 @@ public class AdministratorController {
     }
     
 
-	// Endpoint to associate an instructor with a course
-	    @PostMapping("/instructor/course/associate")
-	    public ResponseEntity<String> associateInstructorWithCourse(
-	        @RequestParam Long instructorId,
-	        @RequestParam Long courseId,
-	        Model model) {
-
-	        // Retrieve the instructor and course entities from the repository
-	        Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
-	        Course course = courseRepository.findById(courseId).orElse(null);
-
-	        // Check if both entities exist
-	        if (instructor != null && course != null) {
-	            // Add the course to the instructor's courses
-	            instructor.getCourses().add(course);
-	            instructorRepository.save(instructor);
-	            return ResponseEntity.ok("Instructor associated with the course successfully");
-	        } else {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Instructor or course not found");
-	        }
-	    }
-
+	
 
     
     @GetMapping("/upload-success")

@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -32,18 +33,22 @@ import javax.persistence.JoinColumn;
 public class Instructor {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long instructorId;
     
+    /*
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
         name = "INSTRUCTOR_COURSE",
         joinColumns = @JoinColumn(name = "instructor_id"),
         inverseJoinColumns = @JoinColumn(name = "course_id")
     )
+    */
+    
+    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Course> courses = new HashSet<>();
     
     
-    private Set<Course> courses;
+   // private Set<Course> courses;
     
 
     
