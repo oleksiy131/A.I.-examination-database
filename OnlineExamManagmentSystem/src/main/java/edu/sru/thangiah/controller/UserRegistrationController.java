@@ -19,18 +19,5 @@ public class UserRegistrationController {
 		super();
 		this.userService = userService;
 	}
-	
-	/*
-	//@GetMapping
-	public String showRegistrationForm() {
-		return "register";
-	}
-	
-	@PostMapping
-	public String registerUserAccount(@ModelAttribute("user")UserRegistrationDto registrationDto) {
-		userService.save(registrationDto);
-		return "redirect:/index";//registration?success";
-		
-	}
-	*/
+
 }
