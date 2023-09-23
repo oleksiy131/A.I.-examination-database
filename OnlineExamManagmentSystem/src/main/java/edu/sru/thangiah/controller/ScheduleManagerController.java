@@ -62,7 +62,7 @@ public class ScheduleManagerController {
     
     @GetMapping("/page")
     public String loadManagerPage() {
-        return "manager"; // This corresponds to the name of your HTML file
+        return "manager"; 
     }
 
     // Load/Create Instructor
