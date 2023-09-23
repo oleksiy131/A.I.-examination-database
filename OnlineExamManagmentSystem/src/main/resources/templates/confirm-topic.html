@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirm Topic</title>
+</head>
+<body>
+    <p>You have chosen the topic: <strong th:text="${topic}"></strong>. Is this correct?</p>
+    <button id="confirmButton">Yes, proceed</button>
+
+    <script type="text/javascript">
+        document.getElementById('confirmButton').addEventListener('click', function() {
+            window.location.href = '/bot/quiz';
+        });
+    </script>
+</body>
+</html>
