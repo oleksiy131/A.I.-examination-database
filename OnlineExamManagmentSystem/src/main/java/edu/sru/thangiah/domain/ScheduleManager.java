@@ -21,5 +21,31 @@ public class ScheduleManager {
 	@Column(name = "username", nullable = false)
 	private String smUsername;
 
+	public Long getScheduleManagerId() {
+		return scheduleManagerId;
+	}
+
+	public String getSmPassword() {
+		return smPassword;
+	}
+
+	public String getSmUsername() {
+		return smUsername;
+	}
+
+	public void setScheduleManagerId(Long scheduleManagerId) {
+		this.scheduleManagerId = scheduleManagerId;
+	}
+
+	public void setSmPassword(String smPassword) {
+		this.smPassword = smPassword;
+	}
+
+	public void setSmUsername(String smUsername) {
+		this.smUsername = smUsername;
+	}
+	
+	
+
 
 }

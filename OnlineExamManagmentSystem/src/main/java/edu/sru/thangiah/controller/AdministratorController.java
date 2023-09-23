@@ -16,11 +16,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.sru.thangiah.domain.Administrator;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.EmailService;
@@ -56,6 +58,8 @@ public class AdministratorController {
     private EmailService emailService;
     @Autowired
     private  UserRepository userRepository;
+    @Autowired
+    private  ScheduleManagerRepository scheduleManagerRepository;
     
 
 
@@ -254,6 +258,18 @@ public class AdministratorController {
 	    @GetMapping("/chat-page")
 	    public String chatPage() {
 	        return "chat";
+	    }
+	    
+	    @GetMapping("/schedule-managers")
+	    public String showScheduleManagerList(Model model) {
+	        // Retrieve the list of schedule managers from the repository
+	        List<ScheduleManager> managers = (List<ScheduleManager>) scheduleManagerRepository.findAll();
+
+	        // Add the list of schedule managers to the model for rendering in the HTML template
+	        model.addAttribute("managers", managers);
+
+	        // Return the name of the HTML template to be displayed
+	        return "schedule-manager-list";  // Assuming the HTML file is named 'schedule-manager-list.html'
 	    }
 	    
 	    
