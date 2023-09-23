@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Quiz</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div id="quiz-container"></div>
+<button id="submit-button">Submit</button>
+<div id="result"></div>
+
+<script>
+$(document).ready(function(){
+    $.get("/bot/quiz", function(data) {
+        var quizHtml = '';
+        data.forEach(function(question, index) {
+            quizHtml += '<div class="question" data-question-index="' + index + '">';
+            quizHtml += '<p>' + (index + 1) + '. ' + question.question.split('\n')[0] + '</p>';
+            var answers = question.question.split('\n').slice(1);
+            answers.forEach(function(answer, answerIndex) {
+                quizHtml += '<input type="radio" name="q' + index + '" value="' + answer + '">' + answer + '<br>';
+            });
+            quizHtml += '</div>';
+        });
+        $('#quiz-container').html(quizHtml);
+    });
+
+    $('#submit-button').click(function() {
+        var resultHtml = '';
+        $('.question').each(function() {
+            var questionIndex = $(this).data('question-index');
+            var selectedAnswer = $(this).find('input[type=radio]:checked').val();
+            if (selectedAnswer) {
+                var answerIndex = selectedAnswer.charCodeAt(0) - 'A'.charCodeAt(0);
+                var correctAnswerIndex = 0;  // Assuming the correct answer is always the first choice (A)
+                if (answerIndex === correctAnswerIndex) {
+                    resultHtml += '<p>Question ' + (questionIndex + 1) + ': Correct</p>';
+                } else {
+                    resultHtml += '<p>Question ' + (questionIndex + 1) + ': Incorrect</p>';
+                }
+            } else {
+                resultHtml += '<p>Question ' + (questionIndex + 1) + ': No answer selected</p>';
+            }
+        });
+        $('#result').html(resultHtml);
+    });
+});
+</script>
+
+</body>
+</html>

@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Administrator;
@@ -22,6 +24,8 @@ import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.EmailService;
+import edu.sru.thangiah.web.dto.ChatGPTRequest;
+import edu.sru.thangiah.web.dto.ChatGptResponse;
 
 import java.util.List;
 
@@ -95,10 +99,10 @@ public class AdministratorController {
         return "classes"; // the name of the HTML template for the classes page
     }
     
-    @GetMapping("/math-quiz")
+    @GetMapping("/maths-quiz")
     public String mathQuizPage() {
         // displays the math quiz
-        return "math-quiz"; // the name of the HTML template for the quiz page
+        return "maths-quiz"; // the name of the HTML template for the quiz page
     }
     
     @GetMapping("/history-quiz")
@@ -245,7 +249,14 @@ public class AdministratorController {
 	            // Handle the exception (e.g., log it)
 	        }
 	    }
-
+	
+	    
+	    @GetMapping("/chat-page")
+	    public String chatPage() {
+	        return "chat";
+	    }
+	    
+	   
 	 
 
 
