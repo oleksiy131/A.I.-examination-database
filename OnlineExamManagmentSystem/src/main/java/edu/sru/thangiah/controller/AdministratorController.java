@@ -90,48 +90,48 @@ public class AdministratorController {
     @GetMapping("/exams")
     public String examsPage() {
         // display the list of exams here
-        return "exams"; // the name of the HTML template for the exams page
+        return "exams";
     }
     
     @GetMapping("/classes")
     public String classesPage() {
         // displays the list of classes here
-        return "classes"; // the name of the HTML template for the classes page
+        return "classes"; 
     }
     
     @GetMapping("/maths-quiz")
     public String mathQuizPage() {
         // displays the math quiz
-        return "maths-quiz"; // the name of the HTML template for the quiz page
+        return "maths-quiz"; 
     }
     
     @GetMapping("/history-quiz")
     public String historyQuizPage() {
         // displays the math quiz
-        return "history-quiz"; // the name of the HTML template for the quiz page
+        return "history-quiz"; 
     }
     
     @GetMapping("/science-quiz")
     public String scienceQuizPage() {
         // displays the science quiz
-        return "science-quiz"; // the name of the HTML template for the quiz page
+        return "science-quiz"; 
     }
     
     @GetMapping("/create-student")
     public String showCreateStudentForm() {
-        return "create-student"; // This corresponds to the name of your HTML file
+        return "create-student"; 
     }
     
     @GetMapping("/create-instructor")
     public String showCreateInstructorForm() {
-        return "create-instructor"; // This corresponds to the name of your HTML file
+        return "create-instructor"; 
     }
     
     
     
     @GetMapping("/import")
     public String importStudents() {
-        return "import"; // This corresponds to the name of your HTML file
+        return "import";
     }
     
     @GetMapping("/associate")
@@ -168,7 +168,7 @@ public class AdministratorController {
     
     @GetMapping("/upload-success")
     public String uploadSuccess() {
-        return "upload-success"; // This corresponds to the name of your HTML file
+        return "upload-success"; 
     }
     
     
@@ -207,7 +207,7 @@ public class AdministratorController {
 	 
 	 @GetMapping("/register")
 	    public String showRegistrationForm() {
-	        return "register"; // This maps to the register.html file
+	        return "register";
 	    }
 
 	    @PostMapping("/register")
@@ -229,12 +229,12 @@ public class AdministratorController {
 	        sendVerificationEmail(user);
 
 	        // Redirect to a confirmation page or login page
-	        return "redirect:/registration-confirmation"; // 
+	        return "redirect:/registration-confirmation"; 
 	    }
 	    
 	    @GetMapping("/registration-confirmation")
 	    public String registerConfirm() {
-	        return "registration-confirmation"; // The HTML file
+	        return "registration-confirmation"; 
 	    }
 	    
 	 // Send verification email to the user
@@ -246,7 +246,7 @@ public class AdministratorController {
 	        try {
 	            emailService.sendEmail(recipientEmail, subject, message);
 	        } catch (Exception e) {
-	            // Handle the exception (e.g., log it)
+	            // Handle the exception if any
 	        }
 	    }
 	
