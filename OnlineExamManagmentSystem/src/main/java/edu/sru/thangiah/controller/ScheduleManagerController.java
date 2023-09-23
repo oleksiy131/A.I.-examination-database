@@ -154,7 +154,4 @@ public class ScheduleManagerController {
             return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Failed to delete instructor.\"}");
         }
     }
-
-    // Edit course details - similar to the edit instructor endpoint.
-    // Additional endpoints for deleting/editing courses can also be added similarly.
 }
