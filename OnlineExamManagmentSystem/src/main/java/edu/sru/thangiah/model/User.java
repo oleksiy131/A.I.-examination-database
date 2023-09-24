@@ -2,6 +2,8 @@ package edu.sru.thangiah.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.lang.NonNull;
 
@@ -20,7 +22,7 @@ import jakarta.persistence.UniqueConstraint;
 
 
 @Entity
-@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class User {
 	
 	@Id
@@ -52,34 +54,35 @@ public class User {
     private String verificationCode;
     
     private boolean enabled;
-    
-    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-    		name = "users_roles",
-    		joinColumns = @JoinColumn(
-    				name = "user_id", referencedColumnName = "id"),
-    		inverseJoinColumns = @JoinColumn(
-    				name ="role_id", referencedColumnName = "id"))
-    private Collection<Roles> roles;
 
-    public User(String firstName, String lastName, String email, String password, String username, String role, String verificationCode) {
-        super();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.username = username;
-        this.verificationCode = verificationCode;
-        this.roles = Arrays.asList(new Roles(role));
-    }
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", 
+               joinColumns = @JoinColumn(name = "user_id"), 
+               inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Roles> roles = new HashSet<>();
+	
+	public User(Long id, String firstName, String lastName, String email, String password, String username,
+			String verificationCode, boolean enabled, Set<Roles> roles) {
+		super();
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.username = username;
+		this.verificationCode = verificationCode;
+		this.enabled = enabled;
+		this.roles = roles;
+	}
 
 
-	public long getId() {
+
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -123,11 +126,13 @@ public class User {
 		this.username = username;
 	}
 
-	public Collection<Roles> getRoles() {
+
+	public Set<Roles> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Collection<Roles> roles) {
+
+	public void setRoles(Set<Roles> roles) {
 		this.roles = roles;
 	}
 
