@@ -33,15 +33,16 @@ public class Instructor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private long instructorId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
     joinColumns = {
-    		@JoinColumn(name = "instructor_id", referencedColumnName = "instructorId")
+    		@JoinColumn(name = "id", referencedColumnName = "instructorId")
     },
     inverseJoinColumns = {
-    		@JoinColumn(name = "course_id", referencedColumnName = "id")
+    		@JoinColumn(name = "id", referencedColumnName = "id")
     })
     private Set<Course> courses;
     

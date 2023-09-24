@@ -20,7 +20,8 @@ public class Administrator {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long adminId;
+    @Column(name = "id")
+    private Long adminId;
     
     @NonNull
     @Column (name = "first_name")
@@ -46,11 +47,11 @@ public class Administrator {
     @JoinColumn(name = "role_id")
     private Roles role;
 
-	public long getAdminId() {
+	public Long getAdminId() {
 		return adminId;
 	}
 
-	public void setAdminId(long adminId) {
+	public void setAdminId(Long adminId) {
 		this.adminId = adminId;
 	}
 

@@ -1,6 +1,7 @@
 package edu.sru.thangiah.model;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +13,7 @@ import jakarta.persistence.Table;
 public class Roles {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @Column(name = "id")
 	private Long id;
 	private String name;
 	

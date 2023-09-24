@@ -23,8 +23,9 @@ import jakarta.persistence.UniqueConstraint;
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
 	
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+	 @Column(name = "id")
     private Long id;
     
     @NonNull
