@@ -28,7 +28,7 @@ import javax.persistence.JoinColumn;
 
 
 @Entity
-@Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "instructorId"))
+@Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Instructor {
     
     @Id
@@ -39,7 +39,7 @@ public class Instructor {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
     joinColumns = {
-    		@JoinColumn(name = "id", referencedColumnName = "instructorId")
+    		@JoinColumn(name = "instructorId", referencedColumnName = "id")
     },
     inverseJoinColumns = {
     		@JoinColumn(name = "id", referencedColumnName = "id")

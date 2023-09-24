@@ -33,7 +33,7 @@ public class Student {
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "STUDENT_AND_COURSES_TABLE", 
     joinColumns = {
-    		@JoinColumn(name = "id", referencedColumnName = "studentId")
+    		@JoinColumn(name = "student_id", referencedColumnName = "id")
     },
     inverseJoinColumns = {
     		@JoinColumn(name = "course_id", referencedColumnName = "id")
