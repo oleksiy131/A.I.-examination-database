@@ -17,11 +17,14 @@ public class Roles {
 	private Long id;
 	private String name;
 	
-	public Roles(String name) {
+	public Roles() {}
+	
+	public Roles(Long id, String name) {
 		super();
+		this.id = id;
 		this.name = name;
 	}
-	
+		
 	public Long getId() {
 		return id;
 	}
