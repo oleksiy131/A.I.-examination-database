@@ -42,7 +42,7 @@ public class MenuController {
 	// this will pull data from the user, the user enters this data on the register.html page
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User(null, null, null, null, null, null, null));
+        model.addAttribute("user", new User(null, null, null, null, null, null, null, false, null));
         return "register";
     }
     //this moves the data to the userRepository that stores the data in our SQL server.
