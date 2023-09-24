@@ -269,6 +269,19 @@ public class AdministratorController {
 	            // Handle the exception (e.g., log it)
 	        }
 	    }
+	    
+	    
+	    @GetMapping("/lister")
+	    public String userLister(Model model) {
+	   
+	    	 List<User> users = (List<User>) userRepository.findAll();
+
+	        // Add the list of user to the model for rendering in the HTML template
+	        model.addAttribute("Users", users);
+			return "lister";
+	    }
+	    
+	    
 
 	 
 
