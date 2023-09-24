@@ -1,7 +1,7 @@
 package edu.sru.thangiah.controller;
 
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Value; 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +13,12 @@ import edu.sru.thangiah.domain.Administrator;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
@@ -31,6 +31,8 @@ public class AdministratorController {
     @Value("${spring.datasource.password}")
     private String adminPassword;
 
+    @Autowired
+    private UserRepository userRepository;
     @Autowired
     private AdministratorRepository administratorRepository;
     @Autowired
@@ -116,8 +118,5 @@ public class AdministratorController {
         // Return the name of the HTML template to be displayed
         return "student-list";
     }
-
-   
-    
 }
 
