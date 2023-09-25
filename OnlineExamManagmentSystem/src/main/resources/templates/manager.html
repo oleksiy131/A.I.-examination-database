@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h1>Schedule Manager</h1>
+<h1 align="center">Schedule Manager Control Panel</h1>
 
 <!-- Add a new Instructor -->
 <h2>Add New Instructor</h2>
@@ -28,7 +28,13 @@
 </a>
 
 
-<!-- Assign instructor to a course -->
+<!-- 	/*
+	 *  ____  __    __        _ _ 
+ / __ \/ /__ / /__ ___ (_|_)
+/ /_/ / / -_)  '_/(_-</ / / 
+\____/_/\__/_/\_\/___/_/_/  
+                            
+	 */ -->
 <h2>Assign Instructor To Course</h2>
 
 <!-- Link  -->
@@ -47,7 +53,7 @@
        <h2>Delete Instructor</h2>
     <form action="#" th:action="@{/schedule-manager/instructor/delete}" method="post">
         <div class="form-group">
-            <label for="selectInstructorDelete">Select Instructor to Delete:</label>
+            <label for="selectInstructorDelete">Select Instructor to Delete: (Please refresh the page before you do)</label>
             <select id="selectInstructorDelete" name="instructorId" required>
                 <option value="" selected disabled>Choose an instructor</option>
                 <option th:each="instructor : ${instructors}" 

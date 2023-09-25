@@ -1,13 +1,4 @@
-/*
- *   /$$$$$$  /$$       /$$$$$$$$ /$$   /$$  /$$$$$$  /$$$$$$ /$$$$$$
- /$$__  $$| $$      | $$_____/| $$  /$$/ /$$__  $$|_  $$_/|_  $$_/
-| $$  \ $$| $$      | $$      | $$ /$$/ | $$  \__/  | $$    | $$  
-| $$  | $$| $$      | $$$$$   | $$$$$/  |  $$$$$$   | $$    | $$  
-| $$  | $$| $$      | $$__/   | $$  $$   \____  $$  | $$    | $$  
-| $$  | $$| $$      | $$      | $$\  $$  /$$  \ $$  | $$    | $$  
-|  $$$$$$/| $$$$$$$$| $$$$$$$$| $$ \  $$|  $$$$$$/ /$$$$$$ /$$$$$$
- \______/ |________/|________/|__/  \__/ \______/ |______/|______/
- */
+
 
 
  package edu.sru.thangiah.controller;
@@ -29,6 +20,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+/*
+ *  ____  __    __        _ _ 
+/ __ \/ /__ / /__ ___ (_|_)
+/ /_/ / / -_)  '_/(_-</ / / 
+\____/_/\__/_/\_\/___/_/_/  
+                        
+ */
 
 @Controller
 @RequestMapping("/schedule-manager")

@@ -13,6 +13,14 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class OpenAIConfig {
+	
+	/*
+	 *  ____  __    __        _ _ 
+ / __ \/ /__ / /__ ___ (_|_)
+/ /_/ / / -_)  '_/(_-</ / / 
+\____/_/\__/_/\_\/___/_/_/  
+                            
+	 */
 
     @Value("${openai.api.key}")
      String openaiApiKey;
