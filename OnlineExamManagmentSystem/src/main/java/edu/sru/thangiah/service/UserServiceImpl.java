@@ -1,6 +1,10 @@
 package edu.sru.thangiah.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import edu.sru.thangiah.model.User;
@@ -28,8 +32,26 @@ public class UserServiceImpl implements UserService {
     }
 
 	@Override
-	public void save(UserRegistrationDto registrationDto) {
-		// TODO Auto-generated method stub
+	public User save(UserRegistrationDto registrationDto) {
+		User user = new User(null, registrationDto.getFirstName(), registrationDto.getLastName(), registrationDto.getEmail(), registrationDto.getPassword(), 
+			    registrationDto.getUsername(),registrationDto.getVerificationCode(), false, null);
+
 		
 	}
+
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+	    User user = userRepository.findByUsername(username).orElse(null);
+
+	    if (user == null) {
+	        throw new UsernameNotFoundException("User not found with username: " + username);
+	    }
+
+	    return user;
+	}
+
+
+
+
 }
