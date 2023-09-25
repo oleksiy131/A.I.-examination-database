@@ -1,8 +1,6 @@
 package edu.sru.thangiah.controller;
 
 
-//import java.io.UnsupportedEncodingException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,13 +11,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.UserRepository;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import edu.sru.thangiah.service.UserVerifyService;
-//import jakarta.mail.MessagingException;
-//import jakarta.servlet.http.HttpServletRequest;
+import edu.sru.thangiah.service.EmailService;
+import edu.sru.thangiah.service.UserService;
+import edu.sru.thangiah.web.dto.UserRegistrationDto;
 
 @Controller
 public class MenuController {
+	
+		@Autowired
+	    private UserService userService;
+
+	    @Autowired
+	    private EmailService emailService;
+	
 	@RequestMapping("/navbar")
     public String showMainScreen() {
         return "navbar"; 
@@ -40,6 +44,7 @@ public class MenuController {
 
 	
 	// this will pull data from the user, the user enters this data on the register.html page
+
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new User(null, null, null, null, null, null, null, false, null));
@@ -51,28 +56,7 @@ public class MenuController {
         userRepository.save(user);
         return "redirect:navbar";
     }
+
     
-/*
-    @Autowired
-    private UserVerifyService service;
- 
-    /*
-     * this is still being worked on, its part of email verification.
-     * 
-     * 
-     * */
-    /*
-    @PostMapping("/register")
-    public String processRegister(User user, HttpServletRequest request)
-            throws UnsupportedEncodingException, MessagingException, javax.mail.MessagingException {
-        service.register(user, getSiteURL(request));
-        return "registration_success";
-    }
- 
-    private String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
-    }  
- */    
 }
 

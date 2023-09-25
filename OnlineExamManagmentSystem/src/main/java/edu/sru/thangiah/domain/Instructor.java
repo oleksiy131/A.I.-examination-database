@@ -33,10 +33,11 @@ public class Instructor {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     @Column(name = "id")
-    private long instructorId;
+    private Long instructorId;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
     joinColumns = {
     		@JoinColumn(name = "instructorId", referencedColumnName = "id")
@@ -44,7 +45,10 @@ public class Instructor {
     inverseJoinColumns = {
     		@JoinColumn(name = "id", referencedColumnName = "id")
     })
+
     private Set<Course> courses;
+    
+
     
     @NonNull
     @Column(name = "first_name")
@@ -140,8 +144,24 @@ public class Instructor {
 		this.courses = courses;
 	}
 	
+	// Constructors
+    public Instructor() {
+    }
 
-    
+    public Instructor(String instructorFirstName, String instructorLastName, String instructorEmail,
+                      String instructorPassword, String instructorUsername, float creditsTaught) {
+        this.instructorFirstName = instructorFirstName;
+        this.instructorLastName = instructorLastName;
+        this.instructorEmail = instructorEmail;
+        this.instructorPassword = instructorPassword;
+        this.instructorUsername = instructorUsername;
+        this.creditsTaught = creditsTaught;
+    }
+
+	public void setInstructorId(Long instructorId) {
+		this.instructorId = instructorId;
+	}
+	
 	
 	
     // standard constructors / setters / getters / toString

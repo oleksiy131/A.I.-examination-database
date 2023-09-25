@@ -9,6 +9,10 @@
  * Description:
  *
  * Online Exam-taking software with different user permissions. 
+ * 
+ * May the Lord bless this program, and make it run with no errors,
+ * forever and ever,
+ * Amen
  *
  * ----------------------------------------------------------------------------
  */
