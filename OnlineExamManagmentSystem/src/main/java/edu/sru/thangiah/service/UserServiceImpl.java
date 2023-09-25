@@ -16,28 +16,26 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User registerNewUserAccount(UserRegistrationDto userDto) {
-        // Create a User object from the registration data
-        User user = new User(
-            userDto.getFirstName(),
-            userDto.getLastName(),
-            userDto.getEmail(),
-            userDto.getPassword(),
-            userDto.getUsername(),
-            "ROLE_USER"
-        );
+	/*
+	 * public User registerNewUserAccount(UserRegistrationDto userDto) { // Create a
+	 * User object from the registration data User user = new User( null,
+	 * userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(),
+	 * userDto.getPassword(), userDto.getUsername(), "ROLE_USER", false, null );
+	 * 
+	 * // Save the user to the database return userRepository.save(user); }
+	 */
 
-        // Save the user to the database
-        return userRepository.save(user);
-    }
-
+	
 	@Override
 	public User save(UserRegistrationDto registrationDto) {
-		User user = new User(null, registrationDto.getFirstName(), registrationDto.getLastName(), registrationDto.getEmail(), registrationDto.getPassword(), 
-			    registrationDto.getUsername(),registrationDto.getVerificationCode(), false, null);
+		User user = new User(null, registrationDto.getFirstName(), registrationDto.getLastName(),
+				registrationDto.getEmail(), registrationDto.getPassword(), registrationDto.getUsername(),
+				registrationDto.getVerificationCode(), false, null);
 
-		
+		return userRepository.save(user);
+
 	}
+	
 
 
 	@Override
@@ -50,8 +48,6 @@ public class UserServiceImpl implements UserService {
 
 	    return user;
 	}
-
-
 
 
 }
