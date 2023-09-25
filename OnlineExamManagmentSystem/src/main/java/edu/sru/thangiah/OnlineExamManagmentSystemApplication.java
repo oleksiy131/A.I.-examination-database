@@ -16,7 +16,9 @@
 package edu.sru.thangiah;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -32,15 +34,16 @@ import edu.sru.thangiah.repository.UserRepository;
 
 @SpringBootApplication
 public class OnlineExamManagmentSystemApplication {
-    
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
 	}
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	 List<Roles> rolesList = new ArrayList<>();
 
+	
+	
 	@Bean
 	public CommandLineRunner setupRoles(RoleRepository roleRepository) {
 		
@@ -71,7 +74,9 @@ public class OnlineExamManagmentSystemApplication {
 	            
 	            Roles adminRole = roleRepository.findByName("ADMINISTRATOR")
 	                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-	            root.setRoles(Collections.singleton(adminRole));
+	            	rolesList.add(adminRole);
+	            	root.setEnabled(true);
+	            	root.setRoles(rolesList);
 	            
 	            if (!userRepository.findByUsername(root.getUsername()).isPresent()) {
 	                userRepository.save(root);
@@ -84,5 +89,6 @@ public class OnlineExamManagmentSystemApplication {
 	
 
 }
+
 
 
