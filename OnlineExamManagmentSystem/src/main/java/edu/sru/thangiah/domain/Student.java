@@ -1,11 +1,11 @@
 package edu.sru.thangiah.domain;
 
 
-import java.util.Set;
+import java.util.Set; 
 
 import org.springframework.lang.NonNull;
 
-
+import edu.sru.thangiah.model.Roles;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,8 +17,8 @@ import jakarta.persistence.JoinColumn;
 
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.criteria.Fetch;
 
 @Entity
 @Table(name = "STUDENT")
@@ -72,6 +72,10 @@ public class Student {
     @NonNull
     @Column (name = "enrolled_credits")
     private float creditsTaken;
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
     
 
 	public long getStudentId() {
@@ -129,17 +133,30 @@ public class Student {
 	public void setCreditsTaken(float creditsTaken) {
 		this.creditsTaken = creditsTaken;
 	}
+	
+	
 
-	public Student(Long studentId, String studentFirstName, String studentLastName, String studentEmail,
-			String studentPassword, String studentUsername, float creditsTaken) {
+	public Roles getRole() {
+		return role;
+	}
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+
+	
+	public Student(Long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
+			String studentEmail, String studentPassword, String studentUsername, float creditsTaken, Roles role) {
 		super();
 		this.studentId = studentId;
+		this.courses = courses;
 		this.studentFirstName = studentFirstName;
 		this.studentLastName = studentLastName;
 		this.studentEmail = studentEmail;
 		this.studentPassword = studentPassword;
 		this.studentUsername = studentUsername;
 		this.creditsTaken = creditsTaken;
+		this.role = role;
 	}
 
 	public Student() {
