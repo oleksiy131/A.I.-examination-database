@@ -31,8 +31,9 @@ import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "instructorId"))
 public class Instructor {
-    
+
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long instructorId;
     
     /*
