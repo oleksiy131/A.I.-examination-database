@@ -13,7 +13,4 @@ public interface UserService extends UserDetailsService{
 	User save(UserRegistrationDto registrationDto);
 	UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 
-
-
-	void save(UserRegistrationDto registrationDto);
 }
