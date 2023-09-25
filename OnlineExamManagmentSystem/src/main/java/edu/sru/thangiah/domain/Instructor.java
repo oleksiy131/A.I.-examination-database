@@ -45,8 +45,8 @@ public class Instructor {
     )
     */
     
-    @OneToMany(mappedBy = "instructor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Course> courses = new HashSet<>();
+    @OneToMany(mappedBy = "instructor", cascade = {}, orphanRemoval = false)
+    private Set<Course> courses;
     
     
    // private Set<Course> courses;

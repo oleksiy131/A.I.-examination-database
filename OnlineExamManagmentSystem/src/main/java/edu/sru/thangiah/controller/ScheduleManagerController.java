@@ -15,6 +15,7 @@
 
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.exception.ResourceNotFoundException;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 
@@ -27,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/schedule-manager")
@@ -40,8 +42,58 @@ public class ScheduleManagerController {
     
     @GetMapping("/add-course")
     public String showCreateCourseForm() {
-        return "add-course"; // This corresponds to the name of your HTML file
+        return "add-course"; 
     }
+    
+    @GetMapping("/create-instructor")
+    public String showCreateInstructorForm() {
+        return "create-instructor"; 
+    }
+    
+    @GetMapping("/instructors")
+    @ResponseBody
+    public List<Instructor> getInstructors() {
+        return instructorRepository.findAll();
+    }
+
+    
+    @GetMapping("/associate-instructor")
+    public String associateInstructorWithCourseForm(Model model) {
+        // Retrieve the list of instructors and courses from the repository
+        List<Instructor> instructors = instructorRepository.findAll();
+        List<Course> courses = courseRepository.findAll();
+
+        // Add the lists of instructors and courses to the model for rendering in the HTML template
+        model.addAttribute("instructors", instructors);
+        model.addAttribute("courses", courses);
+
+        // Return the name of the HTML template for the form
+        return "associate-instructor";
+    }
+    
+    @PostMapping("/associate-instructor")
+    public String associateInstructorWithCourse(
+            @RequestParam Long instructorId,
+            @RequestParam Long courseId) {
+
+        Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
+        Optional<Course> optionalCourse = courseRepository.findById(courseId);
+
+        if (optionalInstructor.isPresent() && optionalCourse.isPresent()) {
+            Instructor instructor = optionalInstructor.get();
+            Course course = optionalCourse.get();
+
+            // Assuming the association is bidirectional
+            instructor.getCourses().add(course);
+            course.setInstructor(instructor);
+
+            instructorRepository.save(instructor);
+            courseRepository.save(course);
+
+        } 
+        return "redirect:/schedule-manager/associate-instructor";
+    }
+
     
     @GetMapping("/edit-instructor")
     public String editInstructorForm(Model model, @RequestParam(required = false) Long instructorId) {
@@ -61,7 +113,9 @@ public class ScheduleManagerController {
     
     
     @GetMapping("/page")
-    public String loadManagerPage() {
+    public String loadManagerPage(Model model) {
+        List<Instructor> instructors = instructorRepository.findAll();
+        model.addAttribute("instructors", instructors);
         return "manager"; 
     }
 
@@ -141,17 +195,44 @@ public class ScheduleManagerController {
         }
     }
     // Delete instructor
-    @DeleteMapping("/instructor/delete/{instructorId}")
-    public ResponseEntity<?> deleteInstructor(@PathVariable Long instructorId) {
+    @PostMapping("/instructor/delete")	//This is VERY rough but i am working on this...
+    public ResponseEntity<?> deleteInstructor(@RequestParam Long instructorId) {
+    	
+    	boolean association = false;
+    	
         try {
-            if (!instructorRepository.existsById(instructorId)) {
-                return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Invalid instructor ID.\"}");
+            Instructor instructor = instructorRepository.findById(instructorId)
+                    .orElseThrow(() -> new ResourceNotFoundException("Instructor not found: " + instructorId));
+
+            // Fetch the courses associated with this instructor
+            List<Course> courses = courseRepository.findAllByInstructor(instructor);
+
+            // to prevent deletion if the instructor is associated with any courses
+            if (!courses.isEmpty()) {
+            	association = true;
+            	
+            	 //  disassociate the instructor from their courses before deletion
+                for (Course course : courses) {
+                    course.setInstructor(null);
+                    courseRepository.save(course);
+                }
+                
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body("{\"success\": false, \"message\": \"WARNING: Instructor is associated with one or more courses. The association is now removed. Refresh the page to DELETE the instructor.\"}");
+                
             }
 
+           
+
             instructorRepository.deleteById(instructorId);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Instructor deleted.\"}");
+            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Instructor deleted successfully.\"}");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Failed to delete instructor.\"}");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("{\"success\": false, \"message\": \"Failed to delete instructor.\"}");
         }
     }
+
 }

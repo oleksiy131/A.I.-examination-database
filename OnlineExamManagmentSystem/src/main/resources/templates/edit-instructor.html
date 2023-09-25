@@ -1,12 +1,3 @@
-  /$$$$$$  /$$       /$$$$$$$$ /$$   /$$  /$$$$$$  /$$$$$$ /$$$$$$
- /$$__  $$| $$      | $$_____/| $$  /$$/ /$$__  $$|_  $$_/|_  $$_/
-| $$  \ $$| $$      | $$      | $$ /$$/ | $$  \__/  | $$    | $$  
-| $$  | $$| $$      | $$$$$   | $$$$$/  |  $$$$$$   | $$    | $$  
-| $$  | $$| $$      | $$__/   | $$  $$   \____  $$  | $$    | $$  
-| $$  | $$| $$      | $$      | $$\  $$  /$$  \ $$  | $$    | $$  
-|  $$$$$$/| $$$$$$$$| $$$$$$$$| $$ \  $$|  $$$$$$/ /$$$$$$ /$$$$$$
- \______/ |________/|________/|__/  \__/ \______/ |______/|______/╝
-
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -28,6 +19,21 @@
                         th:text="${instructor.instructorFirstName} + ' ' + ${instructor.instructorLastName}"></option>
             </select>
         </div>
+        
+        
+        <h2>Delete Instructor</h2>
+    <form action="#" th:action="@{/schedule-manager/instructor/delete}" method="post">
+        <div class="form-group">
+            <label for="selectInstructorDelete">Select Instructor to Delete:</label>
+            <select id="selectInstructorDelete" name="instructorId" required>
+                <option value="" selected disabled>Choose an instructor</option>
+                <option th:each="instructor : ${instructors}" 
+                        th:value="${instructor.instructorId}" 
+                        th:text="${instructor.instructorFirstName} + ' ' + ${instructor.instructorLastName}"></option>
+            </select>
+        </div>
+        <button type="submit">Delete Instructor</button>
+    </form>
 
 
         <div class="form-group">
