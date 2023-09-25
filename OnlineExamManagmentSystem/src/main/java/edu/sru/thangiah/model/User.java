@@ -1,13 +1,15 @@
 package edu.sru.thangiah.model;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +25,7 @@ import jakarta.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
-public class User {
+public class User implements UserDetails{
 	
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,12 +59,13 @@ public class User {
 
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", 
-               joinColumns = @JoinColumn(name = "user_id"), 
-               inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Roles> roles = new HashSet<>();
+               joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
+               inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Roles> roles = new ArrayList<>();
 	
+
 	public User(Long id, String firstName, String lastName, String email, String password, String username,
-			String verificationCode, boolean enabled, Set<Roles> roles) {
+			String verificationCode, boolean enabled, List<Roles> roles) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
@@ -74,9 +77,6 @@ public class User {
 		this.enabled = enabled;
 		this.roles = roles;
 	}
-
-
-
 
 	public Long getId() {
 		return id;
@@ -127,15 +127,13 @@ public class User {
 	}
 
 
-	public Set<Roles> getRoles() {
+	public List<Roles> getRoles() {
 		return roles;
 	}
 
-
-	public void setRoles(Set<Roles> roles) {
+	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
 	}
-
 
 	public String getVerificationCode() {
 		return verificationCode;
@@ -146,15 +144,38 @@ public class User {
 		this.verificationCode = verificationCode;
 	}
 
-
+	@Override
 	public boolean isEnabled() {
 		return enabled;
 	}
-
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	public User(){}
 
 }
