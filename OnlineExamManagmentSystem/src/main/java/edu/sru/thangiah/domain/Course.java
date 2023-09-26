@@ -23,9 +23,10 @@ import jakarta.persistence.Table;
 @Table(name = "COURSE")
 
 public class Course {
+
 	@Id
 	private Long id;
-    
+
     private String courseName;
     
     @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
