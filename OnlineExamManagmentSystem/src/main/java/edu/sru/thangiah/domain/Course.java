@@ -23,7 +23,6 @@ import jakarta.persistence.Table;
 
 public class Course {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
     
     private String courseName;
