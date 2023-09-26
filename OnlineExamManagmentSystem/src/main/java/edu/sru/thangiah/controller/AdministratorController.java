@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
@@ -239,15 +238,15 @@ public class AdministratorController {
 	            @RequestParam String username,
 	            @RequestParam String role) {
 	        
-	        // Create a new user with the provided information
-	        User user = new User(firstName, lastName, email, password, username, role);
-	        
-	        // Save the user to the database using JpaRepository's save method
-	        userRepository.save(user);
-	        
-	        // Send a verification email
-	        sendVerificationEmail(user);
-
+			/*
+			 * // Create a new user with the provided information User user = new
+			 * User(firstName, lastName, email, password, username, role);
+			 * 
+			 * // Save the user to the database using JpaRepository's save method
+			 * userRepository.save(user);
+			 * 
+			 * // Send a verification email sendVerificationEmail(user);
+			 */
 	        // Redirect to a confirmation page or login page
 	        return "redirect:/registration-confirmation"; // 
 	    }
