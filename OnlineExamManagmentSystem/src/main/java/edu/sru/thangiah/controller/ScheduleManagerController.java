@@ -74,7 +74,6 @@ public class ScheduleManagerController {
         model.addAttribute("instructors", instructors);
         model.addAttribute("courses", courses);
 
-        // Return the name of the HTML template for the form
         return "associate-instructor";
     }
     
@@ -235,7 +234,6 @@ public class ScheduleManagerController {
                 
             }
 
-           
 
             instructorRepository.deleteById(instructorId);
             return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Instructor deleted successfully.\"}");
