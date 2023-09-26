@@ -1,12 +1,12 @@
-<!-- student-list.html -->
+<!-- instructor-list.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student List</title>
-    <style>
+    <title>Instructor List</title>
+        <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -47,7 +47,7 @@
     </style>
 </head>
 <body>
-    <h1>Student List</h1>
+    <h1>Instructor List</h1>
     <table>
         <thead>
             <tr>
@@ -56,18 +56,18 @@
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Username</th>
-                <th>Enrolled Credits</th>
+                <th>Credits Taught</th>
             </tr>
         </thead>
         <tbody>
-            <!-- Use Thymeleaf to iterate through the list of students -->
-            <tr th:each="student : ${students}">
-                <td th:text="${student.studentId}"></td>
-                <td th:text="${student.studentFirstName}"></td>
-                <td th:text="${student.studentLastName}"></td>
-                <td th:text="${student.studentEmail}"></td>
-                <td th:text="${student.studentUsername}"></td>
-                <td th:text="${student.creditsTaken}"></td>
+            <!-- Use Thymeleaf to iterate through the list of instructors -->
+            <tr th:each="instructor : ${instructors}">
+                <td th:text="${instructor.instructorId}"></td>
+                <td th:text="${instructor.instructorFirstName}"></td>
+                <td th:text="${instructor.instructorLastName}"></td>
+                <td th:text="${instructor.instructorEmail}"></td>
+                <td th:text="${instructor.instructorUsername}"></td>
+                <td th:text="${instructor.creditsTaught}"></td>
             </tr>
         </tbody>
     </table>

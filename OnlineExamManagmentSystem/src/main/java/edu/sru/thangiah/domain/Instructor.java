@@ -34,6 +34,7 @@ public class Instructor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name= "id")
     private Long instructorId;
     
     /*

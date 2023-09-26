@@ -66,6 +66,11 @@ public class AdministratorController {
     public String showLoginPage() {
         return "administratorlogin"; // Return the administratorlogin.html template
     }
+    
+    @GetMapping("/navbar")
+    public String showNavPage() {
+        return "navbar"; // Return the administratorlogin.html template
+    }
 
     @PostMapping("/index")
     public String adminLogin(

@@ -8,7 +8,10 @@
 </head>
 <body>
     <h2>Associate Instructor with Course</h2>
-    <form id="associateInstructorWithCourseForm" action="/instructor/course/associate" method="POST">
+    <!-- Element for displaying success and error messages -->
+    <div id="message" style="display: none;"></div>
+    
+    <form id="associateInstructorWithCourseForm" action="/schedule-manager/associate-instructor" method="POST">
         <label for="instructorId">Select an Instructor:</label>
         <select id="instructorId" name="instructorId">
             <!-- Use Thymeleaf each loop to iterate over a list of instructors -->
@@ -34,21 +37,20 @@
             $('#associateInstructorWithCourseForm').submit(function (event) {
                 event.preventDefault();
 
-                // Serialize form data
                 var formData = $(this).serialize();
-                console.log("Form Data: ", formData); // Debug
+                console.log("Form Data: ", formData);
 
                 $.ajax({
                     type: 'POST',
-                    url: '/instructor/course/associate',
+                    url: '/schedule-manager/associate-instructor',
                     data: formData,
                     success: function (response) {
-                        console.log("Response: ", response); // Debug
-                        alert(response);
+                        console.log("Response: ", response);
+                        $('#message').text('Successfully associated the instructor with the course!').css('color', 'green').show();
                     },
                     error: function (error) {
-                        console.log("Error: ", error); // Debug
-                        alert('Error: ' + error.responseText);
+                        console.log("Error: ", error);
+                        $('#message').text('Error: ' + error.responseText).css('color', 'red').show();
                     }
                 });
             });

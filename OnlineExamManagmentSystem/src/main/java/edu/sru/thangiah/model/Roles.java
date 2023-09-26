@@ -20,7 +20,7 @@ public class Roles {
   public static final String SCHEDULE_MANAGER = "SCHEDULE_MANAGER";
 
 	
-	public Roles(String name) {
+	//public Roles(String name) {}
 	public Roles() {}
 	
 	public Roles(Long id, String name) {

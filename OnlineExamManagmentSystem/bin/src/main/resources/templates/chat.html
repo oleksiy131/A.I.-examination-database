@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Bot</title>
+</head>
+<body>
+
+<div id="chat-container">
+    <div id="chat-history"></div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+    async function sendMessage() {
+        const userInput = document.getElementById('user-input');
+        const chatHistory = document.getElementById('chat-history');
+        
+        // Append user's message to chat history
+        chatHistory.innerHTML += `<div><b>You:</b> ${userInput.value}</div>`;
+        
+        // Update the URL to include the prompt query parameter
+        const url = `/bot/chat?prompt=${encodeURIComponent(userInput.value)}`;
+        
+        const response = await fetch(url, {
+            method: 'GET',  // Update to GET
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        const responseBody = await response.text();
+        
+        // Append bot's reply to chat history
+        chatHistory.innerHTML += `<div><b>Bot:</b> ${responseBody}</div>`;
+        
+        // Clear the user input field
+        userInput.value = '';
+    }
+</script>
+
+<style>
+    #chat-container {
+        width: 300px;
+        margin: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+
+    #chat-history {
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    #user-input {
+        width: calc(100% - 10px);
+        padding: 5px;
+    }
+</style>
+
+</body>
+</html>
