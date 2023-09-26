@@ -24,10 +24,10 @@ public class MenuController {
 	    @Autowired
 	    private EmailService emailService;
 	
-	@RequestMapping("/navbar")
-    public String showMainScreen() {
-        return "navbar"; 
-    }
+//	@RequestMapping("/navbar")
+//    public String showMainScreen() {
+//        return "navbar"; 
+//    }
 	
 	@RequestMapping("/sidebar")
     public String showSidebar() {

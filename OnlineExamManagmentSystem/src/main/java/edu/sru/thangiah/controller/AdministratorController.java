@@ -14,19 +14,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.sru.thangiah.domain.Administrator;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.EmailService;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 
@@ -51,7 +57,17 @@ public class AdministratorController {
     private EmailService emailService;
     @Autowired
     private  UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private ScheduleManagerRepository managerRepo;
     
+    
+    
+    @RequestMapping("/navbar")
+    public String showMainScreen() {
+        return "navbar"; 
+    }
 
 
     @GetMapping("/administratorlogin")
@@ -238,6 +254,77 @@ public class AdministratorController {
 	            @RequestParam String username,
 	            @RequestParam String role) {
 	        
+	    	switch (role) {
+	        case "ADMINISTRATOR":
+	        	Optional<Roles> adminRole = roleRepository.findByName(role);
+		    	
+		    	Administrator adminUser = new Administrator();
+		    	
+		    	adminUser.setAdminFirstName(firstName);
+		    	adminUser.setAdminLastName(lastName);
+		    	adminUser.setAdminEmail(email);
+		    	adminUser.setAdminUsername(username);
+		    	adminUser.setAdminPassword(password);
+		    	//adminUser.setRole(adminRole);
+		    	
+		    	if (!userRepository.findByUsername(adminUser.getAdminUsername()).isPresent()) {
+		    		administratorRepository.save(adminUser);
+	            }
+
+	            break;
+	        case "SCHEDULE_MANAGER":
+	        	Optional<Roles> managerRole = roleRepository.findByName(role);
+		    	
+		    	ScheduleManager managerUser = new ScheduleManager();
+		    	
+		    	managerUser.setManagerFirstName(firstName);
+		    	managerUser.setManagerLastName(lastName);
+		    	managerUser.setManagerEmail(email);
+		    	managerUser.setManagerUsername(username);
+		    	managerUser.setManagerPassword(password);
+		    	//managerUser.setRole(managerRole);
+	        	
+		    	if (!userRepository.findByUsername(managerUser.getManagerUsername()).isPresent()) {
+		    		managerRepo.save(managerUser);
+	            }
+
+	            break;
+	        case "STUDENT":
+	        	Optional<Roles> studentRole = roleRepository.findByName(role);
+		    	
+		    	Student studentUser = new Student();
+		    	
+		    	studentUser.setStudentFirstName(firstName);
+		    	studentUser.setStudentLastName(lastName);
+		    	studentUser.setStudentEmail(email);
+		    	studentUser.setStudentUsername(username);
+		    	studentUser.setStudentPassword(password);
+		    	//studentUser.setRole(studentRole);
+	        	
+		    	if (!userRepository.findByUsername(studentUser.getStudentUsername()).isPresent()) {
+	                studentRepository.save(studentUser);
+	            }
+		    	
+	            break;
+	        case "INSTRUCTOR":
+	        	Optional<Roles> instructorRole = roleRepository.findByName(role);
+		    	
+	        	Instructor instructorUser = new Instructor();
+		    	
+	        	instructorUser.setInstructorFirstName(firstName);
+	        	instructorUser.setInstructorLastName(lastName);
+	        	instructorUser.setInstructorEmail(email);
+	        	instructorUser.setInstructorUsername(username);
+	        	instructorUser.setInstructorPassword(password);
+		    	//instructorUser.setRole(instructorRole);
+	        	if (!userRepository.findByUsername(instructorUser.getInstructorUsername()).isPresent()) {
+	                instructorRepository.save(instructorUser);
+	            }
+		    	
+	            break;
+	        default:
+	            System.out.println("Unknown role: " + role);
+	    }
 			/*
 			 * // Create a new user with the provided information User user = new
 			 * User(firstName, lastName, email, password, username, role);
@@ -281,7 +368,12 @@ public class AdministratorController {
 	    }
 	    
 	    
-
+	    @GetMapping("/rooty")
+	    public String rootHome(Model model) {
+			List<User> listUsers = userRepository.findAll();
+		    model.addAttribute("listUsers", listUsers);
+	        return "rootHome"; // The HTML file
+	    }
 	 
 
 

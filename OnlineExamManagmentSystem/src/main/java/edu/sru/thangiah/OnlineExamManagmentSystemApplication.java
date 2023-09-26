@@ -85,9 +85,19 @@ public class OnlineExamManagmentSystemApplication {
 	            if (!userRepository.findByUsername(root.getUsername()).isPresent()) {
 	                userRepository.save(root);
 	            }
+	            
+	            
+	            User testUser = new User(null, null, null, null, null, null, null, false, null);
+	            testUser.setFirstName("test");
+	            testUser.setLastName("man");
+	            testUser.setEmail("test@email.com");
+	            testUser.setPassword("12345678");
+	            testUser.setUsername("testerman");
+	            
+	            if (!userRepository.findByUsername(testUser.getUsername()).isPresent()) {
+	                userRepository.save(testUser);
+	            }
 	        };
-	   
-
 	}
 	
 	
