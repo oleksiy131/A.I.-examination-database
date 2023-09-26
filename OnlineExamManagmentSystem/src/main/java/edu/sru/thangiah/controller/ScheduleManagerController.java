@@ -45,8 +45,10 @@ public class ScheduleManagerController {
     }
     
     @GetMapping("/instructor-list")
-    public String showAllInstructors() {
-        return "instructor-page"; 
+    public String showInstructorList(Model model) {
+        List<Instructor> instructors = instructorRepository.findAll();
+        model.addAttribute("instructors", instructors);
+        return "instructor-list";
     }
     
     @GetMapping("/create-instructor")
