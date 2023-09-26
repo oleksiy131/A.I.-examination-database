@@ -49,6 +49,7 @@ public class ScheduleManagerController {
         return "create-instructor"; 
     }
     
+    
     @GetMapping("/instructors")
     @ResponseBody
     public List<Instructor> getInstructors() {
@@ -73,7 +74,8 @@ public class ScheduleManagerController {
     @PostMapping("/associate-instructor")
     public String associateInstructorWithCourse(
             @RequestParam Long instructorId,
-            @RequestParam Long courseId) {
+            @RequestParam Long courseId,
+            RedirectAttributes redirectAttributes) {
 
         Optional<Instructor> optionalInstructor = instructorRepository.findById(instructorId);
         Optional<Course> optionalCourse = courseRepository.findById(courseId);
@@ -88,10 +90,15 @@ public class ScheduleManagerController {
 
             instructorRepository.save(instructor);
             courseRepository.save(course);
+            redirectAttributes.addFlashAttribute("successMessage", "Instructor successfully associated with the course");
+        } else {
+            redirectAttributes.addFlashAttribute("failureMessage", "Failed to associate instructor with the course");
+        }
 
-        } 
         return "redirect:/schedule-manager/associate-instructor";
     }
+
+
 
     
     @GetMapping("/edit-instructor")

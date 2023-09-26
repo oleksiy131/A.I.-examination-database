@@ -8,6 +8,9 @@
 </head>
 <body>
     <h2>Associate Instructor with Course</h2>
+    <!-- Element for displaying success and error messages -->
+    <div id="message" style="display: none;"></div>
+    
     <form id="associateInstructorWithCourseForm" action="/schedule-manager/associate-instructor" method="POST">
         <label for="instructorId">Select an Instructor:</label>
         <select id="instructorId" name="instructorId">
@@ -29,36 +32,29 @@
     </form>
 
     <!-- JavaScript for handling form submission -->
-<script>
-    $(document).ready(function () {
-        $('#associateInstructorWithCourseForm').submit(function (event) {
-            event.preventDefault();
+    <script>
+        $(document).ready(function () {
+            $('#associateInstructorWithCourseForm').submit(function (event) {
+                event.preventDefault();
 
-            // Serialize form data
-            var formData = $(this).serialize();
-            console.log("Form Data: ", formData); // Debug
+                var formData = $(this).serialize();
+                console.log("Form Data: ", formData);
 
-            $.ajax({
-                type: 'POST',
-                url: '/schedule-manager/associate-instructor',
-                data: formData,
-                success: function (response) {
-                    console.log("Response: ", response); // Debug
-                    // Remove alert: alert(response);
-                    
-                    // Display success message
-                    $('#success-message').text('Successfully associated the instructor with the course!').show();
-                },
-                error: function (error) {
-                    console.log("Error: ", error); // Debug
-                    // Remove alert: alert('Error: ' + error.responseText);
-                    
-                    // Optionally: Display error message
-                    $('#success-message').text('Error: ' + error.responseText).css('color', 'red').show();
-                }
+                $.ajax({
+                    type: 'POST',
+                    url: '/schedule-manager/associate-instructor',
+                    data: formData,
+                    success: function (response) {
+                        console.log("Response: ", response);
+                        $('#message').text('Successfully associated the instructor with the course!').css('color', 'green').show();
+                    },
+                    error: function (error) {
+                        console.log("Error: ", error);
+                        $('#message').text('Error: ' + error.responseText).css('color', 'red').show();
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
 </html>
