@@ -87,7 +87,7 @@ public class OnlineExamManagmentSystemApplication {
 	            }
 	            
 	            
-	            User testUser = new User(null, null, null, null, null, null, null, false, null);
+	            User testUser = new User();
 	            testUser.setFirstName("test");
 	            testUser.setLastName("man");
 	            testUser.setEmail("test@email.com");
