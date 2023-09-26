@@ -17,6 +17,10 @@ public class Roles {
 	private Long id;
 	private String name;
 	
+  public static final String SCHEDULE_MANAGER = "SCHEDULE_MANAGER";
+
+	
+	public Roles(String name) {
 	public Roles() {}
 	
 	public Roles(Long id, String name) {

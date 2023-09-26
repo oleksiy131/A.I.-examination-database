@@ -1,6 +1,7 @@
 package edu.sru.thangiah.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,11 @@ public class InstructorController {
         model.addAttribute("instructors", instructors);
         return "instructor-list"; // Create an HTML template for instructor list
     }
+    
+    @GetMapping("/generate-exam")
+    public String showExamGenerator(Model model) {
+        return "exam-generator"; // Create an HTML template for exam generation
+    }
 
     @PostMapping("/instructor/create")
     public ResponseEntity<String> createInstructor(@RequestBody Instructor instructor) {
@@ -48,5 +54,12 @@ public class InstructorController {
     public Instructor findInstructor(@PathVariable Long instructorId) {
         return instructorRepository.findById(instructorId).orElse(null);
     }
+    
+    
+    
+    
 
+   
 }
+
+

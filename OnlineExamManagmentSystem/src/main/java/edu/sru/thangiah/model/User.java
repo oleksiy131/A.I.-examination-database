@@ -10,6 +10,7 @@ import java.util.UUID;
 
 
 import org.springframework.lang.NonNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -63,6 +64,32 @@ public class User implements UserDetails{
     private boolean verified;
     private boolean enabled;
 
+/*
+    //OLEKSII BRANCH BELOW
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<Roles> roles;
+
+    public User(String firstName, String lastName, String email, String password, String username, String role) {
+        super();
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = new BCryptPasswordEncoder().encode(password);	//encode
+        this.username = username;
+        this.roles = Arrays.asList(new Roles(role));
+        this.verificationCode = generateVerificationCode();
+        this.verified = false; // Initialize as unverified
+    }
+    */
+
+  //MASTER BRANCH BELOW
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", 
                joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 

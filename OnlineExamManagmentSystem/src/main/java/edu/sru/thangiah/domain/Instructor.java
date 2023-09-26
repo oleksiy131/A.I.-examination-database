@@ -31,23 +31,26 @@ import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Instructor {
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @Column(name = "id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long instructorId;
     
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
-    joinColumns = {
-    		@JoinColumn(name = "instructorId", referencedColumnName = "id")
-    },
-    inverseJoinColumns = {
-    		@JoinColumn(name = "id", referencedColumnName = "id")
-    })
+    /*
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "INSTRUCTOR_COURSE",
+        joinColumns = @JoinColumn(name = "instructor_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    */
+    
+    @OneToMany(mappedBy = "instructor", cascade = {}, orphanRemoval = false)
 
     private Set<Course> courses;
+    
+    
+   // private Set<Course> courses;
     
 
     

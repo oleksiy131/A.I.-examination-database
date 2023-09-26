@@ -38,6 +38,8 @@ import edu.sru.thangiah.repository.UserRepository;
 
 @SpringBootApplication
 public class OnlineExamManagmentSystemApplication {
+	
+
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineExamManagmentSystemApplication.class, args);
 	}
@@ -50,7 +52,7 @@ public class OnlineExamManagmentSystemApplication {
 	
 	@Bean
 	public CommandLineRunner setupRoles(RoleRepository roleRepository) {
-		
+
 
 	    return args -> {
 	        // Check and insert roles if they don't exist

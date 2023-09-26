@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associate Instructor with Course</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Associate Instructor with Course</h2>
+    <form id="associateInstructorWithCourseForm" action="/instructor/course/associate" method="POST">
+        <label for="instructorId">Select an Instructor:</label>
+        <select id="instructorId" name="instructorId">
+            <!-- Use Thymeleaf each loop to iterate over a list of instructors -->
+            <option th:each="instructor : ${instructors}" th:value="${instructor.instructorId}" th:text="${instructor.instructorFirstName + ' ' + instructor.instructorLastName}"></option>
+        </select>
+
+        <br><br>
+
+        <label for="courseId">Select a Course:</label>
+        <select id="courseId" name="courseId">
+            <!-- Using Thymeleaf each loop to iterate over a list of courses -->
+            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+        </select>
+
+        <br><br>
+
+        <input type="submit" value="Associate Instructor with Course">
+    </form>
+
+    <!-- JavaScript for handling form submission -->
+    <script>
+        $(document).ready(function () {
+            $('#associateInstructorWithCourseForm').submit(function (event) {
+                event.preventDefault();
+
+                // Serialize form data
+                var formData = $(this).serialize();
+                console.log("Form Data: ", formData); // Debug
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/instructor/course/associate',
+                    data: formData,
+                    success: function (response) {
+                        console.log("Response: ", response); // Debug
+                        alert(response);
+                    },
+                    error: function (error) {
+                        console.log("Error: ", error); // Debug
+                        alert('Error: ' + error.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

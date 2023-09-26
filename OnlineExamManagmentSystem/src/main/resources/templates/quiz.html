@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz</title>
+</head>
+<body>
+
+<table id="quiz-table">
+    <tr>
+        <th>Question Number</th>
+        <th>Question</th>
+        <th>Choices</th>
+    </tr>
+    <tr th:each="question, stat : ${quizData}">
+        <td th:text="${stat.count}"></td>
+        <td th:text="${question.question}"></td>
+        <td>
+            <div th:each="choice : ${question.choices}">
+                <input type="radio" th:name="'q' + ${stat.count}" th:value="${choice}" th:text="${choice}" /><br>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<button onclick="window.location.href='/bot/download'">Download as Excel</button>
+
+</body>
+</html>
