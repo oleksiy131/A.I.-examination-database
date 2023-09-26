@@ -44,6 +44,11 @@ public class ScheduleManagerController {
         return "add-course"; 
     }
     
+    @GetMapping("/instructor-list")
+    public String showAllInstructors() {
+        return "instructor-page"; 
+    }
+    
     @GetMapping("/create-instructor")
     public String showCreateInstructorForm() {
         return "create-instructor"; 
