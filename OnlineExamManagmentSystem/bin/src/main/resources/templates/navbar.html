@@ -1,3 +1,5 @@
+<!-- navbar.html -->
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -6,26 +8,27 @@
 </head>
 
 <body>
-    <!-- This div sets up a class called navbar that holds all the buttons -->
+    <!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
         <!-- Management button -->
         <div class="dropdown-nav">
             <button class="dropbutton">Management</button>
             <div class="dropdown-info">
+                <a href="/schedule-manager/page">Schedule Manager</a>
                 <a href="#">Accounts</a>
                 <a href="/register">Create Account</a>
-                <a href="/classes">Classes</a>
-                <a href="#">Chapters</a>
-                <a href="/exams">Exams</a>
+                <a href="#">Classes</a>
+                <a href="/exams">Chapters</a>
+                <a href="/classes">Exams</a>
                 <a href="#">Change Password</a>
 
             </div>
         </div>
         <!-- Computer Literacy button -->
         <div class="dropdown-nav">
-            <button class="dropbutton">Computer Literacy</button>
+            <button class="dropbutton">Exam Generation</button>
             <div class="dropdown-info">
-                <a href="#">Exam Generator</a>
+                <a href="/bot/choose-topic">Generate Exam</a>
             </div>
         </div>
         <!-- Grading button -->
@@ -47,8 +50,14 @@
         <div class="dropdown-nav">
             <button class="dropbutton">Database</button>
             <div class="dropdown-info">
+            
                 <a href="/students">View All Students</a>
-                <a href="/create">Add Students</a>
+                <a href="/schedule-managers">View All Schedule Managers</a>
+                <a href="/create-student">Add Students</a>
+                <a href="/create-instructor">Add Instructors</a>
+                <a href="/schedule-manager/add-course">Add Courses</a>
+                <a href="/associate">Assign Students</a>
+                <a href="/associate-instructor">Assign Instructors</a>
                 <a href="/export/students">Export To Excel</a>
                 <a href="/import">Import with Excel</a>
                 

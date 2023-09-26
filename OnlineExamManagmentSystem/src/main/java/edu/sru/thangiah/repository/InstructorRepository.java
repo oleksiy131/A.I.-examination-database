@@ -12,6 +12,8 @@ import edu.sru.thangiah.domain.Instructor;
 
 public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 	Optional<Instructor> findByInstructorUsername(String username);
+	
+	
 
 }
 

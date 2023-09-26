@@ -109,6 +109,33 @@
     <version>4.1.2</version> 
 </dependency>
 
+<!-- OPEN AI TEST -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.30</version>
+    <scope>provided</scope>
+</dependency>
+
+<!-- openAI debug... -->
+
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.github.flashvayne</groupId>
+    <artifactId>chatgpt-spring-boot-starter</artifactId>
+    <version>1.0.4</version>
+</dependency>
+
 	</dependencies>
 
 
