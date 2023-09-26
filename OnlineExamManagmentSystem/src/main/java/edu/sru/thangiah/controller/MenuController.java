@@ -42,9 +42,6 @@ public class MenuController {
 	@Autowired
     private UserRepository userRepository;
 
-	
-	// this will pull data from the user, the user enters this data on the register.html page
-	
     
 }
 

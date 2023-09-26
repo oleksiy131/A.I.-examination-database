@@ -15,42 +15,43 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "administrator", uniqueConstraints = @UniqueConstraint(columnNames = "adminId"))
+@Table(name = "administrator", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Administrator {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long adminId;
+    @Column(name = "id")
+    private Long adminId;
     
     @NonNull
-    @Column (name = "first_name")
+    @Column(name = "first_name")
     private String adminFirstName;
     
     @NonNull
-    @Column (name = "last_name")
+    @Column(name = "last_name")
     private String adminLastName;
     
     @NonNull
-    @Column (name = "email")
+    @Column(name = "email")
     private String adminEmail;
     
     @NonNull
-    @Column (name = "password")
+    @Column(name = "password")
     private String adminPassword;
     
     @NonNull
-    @Column (name = "username")
+    @Column(name = "username")
     private String adminUsername;
     
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Roles role;
 
-	public long getAdminId() {
+	public Long getAdminId() {
 		return adminId;
 	}
 
-	public void setAdminId(long adminId) {
+	public void setAdminId(Long adminId) {
 		this.adminId = adminId;
 	}
 
