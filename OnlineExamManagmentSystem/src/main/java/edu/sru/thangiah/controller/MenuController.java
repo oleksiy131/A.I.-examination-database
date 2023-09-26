@@ -34,13 +34,10 @@ public class MenuController {
         return "sidebar"; 
     }
 	
-	@RequestMapping("/exit")
-    public String exitProgram() {
-        return "index"; 
-    }
-
-	@Autowired
-    private UserRepository userRepository;
+//	@RequestMapping("/exit")
+//    public String exitProgram() {
+//        return "index"; 
+//    }
 
     
 }

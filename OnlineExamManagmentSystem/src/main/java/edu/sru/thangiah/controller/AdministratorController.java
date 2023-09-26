@@ -70,33 +70,33 @@ public class AdministratorController {
     }
 
 
-    @GetMapping("/administratorlogin")
-    public String showLoginPage() {
-        return "administratorlogin"; // Return the administratorlogin.html template
-    }
-
-    @PostMapping("/index")
-    public String adminLogin(
-        @RequestParam("username") String username,
-        @RequestParam("password") String password,
-        RedirectAttributes redirectAttributes
-    ) {
-        if (adminUsername.equals(username) && adminPassword.equals(password)) {
-            // Successful login, redirect to the navbar screen
-            return "redirect:/navbar";
-        } else {
-            // Invalid credentials, display an error message
-            redirectAttributes.addFlashAttribute("errorMessage", "Invalid credentials");
-            return "redirect:/index";
-        }
-    }
-
-    // This method handles HTTP POST requests to create a new Administrator.
-    @PostMapping("/process_login")
-    public Administrator createAdministrator(@RequestBody Administrator administrator) {
-        // Save the Administrator object to the repository and return the saved user.
-        return administratorRepository.save(administrator);
-    }
+//    @GetMapping("/administratorlogin")
+//    public String showLoginPage() {
+//        return "administratorlogin"; // Return the administratorlogin.html template
+//    }
+//
+//    @PostMapping("/index")
+//    public String adminLogin(
+//        @RequestParam("username") String username,
+//        @RequestParam("password") String password,
+//        RedirectAttributes redirectAttributes
+//    ) {
+//        if (adminUsername.equals(username) && adminPassword.equals(password)) {
+//            // Successful login, redirect to the navbar screen
+//            return "redirect:/navbar";
+//        } else {
+//            // Invalid credentials, display an error message
+//            redirectAttributes.addFlashAttribute("errorMessage", "Invalid credentials");
+//            return "redirect:/index";
+//        }
+//    }
+//
+//    // This method handles HTTP POST requests to create a new Administrator.
+//    @PostMapping("/process_login")
+//    public Administrator createAdministrator(@RequestBody Administrator administrator) {
+//        // Save the Administrator object to the repository and return the saved user.
+//        return administratorRepository.save(administrator);
+//    }
     
     @GetMapping("/exams")
     public String examsPage() {
