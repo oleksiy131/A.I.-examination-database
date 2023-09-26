@@ -1,7 +1,4 @@
-
-
-
- package edu.sru.thangiah.controller;
+package edu.sru.thangiah.controller;
  
 
 import edu.sru.thangiah.domain.Course;
