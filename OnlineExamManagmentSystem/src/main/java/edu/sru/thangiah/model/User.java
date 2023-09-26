@@ -23,6 +23,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -59,6 +60,10 @@ public class User implements UserDetails{
     @NonNull
     @Column(name = "verification_code")
     private String verificationCode;
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
 
     private boolean verified;
     private boolean enabled;
@@ -86,12 +91,16 @@ public class User implements UserDetails{
 		this.roles = roles;
 	}
 
-	
+
+
+
 
 
 	public Long getId() {
 		return id;
 	}
+
+
 
 
 
@@ -103,9 +112,13 @@ public class User implements UserDetails{
 
 
 
+
+
 	public String getFirstName() {
 		return firstName;
 	}
+
+
 
 
 
@@ -117,9 +130,13 @@ public class User implements UserDetails{
 
 
 
+
+
 	public String getLastName() {
 		return lastName;
 	}
+
+
 
 
 
@@ -131,9 +148,13 @@ public class User implements UserDetails{
 
 
 
+
+
 	public String getEmail() {
 		return email;
 	}
+
+
 
 
 
@@ -145,9 +166,13 @@ public class User implements UserDetails{
 
 
 
+
+
 	public String getPassword() {
 		return password;
 	}
+
+
 
 
 
@@ -159,9 +184,13 @@ public class User implements UserDetails{
 
 
 
+
+
 	public String getVerificationCode() {
 		return verificationCode;
 	}
+
+
 
 
 
@@ -173,9 +202,40 @@ public class User implements UserDetails{
 
 
 
+
+
+	public Roles getRole() {
+		return role;
+	}
+
+
+
+
+
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+
+
+
+
+
+
+	public List<Roles> getRoles() {
+		return roles;
+	}
+
+
+
+
+
+
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
 	}
+
+
 
 
 

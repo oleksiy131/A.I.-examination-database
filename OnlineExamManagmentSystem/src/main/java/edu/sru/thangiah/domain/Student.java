@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.lang.NonNull;
 
 import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -162,5 +163,15 @@ public class Student {
 	public Student() {
 		
 	}
+
+	public void setUser(User Student) {
+		this.studentFirstName = Student.getFirstName();
+	    this.studentLastName = Student.getLastName();
+	    this.studentEmail = Student.getEmail();
+	    this.studentPassword = Student.getPassword();
+	    this.studentUsername = Student.getUsername();
+	    this.role = Student.getRole();		
+	}
+
 	
 }
