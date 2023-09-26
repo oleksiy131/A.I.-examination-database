@@ -6,6 +6,7 @@ import javax.persistence.JoinTable;
 import org.springframework.lang.NonNull;
 
 import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,9 +33,11 @@ import javax.persistence.JoinColumn;
 @Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Instructor {
 
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name= "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+
     private Long instructorId;
     
     /*
@@ -165,6 +168,15 @@ public class Instructor {
 
 	public void setInstructorId(Long instructorId) {
 		this.instructorId = instructorId;
+	}
+
+	public void setUser(User instructor) {
+	    this.instructorFirstName = instructor.getFirstName();
+	    this.instructorLastName = instructor.getLastName();
+	    this.instructorEmail = instructor.getEmail();
+	    this.instructorPassword = instructor.getPassword();
+	    this.instructorUsername = instructor.getUsername();
+	    this.role = instructor.getRole();
 	}
 	
 	

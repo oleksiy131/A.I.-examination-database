@@ -4,6 +4,7 @@ package edu.sru.thangiah.domain;
 import org.springframework.lang.NonNull;
 
 import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -102,6 +103,16 @@ public class Administrator {
 	public void setRole(Roles role) {
 		this.role = role;
 	}
+
+	public void setUser(User root) {
+	    this.adminFirstName = root.getFirstName();
+	    this.adminLastName = root.getLastName();
+	    this.adminEmail = root.getEmail();
+	    this.adminPassword = root.getPassword();
+	    this.adminUsername = root.getUsername();
+	    this.role = root.getRole();
+	}
+
 	
 	
 	
