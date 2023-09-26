@@ -28,12 +28,13 @@ public class SecurityConfig {
 	protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/index").permitAll()
+                        .requestMatchers("/").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/")
-                        .defaultSuccessUrl("/navbar")
-                        .permitAll());
+                        .defaultSuccessUrl("/navbar", true)
+                        .permitAll()
+                        );
     }
 	
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
