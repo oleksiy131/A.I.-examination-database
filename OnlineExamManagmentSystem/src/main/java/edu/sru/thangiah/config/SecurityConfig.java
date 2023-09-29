@@ -32,7 +32,7 @@ public class SecurityConfig {
 
 	    http
 	        .authorizeHttpRequests((authorize) -> authorize
-	                .requestMatchers("/add-course.html",
+	                .requestMatchers("/schedule-manager/add-course",
 	                        "/associate-instructor.html",
 	                        "/associate-students.html",
 	                        "/classes.html",
