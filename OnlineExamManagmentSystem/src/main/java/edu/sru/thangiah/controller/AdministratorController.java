@@ -248,6 +248,11 @@ public class AdministratorController {
 	public String registerConfirm() {
 		return "registration-confirmation"; // The HTML file
 	}
+	
+	@GetMapping("/course-success-page")
+    public String showCourseSuccessForm() {
+        return "course-success-page"; 
+    }
 
 	// Send verification email to the user
 	private void sendVerificationEmail(User user) {

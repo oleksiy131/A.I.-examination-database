@@ -2,6 +2,7 @@ package edu.sru.thangiah.controller;
  
 
 import edu.sru.thangiah.domain.Course;
+
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.exception.ResourceNotFoundException;
 import edu.sru.thangiah.repository.CourseRepository;
@@ -18,6 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.transaction.annotation.Transactional;
+
+
+
 
 /*
  *  ____  __    __        _ _ 
@@ -37,11 +42,13 @@ public class ScheduleManagerController {
     @Autowired
     private InstructorRepository instructorRepository;
     
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/add-course")
     public String showCreateCourseForm() {
         return "add-course"; 
     }
     
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/instructor-list")
     public String showInstructorList(Model model) {
         List<Instructor> instructors = instructorRepository.findAll();
@@ -49,6 +56,7 @@ public class ScheduleManagerController {
         return "instructor-list";
     }
     
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/create-instructor")
     public String showCreateInstructorForm() {
         return "create-instructor"; 
@@ -130,22 +138,31 @@ public class ScheduleManagerController {
     }
 
     // Load/Create Instructor
+    @Transactional
     @PostMapping("/instructor/add")
-    public ResponseEntity<?> addInstructor(@ModelAttribute Instructor instructor) {
+    public String addInstructor(@ModelAttribute Instructor instructor, RedirectAttributes redirectAttributes) {
+        System.out.println("Inside instructor-add method");
         try {
-            if (instructorRepository.findById(instructor.getInstructorId()).isPresent()) {
-                return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Instructor with given ID already exists.\"}");
+            // Check if the instructor with the given username already exists
+            if (instructorRepository.findByInstructorUsername(instructor.getInstructorUsername()).isPresent()) {
+                redirectAttributes.addFlashAttribute("errorMessage", "Instructor with given username already exists.");
+                return "redirect:/schedule-manager/create-instructor";
             }
 
-            Instructor savedInstructor = instructorRepository.save(instructor);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Instructor added.\"}");
+            // Save the new instructor
+            instructorRepository.save(instructor);
+            redirectAttributes.addFlashAttribute("successMessage", "Instructor added successfully.");
+            return "redirect:/success";
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("{\"success\": false, \"message\": \"Failed to add instructor.\"}");
+            System.out.println("Failed to add instructor: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to add instructor.");
+            return "redirect:/fail";
         }
     }
 
 
     // Load/Create Course
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/course/add")
     public ResponseEntity<?> addCourse(@ModelAttribute Course course){
         try {
@@ -157,6 +174,7 @@ public class ScheduleManagerController {
     }
 
     // Assign instructor to course
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/course/assign-instructor")
     public ResponseEntity<?> assignInstructorToCourse(
         @RequestParam Long courseId, 
