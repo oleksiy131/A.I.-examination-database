@@ -118,7 +118,7 @@ public class ScheduleManagerController {
             redirectAttributes.addFlashAttribute("failureMessage", "Failed to associate instructor with the course");
         }
 
-        return "redirect:/schedule-manager/associate-instructor";
+        return "redirect:/success";
     }
 
 
