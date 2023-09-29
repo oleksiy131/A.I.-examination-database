@@ -17,8 +17,9 @@
         <td th:text="${stat.count}"></td>
         <td th:text="${question.question}"></td>
         <td>
-            <div th:each="choice : ${question.choices}">
+            <div th:each="choice, choiceStat : ${question.choices}" th:if="${!choice.isEmpty()}">
                 <input type="radio" th:name="'q' + ${stat.count}" th:value="${choice}" th:text="${choice}" /><br>
+                <hr th:if="${choiceStat.last}"/>
             </div>
         </td>
     </tr>
