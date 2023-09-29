@@ -5,8 +5,12 @@ import edu.sru.thangiah.domain.Course;
 
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.exception.ResourceNotFoundException;
+import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +45,13 @@ public class ScheduleManagerController {
 
     @Autowired
     private InstructorRepository instructorRepository;
+    
+    @Autowired
+    private RoleRepository roleRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+
     
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/add-course")
@@ -149,10 +160,27 @@ public class ScheduleManagerController {
                 return "redirect:/schedule-manager/create-instructor";
             }
 
+            // Fetch the role with ID 3 and set it to the instructor
+            Roles role = roleRepository.findById(3L)
+                .orElseThrow(() -> new RuntimeException("Role with ID 3 not found"));
+            instructor.setRole(role);
+
             // Save the new instructor
             instructorRepository.save(instructor);
-            redirectAttributes.addFlashAttribute("successMessage", "Instructor added successfully.");
-            return "redirect:/success";
+
+            // Create and save the corresponding user
+            User newUser = new User();
+            newUser.setUsername(instructor.getInstructorUsername());
+            newUser.setPassword(instructor.getInstructorPassword());  // We might want to encode this
+            newUser.setRole(role); 
+
+            // Set enabled for the user as well
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Instructor and corresponding user added successfully.");
+            return "redirect:/instructor-success";
         } catch (Exception e) {
             System.out.println("Failed to add instructor: " + e.getMessage());
             redirectAttributes.addFlashAttribute("errorMessage", "Failed to add instructor.");
@@ -196,8 +224,10 @@ public class ScheduleManagerController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/instructor/edit")
-    public ResponseEntity<?> editInstructor(@ModelAttribute Instructor updatedInstructor) {
+    public String editInstructor(@ModelAttribute Instructor updatedInstructor, RedirectAttributes redirectAttributes) {
+    	System.out.println("Inside Instructor Edit");
         try {
             // Find the instructor in the database
             Optional<Instructor> existingInstructorOpt = instructorRepository.findById(updatedInstructor.getInstructorId());
@@ -209,19 +239,23 @@ public class ScheduleManagerController {
                 existingInstructor.setInstructorFirstName(updatedInstructor.getInstructorFirstName());
                 existingInstructor.setInstructorLastName(updatedInstructor.getInstructorLastName());
                 existingInstructor.setInstructorEmail(updatedInstructor.getInstructorEmail());
-                existingInstructor.setInstructorPassword(updatedInstructor.getInstructorPassword());
+                existingInstructor.setInstructorPassword(updatedInstructor.getInstructorPassword());  // Consider encrypting the password
                 existingInstructor.setInstructorUsername(updatedInstructor.getInstructorUsername());
                 existingInstructor.setCreditsTaught(updatedInstructor.getCreditsTaught());
 
                 instructorRepository.save(existingInstructor);
-                return new ResponseEntity<>(existingInstructor, HttpStatus.OK);
+                redirectAttributes.addFlashAttribute("successMessage", "Instructor updated successfully.");
+                return "redirect:/schedule-manager/edit-instructor";
             } else {
-                return new ResponseEntity<>("Instructor not found!", HttpStatus.NOT_FOUND);
+                redirectAttributes.addFlashAttribute("errorMessage", "Instructor not found.");
+                return "redirect:/schedule-manager/edit-instructor";
             }
         } catch (Exception e) {
-            return new ResponseEntity<>("An error occurred while updating the instructor.", HttpStatus.INTERNAL_SERVER_ERROR);
+            redirectAttributes.addFlashAttribute("Message", "Instructor updated successfully.");
+            return "redirect:/schedule-manager/page";
         }
     }
+
     // Delete instructor
     @PostMapping("/instructor/delete")	//This is VERY rough but i am working on this...
     public ResponseEntity<?> deleteInstructor(@RequestParam Long instructorId) {
