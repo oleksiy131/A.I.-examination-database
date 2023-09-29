@@ -31,15 +31,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequestMapping("/student/course")
 public class StudentController 
 {
-
+    @Autowired
 	private StudentRepository studentRepository;
-
+    @Autowired
 	private CourseRepository courseRepository;
-	
+    @Autowired
 	private UserRepository userRepository;
-	
+    @Autowired
 	private RoleRepository roleRepository;
-	
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -91,7 +90,7 @@ public class StudentController
     }
 	
 	@Transactional
-	@PostMapping("/student/course/create")
+	@PostMapping("/create")
 	public String create(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
 	    System.out.println("Inside student-create method");
 	    try {
@@ -128,20 +127,5 @@ public class StudentController
 	        return "redirect:/fail";
 	    }
 	}
-
-	 @PostMapping("/create")
-	 public String createStudent(@ModelAttribute Student student, Model model) {
-
-	     // (assuming studentRepository is injected)
-	     studentRepository.save(student);
-
-	    
-	     model.addAttribute("message", "Student created successfully");
-
-
-	     return "redirect:/student/course/create"; // Redirect back to the form page
-	 }
-	
-
 
 }

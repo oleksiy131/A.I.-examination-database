@@ -109,31 +109,5 @@
     <!-- Add the Export button and JavaScript for redirection -->
     <button id="exportButton">Export All Students to Excel</button>
 
-    <script>
-        $(document).ready(function () {
-            $('#createStudentForm').submit(function (event) {
-                event.preventDefault();
-                // Serialize form data
-                var formData = $(this).serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: '/student/course/create',
-                    data: formData,
-                    success: function (response) {
-                        alert('Student created successfully. Student ID: ' + response.studentId);
-                    },
-                    error: function (error) {
-                        $('#responseMessage').text('Error: ' + error.responseText);
-                    }
-                });
-            });
-
-            // Add click event for the Export button
-            $('#exportButton').click(function () {
-                // Redirect to the "/export/students" page
-                window.location.href = '/export/students';
-            });
-        });
-    </script>
 </body>
 </html>
