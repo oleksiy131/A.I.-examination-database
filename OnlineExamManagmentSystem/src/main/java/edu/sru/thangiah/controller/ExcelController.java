@@ -77,10 +77,10 @@ public class ExcelController {
             course.setInstructor(instructor);
             courseRepository.save(course);
 
-         // Create and save students
+         // Create and save students 
             for (int i = 5; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row != null) {  // Add this null check
+                if (row != null) {  //null check
                     Student student = new Student();
                     if (row.getCell(1) != null) {
                         student.setStudentId((long) row.getCell(1).getNumericCellValue());
