@@ -93,20 +93,19 @@ public class ExcelController {
                     }
 
                  // Check if a student with the same ID already exists
-                    if (student.getStudentId() != null) {
-                        Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
-                        if (!existingStudent.isPresent()) {
-                            studentRepository.save(student);
-                        }
+                    Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
+                    if (!existingStudent.isPresent()) {
+                        studentRepository.save(student);
+
+                        // Associate the student with the course
+                        student.getCourses().add(course);  // Assuming 'course' is the Course object you want to associate with
+                        studentRepository.save(student);
                     } else {
-                        System.out.println("Console LOG: Student Id is already "
-                        		+ "present in the database");
+                        System.out.println("Console LOG: Student Id is already present in the database");
                     }
-
-
-
                 }
             }
+
 
             return "redirect:/upload-success";
 
