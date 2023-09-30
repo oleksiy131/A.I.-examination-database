@@ -6,6 +6,7 @@ import javax.persistence.JoinTable;
 import org.springframework.lang.NonNull;
 
 import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -31,24 +32,35 @@ import javax.persistence.JoinColumn;
 @Entity
 @Table(name = "instructor", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class Instructor {
+
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Column(name = "id")
+
     private Long instructorId;
     
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "INSTRUCTOR_AND_COURSES_TABLE", 
-    joinColumns = {
-    		@JoinColumn(name = "instructorId", referencedColumnName = "id")
-    },
-    inverseJoinColumns = {
-    		@JoinColumn(name = "id", referencedColumnName = "id")
-    })
+    /*
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "INSTRUCTOR_COURSE",
+        joinColumns = @JoinColumn(name = "instructor_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    */
+    
+    @OneToMany(mappedBy = "instructor", cascade = {}, orphanRemoval = false)
 
     private Set<Course> courses;
     
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
+
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
+        
 
     
     @NonNull
@@ -74,10 +86,6 @@ public class Instructor {
     @NonNull 
     @Column(name = "credits_taught")
     private float creditsTaught;
-    
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
 
 
 	public long getInstructorId() {
@@ -161,6 +169,15 @@ public class Instructor {
 
 	public void setInstructorId(Long instructorId) {
 		this.instructorId = instructorId;
+	}
+
+	public void setUser(User instructor) {
+	    this.instructorFirstName = instructor.getFirstName();
+	    this.instructorLastName = instructor.getLastName();
+	    this.instructorEmail = instructor.getEmail();
+	    this.instructorPassword = instructor.getPassword();
+	    this.instructorUsername = instructor.getUsername();
+	    this.role = instructor.getRole();
 	}
 	
 	

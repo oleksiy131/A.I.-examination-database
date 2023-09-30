@@ -2,8 +2,12 @@ package edu.sru.thangiah.domain;
 
 import java.util.Set;
 
-import org.springframework.lang.NonNull;
+import javax.persistence.JoinColumn;
 
+import org.springframework.lang.NonNull;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,25 +15,36 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+//course
 @Entity
 @Table(name = "COURSE")
 
 public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
 
-    private Long id;
-    
+	@Id
+	private Long id;
+
     private String courseName;
     
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Student> students;
     
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
-    private Set<Instructor> instructors;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "instructor_id")
+    private Instructor instructor;
+
+
+    // Add getters and setters
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
 
 	public Long getId() {
 		return id;
@@ -42,10 +57,16 @@ public class Course {
 	public String getCourseName() {
 		return courseName;
 	}
+	
 
-	public void setCourseName(String className) {
-		this.courseName = className;
+	//public void setCourseName(String className) {
+	//	this.courseName = className;
+	//}
+	
+	public void setCourseName(String courseName) {
+	    this.courseName = courseName;
 	}
+	
 
 	public Set<Student> getStudents() {
 		return students;
@@ -55,13 +76,7 @@ public class Course {
 		this.students = students;
 	}
 
-	public Set<Instructor> getInstructors() {
-		return instructors;
-	}
-
-	public void setInstructors(Set<Instructor> instructors) {
-		this.instructors = instructors;
-	}
+	
 	
 	
 	

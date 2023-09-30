@@ -15,7 +15,7 @@
 
         h2 {
             text-align: center;
-            background-color: #3498db;
+            background-color: #007055;
             color: #fff;
             padding: 10px;
         }
@@ -49,7 +49,7 @@
         input[type="submit"] {
             display: block;
             margin: 20px auto;
-            background-color: #3498db;
+            background-color: #007055;
             color: #fff;
             padding: 10px 20px;
             border: none;
@@ -65,7 +65,10 @@
 </head>
 <body>
     <h2>Create Instructor</h2>
-    <form id="createInstructorForm" action="/instructor/instructor/create" method="POST">
+    <form action="/schedule-manager/instructor/add" method="post">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="instructorId" required>
+
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="instructorFirstName" required>
 
@@ -86,38 +89,5 @@
 
         <input type="submit" value="Create Instructor">
     </form>
-    
-    <script>
-        $(document).ready(function () {
-    $('#createInstructorForm').submit(function (event) {
-        event.preventDefault();
-        
-        // Serialize form data as JSON
-        var formData = {
-            instructorFirstName: $('#firstName').val(),
-            instructorLastName: $('#lastName').val(),
-            instructorEmail: $('#email').val(),
-            instructorPassword: $('#password').val(),
-            instructorUsername: $('#username').val(),
-            creditsTaught: $('#creditsTaught').val()
-        };
-
-        $.ajax({
-            type: 'POST',
-            url: '/instructor/instructor/create',
-            contentType: 'application/json', // Set content type to JSON
-            data: JSON.stringify(formData), // Converting data to JSON format
-            success: function (response) {
-                alert(response);
-            },
-            error: function (error) {
-                alert('Error: ' + error.responseText);
-            }
-        });
-    });
-});
-
-
-    </script>
 </body>
 </html>

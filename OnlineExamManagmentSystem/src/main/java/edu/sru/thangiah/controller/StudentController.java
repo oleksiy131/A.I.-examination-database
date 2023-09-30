@@ -2,6 +2,7 @@ package edu.sru.thangiah.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -13,27 +14,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 @RestController
 @RequestMapping("/student/course")
 public class StudentController 
 {
-
+    @Autowired
 	private StudentRepository studentRepository;
-
+    @Autowired
 	private CourseRepository courseRepository;
+    @Autowired
+	private UserRepository userRepository;
+    @Autowired
+	private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	public StudentController(StudentRepository studentRepository, CourseRepository courseRepository) 
-	{
-		super();
-		this.studentRepository = studentRepository;
-		this.courseRepository = courseRepository; 
-	}
+	public StudentController(StudentRepository studentRepository, CourseRepository courseRepository, UserRepository userRepository) {
+        super();
+        this.studentRepository = studentRepository;
+        this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
+    }
 	
 
     @GetMapping("/students")
@@ -75,29 +89,45 @@ public class StudentController
         return "math-quiz"; // the name of the HTML template for the quiz page
     }
 	
-	 @PostMapping("/student/course/create")
-	    public String create(Student student, Model model) {
-	        // (assuming studentRepository is injected)
+	@Transactional
+	@PostMapping("/create")
+	public String create(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+	    System.out.println("Inside student-create method");
+	    try {
+	        // Check if the student with the given username already exists
+	        if (studentRepository.findByStudentUsername(student.getStudentUsername()).isPresent()) {
+	            redirectAttributes.addFlashAttribute("errorMessage", "Student with given username already exists.");
+	            return "redirect:/student/create";
+	        }
+
+	        // Fetch the role with ID 2 and set it to the student
+	        Roles role = roleRepository.findById(2L)
+	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+	        student.setRole(role);
+
+	        // Save the new student
 	        studentRepository.save(student);
 
-	        model.addAttribute("message", "Student created successfully");
+	        // Create and save the corresponding user
+	        User newUser = new User();
+	        newUser.setId(student.getStudentId());
+	        newUser.setUsername(student.getStudentUsername());
+	        newUser.setPassword(student.getStudentPassword());  // We might want to encode this
+	        newUser.setRole(role);
 
-	        // Redirect to a success page 
-	        return "redirect:/student/create"; // Redirect back to the form page
+
+            // Set enabled for the user as well
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
+
+	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
+	        return "redirect:/student-success";
+	    } catch (Exception e) {
+	        System.out.println("Failed to add student: " + e.getMessage());
+	        redirectAttributes.addFlashAttribute("errorMessage", "Failed to add student.");
+	        return "redirect:/fail";
 	    }
-	 @PostMapping("/create")
-	 public String createStudent(@ModelAttribute Student student, Model model) {
-
-	     // (assuming studentRepository is injected)
-	     studentRepository.save(student);
-
-	    
-	     model.addAttribute("message", "Student created successfully");
-
-
-	     return "redirect:/student/course/create"; // Redirect back to the form page
-	 }
-	
-
+	}
 
 }
