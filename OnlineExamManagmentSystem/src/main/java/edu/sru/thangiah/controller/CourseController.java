@@ -2,7 +2,9 @@ package edu.sru.thangiah.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.repository.CourseRepository;
@@ -13,21 +15,26 @@ public class CourseController {
 
     @Autowired
     private CourseRepository courseRepository;
+    
+    
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/add-course")
-    @ResponseBody
-    public ResponseEntity<?> addCourse(@RequestBody Course course) {
+    public String addCourse(@ModelAttribute Course course, Model model) {
+        System.out.println("Inside addCourse method");  // Debugging line
         try {
             // Save the course to the database
             Course savedCourse = courseRepository.save(course);
             if (savedCourse != null) {
-                return ResponseEntity.ok().body("{\"success\": true}");
+                model.addAttribute("message", "Course added successfully.");
+                return "redirect:/course-success-page"; // Redirect to a success page
             } else {
-                return ResponseEntity.ok().body("{\"success\": false}");
+                model.addAttribute("message", "Error adding course. Controller");
+                return "add-course"; // Stay on the same page and display the error
             }
         } catch (Exception e) {
-            return ResponseEntity.ok().body("{\"success\": false}");
+            model.addAttribute("message", "Error adding course. Controller Error");
+            return "add-course"; // Stay on the same page and display the error
         }
     }
-
 }

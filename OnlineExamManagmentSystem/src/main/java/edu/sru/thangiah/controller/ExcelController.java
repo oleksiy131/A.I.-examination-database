@@ -1,11 +1,16 @@
 package edu.sru.thangiah.controller;
 
 import org.apache.poi.ss.usermodel.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.sru.thangiah.domain.Course;
+import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 
 import java.io.IOException;
@@ -13,8 +18,8 @@ import java.io.InputStream;
 import java.util.Optional;
 
 /*
- *  ____  __    __        _ _ 
-/ __ \/ /__ / /__ ___ (_|_)
+ *____  __    __        _ _ 
+ / __ \/ /__ / /__ ___ (_|_)
 / /_/ / / -_)  '_/(_-</ / / 
 \____/_/\__/_/\_\/___/_/_/  
                         
@@ -22,10 +27,92 @@ import java.util.Optional;
 
 @Controller
 public class ExcelController {
-    private final StudentRepository studentRepository;
+    
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private InstructorRepository instructorRepository;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     public ExcelController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
+    }
+    
+    @GetMapping("/class-import")
+    public String showClassImportPage() {
+        return "class-import";
+    }
+    
+    @PostMapping("/upload")
+    public String upload(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return "redirect:/import?error=emptyfile";
+        }
+
+        try (InputStream is = file.getInputStream();
+             Workbook workbook = WorkbookFactory.create(is)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            String courseName = sheet.getRow(1).getCell(0).getStringCellValue();
+            Long instructorId = (long) sheet.getRow(3).getCell(1).getNumericCellValue();
+            Long courseId = (long) sheet.getRow(4).getCell(1).getNumericCellValue();
+
+            // Create and save course
+            Course course = new Course();
+            course.setId(courseId);
+            course.setCourseName(courseName);
+            courseRepository.save(course);
+
+            // Create and save instructor
+            Instructor instructor = new Instructor();
+            instructor.setInstructorId(instructorId);
+            instructor.setInstructorFirstName(sheet.getRow(3).getCell(2).getStringCellValue());
+            instructor.setInstructorLastName(sheet.getRow(3).getCell(3).getStringCellValue());
+            instructorRepository.save(instructor);
+            
+            // Associate instructor with the course
+            course.setInstructor(instructor);
+            courseRepository.save(course);
+
+         // Create and save students
+            for (int i = 5; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row != null) {  // Add this null check
+                    Student student = new Student();
+                    if (row.getCell(1) != null) {
+                        student.setStudentId((long) row.getCell(1).getNumericCellValue());
+                    }
+                    if (row.getCell(2) != null) {
+                        student.setStudentFirstName(row.getCell(2).getStringCellValue());
+                    }
+                    if (row.getCell(3) != null) {
+                        student.setStudentLastName(row.getCell(3).getStringCellValue());
+                    }
+
+                 // Check if a student with the same ID already exists
+                    Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
+                    if (!existingStudent.isPresent()) {
+                        studentRepository.save(student);
+
+                        // Associate the student with the course
+                        student.getCourses().add(course);  // Assuming 'course' is the Course object you want to associate with
+                        studentRepository.save(student);
+                    } else {
+                        System.out.println("Console LOG: Student Id is already present in the database");
+                    }
+                }
+            }
+
+
+            return "redirect:/upload-success";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "redirect:/error";
+        }
     }
 
     @PostMapping("/uploadExcel")

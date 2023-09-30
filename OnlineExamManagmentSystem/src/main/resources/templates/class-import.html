@@ -101,11 +101,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>File Upload</h1>
+        <h1>Upload Excel File to Load the Class</h1>
 
         <!-- New message -->
         <div class="download-link">
-            <a href="/download/students">Download the Excel sheet to load data into</a>
+            <a href="/download/class-import">Download the Excel sheet to load data into</a>
         </div>
 
         <div class="message error" th:if="${param.error == 'emptyfile'}">Please select a file to upload.</div>
@@ -113,7 +113,7 @@
         <div class="message success" th:if="${param.success == 'true'}">File uploaded successfully.</div>
 
         <!-- Create the file upload form -->
-        <form method="post" action="/uploadExcel" enctype="multipart/form-data">
+        <form method="post" action="/upload" enctype="multipart/form-data">
             <label for="file" class="custom-file-upload">Choose File</label>
             <input type="file" name="file" id="file" accept=".xlsx, .xls" class="file-upload" onchange="displaySelectedFile()">
             <button type="submit" class="upload-button">Upload</button>

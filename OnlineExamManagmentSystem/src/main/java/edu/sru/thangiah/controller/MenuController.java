@@ -84,8 +84,11 @@ public class MenuController {
         return "navbar"; 
     }
 	
+	
+	
 	@RequestMapping("/sidebar")
     public String showSidebar() {
+	    System.out.println("Sidebar request received");
         return "sidebar"; 
     }
 	

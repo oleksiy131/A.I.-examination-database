@@ -1,6 +1,7 @@
 package edu.sru.thangiah.domain;
 
 
+import java.util.HashSet;
 import java.util.Set; 
 
 import org.springframework.lang.NonNull;
@@ -27,9 +28,8 @@ import jakarta.persistence.Table;
 public class Student {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long studentId;
+    private long studentId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "STUDENT_AND_COURSES_TABLE", 
@@ -39,7 +39,9 @@ public class Student {
     inverseJoinColumns = {
     		@JoinColumn(name = "course_id", referencedColumnName = "id")
     })
-    private Set<Course> courses;
+    private Set<Course> courses = new HashSet<>();  // Initialize here
+
+    
     
  // Getter and setter for courses
     public Set<Course> getCourses() {
@@ -79,7 +81,7 @@ public class Student {
     private Roles role;
     
 
-	public long getStudentId() {
+	public Long getStudentId() {
 		return studentId;
 	}
 
@@ -161,7 +163,7 @@ public class Student {
 	}
 
 	public Student() {
-		
+		this.courses = new HashSet<>();
 	}
 
 	public void setUser(User Student) {

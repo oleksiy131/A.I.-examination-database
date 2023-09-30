@@ -35,7 +35,6 @@ public class Instructor {
 
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
 
     private Long instructorId;
@@ -53,9 +52,15 @@ public class Instructor {
 
     private Set<Course> courses;
     
-    
-   // private Set<Course> courses;
-    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Roles role;
+
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
+        
 
     
     @NonNull
@@ -81,10 +86,6 @@ public class Instructor {
     @NonNull 
     @Column(name = "credits_taught")
     private float creditsTaught;
-    
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
 
 
 	public long getInstructorId() {
