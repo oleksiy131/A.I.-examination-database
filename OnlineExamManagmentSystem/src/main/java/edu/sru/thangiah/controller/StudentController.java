@@ -110,14 +110,16 @@ public class StudentController
 
 	        // Create and save the corresponding user
 	        User newUser = new User();
+	        newUser.setId(student.getStudentId());
 	        newUser.setUsername(student.getStudentUsername());
 	        newUser.setPassword(student.getStudentPassword());  // We might want to encode this
 	        newUser.setRole(role);
 
-	        // Set enabled for the user as well
-	        newUser.setEnabled(true);
 
-	        userRepository.save(newUser);
+            // Set enabled for the user as well
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
 
 	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
 	        return "redirect:/student-success";
