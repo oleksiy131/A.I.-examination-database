@@ -41,6 +41,11 @@ public class ExcelController {
         this.studentRepository = studentRepository;
     }
     
+    @GetMapping("/class-import")
+    public String showClassImportPage() {
+        return "class-import";
+    }
+    
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -94,7 +99,8 @@ public class ExcelController {
                             studentRepository.save(student);
                         }
                     } else {
-                        System.out.println("Console LOG: Student Id is present in the database");
+                        System.out.println("Console LOG: Student Id is already "
+                        		+ "present in the database");
                     }
 
 

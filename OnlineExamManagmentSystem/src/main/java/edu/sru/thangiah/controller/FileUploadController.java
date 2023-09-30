@@ -15,6 +15,7 @@ public class FileUploadController {
     @Autowired
     private ExcelParserService excelParserService;
     
+    /*
     @GetMapping("/class")
     public String showClassImportPage() {
         return "class-import";
@@ -29,4 +30,5 @@ public class FileUploadController {
             return new ResponseEntity<>("Failed to upload file: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    */
 }
