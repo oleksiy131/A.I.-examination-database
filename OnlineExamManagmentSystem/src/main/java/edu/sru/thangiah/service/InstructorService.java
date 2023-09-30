@@ -1,8 +1,13 @@
 package edu.sru.thangiah.service;
 
+import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.exception.ResourceNotFoundException;
+import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +24,15 @@ public class InstructorService {
             .orElseThrow(() -> new ResourceNotFoundException("Instructor not found: " + instructorId));
         
         instructorRepository.deleteById(instructorId);
+    }
+ 
+
+    public void saveAll(List<Instructor> instructors) {
+        instructorRepository.saveAll(instructors);
+    }
+    
+    public void save(Instructor instructor) {
+        instructorRepository.save(instructor);
     }
     
 }

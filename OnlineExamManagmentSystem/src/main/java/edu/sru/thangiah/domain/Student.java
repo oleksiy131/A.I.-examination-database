@@ -27,7 +27,6 @@ import jakarta.persistence.Table;
 public class Student {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long studentId;
     
@@ -79,7 +78,7 @@ public class Student {
     private Roles role;
     
 
-	public long getStudentId() {
+	public Long getStudentId() {
 		return studentId;
 	}
 

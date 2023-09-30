@@ -8,6 +8,9 @@
     <h2>Create Instructor</h2>
     <!-- Updated the action attribute to match the new endpoint -->
     <form action="/schedule-manager/instructor/add" method="post">
+     	<label for="id">ID:</label>
+        <input type="text" id="id" name="instructorId" required>
+    
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="instructorFirstName" required>
 

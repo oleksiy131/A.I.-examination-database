@@ -170,6 +170,7 @@ public class ScheduleManagerController {
 
             // Create and save the corresponding user
             User newUser = new User();
+            newUser.setId(instructor.getInstructorId());
             newUser.setUsername(instructor.getInstructorUsername());
             newUser.setPassword(instructor.getInstructorPassword());  // We might want to encode this
             newUser.setRole(role); 
