@@ -105,7 +105,7 @@ public class OnlineExamManagmentSystemApplication {
             user.setRole(role);
             List<Roles> rolesList = new ArrayList<>();
             rolesList.add(role);
-            user.setEnabled(true);//sets all users to enabled account
+            user.setEnabled(true);
             user.setRoles(rolesList);
             
             userRepository.save(user);
