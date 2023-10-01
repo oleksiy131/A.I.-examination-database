@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
 
                                 .requestMatchers("/course/add-course").hasAuthority("ADMINISTRATOR")
-
+                              //  .requestMatchers("/profile").authenticated()
                                 .requestMatchers("/add-course.html",
                                         "/associate-instructor.html",
                                         "/associate-students.html",
