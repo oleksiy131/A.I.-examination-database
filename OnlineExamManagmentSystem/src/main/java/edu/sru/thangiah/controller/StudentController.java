@@ -112,7 +112,8 @@ public class StudentController
 	        User newUser = new User();
 	        newUser.setId(student.getStudentId());
 	        newUser.setUsername(student.getStudentUsername());
-	        newUser.setPassword(student.getStudentPassword());  // We might want to encode this
+	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
+		    newUser.setPassword(hashedPassword);
 	        newUser.setRole(role);
 
 

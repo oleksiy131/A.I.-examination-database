@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +52,9 @@ public class ScheduleManagerController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -172,7 +176,8 @@ public class ScheduleManagerController {
             User newUser = new User();
             newUser.setId(instructor.getInstructorId());
             newUser.setUsername(instructor.getInstructorUsername());
-            newUser.setPassword(instructor.getInstructorPassword());  // We might want to encode this
+            String hashedPassword = passwordEncoder.encode(instructor.getInstructorPassword());
+    	    newUser.setPassword(hashedPassword);
             newUser.setRole(role); 
 
             // Set enabled for the user as well
