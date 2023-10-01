@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -59,6 +60,8 @@ public class AdministratorController {
 	private RoleRepository roleRepository;
 	@Autowired
 	private ScheduleManagerRepository SMRepo;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/administratorlogin")
 	public String showLoginPage() {
@@ -248,8 +251,11 @@ public class AdministratorController {
 		user.setFirstName(manager.getManagerFirstName());
 		user.setLastName(manager.getManagerLastName());
 		user.setUsername(manager.getManagerUsername());
-		user.setPassword(manager.getManagerPassword());
+		String hashedPassword = passwordEncoder.encode(manager.getManagerPassword());
+	    user.setPassword(hashedPassword);
 		user.setRole(role);
+		user.setEnabled(true);
+
 
 		
 		

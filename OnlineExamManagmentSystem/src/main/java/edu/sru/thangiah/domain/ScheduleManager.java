@@ -33,7 +33,7 @@ public class ScheduleManager {
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@NonNull
     @Column(name = "id")
     private Long managerId;

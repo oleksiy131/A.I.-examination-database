@@ -30,39 +30,43 @@ public class SecurityConfig {
         System.out.println("SecurityConfig is loaded");
 
         http
-        	//Disabling CSRF is not recommended for production but it is making the whole program very angry.
-        	.csrf().disable()
-            .authorizeHttpRequests((authorize) -> authorize
-            		
-                    .requestMatchers("/course/add-course").hasAuthority("ADMINISTRATOR")
+                //Disabling CSRF is not recommended for production but it is making the whole program very angry.
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests((authorize) -> authorize
 
-                    .requestMatchers("/add-course.html",
-                            "/associate-instructor.html",
-                            "/associate-students.html",
-                            "/classes.html",
-                            "/create-instructor.html",
-                            "/create-student.html",
-                            "/exams.html",
-                            "/history-quiz.html",
-                            "/import.html",
-                            "/import-students.html",
-                            "/index.html",
-                            "/math-quiz.html",
-                            "/navbar.html",
-                            "/register.html",
-                            "/registration_success.html",
-                            "/registration-confirmation.html",
-                            "/science-quiz.html",
-                            "/sidebar.html",
-                            "/student-list.html",
-                            "/upload-success.html",
-                            "/users.html").hasAnyAuthority("ADMINISTRATOR", "STUDENT", "INSTRUCTOR", "SCHEDULE_MANAGER")
-                    .anyRequest().authenticated()
-            )
-            .formLogin(login -> login
-                    .defaultSuccessUrl("/navbar", true) // the second parameter ensures always redirecting to "/navbar" after login
-                    .permitAll()
-            );
+                                .requestMatchers("/course/add-course").hasAuthority("ADMINISTRATOR")
+
+                                .requestMatchers("/add-course.html",
+                                        "/associate-instructor.html",
+                                        "/associate-students.html",
+                                        "/classes.html",
+                                        "/create-instructor.html",
+                                        "/create-student.html",
+                                        "/exams.html",
+                                        "/history-quiz.html",
+                                        "/import.html",
+                                        "/import-students.html",
+                                        "/index.html",
+                                        "/math-quiz.html",
+                                        "/navbar.html",
+                                        "/register.html",
+                                        "/registration_success.html",
+                                        "/registration-confirmation.html",
+                                        "/science-quiz.html",
+                                        "/sidebar.html",
+                                        "/student-list.html",
+                                        "/upload-success.html",
+                                        "/users.html").hasAnyAuthority("ADMINISTRATOR", "STUDENT", "INSTRUCTOR", "SCHEDULE_MANAGER")
+                                .anyRequest().authenticated()
+                )
+                .formLogin(login -> login
+                                .defaultSuccessUrl("/navbar", true) // the second parameter ensures always redirecting to "/navbar" after login
+                                .permitAll()
+                )
+                .logout(logout -> logout // Configure logout
+                                .logoutUrl("/logout") // Set the URL for logout
+                                .logoutSuccessUrl("/login?logout") // Redirect to this URL after successful logout
+                );
         return http.build();
     }
 
