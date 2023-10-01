@@ -77,10 +77,16 @@
                 <!-- search options --> 
                 <button class="dropbutton">Account
                 </button>
-                <div class="dropdown-info">
-                    <a href="#">Change Password</a>
-                    <a href="/logout">Logout</a>
-                </div>
+            <div class="dropdown-info">
+    			<!--	<p>Username: <span th:text="${#authentication.principal.username}"></span></p>
+    				<p>ID: <span th:text="${#authentication.principal.id}"></span></p>
+    				<p>First Name: <span th:text="${#authentication.principal.firstName}"></span></p>
+    				<p>Last Name: <span th:text="${#authentication.principal.lastName}"></span></p>
+    				<p>Email: <span th:text="${#authentication.principal.email}"></span></p> -->
+    			<a href="#">Change Password</a>
+    			<a href="/logout">Logout</a>
+			</div>
+
             </div>
 
     </div>
