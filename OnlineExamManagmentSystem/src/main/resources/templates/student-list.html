@@ -68,6 +68,10 @@
                 <td th:text="${student.studentEmail}"></td>
                 <td th:text="${student.studentUsername}"></td>
                 <td th:text="${student.creditsTaken}"></td>
+                 <td>
+            <!-- Add an edit button with a link to the edit page -->
+            <a th:href="@{'/edit/' + ${student.studentUsername}}">Edit</a>
+        </td>
             </tr>
         </tbody>
     </table>

@@ -22,20 +22,19 @@ public class ScheduleManager {
 		super();
 	}
 
-	public ScheduleManager(Long managerId, String managerFirstName, String managerLastName, String managerEmail,
-			String managerPassword, String managerUsername, Roles role) {
+	public ScheduleManager(String managerFirstName, String managerLastName, String managerEmail,
+			String managerPassword, String managerUsername) {
 		super();
-		this.managerId = managerId;
 		this.managerFirstName = managerFirstName;
 		this.managerLastName = managerLastName;
 		this.managerEmail = managerEmail;
 		this.managerPassword = managerPassword;
 		this.managerUsername = managerUsername;
-		this.role = role;
 	}
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+	@NonNull
     @Column(name = "id")
     private Long managerId;
     
@@ -62,6 +61,7 @@ public class ScheduleManager {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Roles role;
+        
 
 	public Long getManagerId() {
 		return managerId;
@@ -114,11 +114,10 @@ public class ScheduleManager {
 	public Roles getRole() {
 		return role;
 	}
-
-	public void setRole(Roles role) {
-		this.role = role;
-	}
 		
+	public void setRole(Roles role) {
+	    this.role = role;
+	}
 		
 
 

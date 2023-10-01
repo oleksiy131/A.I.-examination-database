@@ -1,8 +1,10 @@
 package edu.sru.thangiah.controller;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.StudentRepository;
 
 @RestController
 @RequestMapping("/instructor")
@@ -20,7 +23,9 @@ public class InstructorController {
 
     private  InstructorRepository instructorRepository;
     private  CourseRepository courseRepository;
-
+    
+    @Autowired
+    private StudentRepository studentRepository;
 
     public InstructorController(InstructorRepository instructorRepository, CourseRepository courseRepository) {
         this.instructorRepository = instructorRepository;
@@ -55,9 +60,17 @@ public class InstructorController {
         return instructorRepository.findById(instructorId).orElse(null);
     }
     
-    
-    
-    
+	@GetMapping("/students")
+	public String showStudentList(Model model) {
+		// Retrieve the list of students from the repository
+		List<Student> students = (List<Student>) studentRepository.findAll();
+
+		// Add the list of students to the model for rendering in the HTML template
+		model.addAttribute("students", students);
+
+		// Return the name of the HTML template to be displayed
+		return "student-list";
+	}
 
    
 }
