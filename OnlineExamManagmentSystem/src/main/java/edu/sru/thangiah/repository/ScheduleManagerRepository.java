@@ -10,7 +10,5 @@ import edu.sru.thangiah.domain.ScheduleManager;
 
 
 public interface ScheduleManagerRepository extends JpaRepository<ScheduleManager, Long> {
-    Optional<ScheduleManager> findBySmUsername(String username);  // Updated method name to match field name
+    Optional<ScheduleManager> findBymanagerUsername(String username);  // Updated method name to match field name
 }
-
-

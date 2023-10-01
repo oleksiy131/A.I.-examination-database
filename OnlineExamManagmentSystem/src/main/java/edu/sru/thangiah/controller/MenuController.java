@@ -43,41 +43,28 @@ public class MenuController {
 	        return "index"; 
 	    }
 
-		
-		  @GetMapping("/register") public String register(Model model) {
-		  model.addAttribute("user", new User()); return "register"; }
-		 
-
-	    @PostMapping("/register")
-	    public String saveUser(User user, @RequestParam String role) {
-	        user.setPassword(passwordEncoder.encode(user.getPassword()));
-	        Roles userRole = roleRepository.findByName(role)
-	            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-	        user.setRole(userRole);
-	        userRepository.save(user);
-
-	        switch (role) {
-	            case "ADMINISTRATOR":
-	                Administrator admin = new Administrator();
-	                admin.setUser(user);
-	                administratorRepository.save(admin);
-	                break;
-	            case "STUDENT":
-	                Student student = new Student();
-	                student.setUser(user);
-	                studentRepository.save(student);
-	                break;
-	            case "INSTRUCTOR":
-	                Instructor instructor = new Instructor();
-	                instructor.setUser(user);
-	                instructorRepository.save(instructor);
-	                break;
-	            // Add Scedule manager when merged
-	        }
-
-	        return "redirect:/index"; // Redirect to login page after successful registration
-	    }
-	
+		/*
+		 * @GetMapping("/register") public String register(Model model) {
+		 * model.addAttribute("user", new User()); return "register"; }
+		 * 
+		 * 
+		 * @PostMapping("/register") public String saveUser(User user, @RequestParam
+		 * String role) { user.setPassword(passwordEncoder.encode(user.getPassword()));
+		 * Roles userRole = roleRepository.findByName(role) .orElseThrow(() -> new
+		 * RuntimeException("Error: Role is not found.")); user.setRole(userRole);
+		 * userRepository.save(user);
+		 * 
+		 * switch (role) { case "ADMINISTRATOR": Administrator admin = new
+		 * Administrator(); admin.setUser(user); administratorRepository.save(admin);
+		 * break; case "STUDENT": Student student = new Student();
+		 * student.setUser(user); studentRepository.save(student); break; case
+		 * "INSTRUCTOR": Instructor instructor = new Instructor();
+		 * instructor.setUser(user); instructorRepository.save(instructor); break; //
+		 * Add Scedule manager when merged }
+		 * 
+		 * return "redirect:/index"; // Redirect to login page after successful
+		 * registration }
+		 */
 	
 	@RequestMapping("/navbar")
     public String showMainScreen() {
@@ -100,4 +87,3 @@ public class MenuController {
 
     
 }
-

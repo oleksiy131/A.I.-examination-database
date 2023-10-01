@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -14,11 +16,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.sru.thangiah.domain.Administrator;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.EmailService;
@@ -49,6 +55,10 @@ public class AdministratorController {
 	private EmailService emailService;
 	@Autowired
 	private UserRepository userRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private ScheduleManagerRepository SMRepo;
 
 	@GetMapping("/administratorlogin")
 	public String showLoginPage() {
@@ -71,7 +81,7 @@ public class AdministratorController {
 		// Save the Administrator object to the repository and return the saved user.
 		return administratorRepository.save(administrator);
 	}
-	
+
 	@GetMapping("/navbar")
 	public String navbar() {
 		return "navbar";
@@ -212,53 +222,61 @@ public class AdministratorController {
 		}
 	}
 
-	/*
-	 * @GetMapping("/register") public String showRegistrationForm() { return
-	 * "register"; // This maps to the register.html file }
-	 */
 
-	/*
-	 * @PostMapping("/register") public String registerUser(
-	 * 
-	 * @RequestParam String firstName,
-	 * 
-	 * @RequestParam String lastName,
-	 * 
-	 * @RequestParam String email,
-	 * 
-	 * @RequestParam String password,
-	 * 
-	 * @RequestParam String username,
-	 * 
-	 * @RequestParam String role) {
-	 * 
-	 * 
-	 * // Create a new user with the provided information User user = new
-	 * User(firstName, lastName, email, password, username, role);
-	 * 
-	 * // Save the user to the database using JpaRepository's save method
-	 * userRepository.save(user);
-	 * 
-	 * // Send a verification email sendVerificationEmail(user);
-	 * 
-	 * // Redirect to a confirmation page or login page return
-	 * "redirect:/registration-confirmation"; // }
-	 */
+	 @GetMapping("/register") public String showRegistrationForm(Model model) {
+	 model.addAttribute("user", new User()); 
+	 return "register"; // This maps to the register.html file 
+	  }
+	 
+
+	@Transactional
+	@PostMapping("/register")
+	public String registerUser(@ModelAttribute ScheduleManager manager, RedirectAttributes redirectAttributes) {
+
+		if (SMRepo.findBymanagerUsername(manager.getManagerUsername()).isPresent()) {
+			redirectAttributes.addFlashAttribute("errorMessage", "Manager with given username already exists.");
+			return "redirect:/register";
+		}
+
+		Roles role = roleRepository.findById(4L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+		manager.setRole(role);
+
+		SMRepo.save(manager);
+
+		User user = new User();
+		user.setEmail(manager.getManagerEmail());
+		user.setFirstName(manager.getManagerFirstName());
+		user.setLastName(manager.getManagerLastName());
+		user.setUsername(manager.getManagerUsername());
+		user.setPassword(manager.getManagerPassword());
+		user.setRole(role);
+
+		
+		
+        userRepository.save(user);
+        
+        
+//        // Send a verification email
+        //sendVerificationEmail(user);
+//
+//        // Redirect to a confirmation page or login page
+		return "redirect:/registration-confirmation"; //
+	}
 
 	@GetMapping("/registration-confirmation")
 	public String registerConfirm() {
 		return "registration-confirmation"; // The HTML file
 	}
-	
+
 	@GetMapping("/course-success-page")
-    public String showCourseSuccessForm() {
-        return "course-success-page"; 
-    }
-	
+	public String showCourseSuccessForm() {
+		return "course-success-page";
+	}
+
 	@GetMapping("/instructor-success")
-    public String showInstructorSuccessForm() {
-        return "/instructor-success"; 
-    }
+	public String showInstructorSuccessForm() {
+		return "/instructor-success";
+	}
 
 	// Send verification email to the user
 	private void sendVerificationEmail(User user) {
