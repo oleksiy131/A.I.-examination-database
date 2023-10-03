@@ -7,8 +7,13 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
@@ -17,7 +22,7 @@ import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 
-@RestController
+@Controller
 @RequestMapping("/instructor")
 public class InstructorController {
 
@@ -71,6 +76,48 @@ public class InstructorController {
 		// Return the name of the HTML template to be displayed
 		return "student-list";
 	}
+	
+	@GetMapping("/edit-student/{id}")
+    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+		Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        model.addAttribute("student", student);
+        return "edit-student";
+    }
+	
+	@PostMapping("/update/{id}")
+    public String updateStudent(@PathVariable("id") long id, @Validated Student student, 
+      BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            student.setStudentId(id);
+            return "update-user";
+        }
+        
+        // Debugging: Print the received student data
+        System.out.println("Received Student Data:");
+        System.out.println("ID: " + student.getStudentId());
+        System.out.println("First Name: " + student.getStudentFirstName());
+        System.out.println("Last Name: " + student.getStudentLastName());
+        System.out.println("Email: " + student.getStudentEmail());
+        System.out.println("Path Variable ID: " + id);
+        
+//        student.setStudentId(id);
+//        student.setRole(student.getRole());
+//        student.setStudentPassword(student.getStudentPassword());
+        studentRepository.save(student);
+        return "edit-confirmation";
+    }
+	
+	@GetMapping("/student/delete/{id}")
+    public String deleteStudent(@PathVariable("id") long id, Model model) {
+        Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        studentRepository.delete(student);
+        return "edit-confirmation";
+    }
+	
+	
 
    
 }
