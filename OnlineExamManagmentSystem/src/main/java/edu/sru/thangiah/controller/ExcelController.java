@@ -98,7 +98,7 @@ public class ExcelController {
                         studentRepository.save(student);
 
                         // Associate the student with the course
-                        student.getCourses().add(course);  // Assuming 'course' is the Course object you want to associate with
+                        student.getCourses().add(course);  
                         studentRepository.save(student);
                     } else {
                         System.out.println("Console LOG: Student Id is already present in the database");
