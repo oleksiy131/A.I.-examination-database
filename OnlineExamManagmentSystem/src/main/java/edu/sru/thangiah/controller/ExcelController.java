@@ -9,9 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
 import jakarta.transaction.Transactional;
 
 import java.io.IOException;
@@ -28,6 +32,9 @@ import java.util.Optional;
 
 @Controller
 public class ExcelController {
+	
+	@Autowired
+    private RoleRepository roleRepository;
     
     @Autowired
     private StudentRepository studentRepository;
@@ -37,6 +44,10 @@ public class ExcelController {
 
     @Autowired
     private CourseRepository courseRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+
 
     public ExcelController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -137,6 +148,7 @@ public class ExcelController {
 
                 Student student = new Student();
 
+
                 // Handle each cell in the row
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
@@ -178,8 +190,29 @@ public class ExcelController {
                                 }
                                 break;
                         }
+              
                     }
                 }
+                
+                // Fetch the role with ID 2 and set it to the student
+                Roles role = roleRepository.findById(2L)
+                    .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+                student.setRole(role);
+
+                // Save the new instructor
+                studentRepository.save(student);
+
+                // Create and save the corresponding user
+                User newUser = new User();
+                newUser.setId(student.getStudentId());
+                newUser.setUsername(student.getStudentUsername());
+                newUser.setPassword(student.getStudentPassword());  // We might want to encode this
+                newUser.setRole(role); 
+
+                // Set enabled for the user as well
+                newUser.setEnabled(true);
+
+                userRepository.save(newUser);
 
                 // Check if a student with the same ID already exists
                 Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
