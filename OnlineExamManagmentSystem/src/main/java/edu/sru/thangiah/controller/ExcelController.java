@@ -12,6 +12,7 @@ import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import jakarta.transaction.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -115,6 +116,7 @@ public class ExcelController {
         }
     }
 
+    @Transactional
     @PostMapping("/uploadExcel")
     public String uploadExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -143,19 +145,19 @@ public class ExcelController {
                             case STRING:
                                 // Cell contains a string value
                                 switch (i) {
-                                    case 0:
+                                    case 1:
                                         student.setStudentFirstName(cell.getStringCellValue());
                                         break;
-                                    case 1:
+                                    case 2:
                                         student.setStudentLastName(cell.getStringCellValue());
                                         break;
-                                    case 2:
+                                    case 3:
                                         student.setStudentEmail(cell.getStringCellValue());
                                         break;
-                                    case 3:
+                                    case 4:
                                         student.setStudentPassword(cell.getStringCellValue());
                                         break;
-                                    case 4:
+                                    case 5:
                                         student.setStudentUsername(cell.getStringCellValue());
                                         break;
                                     // Add cases for other cells as needed
@@ -165,8 +167,11 @@ public class ExcelController {
                                 // Cell contains a numeric value
                                 double numericValue = cell.getNumericCellValue();
                                 switch (i) {
-                                    case 5:
-                                        // Assuming column 5 contains numeric value
+                                    case 0:
+                                        student.setStudentId((long) numericValue);
+                                        break;
+                                    case 6:
+                                        // Assuming column 6 contains numeric value for Credits Taken
                                         student.setCreditsTaken((float) numericValue);
                                         break;
                                     // Handle numeric value for other cells if needed
@@ -176,11 +181,13 @@ public class ExcelController {
                     }
                 }
 
-                // Check if a student with the same username already exists
-                Optional<Student> existingStudent = studentRepository.findByStudentUsername(student.getStudentUsername());
+                // Check if a student with the same ID already exists
+                Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
                 if (!existingStudent.isPresent()) {
-                    // Save the student to the database only if it doesn't exist
+                    // Saving the student to the database only if it doesn't exist
                     studentRepository.save(student);
+                } else {
+                    // Handling the case where the student already exists, if needed
                 }
             }
 
@@ -192,4 +199,5 @@ public class ExcelController {
             return "redirect:/import?error=processing";
         }
     }
+
 }
