@@ -29,7 +29,7 @@ public class Student {
     
     @Id
     @Column(name = "id")
-    private long studentId;
+    private Long studentId;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "STUDENT_AND_COURSES_TABLE", 
@@ -85,7 +85,7 @@ public class Student {
 		return studentId;
 	}
 
-	public void setStudentId(long studentId) {
+	public void setStudentId(Long studentId) {
 		this.studentId = studentId;
 	}
 

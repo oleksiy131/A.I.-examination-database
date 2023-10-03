@@ -123,7 +123,7 @@ public class StudentController
             userRepository.save(newUser);
 
 	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
-	        return "redirect:/student-success";
+	        return "upload-success";
 	    } catch (Exception e) {
 	        System.out.println("Failed to add student: " + e.getMessage());
 	        redirectAttributes.addFlashAttribute("errorMessage", "Failed to add student.");

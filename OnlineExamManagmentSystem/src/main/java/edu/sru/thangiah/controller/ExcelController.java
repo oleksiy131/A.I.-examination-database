@@ -9,9 +9,14 @@ import org.springframework.web.multipart.MultipartFile;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
+import jakarta.transaction.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +32,9 @@ import java.util.Optional;
 
 @Controller
 public class ExcelController {
+	
+	@Autowired
+    private RoleRepository roleRepository;
     
     @Autowired
     private StudentRepository studentRepository;
@@ -36,6 +44,10 @@ public class ExcelController {
 
     @Autowired
     private CourseRepository courseRepository;
+    
+    @Autowired
+    private UserRepository userRepository;
+
 
     public ExcelController(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -98,7 +110,7 @@ public class ExcelController {
                         studentRepository.save(student);
 
                         // Associate the student with the course
-                        student.getCourses().add(course);  // Assuming 'course' is the Course object you want to associate with
+                        student.getCourses().add(course);  
                         studentRepository.save(student);
                     } else {
                         System.out.println("Console LOG: Student Id is already present in the database");
@@ -115,6 +127,7 @@ public class ExcelController {
         }
     }
 
+    @Transactional
     @PostMapping("/uploadExcel")
     public String uploadExcel(@RequestParam("file") MultipartFile file) {
         if (file.isEmpty()) {
@@ -135,6 +148,7 @@ public class ExcelController {
 
                 Student student = new Student();
 
+
                 // Handle each cell in the row
                 for (int i = 0; i < row.getLastCellNum(); i++) {
                     Cell cell = row.getCell(i);
@@ -143,19 +157,19 @@ public class ExcelController {
                             case STRING:
                                 // Cell contains a string value
                                 switch (i) {
-                                    case 0:
+                                    case 1:
                                         student.setStudentFirstName(cell.getStringCellValue());
                                         break;
-                                    case 1:
+                                    case 2:
                                         student.setStudentLastName(cell.getStringCellValue());
                                         break;
-                                    case 2:
+                                    case 3:
                                         student.setStudentEmail(cell.getStringCellValue());
                                         break;
-                                    case 3:
+                                    case 4:
                                         student.setStudentPassword(cell.getStringCellValue());
                                         break;
-                                    case 4:
+                                    case 5:
                                         student.setStudentUsername(cell.getStringCellValue());
                                         break;
                                     // Add cases for other cells as needed
@@ -165,22 +179,48 @@ public class ExcelController {
                                 // Cell contains a numeric value
                                 double numericValue = cell.getNumericCellValue();
                                 switch (i) {
-                                    case 5:
-                                        // Assuming column 5 contains numeric value
+                                    case 0:
+                                        student.setStudentId((long) numericValue);
+                                        break;
+                                    case 6:
+                                        // Assuming column 6 contains numeric value for Credits Taken
                                         student.setCreditsTaken((float) numericValue);
                                         break;
                                     // Handle numeric value for other cells if needed
                                 }
                                 break;
                         }
+              
                     }
                 }
+                
+                // Fetch the role with ID 2 and set it to the student
+                Roles role = roleRepository.findById(2L)
+                    .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+                student.setRole(role);
 
-                // Check if a student with the same username already exists
-                Optional<Student> existingStudent = studentRepository.findByStudentUsername(student.getStudentUsername());
+                // Save the new instructor
+                studentRepository.save(student);
+
+                // Create and save the corresponding user
+                User newUser = new User();
+                newUser.setId(student.getStudentId());
+                newUser.setUsername(student.getStudentUsername());
+                newUser.setPassword(student.getStudentPassword());  // We might want to encode this
+                newUser.setRole(role); 
+
+                // Set enabled for the user as well
+                newUser.setEnabled(true);
+
+                userRepository.save(newUser);
+
+                // Check if a student with the same ID already exists
+                Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
                 if (!existingStudent.isPresent()) {
-                    // Save the student to the database only if it doesn't exist
+                    // Saving the student to the database only if it doesn't exist
                     studentRepository.save(student);
+                } else {
+                    // Handling the case where the student already exists, if needed
                 }
             }
 
@@ -192,4 +232,5 @@ public class ExcelController {
             return "redirect:/import?error=processing";
         }
     }
+
 }
