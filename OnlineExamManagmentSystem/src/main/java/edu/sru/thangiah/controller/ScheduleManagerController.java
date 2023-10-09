@@ -178,7 +178,9 @@ public class ScheduleManagerController {
             newUser.setUsername(instructor.getInstructorUsername());
             String hashedPassword = passwordEncoder.encode(instructor.getInstructorPassword());
     	    newUser.setPassword(hashedPassword);
-            newUser.setRole(role); 
+
+    	    newUser.setRole(role); 
+
 
             // Set enabled for the user as well
             newUser.setEnabled(true);
@@ -245,7 +247,7 @@ public class ScheduleManagerController {
                 existingInstructor.setInstructorFirstName(updatedInstructor.getInstructorFirstName());
                 existingInstructor.setInstructorLastName(updatedInstructor.getInstructorLastName());
                 existingInstructor.setInstructorEmail(updatedInstructor.getInstructorEmail());
-                existingInstructor.setInstructorPassword(updatedInstructor.getInstructorPassword());  // Consider encrypting the password
+                existingInstructor.setInstructorPassword(passwordEncoder.encode(updatedInstructor.getInstructorPassword()));
                 existingInstructor.setInstructorUsername(updatedInstructor.getInstructorUsername());
                 existingInstructor.setCreditsTaught(updatedInstructor.getCreditsTaught());
 
