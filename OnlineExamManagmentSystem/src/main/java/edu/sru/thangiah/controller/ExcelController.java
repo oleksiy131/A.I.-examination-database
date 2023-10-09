@@ -20,6 +20,8 @@ import jakarta.transaction.Transactional;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /*
@@ -197,7 +199,8 @@ public class ExcelController {
                 // Fetch the role with ID 2 and set it to the student
                 Roles role = roleRepository.findById(2L)
                     .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
-                student.setRole(role);
+                List<Roles> rolesList = new ArrayList<>();
+                student.setRoles(rolesList);
 
                 // Save the new instructor
                 studentRepository.save(student);
@@ -207,7 +210,7 @@ public class ExcelController {
                 newUser.setId(student.getStudentId());
                 newUser.setUsername(student.getStudentUsername());
                 newUser.setPassword(student.getStudentPassword());  // We might want to encode this
-                newUser.setRole(role); 
+        		newUser.setRoles(rolesList); 
 
                 // Set enabled for the user as well
                 newUser.setEnabled(true);
