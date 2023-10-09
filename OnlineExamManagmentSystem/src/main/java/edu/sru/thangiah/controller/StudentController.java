@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,10 @@ import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 
-@RestController
+@Controller
 @RequestMapping("/student/course")
 public class StudentController 
 {
@@ -49,6 +51,10 @@ public class StudentController
         this.userRepository = userRepository;
     }
 	
+	@RequestMapping("/student_homepage")
+	public String showStudentHomepage() {
+		return "student_homepage";
+	}
 
     @GetMapping("/students")
     public String showStudentList(Model model) {
@@ -101,9 +107,11 @@ public class StudentController
 	        }
 
 	        // Fetch the role with ID 2 and set it to the student
-	        Roles role = roleRepository.findById(2L)
+	        Roles roles = roleRepository.findById(2L)
 	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
-	        student.setRole(role);
+	        List<Roles> rolesList = new ArrayList<>();
+            rolesList.add(roles);
+            student.setRoles(rolesList);
 
 	        // Save the new student
 	        studentRepository.save(student);
@@ -114,7 +122,7 @@ public class StudentController
 	        newUser.setUsername(student.getStudentUsername());
 	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
 		    newUser.setPassword(hashedPassword);
-	        newUser.setRole(role);
+	        newUser.setRoles(rolesList);
 
 
             // Set enabled for the user as well

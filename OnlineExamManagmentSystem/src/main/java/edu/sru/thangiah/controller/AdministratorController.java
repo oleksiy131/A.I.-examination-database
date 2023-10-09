@@ -30,6 +30,7 @@ import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.EmailService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,10 +86,10 @@ public class AdministratorController {
 		return administratorRepository.save(administrator);
 	}
 
-	@GetMapping("/navbar")
-	public String navbar() {
-		return "navbar";
-	}
+//	@GetMapping("/navbar")
+//	public String navbar() {
+//		return "navbar";
+//	}
 
 	@GetMapping("/exams")
 	public String examsPage() {
@@ -241,8 +242,10 @@ public class AdministratorController {
 			return "redirect:/register";
 		}
 
-		Roles role = roleRepository.findById(4L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
-		manager.setRole(role);
+		Roles roles = roleRepository.findById(4L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+		List<Roles> rolesList = new ArrayList<>();
+		rolesList.add(roles);
+		manager.setRoles(rolesList);
 
 		SMRepo.save(manager);
 
@@ -252,14 +255,16 @@ public class AdministratorController {
 		user.setLastName(manager.getManagerLastName());
 		user.setUsername(manager.getManagerUsername());
 		String hashedPassword = passwordEncoder.encode(manager.getManagerPassword());
-	    user.setPassword(hashedPassword);
-		user.setRole(role);
+		user.setPassword(hashedPassword);
+
+
+		
+		rolesList.add(roles);
+		user.setRoles(rolesList);
+
 		user.setEnabled(true);
+		userRepository.save(user);
 
-
-		
-		
-        userRepository.save(user);
         
         
 //        // Send a verification email

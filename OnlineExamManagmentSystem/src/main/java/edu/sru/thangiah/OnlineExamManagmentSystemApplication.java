@@ -33,12 +33,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import edu.sru.thangiah.domain.Administrator;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.AdministratorRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 
@@ -68,6 +70,9 @@ public class OnlineExamManagmentSystemApplication {
     
     @Autowired
     private InstructorRepository instructorRepository;
+    
+    @Autowired
+    private ScheduleManagerRepository scheduleManagerRepository;
 
     @Bean
     public CommandLineRunner setupRoles() {
@@ -102,7 +107,6 @@ public class OnlineExamManagmentSystemApplication {
             Roles role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             
-            user.setRole(role);
             List<Roles> rolesList = new ArrayList<>();
             rolesList.add(role);
             user.setEnabled(true);
@@ -125,12 +129,12 @@ public class OnlineExamManagmentSystemApplication {
                 instructor.setUser(user);
                 instructorRepository.save(instructor);
             }
-			/*
-			 * if (roleName.equals("SCHEDULE_MANAGER")) { ScheduleManager scheduleManager =
-			 * new ScheduleManager(); scheduleManager.setUser(user);
-			 * scheduleManagerRepository.save(scheduleManager); }
-			 */
             
+            if (roleName.equals("SCHEDULE_MANAGER")) {
+                ScheduleManager scheduleManager = new ScheduleManager();
+                scheduleManager.setUser(user);
+                scheduleManagerRepository.save(scheduleManager);
+            }
         }
     }
 }

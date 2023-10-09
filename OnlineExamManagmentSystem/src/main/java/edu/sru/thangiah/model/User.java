@@ -74,39 +74,13 @@ public class User implements UserDetails{
     @Column(name = "verification_code")
     private String verificationCode;
     
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Roles role;
+//    @ManyToOne
+//    @JoinColumn(name = "role_id")
+//    private Roles role;
 
     private boolean verified;
     private boolean enabled;
 
-/*
-    //OLEKSII BRANCH BELOW
-    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    private Collection<Roles> roles;
-
-    public User(String firstName, String lastName, String email, String password, String username, String role) {
-        super();
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = new BCryptPasswordEncoder().encode(password);	//encode
-        this.username = username;
-        this.roles = Arrays.asList(new Roles(role));
-        this.verificationCode = generateVerificationCode();
-        this.verified = false; // Initialize as unverified
-    }
-    */
-
-  //MASTER BRANCH BELOW
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", 
                joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), 
@@ -131,144 +105,57 @@ public class User implements UserDetails{
 	}
 
 
-
-
-
-
 	public Long getId() {
 		return id;
 	}
-
-
-
-
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
-
-
-
-
 	public String getFirstName() {
 		return firstName;
 	}
-
-
-
-
-
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-
-
-
-
-
 	public String getLastName() {
 		return lastName;
 	}
-
-
-
-
-
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-
-
-
-
-
 	public String getEmail() {
 		return email;
 	}
-
-
-
-
-
-
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
-
-
-
-
-
+	
 	public String getPassword() {
 		return password;
 	}
-
-
-
-
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-
-
-
-
 	public String getVerificationCode() {
 		return verificationCode;
 	}
-
-
-
-
-
 
 	public void setVerificationCode(String verificationCode) {
 		this.verificationCode = verificationCode;
 	}
 
-
-
-
-
-
-	public Roles getRole() {
-		return role;
-	}
-
-
-
-
-
-
-	public void setRole(Roles role) {
-		this.role = role;
-	}
-
-
-
-
-
-
 	public List<Roles> getRoles() {
 		return roles;
 	}
-
-
-
-
-
 
 	public void setRoles(List<Roles> roles) {
 		this.roles = roles;
@@ -324,5 +211,4 @@ public class User implements UserDetails{
     public void setVerified(boolean verified) {
         this.verified = true;
     }
-
 }

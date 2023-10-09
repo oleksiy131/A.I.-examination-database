@@ -19,6 +19,9 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -33,34 +36,11 @@ public class SecurityConfig {
                 //Disabling CSRF is not recommended for production but it is making the whole program very angry.
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> authorize
-
-                                .requestMatchers("/course/add-course").hasAuthority("ADMINISTRATOR")
-                              //  .requestMatchers("/profile").authenticated()
-                                .requestMatchers("/add-course.html",
-                                        "/associate-instructor.html",
-                                        "/associate-students.html",
-                                        "/classes.html",
-                                        "/create-instructor.html",
-                                        "/create-student.html",
-                                        "/exams.html",
-                                        "/history-quiz.html",
-                                        "/import.html",
-                                        "/import-students.html",
-                                        "/index.html",
-                                        "/math-quiz.html",
-                                        "/navbar.html",
-                                        "/register.html",
-                                        "/registration_success.html",
-                                        "/registration-confirmation.html",
-                                        "/science-quiz.html",
-                                        "/sidebar.html",
-                                        "/student-list.html",
-                                        "/upload-success.html",
-                                        "/users.html").hasAnyAuthority("ADMINISTRATOR", "STUDENT", "INSTRUCTOR", "SCHEDULE_MANAGER")
+                				.requestMatchers("/student_homepage/**").hasAuthority("STUDENT")
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login -> login
-                                .defaultSuccessUrl("/navbar", true) // the second parameter ensures always redirecting to "/navbar" after login
+                                .successHandler(successHandler) // the second parameter ensures always redirecting to "/navbar" after login
                                 .permitAll()
                 )
                 .logout(logout -> logout // Configure logout

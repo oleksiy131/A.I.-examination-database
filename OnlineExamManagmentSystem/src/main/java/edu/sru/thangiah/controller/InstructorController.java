@@ -25,6 +25,11 @@ import edu.sru.thangiah.repository.StudentRepository;
 @Controller
 @RequestMapping("/instructor")
 public class InstructorController {
+	
+	@RequestMapping("/instructor_homepage")
+	public String showInstructorHomepage() {
+		return "instructor_homepage";
+	}
 
     private  InstructorRepository instructorRepository;
     private  CourseRepository courseRepository;
