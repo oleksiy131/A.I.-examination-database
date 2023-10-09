@@ -2,6 +2,7 @@ package edu.sru.thangiah.domain;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set; 
 
 import org.springframework.lang.NonNull;
@@ -76,9 +77,9 @@ public class Student {
     @Column (name = "enrolled_credits")
     private float creditsTaken;
     
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "role_id")
-    private Roles role;
+    private List<Roles> roles;
     
 
 	public Long getStudentId() {
@@ -139,17 +140,19 @@ public class Student {
 	
 	
 
-	public Roles getRole() {
-		return role;
-	}
-
-	public void setRole(Roles role) {
-		this.role = role;
-	}
-
 	
-	public Student(Long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
-			String studentEmail, String studentPassword, String studentUsername, float creditsTaken, Roles role) {
+	public List<Roles> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
+	}
+
+
+	public Student(long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
+			String studentEmail, String studentPassword, String studentUsername, float creditsTaken,
+			List<Roles> roles) {
 		super();
 		this.studentId = studentId;
 		this.courses = courses;
@@ -159,7 +162,7 @@ public class Student {
 		this.studentPassword = studentPassword;
 		this.studentUsername = studentUsername;
 		this.creditsTaken = creditsTaken;
-		this.role = role;
+		this.roles = roles;
 	}
 
 	public Student() {
@@ -172,7 +175,7 @@ public class Student {
 	    this.studentEmail = Student.getEmail();
 	    this.studentPassword = Student.getPassword();
 	    this.studentUsername = Student.getUsername();
-	    this.role = Student.getRole();		
+	    this.roles = Student.getRoles();		
 	}
 
 	

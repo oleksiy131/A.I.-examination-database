@@ -52,16 +52,10 @@ public class Instructor {
 
     private Set<Course> courses;
     
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "role_id")
-    private Roles role;
-
-
-    public void setRole(Roles role) {
-        this.role = role;
-    }
-        
-
+    private List<Roles> roles;
+ 
     
     @NonNull
     @Column(name = "first_name")
@@ -94,6 +88,16 @@ public class Instructor {
 
 	public void setInstructorId(long instructorId) {
 		this.instructorId = instructorId;
+	}
+	
+	
+
+	public List<Roles> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
 	}
 
 	public String getInstructorFirstName() {
@@ -177,7 +181,7 @@ public class Instructor {
 	    this.instructorEmail = instructor.getEmail();
 	    this.instructorPassword = instructor.getPassword();
 	    this.instructorUsername = instructor.getUsername();
-	    this.role = instructor.getRole();
+	    this.roles = instructor.getRoles();
 	}
 	
 	

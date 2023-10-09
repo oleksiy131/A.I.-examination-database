@@ -1,6 +1,8 @@
 package edu.sru.thangiah.domain;
 
 
+import java.util.List;
+
 import org.springframework.lang.NonNull;
 
 import edu.sru.thangiah.model.Roles;
@@ -11,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
@@ -44,9 +47,9 @@ public class Administrator {
     @Column(name = "username")
     private String adminUsername;
     
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "role_id")
-    private Roles role;
+    private List<Roles> roles;
 
 	public Long getAdminId() {
 		return adminId;
@@ -96,12 +99,14 @@ public class Administrator {
 		this.adminUsername = adminUsername;
 	}
 
-	public Roles getRole() {
-		return role;
+	
+
+	public List<Roles> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Roles role) {
-		this.role = role;
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
 	}
 
 	public void setUser(User root) {
@@ -110,7 +115,7 @@ public class Administrator {
 	    this.adminEmail = root.getEmail();
 	    this.adminPassword = root.getPassword();
 	    this.adminUsername = root.getUsername();
-	    this.role = root.getRole();
+	    this.roles = root.getRoles();
 	}
 
 	

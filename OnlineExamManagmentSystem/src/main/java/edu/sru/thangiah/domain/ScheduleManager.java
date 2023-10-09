@@ -1,14 +1,18 @@
 package edu.sru.thangiah.domain;
 
+import java.util.List;
+
 import org.springframework.lang.NonNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.UniqueConstraint;
 
@@ -58,9 +62,9 @@ public class ScheduleManager {
     @Column(name = "username")
     private String managerUsername;
     
-    @ManyToOne
+    @ManyToMany
     @JoinColumn(name = "role_id")
-    private Roles role;
+    private List<Roles> roles;
         
 
 	public Long getManagerId() {
@@ -111,12 +115,18 @@ public class ScheduleManager {
 		this.managerUsername = managerUsername;
 	}
 
-	public Roles getRole() {
-		return role;
+	
+
+	public List<Roles> getRoles() {
+		return roles;
 	}
+
+	public void setRoles(List<Roles> roles) {
+		this.roles = roles;
+	}
+
+	public void setUser(User user) {
 		
-	public void setRole(Roles role) {
-	    this.role = role;
 	}
 		
 
