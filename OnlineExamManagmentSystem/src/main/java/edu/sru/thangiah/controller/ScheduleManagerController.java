@@ -12,6 +12,7 @@ import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,11 @@ public class ScheduleManagerController {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+	@RequestMapping("/schedule_manager_homepage")
+	public String showScheduleManagerHomepage() {
+		return "schedule_manager_homepage";
+	}
 
     
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -165,9 +171,11 @@ public class ScheduleManagerController {
             }
 
             // Fetch the role with ID 3 and set it to the instructor
-            Roles role = roleRepository.findById(3L)
+            Roles roles = roleRepository.findById(3L)
                 .orElseThrow(() -> new RuntimeException("Role with ID 3 not found"));
-            instructor.setRole(role);
+            List<Roles> rolesList = new ArrayList<>();
+            rolesList.add(roles);
+            instructor.setRoles(rolesList);
 
             // Save the new instructor
             instructorRepository.save(instructor);
@@ -179,7 +187,7 @@ public class ScheduleManagerController {
             String hashedPassword = passwordEncoder.encode(instructor.getInstructorPassword());
     	    newUser.setPassword(hashedPassword);
 
-    	    newUser.setRole(role); 
+    	    newUser.setRoles(rolesList); 
 
 
             // Set enabled for the user as well
