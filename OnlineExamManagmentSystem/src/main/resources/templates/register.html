@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Schedule Manager Registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -28,6 +28,9 @@
         h1 {
             text-align: center;
         }
+        h4{
+			text-align: center;
+		}
 
         form {
             margin-top: 20px;
@@ -67,9 +70,13 @@
         }
     </style>
 </head>
+
 <body>
+	
     <div class="container">
-        <h1>Scheduel Mangager Registration</h1>
+		<h4><a th:href="@{/navbar}">Click here to return to Home Screen</a></h4>
+	<br>
+        <h1>Schedule Mangager Registration</h1>
         <form action="/register" method="post">
             <label for="firstName">First Name:</label>
             <input type="text" id="firstName" name="managerFirstName" required>

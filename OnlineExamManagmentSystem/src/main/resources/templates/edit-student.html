@@ -79,11 +79,17 @@
   }
 
   .delete-link:hover {
-    background-color: #ff0000; 
+    background-color: #ff0000;
   }
+  
+  h4{
+	text-align: center;
+	}
+	
 </style>
 </head>
 <body>
+	<h4><a th:href="@{/navbar}">Click here to return to Home Screen</a></h4>
 <form action="#" 
   th:action="@{/instructor/update/{id}(id=${student.studentId})}" 
   th:object="${student}" 
