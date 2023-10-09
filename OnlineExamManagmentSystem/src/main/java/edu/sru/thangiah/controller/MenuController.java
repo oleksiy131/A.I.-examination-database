@@ -38,10 +38,6 @@ public class MenuController {
 	    @Autowired
 	    private PasswordEncoder passwordEncoder;
 
-	    @GetMapping("/index")
-	    public String login() {
-	        return "index"; 
-	    }
 
 		/*
 		 * @GetMapping("/register") public String register(Model model) {
