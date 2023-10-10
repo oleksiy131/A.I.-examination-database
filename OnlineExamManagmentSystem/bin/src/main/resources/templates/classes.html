@@ -1,8 +1,56 @@
-<!-- navbar.html -->
+<!-- classes.html -->
+
 
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High School Class Selection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #007055;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: 50px auto;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007055;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #019270;
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
 	<link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
@@ -58,7 +106,7 @@
             <div class="dropdown-info">
             
                 <a href="/students">View All Students</a>
-                <a href="/schedule-manager/all">View All Schedule Managers</a>
+                <a href="/schedule-managers">View All Schedule Managers</a>
                 <a href="/create-student">Add Students</a>
                 <a href="/create-instructor">Add Instructors</a>
                 <a href="/schedule-manager/add-course">Add Courses</a>
@@ -82,19 +130,55 @@
                 <!-- search options --> 
                 <button class="dropbutton">Account
                 </button>
-            <div class="dropdown-info">
-    			<!--	<p>Username: <span th:text="${#authentication.principal.username}"></span></p>
-    				<p>ID: <span th:text="${#authentication.principal.id}"></span></p>
-    				<p>First Name: <span th:text="${#authentication.principal.firstName}"></span></p>
-    				<p>Last Name: <span th:text="${#authentication.principal.lastName}"></span></p>
-    				<p>Email: <span th:text="${#authentication.principal.email}"></span></p> -->
-    			<a href="#">Change Password</a>
-    			<a href="/logout">Logout</a>
-			</div>
-
+                <div class="dropdown-info">
+                    <a href="#">Change Password</a>
+                    <a href="/exit">Logout</a>
+                </div>
             </div>
 
     </div>
+</body>
+<br>
+<br>
+<br>
 
+<body>
+    <div class="container">
+        <h1>High School Class Selection</h1>
+        <form id="classForm" onsubmit="return redirectToSelectedClass()">
+            <label for="classSelect">Select a class:</label>
+            <select id="classSelect" name="class">
+                <option value="math">Mathematics</option>
+                <option value="science">Science</option>
+                <option value="history">History</option>
+            </select>
+            <br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    
+    <script>
+        function redirectToSelectedClass() {
+            const classSelect = document.getElementById("classSelect");
+            const selectedClass = classSelect.value;
+            
+            switch (selectedClass) {
+                case "math":
+                    window.location.href = "math-quiz";
+                    break;
+                case "science":
+                    window.location.href = "science-quiz";
+                    break;
+                case "history":
+                    window.location.href = "history-quiz";
+                    break;
+                default:
+                    alert("Please select a class.");
+                    return false; // Prevent form submission if no class is selected
+            }
+            
+            return false; // Prevent form submission
+        }
+    </script>
 </body>
 </html>

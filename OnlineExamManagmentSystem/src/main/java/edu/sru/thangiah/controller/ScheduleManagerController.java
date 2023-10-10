@@ -4,12 +4,14 @@ package edu.sru.thangiah.controller;
 import edu.sru.thangiah.domain.Course;
 
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.exception.ResourceNotFoundException;
 import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.UserRepository;
 
 import java.util.ArrayList;
@@ -55,6 +57,9 @@ public class ScheduleManagerController {
     private UserRepository userRepository;
     
     @Autowired
+    private ScheduleManagerRepository scheduleManagerRepository;
+    
+    @Autowired
     private PasswordEncoder passwordEncoder;
     
 	@RequestMapping("/schedule_manager_homepage")
@@ -88,6 +93,13 @@ public class ScheduleManagerController {
     @ResponseBody
     public List<Instructor> getInstructors() {
         return instructorRepository.findAll();
+    }
+    
+    @GetMapping("/all")
+    public String showSM(Model model) {
+        List<ScheduleManager> managers = scheduleManagerRepository.findAll();
+        model.addAttribute("managers", managers);
+        return "schedule-manager-list";
     }
 
     

@@ -1,20 +1,21 @@
-<!-- navbar.html -->
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
-	<link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Manager</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
-	
-	
+	<link rel="stylesheet" th:href="@{/css/style.css}"/>
+	    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+
     <!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
-        <!-- Home button -->
+		<!-- Home button -->
         <div class="dropdown-nav">
-            <a th:href="@{/navbar}" class="dropbutton">
+            <a href="/navbar" class="dropbutton">
             <i class="fas fa-home"></i> 
         </a>
         </div>
@@ -58,7 +59,7 @@
             <div class="dropdown-info">
             
                 <a href="/students">View All Students</a>
-                <a href="/schedule-manager/all">View All Schedule Managers</a>
+                <a href="/schedule-managers">View All Schedule Managers</a>
                 <a href="/create-student">Add Students</a>
                 <a href="/create-instructor">Add Instructors</a>
                 <a href="/schedule-manager/add-course">Add Courses</a>
@@ -82,19 +83,77 @@
                 <!-- search options --> 
                 <button class="dropbutton">Account
                 </button>
-            <div class="dropdown-info">
-    			<!--	<p>Username: <span th:text="${#authentication.principal.username}"></span></p>
-    				<p>ID: <span th:text="${#authentication.principal.id}"></span></p>
-    				<p>First Name: <span th:text="${#authentication.principal.firstName}"></span></p>
-    				<p>Last Name: <span th:text="${#authentication.principal.lastName}"></span></p>
-    				<p>Email: <span th:text="${#authentication.principal.email}"></span></p> -->
-    			<a href="#">Change Password</a>
-    			<a href="/logout">Logout</a>
-			</div>
-
+                <div class="dropdown-info">
+                    <a href="#">Change Password</a>
+                    <a href="/exit">Logout</a>
+                </div>
             </div>
 
     </div>
+
+</body>
+
+<body>
+
+<h1 align="center">Schedule Manager Control Panel</h1>
+
+<!-- Display success or failure messages -->
+<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+<div th:if="${failureMessage}" class="alert alert-danger" th:text="${failureMessage}"></div>
+
+<!-- All Instructors -->
+<h2>Show all Instructors</h2>
+
+<!-- Link -->
+<a href="instructor-list">
+    <button>Show Instructors</button>
+</a>
+
+<!-- Add a new Instructor -->
+<h2>Add New Instructor</h2>
+
+<!-- Link to Add Instructor page -->
+<a href="create-instructor">
+    <button>Add Instructor</button>
+</a>
+
+<!-- Add a new Course -->
+<h2>Add New Course</h2>
+
+<!-- Link to Add Course page -->
+<a href="add-course">
+    <button>Add Course</button>
+</a>
+
+<h2>Assign Instructor To Course</h2>
+
+<!-- Link  -->
+<a href="associate-instructor">
+    <button>Associate Instructor</button>
+</a>
+
+<!-- Edit Instructor -->
+<h2>Edit Instructor</h2>
+
+<!-- Link  -->
+<a href="edit-instructor">
+    <button>Edit Instructor Info</button>
+</a>
+
+
+<h2>Delete Instructor</h2>
+<form action="#" th:action="@{/schedule-manager/instructor/delete}" method="post">
+    <div class="form-group">
+        <label for="selectInstructorDelete">Select Instructor to Delete: (Please refresh the page before you do)</label>
+        <select id="selectInstructorDelete" name="instructorId" required>
+            <option value="" selected disabled>Choose an instructor</option>
+            <option th:each="instructor : ${instructors}" 
+                    th:value="${instructor.instructorId}" 
+                    th:text="${instructor.instructorFirstName} + ' ' + ${instructor.instructorLastName}"></option>
+        </select>
+    </div>
+    <button type="submit">Delete Instructor</button>
+</form>
 
 </body>
 </html>

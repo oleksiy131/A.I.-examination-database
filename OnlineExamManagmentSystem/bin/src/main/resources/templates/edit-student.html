@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Add User</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  input[type="submit"],
+  button {
+    background-color: #007055;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover,
+  button:hover {
+    background-color: #02795d;
+  }
+
+  a {
+    text-decoration: none;
+    color: #007bff;
+    margin-left: 10px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .error {
+    color: #ff0000;
+    font-size: 12px;
+  }
+
+  .center-delete {
+    text-align: center;
+    margin-top: 20px; 
+  }
+
+  .delete-link {
+    text-decoration: none;
+    background-color: #007055; 
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .delete-link:hover {
+    background-color: #ff0000;
+  }
+  
+  h4{
+	text-align: center;
+	}
+	
+</style>
+</head>
+<body>
+	<h4><a th:href="@{/navbar}">Click here to return to Home Screen</a></h4>
+<form action="#" 
+  th:action="@{/instructor/update/{id}(id=${student.studentId})}" 
+  th:object="${student}" 
+  method="post">
+    <label for="name">First Name</label>
+    <input type="text" th:field="*{studentFirstName}" id="name" placeholder="Name">
+    <span class="error" th:if="${#fields.hasErrors('studentFirstName')}" th:errors="*{studentFirstName}"></span>
+    
+    <label for="name">Last Name:</label>
+    <input type="text" th:field="*{studentLastName}" id="name" placeholder="Name">
+    <span class="error" th:if="${#fields.hasErrors('studentLastName')}" th:errors="*{studentLastName}"></span>
+    
+    <label for="email">Email</label>
+    <input type="text" th:field="*{studentEmail}" id="email" placeholder="Email">
+    <span class="error" th:if="${#fields.hasErrors('studentEmail')}" th:errors="*{studentEmail}"></span>
+    
+    <label for="name">Username</label>
+    <input type="text" th:field="*{studentUsername}" id="name" placeholder="Name">
+    <span class="error" th:if="${#fields.hasErrors('studentUsername')}" th:errors="*{studentUsername}"></span>
+    
+    <input type="hidden" th:field="*{studentPassword}" name="fieldName" value="hiddenValue">
+    <input type="hidden" th:field="*{creditsTaken}" name="fieldName" value="hiddenValue">
+    <input type="hidden" th:field="*{studentId}" name="fieldName" value="hiddenValue">
+    
+    <input type="submit" value="Update User">   
+</form>
+
+<div class="center-delete">
+    <a class="delete-link" th:href="@{/instructor/student/delete/{id}(id=${student.studentId})}">Delete</a>
+</div>
+
+</body>
+</html>

@@ -1,15 +1,14 @@
-<!-- navbar.html -->
-
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <title>Add Course</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
 	<link rel="stylesheet" th:href="@{/css/style.css}"/>
 </head>
 
 <body>
-	
-	
+
     <!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
         <!-- Home button -->
@@ -58,7 +57,7 @@
             <div class="dropdown-info">
             
                 <a href="/students">View All Students</a>
-                <a href="/schedule-manager/all">View All Schedule Managers</a>
+                <a href="/schedule-managers">View All Schedule Managers</a>
                 <a href="/create-student">Add Students</a>
                 <a href="/create-instructor">Add Instructors</a>
                 <a href="/schedule-manager/add-course">Add Courses</a>
@@ -82,19 +81,33 @@
                 <!-- search options --> 
                 <button class="dropbutton">Account
                 </button>
-            <div class="dropdown-info">
-    			<!--	<p>Username: <span th:text="${#authentication.principal.username}"></span></p>
-    				<p>ID: <span th:text="${#authentication.principal.id}"></span></p>
-    				<p>First Name: <span th:text="${#authentication.principal.firstName}"></span></p>
-    				<p>Last Name: <span th:text="${#authentication.principal.lastName}"></span></p>
-    				<p>Email: <span th:text="${#authentication.principal.email}"></span></p> -->
-    			<a href="#">Change Password</a>
-    			<a href="/logout">Logout</a>
-			</div>
-
+                <div class="dropdown-info">
+                    <a href="#">Change Password</a>
+                    <a href="/exit">Logout</a>
+                </div>
             </div>
 
     </div>
+</body>
+<br>
+<br>
+<br>
 
+<body>
+    <h1>Add Course</h1>
+    <!-- Change the form action to point to the server-side controller -->
+    <form action="/course/add-course" method="post">
+        <label for="courseId">Course ID:</label>
+        <input type="text" id="courseId" name="id" required><br><br>
+        
+        <label for="courseName">Course Name:</label>
+        <input type="text" id="courseName" name="courseName" required><br><br>
+        
+        <input type="submit" value="Add Course">
+    </form>
+
+    <div id="message">
+        <!-- You can display server-side messages here -->
+    </div>
 </body>
 </html>
