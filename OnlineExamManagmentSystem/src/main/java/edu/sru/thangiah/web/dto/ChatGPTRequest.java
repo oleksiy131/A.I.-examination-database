@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ChatGPTRequest {	//testing
+public class ChatGPTRequest {	//testing...
 
 	   @JsonProperty("model")
 	    private String model;
