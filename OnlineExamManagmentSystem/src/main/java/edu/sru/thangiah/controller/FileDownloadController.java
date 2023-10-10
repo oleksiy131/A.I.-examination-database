@@ -38,7 +38,7 @@ public class FileDownloadController {
     @GetMapping("/class-import")
     public ResponseEntity<Resource> downloadClassImport() {
         // Load the Excel file from the updated classpath resource location
-        Resource resource = new ClassPathResource("/static/class_data.xlsx");
+        Resource resource = new ClassPathResource("/static/sample_data.xlsx");
 
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=class_data.xlsx");
