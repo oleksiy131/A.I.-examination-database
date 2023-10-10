@@ -54,6 +54,11 @@ public class InstructorController {
     public String showExamGenerator(Model model) {
         return "exam-generator"; // Create an HTML template for exam generation
     }
+    
+    @GetMapping("/pick-exam")
+    public String pickExam(Model model) {
+        return "pick-exam"; // Create an HTML template for exam generation
+    }
 
     @PostMapping("/instructor/create")
     public ResponseEntity<String> createInstructor(@RequestBody Instructor instructor) {
