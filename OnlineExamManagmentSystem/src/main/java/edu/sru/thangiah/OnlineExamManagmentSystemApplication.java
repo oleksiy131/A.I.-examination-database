@@ -89,6 +89,9 @@ public class OnlineExamManagmentSystemApplication {
     public CommandLineRunner setupDefaultUser() {
         return args -> {
             createUserIfNotFound("root", "software", "ADMINISTRATOR");
+            createUserIfNotFound("student", "student", "STUDENT");
+            createUserIfNotFound("instructor", "instructor", "INSTRUCTOR");
+            createUserIfNotFound("schedulemanager", "schedulemanager", "SCHEDULE_MANAGER");
         };
     }
 
@@ -121,11 +124,13 @@ public class OnlineExamManagmentSystemApplication {
             }
             if (roleName.equals("STUDENT")) {
                 Student student = new Student();
+                student.setStudentId((long) 2L);
                 student.setUser(user);
                 studentRepository.save(student);
             }
             if (roleName.equals("INSTRUCTOR")) {
                 Instructor instructor = new Instructor();
+                instructor.setInstructorId((long) 3L);
                 instructor.setUser(user);
                 instructorRepository.save(instructor);
             }
