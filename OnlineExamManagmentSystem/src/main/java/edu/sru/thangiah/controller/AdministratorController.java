@@ -63,21 +63,9 @@ public class AdministratorController {
 	private ScheduleManagerRepository SMRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ScheduleManagerRepository scheduleManagerRepository;
 
-	@GetMapping("/administratorlogin")
-	public String showLoginPage() {
-		return "administratorlogin"; // Return the administratorlogin.html template
-	}
-
-	/*
-	 * @PostMapping("/index") public String adminLogin(@RequestParam("username")
-	 * String username, @RequestParam("password") String password,
-	 * RedirectAttributes redirectAttributes) { if (adminUsername.equals(username)
-	 * && adminPassword.equals(password)) { // Successful login, redirect to the
-	 * navbar screen return "redirect:/navbar"; } else { // Invalid credentials,
-	 * display an error message redirectAttributes.addFlashAttribute("errorMessage",
-	 * "Invalid credentials"); return "redirect:/index"; } }
-	 */
 
 	// This method handles HTTP POST requests to create a new Administrator.
 	@PostMapping("/process_login")
@@ -85,11 +73,13 @@ public class AdministratorController {
 		// Save the Administrator object to the repository and return the saved user.
 		return administratorRepository.save(administrator);
 	}
+	
+	@GetMapping("/admin_homepage")
+	public String viewAdminHomepage() {
+		return "admin_homepage";
+		
+	}
 
-//	@GetMapping("/navbar")
-//	public String navbar() {
-//		return "navbar";
-//	}
 
 	@GetMapping("/exams")
 	public String examsPage() {
@@ -207,6 +197,13 @@ public class AdministratorController {
 		// Return the name of the HTML template to be displayed
 		return "student-list";
 	}
+	
+    @GetMapping("/list-sm")
+    public String showSM(Model model) {
+        List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
+        model.addAttribute("ScheduleManager", ScheduleManager);
+        return "schedule-manager-list";
+    }
 
 	@PostMapping("/student/course/associate")
 	public ResponseEntity<String> associateStudentWithCourse(@RequestParam Long studentId, @RequestParam Long courseId,

@@ -35,19 +35,10 @@ import jakarta.persistence.UniqueConstraint;
 @Table(name = "user", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class User implements UserDetails{
 	
-	public enum Role {
-	    ADMINISTRATOR,
-	    SCHEDULE_MANAGER,
-	    STUDENT,
-	    INSTRUCTOR
-	}
 	
-	@Enumerated(EnumType.STRING)
-    private Role role1;
-	
-	  @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "id")
+	@Column(name = "id")
     private Long id;
 
     @NonNull
@@ -74,9 +65,6 @@ public class User implements UserDetails{
     @Column(name = "verification_code")
     private String verificationCode;
     
-//    @ManyToOne
-//    @JoinColumn(name = "role_id")
-//    private Roles role;
 
     private boolean verified;
     private boolean enabled;
