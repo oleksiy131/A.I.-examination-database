@@ -26,15 +26,20 @@ public class ScheduleManager {
 		super();
 	}
 
-	public ScheduleManager(String managerFirstName, String managerLastName, String managerEmail,
-			String managerPassword, String managerUsername) {
+	
+	public ScheduleManager(Long managerId, String managerFirstName, String managerLastName, String managerEmail,
+			String managerPassword, String managerUsername, List<Roles> roles) {
 		super();
+		this.managerId = managerId;
 		this.managerFirstName = managerFirstName;
 		this.managerLastName = managerLastName;
 		this.managerEmail = managerEmail;
 		this.managerPassword = managerPassword;
 		this.managerUsername = managerUsername;
+		this.roles = roles;
 	}
+
+
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
