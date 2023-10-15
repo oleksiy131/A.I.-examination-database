@@ -1,0 +1,137 @@
+<!-- create-student.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Student</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+		.home {
+		    display: flex;
+		    justify-content: center;
+		    align-items: center; 
+		    height: 100%; 
+		}
+		
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px;
+        }
+        h4{
+			text-align: center;
+		}
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            margin: 20px auto;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #019270;
+        }
+
+        /* Style for the Export button */
+        #exportButton {
+            display: block;
+            margin: 20px auto;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        #exportButton:hover {
+            background-color: #019270;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+
+</head>
+<body>
+	
+    <h2>Create Student</h2>
+    <!-- Home button -->
+        <div class="home">
+            <a href="/navbar">
+            <i class="fas fa-home"></i> 
+        </a>
+        </div>
+        <br>
+    <form id="createStudentForm" action="/student/course/create" method="POST">
+		<label for="id">ID:</label>
+        <input type="text" id="id" name="studentId" required>
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="studentFirstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="studentLastName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="studentEmail" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="studentPassword" required>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="studentUsername" required>
+
+        <label for="credits">Credits Taken:</label>
+        <input type="number" id="credits" name="creditsTaken" step="1.0" required>
+
+        <input type="submit" value="Create Student">
+    </form>
+
+    <!-- Add the Export button and JavaScript for redirection -->
+    <button id="exportButton">Export All Students to Excel</button>
+    
+
+</body>
+</html>
