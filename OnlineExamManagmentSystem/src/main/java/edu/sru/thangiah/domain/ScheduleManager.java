@@ -130,8 +130,13 @@ public class ScheduleManager {
 		this.roles = roles;
 	}
 
-	public void setUser(User user) {
-		
+	public void setUser(User scheduleManager) {
+		this.managerFirstName = scheduleManager.getFirstName();
+	    this.managerLastName = scheduleManager.getLastName();
+	    this.managerEmail = scheduleManager.getEmail();
+	    this.managerPassword = scheduleManager.getPassword();
+	    this.managerUsername = scheduleManager.getUsername();
+	    this.roles = scheduleManager.getRoles();
 	}
 		
 
