@@ -37,7 +37,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 this.setDefaultTargetUrl("/instructor/instructor_homepage");
                 break;
             case "ADMINISTRATOR":
-                this.setDefaultTargetUrl("/navbar");
+                this.setDefaultTargetUrl("/admin_homepage");
                 break;
             case "SCHEDULE_MANAGER":
                 this.setDefaultTargetUrl("/schedule-manager/schedule_manager_homepage");
