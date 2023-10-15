@@ -97,8 +97,8 @@ public class ScheduleManagerController {
     
     @GetMapping("/all")
     public String showSM(Model model) {
-        List<ScheduleManager> managers = scheduleManagerRepository.findAll();
-        model.addAttribute("managers", managers);
+        List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
+        model.addAttribute("ScheduleManager", ScheduleManager);
         return "schedule-manager-list";
     }
 
