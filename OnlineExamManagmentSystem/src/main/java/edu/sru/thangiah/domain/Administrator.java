@@ -120,11 +120,30 @@ public class Administrator {
 	    this.roles = root.getRoles();
 	}
 
-	public void setUser(User user) {
-		
+	public void setUser(User administrator) {
+		this.adminId = administrator.getId();
+		this.adminFirstName = administrator.getFirstName();
+		this.adminLastName = administrator.getLastName();
+		this.adminEmail = administrator.getEmail();
+		this.adminPassword = administrator.getPassword();
+		this.adminUsername = administrator.getUsername();
+		this.roles = administrator.getRoles();
 	}
 
 	public Administrator() {}
+
+
+	public Administrator(Long adminId, String adminFirstName, String adminLastName, String adminEmail,
+			String adminPassword, String adminUsername, List<Roles> roles) {
+		super();
+		this.adminId = adminId;
+		this.adminFirstName = adminFirstName;
+		this.adminLastName = adminLastName;
+		this.adminEmail = adminEmail;
+		this.adminPassword = adminPassword;
+		this.adminUsername = adminUsername;
+		this.roles = roles;
+	}
 
 	
 	
