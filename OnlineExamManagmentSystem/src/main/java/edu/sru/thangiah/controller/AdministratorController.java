@@ -63,6 +63,8 @@ public class AdministratorController {
 	private ScheduleManagerRepository SMRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ScheduleManagerRepository scheduleManagerRepository;
 
 
 	// This method handles HTTP POST requests to create a new Administrator.
@@ -195,6 +197,13 @@ public class AdministratorController {
 		// Return the name of the HTML template to be displayed
 		return "student-list";
 	}
+	
+    @GetMapping("/list-sm")
+    public String showSM(Model model) {
+        List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
+        model.addAttribute("ScheduleManager", ScheduleManager);
+        return "schedule-manager-list";
+    }
 
 	@PostMapping("/student/course/associate")
 	public ResponseEntity<String> associateStudentWithCourse(@RequestParam Long studentId, @RequestParam Long courseId,
