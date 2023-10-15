@@ -50,6 +50,8 @@ public class Administrator {
     @ManyToMany
     @JoinColumn(name = "role_id")
     private List<Roles> roles;
+    
+    
 
 	public Long getAdminId() {
 		return adminId;
@@ -109,7 +111,7 @@ public class Administrator {
 		this.roles = roles;
 	}
 
-	public void setUser(User root) {
+	public void setRoot(User root) {
 	    this.adminFirstName = root.getFirstName();
 	    this.adminLastName = root.getLastName();
 	    this.adminEmail = root.getEmail();
@@ -117,6 +119,12 @@ public class Administrator {
 	    this.adminUsername = root.getUsername();
 	    this.roles = root.getRoles();
 	}
+
+	public void setUser(User user) {
+		
+	}
+
+	public Administrator() {}
 
 	
 	
