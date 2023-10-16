@@ -145,8 +145,7 @@ public class ExamService {
     private void readAllQuestions() {
         readMultipleChoiceQuestions(); // This reads all the multiple-choice questions as before
 
-        // Now, read the true/false questions for each chapter. 
-        // You need to specify the file paths for the true/false questions.
+        
         for (int chapter = 1; chapter <= 4; chapter++) { // Assuming there are 4 chapters
             String tfQuestionsFilePath = "/static/chapter-" + chapter + "_TF.xlsx"; // Construct the file path
             allQuestions.addAll(readTrueFalseQuestions(tfQuestionsFilePath)); // Read and add to the main list
