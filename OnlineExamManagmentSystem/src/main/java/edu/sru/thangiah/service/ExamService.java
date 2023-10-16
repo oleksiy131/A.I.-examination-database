@@ -63,8 +63,9 @@ public class ExamService {
         }
     }
 
-    private void readTrueFalseQuestions() {
-        try (InputStream is = getClass().getResourceAsStream("/static/chapterOneTF.xlsx");
+    private List<Question> readTrueFalseQuestions(String resourcePath) {
+        List<Question> questions = new ArrayList<>();
+        try (InputStream is = getClass().getResourceAsStream(resourcePath);
              Workbook workbook = new XSSFWorkbook(is)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i++) {
@@ -78,17 +79,30 @@ public class ExamService {
                 options.put("A", "True");
                 options.put("B", "False");
                 question.setOptions(options);
-                allQuestions.add(question);
+                String answer = getCellValue(row.getCell(1));
+                if (answer.startsWith("Ans: ")) {
+                    question.setCorrectAnswer(answer.substring(5).trim());
+                }
+                questions.add(question);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return questions;
     }
 
+
     private void readAllQuestions() {
-        readMultipleChoiceQuestions();
-        readTrueFalseQuestions();
+        readMultipleChoiceQuestions(); // This reads all the multiple-choice questions as before
+
+        // Now, read the true/false questions for each chapter. 
+        // You need to specify the file paths for the true/false questions.
+        for (int chapter = 1; chapter <= 4; chapter++) { // Assuming there are 4 chapters
+            String tfQuestionsFilePath = "/static/chapter-" + chapter + "_TF.xlsx"; // Construct the file path
+            allQuestions.addAll(readTrueFalseQuestions(tfQuestionsFilePath)); // Read and add to the main list
+        }
     }
+
 
     private String getCellValue(Cell cell) {
         if (cell.getCellType() == CellType.STRING) {
@@ -101,51 +115,27 @@ public class ExamService {
 
     public List<Question> generateExam(int chapterOrExamType, int numberOfQuestions) {
         List<Question> examQuestions = new ArrayList<>();
-
-        // Function to read questions from specific files and add them to the examQuestions list
-        java.util.function.Consumer<String> readQuestions = (String filePath) -> {
-            try (InputStream is = getClass().getResourceAsStream(filePath)) {
-                if (is != null) {
-                    examQuestions.addAll(readQuestionsFromExcel(is));
-                }
-            } catch (IOException e) {
-                e.printStackTrace(); // exception handling
-            }
-        };
-
+        // Based on the chapter, we decide which files to read.
         if (chapterOrExamType <= 4) {
-            // For chapter exams, read both multiple-choice and true/false questions
-            readQuestions.accept("/static/chapter-" + chapterOrExamType + ".xlsx");
-            readQuestions.accept("/static/chapter-" + chapterOrExamType + "-tf.xlsx");
+            // For individual chapters, we load specific files.
+            examQuestions.addAll(readQuestionsFromExcel("/static/chapter-" + chapterOrExamType + ".xlsx", true)); // true indicates we want to read true/false questions as well.
         } else if (chapterOrExamType == 5) { // Mid-Term
-            // For the mid-term
-            readQuestions.accept("/static/chapter-1.xlsx");
-            readQuestions.accept("/static/chapter-1-tf.xlsx");
-            readQuestions.accept("/static/chapter-2.xlsx");
-            readQuestions.accept("/static/chapter-2-tf.xlsx");
-            // Add more chapters if needed
+            examQuestions.addAll(readQuestionsFromExcel("/static/chapter-1.xlsx", false));
+            examQuestions.addAll(readQuestionsFromExcel("/static/chapter-2.xlsx", false));
         } else if (chapterOrExamType == 6) { // Final Exam
-            // For the final exam, aggregate questions from all chapters
-        	
-            for (int i = 1; i <= 4; i++) { // ASSUMING 4 CHAPTERS!!
-                readQuestions.accept("/static/chapter-" + i + ".xlsx");
-                readQuestions.accept("/static/chapter-" + i + "-tf.xlsx");
+            for (int i = 1; i <= 4; i++) {
+                examQuestions.addAll(readQuestionsFromExcel("/static/chapter-" + i + ".xlsx", false));
             }
         }
-
-        // Shuffle the collected questions
         Collections.shuffle(examQuestions);
-
-        // Limit the number of questions based on the specified count
-        return examQuestions.stream()
-                            .limit(numberOfQuestions)
-                            .collect(Collectors.toList());
+        return examQuestions.stream().limit(numberOfQuestions).collect(Collectors.toList());
     }
 
 
-    private List<Question> readQuestionsFromExcel(InputStream is) {
+    private List<Question> readQuestionsFromExcel(String resourcePath, boolean includeTrueFalse) {
         List<Question> questions = new ArrayList<>();
-        try (Workbook workbook = new XSSFWorkbook(is)) {
+        try (InputStream is = getClass().getResourceAsStream(resourcePath);
+             Workbook workbook = new XSSFWorkbook(is)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (int i = 0; i < sheet.getPhysicalNumberOfRows(); ) {
                 Row questionRow = sheet.getRow(i);
@@ -173,6 +163,10 @@ public class ExamService {
                 }
                 questions.add(question);
                 i++;
+            }
+            // If we need to include true/false questions, we read them from a designated file.
+            if (includeTrueFalse) {
+                questions.addAll(readTrueFalseQuestions(resourcePath.replace(".xlsx", "_TF.xlsx"))); // Assuming a naming convention for true/false files.
             }
         } catch (Exception e) {
             e.printStackTrace();
