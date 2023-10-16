@@ -1,13 +1,23 @@
 package edu.sru.thangiah.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.Question;
 import edu.sru.thangiah.service.ExamService;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +27,10 @@ public class ExamController {
 
     @Autowired
     private ExamService examService;
+    
+    public ExamController(ExamService examService) {
+        this.examService = examService;
+    }
 
     // This method generates the exam and displays it to the user
     @RequestMapping("/generateExam/{chapter}")
@@ -25,6 +39,29 @@ public class ExamController {
         model.addAttribute("questions", questions);
         return "exam";
     }
+    
+    @GetMapping("/pickExam/{chapter}")
+    public String pickExam(@PathVariable int chapter, Model model) {
+        List<Question> questions = examService.generateExam(chapter, 10); // Or however many you want
+        model.addAttribute("questions", questions);
+        return "edit-exam"; // This is the name of the Thymeleaf template to be created next
+    }
+    
+    @PostMapping(value = "/submitEditedExam", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<byte[]> submitEditedExam(@RequestBody List<Question> editedQuestions) {
+        byte[] contents = examService.createExcelFile(editedQuestions);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        String filename = "edited_exam_questions.xlsx";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(contents);
+    }
+
+
 
     // This method receives the submitted answers, evaluates them, and redirects to the results page
     @PostMapping("/submitAnswers")

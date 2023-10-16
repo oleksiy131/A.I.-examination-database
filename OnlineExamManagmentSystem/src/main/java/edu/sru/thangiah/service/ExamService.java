@@ -2,6 +2,7 @@ package edu.sru.thangiah.service;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.stereotype.Service;
 
 import edu.sru.thangiah.domain.ExamResult;
@@ -223,5 +224,51 @@ public class ExamService {
         return questions;
     }
     
-    
+
+    public byte[] createExcelFile(List<Question> questions) {
+        try (Workbook workbook = new XSSFWorkbook(); 
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("Exam Questions");
+
+            int rowIndex = 0;
+
+            // Create header row
+            Row headerRow = sheet.createRow(rowIndex++);
+            createCell(headerRow, 0, "Question Text");
+            createCell(headerRow, 1, "Option A");
+            createCell(headerRow, 2, "Option B");
+            createCell(headerRow, 3, "Option C");
+            createCell(headerRow, 4, "Option D");
+            createCell(headerRow, 5, "Correct Answer");
+
+            // Filling the excel sheet with questions
+            for (Question question : questions) {
+                Row row = sheet.createRow(rowIndex++);
+
+                // Assuming the question text and options are not null
+                createCell(row, 0, question.getQuestionText());
+
+                // Assuming options are stored in a predictable order
+                int cellIndex = 1;
+                for (String option : question.getOptions().values()) {
+                    createCell(row, cellIndex++, option);
+                }
+
+                createCell(row, 5, question.getCorrectAnswer());
+            }
+
+            workbook.write(outputStream);
+            return outputStream.toByteArray(); // This can be directly written to an HTTP response
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create Excel file", e);
+        }
+    }
+
+    private void createCell(Row row, int column, String value) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue(value);
+    }
 }
+    
+    
+
