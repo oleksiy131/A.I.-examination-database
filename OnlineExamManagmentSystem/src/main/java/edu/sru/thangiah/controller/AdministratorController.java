@@ -75,6 +75,7 @@ public class AdministratorController {
 	}
 	
 	@GetMapping("/admin_homepage")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
 	public String viewAdminHomepage() {
 		return "admin_homepage";
 		
@@ -198,11 +199,25 @@ public class AdministratorController {
 		return "student-list";
 	}
 	
+	@GetMapping("/students_list")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
+	public String showStudentsList(Model model) {
+		// Retrieve the list of students from the repository
+		List<Student> students = (List<Student>) studentRepository.findAll();
+
+		// Add the list of students to the model for rendering in the HTML template
+		model.addAttribute("students", students);
+
+		// Return the name of the HTML template to be displayed
+		return "av-student-list";
+	}
+	
     @GetMapping("/list-sm")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public String showSM(Model model) {
         List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
         model.addAttribute("ScheduleManager", ScheduleManager);
-        return "schedule-manager-list";
+        return "av-schedule-manager-list";
     }
 
 	@PostMapping("/student/course/associate")
@@ -224,12 +239,63 @@ public class AdministratorController {
 	}
 
 
-	 @GetMapping("/register") public String showRegistrationForm(Model model) {
+	 @GetMapping("/register") 
+	 public String showRegistrationForm(Model model) {
 	 model.addAttribute("user", new User()); 
 	 return "register"; // This maps to the register.html file 
 	  }
 	 
+	 @GetMapping("/av-register") 
+	 @PreAuthorize("hasRole('ADMINISTRATOR')")
+	 public String showRegistrationFormAV(Model model) {
+	 model.addAttribute("user", new User()); 
+	 return "av-register"; // This maps to the register.html file 
+	  }
+	 
 
+	 
+		@Transactional
+		@PostMapping("/register-av")
+		@PreAuthorize("hasRole('ADMINISTRATOR')")
+		public String registerUserAV(@ModelAttribute ScheduleManager manager, RedirectAttributes redirectAttributes) {
+
+			if (SMRepo.findBymanagerUsername(manager.getManagerUsername()).isPresent()) {
+				redirectAttributes.addFlashAttribute("errorMessage", "Manager with given username already exists.");
+				return "redirect:/register";
+			}
+
+			Roles roles = roleRepository.findById(4L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+			List<Roles> rolesList = new ArrayList<>();
+			rolesList.add(roles);
+			manager.setRoles(rolesList);
+
+			SMRepo.save(manager);
+
+			User user = new User();
+			user.setEmail(manager.getManagerEmail());
+			user.setFirstName(manager.getManagerFirstName());
+			user.setLastName(manager.getManagerLastName());
+			user.setUsername(manager.getManagerUsername());
+			String hashedPassword = passwordEncoder.encode(manager.getManagerPassword());
+			user.setPassword(hashedPassword);
+
+
+			
+			rolesList.add(roles);
+			user.setRoles(rolesList);
+
+			user.setEnabled(true);
+			userRepository.save(user);
+
+	        
+	        
+//	        // Send a verification email
+	        //sendVerificationEmail(user);
+	//
+//	        // Redirect to a confirmation page or login page
+			return "redirect:/av-registration-confirmation"; //
+		}
+		
 	@Transactional
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute ScheduleManager manager, RedirectAttributes redirectAttributes) {
@@ -274,6 +340,12 @@ public class AdministratorController {
 	@GetMapping("/registration-confirmation")
 	public String registerConfirm() {
 		return "registration-confirmation"; // The HTML file
+	}
+	
+	@GetMapping("/av-registration-confirmation")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
+	public String registerConfirmAV() {
+		return "av-registration-confirmation"; // The HTML file
 	}
 
 	@GetMapping("/course-success-page")
