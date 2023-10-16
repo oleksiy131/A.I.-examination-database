@@ -8,8 +8,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -75,6 +78,7 @@ public class AdministratorController {
 	}
 	
 	@GetMapping("/admin_homepage")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
 	public String viewAdminHomepage() {
 		return "admin_homepage";
 		
@@ -198,11 +202,25 @@ public class AdministratorController {
 		return "student-list";
 	}
 	
+	@GetMapping("/students_list")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
+	public String showStudentsList(Model model) {
+		// Retrieve the list of students from the repository
+		List<Student> students = (List<Student>) studentRepository.findAll();
+
+		// Add the list of students to the model for rendering in the HTML template
+		model.addAttribute("students", students);
+
+		// Return the name of the HTML template to be displayed
+		return "av-student-list";
+	}
+	
     @GetMapping("/list-sm")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public String showSM(Model model) {
         List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
         model.addAttribute("ScheduleManager", ScheduleManager);
-        return "schedule-manager-list";
+        return "av-schedule-manager-list";
     }
 
 	@PostMapping("/student/course/associate")
@@ -224,12 +242,63 @@ public class AdministratorController {
 	}
 
 
-	 @GetMapping("/register") public String showRegistrationForm(Model model) {
+	 @GetMapping("/register") 
+	 public String showRegistrationForm(Model model) {
 	 model.addAttribute("user", new User()); 
 	 return "register"; // This maps to the register.html file 
 	  }
 	 
+	 @GetMapping("/av-register") 
+	 @PreAuthorize("hasRole('ADMINISTRATOR')")
+	 public String showRegistrationFormAV(Model model) {
+	 model.addAttribute("user", new User()); 
+	 return "av-register"; // This maps to the register.html file 
+	  }
+	 
 
+	 
+		@Transactional
+		@PostMapping("/register-av")
+		@PreAuthorize("hasRole('ADMINISTRATOR')")
+		public String registerUserAV(@ModelAttribute ScheduleManager manager, RedirectAttributes redirectAttributes) {
+
+			if (SMRepo.findBymanagerUsername(manager.getManagerUsername()).isPresent()) {
+				redirectAttributes.addFlashAttribute("errorMessage", "Manager with given username already exists.");
+				return "redirect:/register";
+			}
+
+			Roles roles = roleRepository.findById(4L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+			List<Roles> rolesList = new ArrayList<>();
+			rolesList.add(roles);
+			manager.setRoles(rolesList);
+
+			SMRepo.save(manager);
+
+			User user = new User();
+			user.setEmail(manager.getManagerEmail());
+			user.setFirstName(manager.getManagerFirstName());
+			user.setLastName(manager.getManagerLastName());
+			user.setUsername(manager.getManagerUsername());
+			String hashedPassword = passwordEncoder.encode(manager.getManagerPassword());
+			user.setPassword(hashedPassword);
+
+
+			
+			rolesList.add(roles);
+			user.setRoles(rolesList);
+
+			user.setEnabled(true);
+			userRepository.save(user);
+
+	        
+	        
+//	        // Send a verification email
+	        //sendVerificationEmail(user);
+	//
+//	        // Redirect to a confirmation page or login page
+			return "redirect:/av-registration-confirmation"; //
+		}
+		
 	@Transactional
 	@PostMapping("/register")
 	public String registerUser(@ModelAttribute ScheduleManager manager, RedirectAttributes redirectAttributes) {
@@ -270,10 +339,56 @@ public class AdministratorController {
 //        // Redirect to a confirmation page or login page
 		return "redirect:/registration-confirmation"; //
 	}
+	
+	@GetMapping("/av-edit-student/{id}")
+    public String showUpdateFormAV(@PathVariable("id") long id, Model model) {
+		Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        model.addAttribute("student", student);
+        return "av-edit-student";
+    }
+	
+	@PostMapping("/av-update/{id}")
+    public String updateStudentAV(@PathVariable("id") long id, @Validated Student student, 
+      BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            student.setStudentId(id);
+            return "av-update-user";
+        }
+        
+        // Debugging: Print the received student data
+        System.out.println("Received Student Data:");
+        System.out.println("ID: " + student.getStudentId());
+        System.out.println("First Name: " + student.getStudentFirstName());
+        System.out.println("Last Name: " + student.getStudentLastName());
+        System.out.println("Email: " + student.getStudentEmail());
+        System.out.println("Path Variable ID: " + id);
+        
+//        student.setStudentId(id);
+//        student.setRole(student.getRole());
+//        student.setStudentPassword(student.getStudentPassword());
+        studentRepository.save(student);
+        return "av-edit-confirmation";
+    }
+	
+	@GetMapping("/student/delete/{id}")
+    public String deleteStudentAV(@PathVariable("id") long id, Model model) {
+        Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        studentRepository.delete(student);
+        return "av-edit-confirmation";
+    }
 
 	@GetMapping("/registration-confirmation")
 	public String registerConfirm() {
 		return "registration-confirmation"; // The HTML file
+	}
+	
+	@GetMapping("/av-registration-confirmation")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
+	public String registerConfirmAV() {
+		return "av-registration-confirmation"; // The HTML file
 	}
 
 	@GetMapping("/course-success-page")
