@@ -8,8 +8,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -336,6 +339,46 @@ public class AdministratorController {
 //        // Redirect to a confirmation page or login page
 		return "redirect:/registration-confirmation"; //
 	}
+	
+	@GetMapping("/av-edit-student/{id}")
+    public String showUpdateFormAV(@PathVariable("id") long id, Model model) {
+		Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        model.addAttribute("student", student);
+        return "av-edit-student";
+    }
+	
+	@PostMapping("/av-update/{id}")
+    public String updateStudentAV(@PathVariable("id") long id, @Validated Student student, 
+      BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            student.setStudentId(id);
+            return "av-update-user";
+        }
+        
+        // Debugging: Print the received student data
+        System.out.println("Received Student Data:");
+        System.out.println("ID: " + student.getStudentId());
+        System.out.println("First Name: " + student.getStudentFirstName());
+        System.out.println("Last Name: " + student.getStudentLastName());
+        System.out.println("Email: " + student.getStudentEmail());
+        System.out.println("Path Variable ID: " + id);
+        
+//        student.setStudentId(id);
+//        student.setRole(student.getRole());
+//        student.setStudentPassword(student.getStudentPassword());
+        studentRepository.save(student);
+        return "av-edit-confirmation";
+    }
+	
+	@GetMapping("/student/delete/{id}")
+    public String deleteStudentAV(@PathVariable("id") long id, Model model) {
+        Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        studentRepository.delete(student);
+        return "av-edit-confirmation";
+    }
 
 	@GetMapping("/registration-confirmation")
 	public String registerConfirm() {
