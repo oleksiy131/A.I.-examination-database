@@ -49,6 +49,8 @@ public class ExamController {
     
     @PostMapping(value = "/submitEditedExam", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<byte[]> submitEditedExam(@RequestBody List<Question> editedQuestions) {
+    	System.out.println("Inside POST");
+    	
         byte[] contents = examService.createExcelFile(editedQuestions);
 
         HttpHeaders headers = new HttpHeaders();

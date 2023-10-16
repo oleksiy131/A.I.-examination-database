@@ -3,7 +3,6 @@ package edu.sru.thangiah.service;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.stereotype.Service;
 
 import edu.sru.thangiah.domain.ExamResult;
@@ -21,11 +20,7 @@ public class ExamService {
     private ExamResult storedExamResult;
 
     private List<Question> allQuestions = new ArrayList<>();
-    
 
-    public ExamService() {
-        readAllQuestions();
-    }
     
     public List<Question> getAllQuestions() {
         return allQuestions;
@@ -79,43 +74,8 @@ public class ExamService {
         selectedQuestions.addAll(allQuestions.subList(0, toIndex));
         return selectedQuestions;
     }
-
-    private void readMultipleChoiceQuestions() {
-        try (InputStream is = getClass().getResourceAsStream("/static/chapter-4.xlsx");
-             Workbook workbook = new XSSFWorkbook(is)) {
-            Sheet sheet = workbook.getSheetAt(0);
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); ) {
-                Row questionRow = sheet.getRow(i);
-                if (questionRow == null || questionRow.getCell(0) == null) {
-                    continue;
-                }
-                Question question = new Question();
-                question.setQuestionText(getCellValue(questionRow.getCell(0)));
-                Map<String, String> options = new HashMap<>();
-                for (int j = 1; j <= 4; j++) {
-                    Row optionRow = sheet.getRow(i + j);
-                    if (optionRow == null || optionRow.getCell(0) == null || optionRow.getCell(1) == null) {
-                        continue;
-                    }
-                    options.put(getCellValue(optionRow.getCell(0)), getCellValue(optionRow.getCell(1)));
-                }
-                question.setOptions(options);
-                i += 5;
-                Row answerRow = sheet.getRow(i);
-                if (answerRow != null && answerRow.getCell(0) != null) {
-                    String answer = getCellValue(answerRow.getCell(0));
-                    if (answer.startsWith("Ans: ")) {
-                        question.setCorrectAnswer(answer.substring(5).trim());
-                    }
-                }
-                allQuestions.add(question);
-                i++;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
+    
     private List<Question> readTrueFalseQuestions(String resourcePath) {
         List<Question> questions = new ArrayList<>();
         try (InputStream is = getClass().getResourceAsStream(resourcePath);
@@ -143,18 +103,6 @@ public class ExamService {
         }
         return questions;
     }
-
-
-    private void readAllQuestions() {
-        readMultipleChoiceQuestions(); // This reads all the multiple-choice questions as before
-
-        
-        for (int chapter = 1; chapter <= 4; chapter++) { // Assuming there are 4 chapters
-            String tfQuestionsFilePath = "/static/chapter-" + chapter + "_TF.xlsx"; // Construct the file path
-            allQuestions.addAll(readTrueFalseQuestions(tfQuestionsFilePath)); // Read and add to the main list
-        }
-    }
-
 
     private String getCellValue(Cell cell) {
         if (cell.getCellType() == CellType.STRING) {
@@ -229,6 +177,13 @@ public class ExamService {
 
     
     public byte[] createExcelFile(List<Question> questions) {
+    	
+    	// Right before calling createExcelFile in your service
+    	for (Question question : questions) {
+    	    System.out.println("Question: " + question.getQuestionText());
+    	    System.out.println("Options: " + question.getOptions()); // This should print the options map
+    	}
+
         // This method calls the ExcelFileExporter utility class to create the Excel content.
         ByteArrayInputStream in = ExcelGeneratorService.createExcelFile(questions);
         try {
@@ -238,10 +193,6 @@ public class ExamService {
         }
     }
 
-    private void createCell(Row row, int column, String value) {
-        Cell cell = row.createCell(column);
-        cell.setCellValue(value);
-    }
 }
     
     

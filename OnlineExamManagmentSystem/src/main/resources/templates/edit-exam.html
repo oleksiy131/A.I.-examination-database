@@ -5,59 +5,63 @@
     <title>Edit Exam</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- Include jQuery -->
     <script>
-        function submitEditedQuestions() {
-            var questionsArray = [];
+function submitEditedQuestions() {
+    var questionsArray = [];
 
-            // Iterate through each question block
-            $("#editExamForm > div").each(function() {
-                var singleQuestion = {};
-                singleQuestion.questionText = $(this).find('textarea').val();
+    // Iterate through each question block
+    $("#editExamForm > div").each(function() {
+        var singleQuestion = {};
+        singleQuestion.questionText = $(this).find('textarea').val();
 
-                // Options are key-value pairs
-                singleQuestion.options = {};
-                $(this).find('input[type="text"]').each(function(index) {
-                    // Assuming every pair of inputs is a key and value for options
-                    if (index % 2 === 0) {
-                        var key = $(this).val();
-                        var value = $(this).next().val();
-                        singleQuestion.options[key] = value;
-                    }
-                });
+        // Options are key-value pairs
+        singleQuestion.options = {};
+        $(this).find('div').each(function() {
+            var keyInput = $(this).find('input:first'); // Get the first input for the option key
+            var valueInput = $(this).find('input:last'); // Get the last input for the option value
 
-                singleQuestion.correctAnswer = $(this).find('input:last').val(); // Get the last input field (correct answer)
-                questionsArray.push(singleQuestion);
-            });
+            // Check if both key and value inputs exist
+            if (keyInput.length > 0 && valueInput.length > 0) {
+                var key = keyInput.val();
+                var value = valueInput.val();
+                singleQuestion.options[key] = value;
+            }
+        });
 
-            // AJAX request to the server
-            $.ajax({
-                type: "POST",
-                url: '/submitEditedExam',
-                data: JSON.stringify(questionsArray),
-                contentType: "application/json",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(response, status, xhr) {
-                    var filename = "";
-                    var disposition = xhr.getResponseHeader('Content-Disposition');
-                    if (disposition) {
-                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        var matches = filenameRegex.exec(disposition);
-                        if (matches !== null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                    }
-                    var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-                    var downloadUrl = URL.createObjectURL(blob);
-                    var a = document.createElement("a");
-                    a.href = downloadUrl;
-                    a.download = filename || "download.xlsx";
-                    document.body.appendChild(a);
-                    a.click();
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.error("Error in operation: " + errorThrown);
-                }
-            });
+        singleQuestion.correctAnswer = $(this).find('input[type="text"]:last').val(); // Get the last input field (correct answer)
+        questionsArray.push(singleQuestion);
+    });
+
+    // AJAX request to the server
+    $.ajax({
+        type: "POST",
+        url: '/submitEditedExam',
+        data: JSON.stringify(questionsArray),
+        contentType: "application/json",
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function(response, status, xhr) {
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition) {
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches !== null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+            var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var downloadUrl = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = downloadUrl;
+            a.download = filename || "download.xlsx";
+            document.body.appendChild(a);
+            a.click();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error("Error in operation: " + errorThrown);
         }
+    });
+}
+
     </script>
     <style>
         /* Add your CSS styles here */
@@ -83,7 +87,7 @@
 
                 <label>Correct Answer:</label>
                 <!-- Assuming the correct answer is the key of the option -->
-  				<input type="text" th:name="|questions[${iterStat.index}].correctAnswer|" th:value="${question.correctAnswer}" required />
+                <input type="text" th:name="|questions[${iterStat.index}].correctAnswer|" th:value="${question.correctAnswer}" required />
             </div>
             <hr> <!-- Just a separator for visual clarity -->
         </div>
