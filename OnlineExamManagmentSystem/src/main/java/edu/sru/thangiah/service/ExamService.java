@@ -3,6 +3,8 @@ package edu.sru.thangiah.service;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
+
+import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.Question;
 
 import java.io.IOException;
@@ -12,11 +14,59 @@ import java.util.stream.Collectors;
 
 @Service
 public class ExamService {
+	
+    private ExamResult storedExamResult;
 
     private List<Question> allQuestions = new ArrayList<>();
+    
 
     public ExamService() {
         readAllQuestions();
+    }
+    
+    public List<Question> getAllQuestions() {
+        return allQuestions;
+    }
+    
+    public ExamResult evaluateAnswers(Map<Integer, String> userAnswers) {
+        int score = 0;
+        Map<String, String> correctAnswers = new HashMap<>();
+        Map<String, String> incorrectAnswersWithCorrections = new HashMap<>();
+
+        for (Map.Entry<Integer, String> entry : userAnswers.entrySet()) {
+            Integer questionIndex = entry.getKey();
+            String userAnswer = entry.getValue();
+
+            if (questionIndex < 0 || questionIndex >= allQuestions.size()) {
+                continue;
+            }
+
+            Question question = allQuestions.get(questionIndex);
+            if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
+                score++;
+                correctAnswers.put(question.getQuestionText(), userAnswer);
+            } else {
+                incorrectAnswersWithCorrections.put(question.getQuestionText(), question.getCorrectAnswer());
+            }
+        }
+
+        ExamResult result = new ExamResult();
+        result.setScore(score);
+        result.setCorrectAnswers(new ArrayList<>(correctAnswers.keySet())); // or store the entire map if needed
+        result.setIncorrectAnswersWithCorrections(incorrectAnswersWithCorrections);
+
+        return result;
+    }
+
+
+    public void storeExamResultForUser(ExamResult result) {
+        // In a real-world application, you might store it in a database or session. Here we're using a simple in-memory storage.
+        this.storedExamResult = result;
+    }
+
+    public ExamResult getStoredExamResultForUser() {
+        // In a real-world application, you'd retrieve this from a database or session. Here we're using simple in-memory storage.
+        return this.storedExamResult;
     }
 
     public List<Question> getRandomQuestions() {
@@ -173,4 +223,6 @@ public class ExamService {
         }
         return questions;
     }
+    
+    
 }
