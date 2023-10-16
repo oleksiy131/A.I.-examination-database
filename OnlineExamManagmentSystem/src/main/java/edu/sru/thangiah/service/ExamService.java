@@ -23,7 +23,7 @@ import java.util.*;
 public class ExamService {
 	
     // Constants for file paths
-    private static final String MULTIPLE_CHOICE_FILE_PATH = "/static/chapterOne.xlsx";
+    private static final String MULTIPLE_CHOICE_FILE_PATH = "/static/chapter-4.xlsx";
     private static final String TRUE_FALSE_FILE_PATH = "/static/chapterOneTF.xlsx";
 
     // List to hold all questions
@@ -43,12 +43,12 @@ public class ExamService {
         return selectedQuestions;
     }
 
-    // Method to read multiple-choice questions from Excel
+ // Method to read multiple-choice questions from Excel
     private void readMultipleChoiceQuestions() {
         try (InputStream is = getClass().getResourceAsStream(MULTIPLE_CHOICE_FILE_PATH);
              Workbook workbook = new XSSFWorkbook(is)) {
             Sheet sheet = workbook.getSheetAt(0);
-            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); i += 5) {
+            for (int i = 0; i < sheet.getPhysicalNumberOfRows(); ) {
                 Row questionRow = sheet.getRow(i);
                 if (questionRow == null || questionRow.getCell(0) == null) {
                     continue;
@@ -56,6 +56,7 @@ public class ExamService {
                 Question question = new Question();
                 question.setQuestionText(getCellValue(questionRow.getCell(0)));
                 Map<String, String> options = new HashMap<>();
+                // Assuming there are always 4 options
                 for (int j = 1; j <= 4; j++) {
                     Row optionRow = sheet.getRow(i + j);
                     if (optionRow == null || optionRow.getCell(0) == null || optionRow.getCell(1) == null) {
@@ -64,12 +65,26 @@ public class ExamService {
                     options.put(getCellValue(optionRow.getCell(0)), getCellValue(optionRow.getCell(1)));
                 }
                 question.setOptions(options);
+
+                // New code to read the answer, which is located after the options
+                i += 5; // Move to the answer row
+                Row answerRow = sheet.getRow(i);
+                if (answerRow != null && answerRow.getCell(0) != null) {
+                    String answer = getCellValue(answerRow.getCell(0));
+                    // Extract the actual answer from the "Ans: " prefix
+                    if (answer.startsWith("Ans: ")) {
+                        question.setCorrectAnswer(answer.substring(5).trim()); // Set the answer, excluding the "Ans: " part
+                    }
+                }
+
                 allQuestions.add(question);
+                i++; // Move to the next question block
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     // Method to read true/false questions from Excel
     private void readTrueFalseQuestions() {

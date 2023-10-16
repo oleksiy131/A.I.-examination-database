@@ -5,6 +5,8 @@ import java.util.Map;
 public class Question {
     private String questionText;
     private Map<String, String> options;
+    private String correctAnswer; 
+
 
     // Getters and setters
     public String getQuestionText() {
@@ -22,4 +24,14 @@ public class Question {
     public void setOptions(Map<String, String> options) {
         this.options = options;
     }
+
+	public String getCorrectAnswer() {
+		return correctAnswer;
+	}
+
+	public void setCorrectAnswer(String correctAnswer) {
+		this.correctAnswer = correctAnswer;
+	}
+    
+    
 }
