@@ -144,11 +144,6 @@ public class Administrator {
 		this.adminUsername = adminUsername;
 		this.roles = roles;
 	}
-
-	
-	
-	
-
     // standard constructors / setters / getters / toString
 }
 /* Java Persistence is the API for the management for persistence and object/relational mapping.   */
