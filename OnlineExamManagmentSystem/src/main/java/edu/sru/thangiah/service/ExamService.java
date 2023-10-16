@@ -14,6 +14,14 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/*
+ *____  __    __        _ _ 
+ / __ \/ /__ / /__ ___ (_|_)
+/ /_/ / / -_)  '_/(_-</ / / 
+\____/_/\__/_/\_\/___/_/_/  
+                        
+ */
+
 @Service
 public class ExamService {
 	
@@ -58,12 +66,10 @@ public class ExamService {
 
 
     public void storeExamResultForUser(ExamResult result) {
-        // In a real-world application, you might store it in a database or session. Here we're using a simple in-memory storage.
         this.storedExamResult = result;
     }
 
     public ExamResult getStoredExamResultForUser() {
-        // In a real-world application, you'd retrieve this from a database or session. Here we're using simple in-memory storage.
         return this.storedExamResult;
     }
 
@@ -178,7 +184,7 @@ public class ExamService {
     
     public byte[] createExcelFile(List<Question> questions) {
     	
-    	// Right before calling createExcelFile in your service
+    	// DEBUGGING...
     	for (Question question : questions) {
     	    System.out.println("Question: " + question.getQuestionText());
     	    System.out.println("Options: " + question.getOptions()); // This should print the options map
