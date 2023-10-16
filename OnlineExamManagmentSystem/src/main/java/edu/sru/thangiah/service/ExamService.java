@@ -109,8 +109,11 @@ public class ExamService {
         }
         return questions;
     }
-
     private String getCellValue(Cell cell) {
+        if (cell == null) {
+            return ""; // Handle the case where the cell is null
+        }
+        
         if (cell.getCellType() == CellType.STRING) {
             return cell.getStringCellValue();
         } else if (cell.getCellType() == CellType.NUMERIC) {
@@ -118,6 +121,7 @@ public class ExamService {
         }
         return "";
     }
+
 
     public List<Question> generateExam(int chapterOrExamType, int numberOfQuestions) {
         List<Question> examQuestions = new ArrayList<>();
@@ -183,12 +187,6 @@ public class ExamService {
 
     
     public byte[] createExcelFile(List<Question> questions) {
-    	
-    	// DEBUGGING...
-    	for (Question question : questions) {
-    	    System.out.println("Question: " + question.getQuestionText());
-    	    System.out.println("Options: " + question.getOptions()); // This should print the options map
-    	}
 
         // This method calls the ExcelFileExporter utility class to create the Excel content.
         ByteArrayInputStream in = ExcelGeneratorService.createExcelFile(questions);
@@ -198,6 +196,8 @@ public class ExamService {
             throw new RuntimeException("Failed to convert input stream to byte array", e);
         }
     }
+    
+    
 
 }
     
