@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Exam Question</title>
+</head>
+<body>
+    <h1>Edit Exam Question</h1>
+    <form th:action="@{/exam-questions/update}" th:object="${examQuestion}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <label>Question Text:</label>
+        <input type="text" th:field="*{questionText}" />
+        <label>Option A:</label>
+        <input type="text" th:field="*{optionA}" />
+        <label>Option B:</label>
+        <input type="text" th:field="*{optionB}" />
+        <label>Option C:</label>
+        <input type="text" th:field="*{optionC}" />
+        <label>Option D:</label>
+        <input type="text" th:field="*{optionD}" />
+        <label>Correct Answer:</label>
+        <input type="text" th:field="*{correctAnswer}" />
+        <input type="submit" value="Save" />
+    </form>
+</body>
+</html>
