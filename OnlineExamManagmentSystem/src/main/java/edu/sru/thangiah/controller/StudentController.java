@@ -94,49 +94,5 @@ public class StudentController
         // displays the math quiz
         return "math-quiz"; // the name of the HTML template for the quiz page
     }
-	
-	@Transactional
-	@PostMapping("/create")
-	public String create(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
-	    System.out.println("Inside student-create method");
-	    try {
-	        // Check if the student with the given username already exists
-	        if (studentRepository.findByStudentUsername(student.getStudentUsername()).isPresent()) {
-	            redirectAttributes.addFlashAttribute("errorMessage", "Student with given username already exists.");
-	            return "redirect:/student/create";
-	        }
-
-	        // Fetch the role with ID 2 and set it to the student
-	        Roles roles = roleRepository.findById(2L)
-	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
-	        List<Roles> rolesList = new ArrayList<>();
-            rolesList.add(roles);
-            student.setRoles(rolesList);
-
-	        // Save the new student
-	        studentRepository.save(student);
-
-	        // Create and save the corresponding user
-	        User newUser = new User();
-	        newUser.setId(student.getStudentId());
-	        newUser.setUsername(student.getStudentUsername());
-	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
-		    newUser.setPassword(hashedPassword);
-	        newUser.setRoles(rolesList);
-
-
-            // Set enabled for the user as well
-            newUser.setEnabled(true);
-
-            userRepository.save(newUser);
-
-	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
-	        return "upload-success";
-	    } catch (Exception e) {
-	        System.out.println("Failed to add student: " + e.getMessage());
-	        redirectAttributes.addFlashAttribute("errorMessage", "Failed to add student.");
-	        return "redirect:/fail";
-	    }
-	}
 
 }
