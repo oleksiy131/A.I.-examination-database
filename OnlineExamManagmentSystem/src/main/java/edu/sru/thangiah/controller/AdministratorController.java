@@ -204,7 +204,7 @@ public class AdministratorController {
 	
 	@GetMapping("/students_list")
 	@PreAuthorize("hasRole('ADMINISTRATOR')")
-	public String showStudentsList(Model model) {
+	public String showStudentsListAV(Model model) {
 		// Retrieve the list of students from the repository
 		List<Student> students = (List<Student>) studentRepository.findAll();
 
