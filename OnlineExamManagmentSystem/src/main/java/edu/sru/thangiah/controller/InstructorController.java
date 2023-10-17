@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -18,13 +21,24 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
 
 @Controller
 @RequestMapping("/instructor")
 public class InstructorController {
+	
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@RequestMapping("/instructor_homepage")
 	public String showInstructorHomepage() {
@@ -126,8 +140,54 @@ public class InstructorController {
         studentRepository.delete(student);
         return "edit-confirmation";
     }
+	@GetMapping("/iv-create-student")
+	public String showCreateStudentFormIV() {
+		return "iv-create-student"; // This corresponds to the name of your HTML file
+	}
 	
-	
+    @Transactional
+	@PostMapping("/createIV")
+	public String createIV(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+	    System.out.println("Inside student-createIV method");
+	    try {
+	        // Check if the student with the given username already exists
+	        if (studentRepository.findByStudentUsername(student.getStudentUsername()).isPresent()) {
+	            redirectAttributes.addFlashAttribute("errorMessage", "Student with given username already exists.");
+	            return "redirect:/create";
+	        }
+
+	        // Fetch the role with ID 2 and set it to the student
+	        Roles roles = roleRepository.findById(2L)
+	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+	        List<Roles> rolesList = new ArrayList<>();
+            rolesList.add(roles);
+            student.setRoles(rolesList);
+
+	        // Save the new student
+	        studentRepository.save(student);
+
+	        // Create and save the corresponding user
+	        User newUser = new User();
+	        newUser.setId(student.getStudentId());
+	        newUser.setUsername(student.getStudentUsername());
+	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
+		    newUser.setPassword(hashedPassword);
+	        newUser.setRoles(rolesList);
+
+
+            // Set enabled for the user as well
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
+
+	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
+	        return "iv-upload-success";
+	    } catch (Exception e) {
+	        System.out.println("Failed to add student: " + e.getMessage());
+	        redirectAttributes.addFlashAttribute("errorMessage", "Failed to add student.");
+	        return "redirect:/fail";
+	    }
+	}
 
    
 }
