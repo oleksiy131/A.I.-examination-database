@@ -2,11 +2,26 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    
 </head>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/instructor/instructor_homepage");
+});
+</script>
+
 
 <body>
     <!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
+     <!-- Home button -->
+        <div class="dropdown-nav">
+            <a th:href="@{/instructor/instructor_homepage}" class="dropbutton">
+            <i class="fas fa-home"></i> 
+        </a>
+        </div>
         <!-- Management button -->
         <div class="dropdown-nav">
             <button class="dropbutton">Management</button>
