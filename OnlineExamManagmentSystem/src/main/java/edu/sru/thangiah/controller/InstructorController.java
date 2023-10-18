@@ -1,9 +1,13 @@
 package edu.sru.thangiah.controller;
 
+import java.io.IOException;
+
 import java.util.ArrayList; 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,16 +23,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Course;
+import edu.sru.thangiah.domain.Exam;
+import edu.sru.thangiah.domain.ExamDetails;
+import edu.sru.thangiah.domain.ExamQuestion;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.ExamRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.repository.UserRepository;
 
 @Controller
@@ -54,10 +63,111 @@ public class InstructorController {
     
     @Autowired
     private StudentRepository studentRepository;
+    
+    @Autowired
+    private ExamQuestionService examQuestionService;
+    
+    @Autowired
+    private ExamRepository examRepository;
 
     public InstructorController(InstructorRepository instructorRepository, CourseRepository courseRepository) {
         this.instructorRepository = instructorRepository;
         this.courseRepository = courseRepository;
+    }
+    
+    @GetMapping("/exam-questions")
+    public String listExamQuestions(Model model) {
+        try {
+            // Call the service method to read exam questions from the file
+            examQuestionService.readExamQuestionsFromFile();
+            
+            // Fetch exam questions after reading from the file
+            List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
+            model.addAttribute("examQuestions", examQuestions);
+        } catch (IOException e) {
+            // Handle the exception appropriately
+            e.printStackTrace();
+        }
+        return "listExamQuestions";
+    }
+
+    @GetMapping("/exam-questions/new")
+    public String showExamQuestionForm(Model model) {
+        model.addAttribute("examQuestion", new ExamQuestion());
+        return "editExamQuestions";
+    }
+
+    @GetMapping("/exam-questions/edit/{id}")
+    public String editExamQuestion(@PathVariable Long id, Model model) {
+        ExamQuestion examQuestion = examQuestionService.getExamQuestionById(id);
+        model.addAttribute("examQuestion", examQuestion);
+        return "editExamQuestions";
+    }
+
+    @PostMapping("/exam-questions/update")
+    public String updateExamQuestion(@ModelAttribute ExamQuestion examQuestion) {
+        // Check if the question with the given ID exists
+        ExamQuestion existingQuestion = examQuestionService.getExamQuestionById(examQuestion.getId());
+
+        if (existingQuestion != null) {
+            // Add some logging to see the values being updated
+            System.out.println("Updating question with ID: " + existingQuestion.getId());
+            System.out.println("Updated Question Text: " + examQuestion.getQuestionText());
+
+            // Update the attributes of the existing question
+            existingQuestion.setQuestionText(examQuestion.getQuestionText());
+            existingQuestion.setOptionA(examQuestion.getOptionA());
+            existingQuestion.setOptionB(examQuestion.getOptionB());
+            existingQuestion.setOptionC(examQuestion.getOptionC());
+            existingQuestion.setOptionD(examQuestion.getOptionD());
+            existingQuestion.setCorrectAnswer(examQuestion.getCorrectAnswer());
+
+            // Save the updated question to the repository
+            examQuestionService.saveExamQuestion(existingQuestion);
+        } else {
+            // Handle the case when the question does not exist (e.g., show an error message)
+            // You can also redirect to an error page or take other appropriate action.
+            System.out.println("CONSOLE LOG: Question with ID " + examQuestion.getId() + " not found.");
+        }
+
+        return "redirect:/instructor/exam-questions";
+    }
+
+
+
+    @GetMapping("/exam-questions/delete/{id}")
+    public String deleteExamQuestion(@PathVariable Long id) {
+        examQuestionService.deleteExamQuestion(id);
+        return "redirect:/instructor/exam-questions";
+    }
+
+    @GetMapping("/exam/select-questions")
+    public String selectExamQuestions(Model model) {
+        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
+        model.addAttribute("examQuestions", examQuestions);
+        model.addAttribute("examDetails", new ExamDetails());
+        return "selectExamQuestions";
+    }
+    
+    @PostMapping("/exam/generate")
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails) {
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+
+        // Fetch selected questions from the database
+        List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
+            .map(examQuestionService::getExamQuestionById)
+            .collect(Collectors.toList());
+
+        // Create a new exam and set its properties
+        Exam exam = new Exam();
+        exam.setExamName(examDetails.getExamName());
+        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setQuestions(selectedQuestions);
+
+        // Save the exam to the database
+        examRepository.save(exam);
+
+        return "redirect:/instructor/exam-questions"; // Redirect to exam questions list
     }
     
  

@@ -2,22 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Random Exam</title>
-    <script>
-        function submitAnswers() {
-            var answers = {};
-            var questions = document.querySelectorAll('.question');
-            questions.forEach(function(question, index) {
-                var selectedOption = question.querySelector('input[type="radio"]:checked');
-                if (selectedOption) {
-                    answers[index] = selectedOption.value;
-                }
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    async function submitAnswers() {
+        var answers = {};
+        var questions = document.querySelectorAll('.question');
+        questions.forEach(function(question, index) {
+            var selectedOption = question.querySelector('input[type="radio"]:checked');
+            if (selectedOption) {
+                answers[index] = selectedOption.value;
+            }
+        });
+
+        // Send the answers to the server
+        try {
+            let response = await fetch('/submitAnswers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(answers),
             });
-            console.log('Selected answers:', answers);
+
+            // Check if the request was successful
+            if (response.ok) {
+                // If successful, redirect to the results page
+                window.location.href = '/submit-answers'; // or response.url if the URL is dynamically generated
+            } else {
+                alert('Error submitting answers.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
-    </script>
+    }
+</script>
 </head>
 <body>
-    <h1>Chapter One Generated Exam</h1>
+    <h1>Exam</h1>
     <form id="examForm">
         <ol>
             <th:block th:each="question, iterStat : ${questions}">
