@@ -3,10 +3,13 @@ package edu.sru.thangiah.service;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.sru.thangiah.domain.Exam;
 import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.Question;
+import edu.sru.thangiah.repository.ExamRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -26,12 +29,19 @@ import java.util.stream.Collectors;
 public class ExamService {
 	
     private ExamResult storedExamResult;
+    
+    @Autowired
+    private ExamRepository examRepository;
 
     private List<Question> allQuestions = new ArrayList<>();
 
     
     public List<Question> getAllQuestions() {
         return allQuestions;
+    }
+    
+    public Exam getExamById(Long id) {
+        return examRepository.findById(id).orElse(null);
     }
     
     public ExamResult evaluateAnswers(Map<Integer, String> userAnswers) {
@@ -196,6 +206,8 @@ public class ExamService {
             throw new RuntimeException("Failed to convert input stream to byte array", e);
         }
     }
+    
+
     
     
 

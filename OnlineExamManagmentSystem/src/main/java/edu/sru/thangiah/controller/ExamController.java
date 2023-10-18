@@ -8,8 +8,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import edu.sru.thangiah.domain.Exam;
+import edu.sru.thangiah.domain.ExamQuestion;
 import edu.sru.thangiah.domain.ExamResult;
+import edu.sru.thangiah.domain.ExamSubmission;
+import edu.sru.thangiah.domain.ExamSubmissionEntity;
 import edu.sru.thangiah.domain.Question;
+import edu.sru.thangiah.model.User;
+import edu.sru.thangiah.repository.ExamRepository;
+import edu.sru.thangiah.repository.ExamSubmissionRepository;
+import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.ExamService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,14 +41,141 @@ import java.util.Map;
  */
 
 @Controller
+@RequestMapping("/exam")
 public class ExamController {
 
     @Autowired
     private ExamService examService;
     
+    @Autowired
+    private UserRepository userRepository;
+    
+    @Autowired
+    private ExamSubmissionRepository examSubmissionRepository;
+    
+    @Autowired
+    private ExamRepository examRepository;
+    
     public ExamController(ExamService examService) {
         this.examService = examService;
     }
+
+
+    @GetMapping("/{id}")
+    public String takeExam(@PathVariable Long id, Model model) {
+        // Retrieve the exam by ID from the repository
+        Exam exam = examService.getExamById(id);
+
+        if (exam != null) {
+            // Check if the exam's duration is still valid
+            if (isExamDurationValid(exam)) {
+                model.addAttribute("exam", exam);
+                return "takeExam"; // Thymeleaf template for taking the exam
+            } else {
+                model.addAttribute("message", "The exam has expired.");
+            }
+        } else {
+            model.addAttribute("message", "Exam not found.");
+        }
+
+        return "error"; // Thymeleaf template for displaying an error message
+    }
+
+    @PostMapping("/submit/{id}")
+    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model) {
+        // Retrieve the exam by ID from the repository
+        Exam exam = examService.getExamById(id);
+
+        if (exam != null) {
+            // Check if the exam's duration is still valid
+            if (isExamDurationValid(exam)) {
+                // Get the user's answers from the form
+                Map<Long, String> userAnswers = new HashMap<>();
+                String[] questionIds = formParams.get("questionIds").split(",");
+                for (String questionId : questionIds) {
+                    String answer = formParams.get("answer_" + questionId);
+                    if (answer != null) {
+                        userAnswers.put(Long.parseLong(questionId), answer);
+                    }
+                }
+
+                // Calculate the score based on the submitted answers
+                int score = calculateScore(exam, userAnswers);
+
+                // Create an ExamSubmission object with userId, examId, answers, and score
+                Long userId = getUserId(); // Implement this method to get the user's ID
+                Long examId = id;
+                ExamSubmission examSubmission = new ExamSubmission(userId, examId, userAnswers, score);
+
+                // Save the examSubmission (including the score) to the database or another storage system
+                saveExamSubmission(examSubmission);
+
+                model.addAttribute("score", score);
+                return "showScore"; // Thymeleaf template for displaying the score
+            } else {
+                model.addAttribute("message", "The exam has expired.");
+            }
+        } else {
+            model.addAttribute("message", "Exam not found.");
+        }
+
+        return "error"; // Thymeleaf template for displaying an error message
+    }
+
+    // Implement this method to get the user's ID
+    private Long getUserId() {
+        // Add your logic to retrieve the user's ID
+        return 1L; // Replace with actual user ID retrieval logic
+    }
+
+    // Implement a method to check if the exam duration is valid
+    private boolean isExamDurationValid(Exam exam) {
+        // Implement your logic here to check if the exam duration is still valid
+        // You can use the exam's start time and durationInMinutes property
+        return true; // Modify this based on your logic
+    }
+
+ // Implement this method to calculate the score
+    private int calculateScore(Exam exam, Map<Long, String> userAnswers) {
+        int score = 0;
+        List<ExamQuestion> questions = exam.getQuestions();
+
+        // Loop through the questions and compare user answers with correct answers
+        for (ExamQuestion question : questions) {
+            Long questionId = question.getId();
+            String correctAnswer = question.getCorrectAnswer();
+
+            // Retrieve the user's selected answer for this question
+            String userAnswer = userAnswers.get(questionId);
+
+            // Check if the user's selected answer matches the correct answer (case-insensitive)
+            if (userAnswer != null && userAnswer.equalsIgnoreCase(correctAnswer)) {
+                score++; // Increment the score for correct answers
+            }
+        }
+
+        return score;
+    }
+
+
+
+
+    // Placeholder method to save the exam submission to the database or storage
+    private void saveExamSubmission(ExamSubmission examSubmission) {
+        // Create an ExamSubmissionEntity to store the submission details
+        ExamSubmissionEntity submissionEntity = new ExamSubmissionEntity();
+
+        submissionEntity.setUserId(examSubmission.getUserId());
+        submissionEntity.setExamId(examSubmission.getExamId());
+        submissionEntity.setUserAnswers(examSubmission.getAnswers());
+        submissionEntity.setScore(examSubmission.getScore());
+
+        // Save the examSubmission entity
+        examSubmissionRepository.save(submissionEntity); 
+
+    }
+    
+
 
     // This method generates the exam and displays it to the user
     @RequestMapping("/generateExam/{chapter}")
