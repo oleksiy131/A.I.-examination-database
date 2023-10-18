@@ -1,7 +1,11 @@
 package edu.sru.thangiah.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +13,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sru.thangiah.domain.Exam;
 import edu.sru.thangiah.domain.ExamQuestion;
@@ -22,19 +32,6 @@ import edu.sru.thangiah.repository.ExamRepository;
 import edu.sru.thangiah.repository.ExamSubmissionRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.ExamService;
-import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /*
  *____  __    __        _ _ 
@@ -74,7 +71,7 @@ public class ExamController {
             // Check if the exam's duration is still valid
             if (isExamDurationValid(exam)) {
                 model.addAttribute("exam", exam);
-                return "takeExam"; // Thymeleaf template for taking the exam
+                return "takeExam"; 
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }
@@ -82,7 +79,7 @@ public class ExamController {
             model.addAttribute("message", "Exam not found.");
         }
 
-        return "error"; // Thymeleaf template for displaying an error message
+        return "error"; 
     }
 
     @PostMapping("/submit/{id}")
@@ -134,7 +131,7 @@ public class ExamController {
                 model.addAttribute("totalQuestions", exam.getQuestions().size());
                 model.addAttribute("incorrectQuestions", incorrectQuestions);
 
-                return "showScore"; // Thymeleaf template for displaying the total score
+                return "showScore"; 
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }
@@ -142,7 +139,7 @@ public class ExamController {
             model.addAttribute("message", "Exam not found.");
         }
 
-        return "error"; // Thymeleaf template for displaying an error message
+        return "error"; 
     }
 
 
@@ -159,15 +156,14 @@ public class ExamController {
 
     // Implement this method to get the user's ID
     private Long getUserId() {
-        // Add your logic to retrieve the user's ID
-        return 1L; // Replace with actual user ID retrieval logic
+        return 1L;
     }
 
     // Implement a method to check if the exam duration is valid
     private boolean isExamDurationValid(Exam exam) {
-        // Implement your logic here to check if the exam duration is still valid
-        // You can use the exam's start time and durationInMinutes property
-        return true; // Modify this based on your logic
+        // TO-DO...
+    	// IMPLEMENT TIME CHECKERS HERE
+        return true; 
     }
 
  // Implement this method to calculate the total score
@@ -196,9 +192,6 @@ public class ExamController {
 
 
 
-
-
-
  // Placeholder method to save the exam submission to the database or storage
     private void saveExamSubmission(ExamSubmission examSubmission, Long userId) {
         // Create an ExamSubmissionEntity to store the submission details
@@ -218,10 +211,8 @@ public class ExamController {
             // Save the exam submission entity to the database
             examSubmissionRepository.save(submissionEntity);
 
-            // You can also add additional logic here, such as sending a confirmation email or performing other actions
         } else {
-            // Handle the case where the exam or user is not found
-            // You can log an error or throw an exception, depending on your requirements
+
         }
     }
     
@@ -239,7 +230,7 @@ public class ExamController {
     public String pickExam(@PathVariable int chapter, Model model) {
         List<Question> questions = examService.generateExam(chapter, 10); // Or however many you want
         model.addAttribute("questions", questions);
-        return "edit-exam"; // This is the name of the Thymeleaf template to be created next
+        return "edit-exam"; 
     }
     
     @PostMapping(value = "/submitEditedExam", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -271,8 +262,7 @@ public class ExamController {
         Map<String, Object> response = new HashMap<>();
         response.put("redirectUrl", "/submit-answers"); // URL for redirection
 
-        // Store the results in the model to make them available for the results page
-        // Note: This assumes that you have a service or session to store and retrieve the results for the next request.
+        
         examService.storeExamResultForUser(result);
 
         return response;

@@ -85,10 +85,8 @@ public class ExamSubmissionEntity {
     
     // Add setter methods for userId and examId
     public void setUserId(Long userId) {
-        // Set the user ID in the User entity or handle it as needed
     }
 
     public void setExamId(Long examId) {
-        // Set the exam ID in the Exam entity or handle it as needed
     }
 }

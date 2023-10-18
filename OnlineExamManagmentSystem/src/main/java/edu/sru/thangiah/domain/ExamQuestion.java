@@ -17,7 +17,7 @@ public class ExamQuestion {
     private String optionC;
     private String optionD;
     private String correctAnswer;
-    private String userAnswer; // Or the appropriate type
+    private String userAnswer; 
 
     public String getUserAnswer() {
         return userAnswer;

@@ -2,14 +2,22 @@ package edu.sru.thangiah.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;public class ExamSubmission {
+import java.util.Map;
 
-    private Long userId; // Add userId property
-    private Long examId; // Add examId property
+/*____  __    __        _ _ 
+ / __ \/ /__ / /__ ___ (_|_)
+/ /_/ / / -_)  '_/(_-</ / / 
+\____/_/\__/_/\_\/___/_/_/  
+                      
+*/
+
+public class ExamSubmission {
+
+    private Long userId; 
+    private Long examId; 
     private List<String> answers;
     private int score;
 
-    // Constructors, getters, and setters
 
     public ExamSubmission() {
         // Default constructor
