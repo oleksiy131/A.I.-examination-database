@@ -20,12 +20,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 
@@ -39,6 +41,8 @@ public class InstructorController {
 	private RoleRepository roleRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ScheduleManagerRepository scheduleManagerRepository;
 	
 	@RequestMapping("/instructor_homepage")
 	public String showInstructorHomepage() {
@@ -100,6 +104,15 @@ public class InstructorController {
 		// Return the name of the HTML template to be displayed
 		return "student-list";
 	}
+	
+    @GetMapping("/list-smIV")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public String showSMIV(Model model) {
+        List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
+        model.addAttribute("ScheduleManager", ScheduleManager);
+        return "iv-schedule-manager-list";
+    }
+
 	
 	@GetMapping("/iv-edit-student/{id}")
     public String showUpdateFormIV(@PathVariable("id") long id, Model model) {
