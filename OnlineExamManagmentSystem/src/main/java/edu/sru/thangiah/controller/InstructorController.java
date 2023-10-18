@@ -85,10 +85,35 @@ public class InstructorController {
     }
 
     @PostMapping("/exam-questions/update")
-    public String saveExamQuestion(@ModelAttribute("examQuestion") ExamQuestion examQuestion) {
-        examQuestionService.saveExamQuestion(examQuestion);
+    public String updateExamQuestion(@ModelAttribute ExamQuestion examQuestion) {
+        // Check if the question with the given ID exists
+        ExamQuestion existingQuestion = examQuestionService.getExamQuestionById(examQuestion.getId());
+
+        if (existingQuestion != null) {
+            // Add some logging to see the values being updated
+            System.out.println("Updating question with ID: " + existingQuestion.getId());
+            System.out.println("Updated Question Text: " + examQuestion.getQuestionText());
+
+            // Update the attributes of the existing question
+            existingQuestion.setQuestionText(examQuestion.getQuestionText());
+            existingQuestion.setOptionA(examQuestion.getOptionA());
+            existingQuestion.setOptionB(examQuestion.getOptionB());
+            existingQuestion.setOptionC(examQuestion.getOptionC());
+            existingQuestion.setOptionD(examQuestion.getOptionD());
+            existingQuestion.setCorrectAnswer(examQuestion.getCorrectAnswer());
+
+            // Save the updated question to the repository
+            examQuestionService.saveExamQuestion(existingQuestion);
+        } else {
+            // Handle the case when the question does not exist (e.g., show an error message)
+            // You can also redirect to an error page or take other appropriate action.
+            System.out.println("CONSOLE LOG: Question with ID " + examQuestion.getId() + " not found.");
+        }
+
         return "redirect:/instructor/exam-questions";
     }
+
+
 
     @GetMapping("/exam-questions/delete/{id}")
     public String deleteExamQuestion(@PathVariable Long id) {
