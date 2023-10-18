@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Select Exam Questions for Exam</h1>
-    <form th:action="@{/exam/generate}" method="post">
+    <form th:action="@{/instructor/exam/generate}" method="post">
         <label>Select Exam Questions:</label>
         <select multiple="multiple" name="selectedExamQuestionIds">
             <option th:each="examQuestion : ${examQuestions}" th:value="${examQuestion.id}" th:text="${examQuestion.questionText}"></option>

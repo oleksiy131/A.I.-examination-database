@@ -13,10 +13,10 @@
         </tr>
         <tr th:each="examQuestion : ${examQuestions}">
             <td th:text="${examQuestion.questionText}"></td>
-            <td><a th:href="@{/exam-questions/edit/{id}(id=${examQuestion.id})}">Edit</a></td>
-            <td><a th:href="@{/exam-questions/delete/{id}(id=${examQuestion.id})}">Delete</a></td>
+            <td><a th:href="@{/instructor/exam-questions/edit/{id}(id=${examQuestion.id})}">Edit</a></td>
+            <td><a th:href="@{/instructor/exam-questions/delete/{id}(id=${examQuestion.id})}">Delete</a></td>
         </tr>
     </table>
-    <a href="/exam-questions/new">Add New Exam Question</a>
+    <a href="/instructor/exam-questions/new">Add New Exam Question</a>
 </body>
 </html>

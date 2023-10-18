@@ -5,7 +5,7 @@
 </head>
 <body>
     <h1>Edit Exam Question</h1>
-    <form th:action="@{/exam-questions/update}" th:object="${examQuestion}" method="post">
+    <form th:action="@{/instructor/exam-questions/update}" th:object="${examQuestion}" method="post">
         <input type="hidden" th:field="*{id}" />
         <label>Question Text:</label>
         <input type="text" th:field="*{questionText}" />

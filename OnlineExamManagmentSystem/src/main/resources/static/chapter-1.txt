@@ -1,8 +1,3 @@
-
-
-Multiple Choice
-
-
 38. This provides the fuel for a computer system.
 A. People
 B. Data
