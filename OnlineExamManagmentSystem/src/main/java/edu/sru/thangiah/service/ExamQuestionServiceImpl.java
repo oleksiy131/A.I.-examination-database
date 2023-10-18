@@ -1,6 +1,7 @@
 package edu.sru.thangiah.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import edu.sru.thangiah.domain.ExamQuestion;
@@ -9,29 +10,44 @@ import edu.sru.thangiah.repository.ExamQuestionRepository;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ExamQuestionServiceImpl implements ExamQuestionService {
+	
+    private final ResourceLoader resourceLoader;
+
 
     @Autowired
     private ExamQuestionRepository examQuestionRepository;
+    
+    @Autowired
+    public ExamQuestionServiceImpl(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+    }
+    
 
     @Override
     public void readExamQuestionsFromFile() throws IOException {
-        // Define the path to your text file
-        String filePath = "/static/chapter-1.txt";
+        try {
+            Resource resource = resourceLoader.getResource("classpath:static/chapter-1.txt");
+            InputStream inputStream = resource.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 
-        // Regular expression to identify the question number and text
-        Pattern questionPattern = Pattern.compile("^(\\d+)\\.(.*)");
+            // Regular expression to identify the question number and text
+            Pattern questionPattern = Pattern.compile("^(\\d+)\\.(.*)");
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
             ExamQuestion currentExamQuestion = null;
             boolean isQuestion = false;
 
+            String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
 
@@ -72,6 +88,9 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
             if (currentExamQuestion != null) {
                 examQuestionRepository.save(currentExamQuestion);
             }
+        } catch (IOException e) {
+            // Handle the exception appropriately
+            e.printStackTrace();
         }
     }
 

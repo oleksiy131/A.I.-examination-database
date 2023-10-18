@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -56,8 +57,17 @@ public class InstructorController {
     
     @GetMapping("/exam-questions")
     public String listExamQuestions(Model model) {
-        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
-        model.addAttribute("examQuestions", examQuestions);
+        try {
+            // Call the service method to read exam questions from the file
+            examQuestionService.readExamQuestionsFromFile();
+            
+            // Fetch exam questions after reading from the file
+            List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
+            model.addAttribute("examQuestions", examQuestions);
+        } catch (IOException e) {
+            // Handle the exception appropriately
+            e.printStackTrace();
+        }
         return "listExamQuestions";
     }
 
