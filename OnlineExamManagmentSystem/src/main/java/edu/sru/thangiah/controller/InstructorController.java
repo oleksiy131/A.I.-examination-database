@@ -237,6 +237,26 @@ public class InstructorController {
         studentRepository.save(student);
         return "iv-edit-confirmation";
     }
+    
+	@GetMapping("/associateIV")
+	public String associateStudentWithCourseFormIV(Model model) {
+		// Retrieve the list of students and courses from the repository
+		List<Student> students = studentRepository.findAll();
+		List<Course> courses = courseRepository.findAll();
+
+		// Add the lists of students and courses to the model for rendering in the HTML
+		// template
+		model.addAttribute("students", students);
+		model.addAttribute("courses", courses);
+
+		// Return the name of the HTML template for the form
+		return "iv-associate-students";
+	}
+	
+	@PostMapping("/associateIV")
+	public ResponseEntity<String> handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
+	    return new ResponseEntity<>("Student associated with course successfully!", HttpStatus.OK);
+	}
 	
 //	@GetMapping("/student/delete/{id}")
 //    public String deleteStudentSMV(@PathVariable("id") long id, Model model) {
