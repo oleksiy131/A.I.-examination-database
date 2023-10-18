@@ -5,6 +5,8 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +29,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /*
  *____  __    __        _ _ 
@@ -89,9 +93,11 @@ public class ExamController {
         if (exam != null) {
             // Check if the exam's duration is still valid
             if (isExamDurationValid(exam)) {
+                // Get the question IDs from the form
+                String[] questionIds = formParams.get("questionIds").split(",");
+
                 // Get the user's answers from the form
                 Map<Long, String> userAnswers = new HashMap<>();
-                String[] questionIds = formParams.get("questionIds").split(",");
                 for (String questionId : questionIds) {
                     String answer = formParams.get("answer_" + questionId);
                     if (answer != null) {
@@ -99,19 +105,42 @@ public class ExamController {
                     }
                 }
 
-                // Calculate the score based on the submitted answers
-                int score = calculateScore(exam, userAnswers);
+                // Calculate the total score based on the submitted answers
+                int totalScore = 0;
+                for (ExamQuestion question : exam.getQuestions()) {
+                    String correctAnswer = question.getCorrectAnswer();
+                    String userAnswer = userAnswers.get(question.getId());
 
-                // Create an ExamSubmission object with userId, examId, answers, and score
-                Long userId = getUserId(); // Implement this method to get the user's ID
-                Long examId = id;
-                ExamSubmission examSubmission = new ExamSubmission(userId, examId, userAnswers, score);
+                    if (correctAnswer.equalsIgnoreCase(userAnswer)) {
+                        totalScore++;
+                    }
+                }
 
-                // Save the examSubmission (including the score) to the database or another storage system
-                saveExamSubmission(examSubmission);
+                // Obtain the authenticated user's ID
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User authenticatedUser = (User) authentication.getPrincipal(); // Assuming the principal is of type 'User'
 
-                model.addAttribute("score", score);
-                return "showScore"; // Thymeleaf template for displaying the score
+                // Create an ExamSubmission object and set the examId and userAnswers
+                ExamSubmission examSubmission = new ExamSubmission();
+                examSubmission.setUserId(authenticatedUser.getId());
+                examSubmission.setExamId(id);
+                examSubmission.setAnswers(new ArrayList<>(userAnswers.values()));
+                examSubmission.setScore(totalScore);
+
+                // Create an ExamSubmissionEntity to store the submission details
+                ExamSubmissionEntity submissionEntity = new ExamSubmissionEntity();
+                submissionEntity.setUser(authenticatedUser);
+                submissionEntity.setExam(exam);
+                submissionEntity.setUserAnswers(examSubmission.getAnswers());
+                submissionEntity.setScore(examSubmission.getScore());
+                submissionEntity.setSubmissionTime(new Date()); // Set the current time as the submission time
+
+                // Save the exam submission entity to the database
+                examSubmissionRepository.save(submissionEntity);
+
+                // Add the total score to the model and return the view name
+                model.addAttribute("score", totalScore);
+                return "showScore"; // Thymeleaf template for displaying the total score
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }
@@ -121,6 +150,17 @@ public class ExamController {
 
         return "error"; // Thymeleaf template for displaying an error message
     }
+
+
+
+ // Helper method to obtain the authenticated user's ID
+ private Long getUserIdFromAuthentication(Authentication authentication) {
+     if (authentication != null && authentication.getPrincipal() instanceof User) {
+         User user = (User) authentication.getPrincipal();
+         return user.getId();
+     }
+     return null; // Return null if the user ID cannot be obtained
+ }
 
     // Implement this method to get the user's ID
     private Long getUserId() {
@@ -135,9 +175,9 @@ public class ExamController {
         return true; // Modify this based on your logic
     }
 
- // Implement this method to calculate the score
-    private int calculateScore(Exam exam, Map<Long, String> userAnswers) {
-        int score = 0;
+ // Implement this method to calculate the total score
+    private int calculateTotalScore(Exam exam, Map<Long, String> userAnswers) {
+        int totalScore = 0;
         List<ExamQuestion> questions = exam.getQuestions();
 
         // Loop through the questions and compare user answers with correct answers
@@ -150,29 +190,44 @@ public class ExamController {
 
             // Check if the user's selected answer matches the correct answer (case-insensitive)
             if (userAnswer != null && userAnswer.equalsIgnoreCase(correctAnswer)) {
-                score++; // Increment the score for correct answers
+                totalScore++; // Increment the total score for correct answers
             }
         }
 
-        return score;
+        return totalScore;
     }
 
 
 
 
-    // Placeholder method to save the exam submission to the database or storage
-    private void saveExamSubmission(ExamSubmission examSubmission) {
+
+
+
+
+ // Placeholder method to save the exam submission to the database or storage
+    private void saveExamSubmission(ExamSubmission examSubmission, Long userId) {
         // Create an ExamSubmissionEntity to store the submission details
         ExamSubmissionEntity submissionEntity = new ExamSubmissionEntity();
+        
+        // Assuming you have an examRepository and a userRepository, retrieve the Exam and User objects
+        Exam exam = examRepository.findById(examSubmission.getExamId()).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
 
-        submissionEntity.setUserId(examSubmission.getUserId());
-        submissionEntity.setExamId(examSubmission.getExamId());
-        submissionEntity.setUserAnswers(examSubmission.getAnswers());
-        submissionEntity.setScore(examSubmission.getScore());
+        if (exam != null && user != null) {
+            // Set the relevant properties of the entity based on the examSubmission object
+            submissionEntity.setUser(user);
+            submissionEntity.setExam(exam);
+            submissionEntity.setUserAnswers(examSubmission.getAnswers());
+            submissionEntity.setScore(examSubmission.getScore());
 
-        // Save the examSubmission entity
-        examSubmissionRepository.save(submissionEntity); 
+            // Save the exam submission entity to the database
+            examSubmissionRepository.save(submissionEntity);
 
+            // You can also add additional logic here, such as sending a confirmation email or performing other actions
+        } else {
+            // Handle the case where the exam or user is not found
+            // You can log an error or throw an exception, depending on your requirements
+        }
     }
     
 

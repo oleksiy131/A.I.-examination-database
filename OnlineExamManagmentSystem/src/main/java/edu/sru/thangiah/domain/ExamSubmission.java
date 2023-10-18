@@ -46,24 +46,7 @@ import java.util.Map;public class ExamSubmission {
         this.examId = examId;
     }
 
-    // Placeholder method to calculate the score
-    public int calculateScore(Exam exam, Map<Long, String> userAnswers) {
-        int score = 0;
-        List<ExamQuestion> questions = exam.getQuestions();
-
-        // Loop through the questions and compare user answers with correct answers
-        for (ExamQuestion question : questions) {
-            Long questionId = question.getId();
-            String correctAnswer = question.getCorrectAnswer();
-            String userAnswer = userAnswers.get(questionId);
-
-            if (userAnswer != null && userAnswer.equals(correctAnswer)) {
-                score++; // Increment the score for correct answers
-            }
-        }
-
-        return score;
-    }
+   
 
     public List<String> getAnswers() {
         return answers;
