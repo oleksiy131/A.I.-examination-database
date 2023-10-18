@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -143,8 +144,6 @@ public class ExamController {
     }
 
 
-
-
  // Helper method to obtain the authenticated user's ID
  private Long getUserIdFromAuthentication(Authentication authentication) {
      if (authentication != null && authentication.getPrincipal() instanceof User) {
@@ -159,12 +158,16 @@ public class ExamController {
         return 1L;
     }
 
-    // Implement a method to check if the exam duration is valid
     private boolean isExamDurationValid(Exam exam) {
-        // TO-DO...
-    	// IMPLEMENT TIME CHECKERS HERE
-        return true; 
+        LocalDateTime now = LocalDateTime.now(); // Current date and time
+
+        // Calculate the exam's end time based on its duration
+        LocalDateTime examEndTime = exam.getStartTime().plusMinutes(exam.getDurationInMinutes());
+
+        // Check if the current time is before the exam's end time
+        return now.isBefore(examEndTime);
     }
+
 
  // Implement this method to calculate the total score
     private int calculateTotalScore(Exam exam, Map<Long, String> userAnswers) {
