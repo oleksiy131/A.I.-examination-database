@@ -11,16 +11,14 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "roles")
 public class Roles {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	 @Column(name = "id")
+	@Column(name = "id")
 	private Long id;
 	private String name;
 	
-  public static final String SCHEDULE_MANAGER = "SCHEDULE_MANAGER";
 
-	
-	//public Roles(String name) {}
 	public Roles() {}
 	
 	public Roles(Long id, String name) {

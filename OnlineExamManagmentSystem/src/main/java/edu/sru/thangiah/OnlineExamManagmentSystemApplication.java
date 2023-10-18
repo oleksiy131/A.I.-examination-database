@@ -89,6 +89,9 @@ public class OnlineExamManagmentSystemApplication {
     public CommandLineRunner setupDefaultUser() {
         return args -> {
             createUserIfNotFound("root", "software", "ADMINISTRATOR");
+            createUserIfNotFound("student", "student", "STUDENT");
+            createUserIfNotFound("instructor", "instructor", "INSTRUCTOR");
+            createUserIfNotFound("schedulemanager", "schedulemanager", "SCHEDULE_MANAGER");
         };
     }
 
@@ -117,22 +120,29 @@ public class OnlineExamManagmentSystemApplication {
             if (roleName.equals("ADMINISTRATOR")) {
                 Administrator admin = new Administrator();
                 admin.setUser(user);
+                admin.setAdminPassword(passwordEncoder.encode(password));
                 administratorRepository.save(admin);
             }
             if (roleName.equals("STUDENT")) {
                 Student student = new Student();
+                student.setStudentId((long) 2L);
                 student.setUser(user);
+                student.setStudentPassword(passwordEncoder.encode(password));
                 studentRepository.save(student);
             }
             if (roleName.equals("INSTRUCTOR")) {
                 Instructor instructor = new Instructor();
+                instructor.setInstructorId((long) 3L);
                 instructor.setUser(user);
+                instructor.setInstructorPassword(passwordEncoder.encode(password));
                 instructorRepository.save(instructor);
             }
             
             if (roleName.equals("SCHEDULE_MANAGER")) {
                 ScheduleManager scheduleManager = new ScheduleManager();
                 scheduleManager.setUser(user);
+                scheduleManager.setManagerUsername(username);
+                scheduleManager.setManagerPassword(passwordEncoder.encode(password));
                 scheduleManagerRepository.save(scheduleManager);
             }
         }

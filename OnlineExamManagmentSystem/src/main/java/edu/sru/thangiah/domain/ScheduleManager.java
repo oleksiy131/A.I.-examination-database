@@ -20,21 +20,6 @@ import jakarta.persistence.UniqueConstraint;
 @Table(name = "ScheduleManager", uniqueConstraints = @UniqueConstraint(columnNames = "id"))
 public class ScheduleManager {
 
-	
-	
-	public ScheduleManager() {
-		super();
-	}
-
-	public ScheduleManager(String managerFirstName, String managerLastName, String managerEmail,
-			String managerPassword, String managerUsername) {
-		super();
-		this.managerFirstName = managerFirstName;
-		this.managerLastName = managerLastName;
-		this.managerEmail = managerEmail;
-		this.managerPassword = managerPassword;
-		this.managerUsername = managerUsername;
-	}
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -125,10 +110,30 @@ public class ScheduleManager {
 		this.roles = roles;
 	}
 
-	public void setUser(User user) {
-		
+	public void setUser(User scheduleManager) {
+		this.managerId = scheduleManager.getId();	
+		this.managerFirstName = scheduleManager.getFirstName();
+	    this.managerLastName = scheduleManager.getLastName();
+	    this.managerEmail = scheduleManager.getEmail();
+	    this.managerPassword = scheduleManager.getPassword();
+	    this.managerUsername = scheduleManager.getUsername();
+	    this.roles = scheduleManager.getRoles();
 	}
-		
 
+	
+	public ScheduleManager() {}
+
+	
+	public ScheduleManager(Long managerId, String managerFirstName, String managerLastName, String managerEmail,
+			String managerPassword, String managerUsername, List<Roles> roles) {
+		super();
+		this.managerId = managerId;
+		this.managerFirstName = managerFirstName;
+		this.managerLastName = managerLastName;
+		this.managerEmail = managerEmail;
+		this.managerPassword = managerPassword;
+		this.managerUsername = managerUsername;
+		this.roles = roles;
+	}
 
 }

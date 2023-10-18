@@ -14,7 +14,7 @@
 
 <script>
 $(function(){
-  $("#nav-placeholder").load("/navbar");
+  $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
 });
 </script>
 
@@ -24,7 +24,7 @@ $(function(){
 
 <body>
     <h2>Associate Student with Course</h2>
-    <form id="associateStudentWithCourseForm" action="/student/course/associate" method="POST">
+    <form id="associateStudentWithCourseFormSMV" action="/schedule-manager/associateSM" method="POST">
         <label for="studentId">Select a Student:</label>
         <select id="studentId" name="studentId">
             <!-- Use Thymeleaf each loop to iterate over a list of students -->
@@ -47,7 +47,7 @@ $(function(){
     <!-- JavaScript for handling form submission -->
     <script>
       $(document).ready(function () {
-    $('#associateStudentWithCourseForm').submit(function (event) {
+    $('#associateStudentWithCourseFormSMV').submit(function (event) {
         event.preventDefault();
 
         // Serialize form data
@@ -56,7 +56,7 @@ $(function(){
 
         $.ajax({
             type: 'POST',
-            url: '/student/course/associate',
+            url: '/schedule-manager/associateSM',
             data: formData,
             success: function (response) {
                 console.log("Response: ", response); // Debug

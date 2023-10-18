@@ -12,7 +12,7 @@
 
 <script>
 $(function(){
-  $("#nav-placeholder").load("/navbar");
+  $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
 });
 </script>
 
@@ -23,7 +23,7 @@ $(function(){
 <body>
     <h1>Add Course</h1>
     <!-- Change the form action to point to the server-side controller -->
-    <form action="/course/add-course" method="post">
+    <form action="/schedule-manager/add-courseSM" method="post">
         <label for="courseId">Course ID:</label>
         <input type="text" id="courseId" name="id" required><br><br>
         
