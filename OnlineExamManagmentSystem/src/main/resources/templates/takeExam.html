@@ -50,14 +50,44 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        .timer {
+            margin-bottom: 20px;
+            font-size: larger;
+            color: red;
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var durationInMinutes = [[${exam.durationInMinutes}]];
+            var totalSeconds = durationInMinutes * 60;
+
+            function updateTimer() {
+                var timerElement = document.getElementById('timer');
+                var minutes = Math.floor(totalSeconds / 60);
+                var seconds = totalSeconds % 60;
+
+                timerElement.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+
+                if (totalSeconds <= 0) {
+                    clearInterval(countdown);
+                    alert('Time is up!');
+                } else {
+                    totalSeconds--;
+                }
+            }
+
+            var countdown = setInterval(updateTimer, 1000);
+            updateTimer();
+        });
+    </script>
 </head>
 <body>
     <div class="exam-container">
         <h1>[[${exam.examName}]]</h1>
+        <div class="timer" id="timer"></div>
         <form th:action="@{/exam/submit/{id}(id=${exam.id})}" method="post">
             <div th:each="question : ${exam.questions}" class="question">
-                <h2 th:text="${question.questionText}">Question Text</h2>
+                <h2 th:text="${question.questionText}"></h2>
                 <ul class="options">
                     <li><label><input type="radio" th:name="'answer_' + ${question.id}" th:value="A" /> A. [[${question.optionA}]]</label></li>
                     <li><label><input type="radio" th:name="'answer_' + ${question.id}" th:value="B" /> B. [[${question.optionB}]]</label></li>

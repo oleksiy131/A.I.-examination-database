@@ -1,6 +1,8 @@
 package edu.sru.thangiah.domain;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -11,9 +13,24 @@ public class Exam {
 
     private String examName;
     private int durationInMinutes;
+    private LocalDateTime startTime;
+
+    public Exam() {
+        this.startTime = LocalDateTime.now(); // Sets the startTime to the current date and time.
+    }
 
     @ManyToMany
     private List<ExamQuestion> questions;
+    
+    // Getter and setter for startTime
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+    
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
 	public Long getId() {
 		return id;
