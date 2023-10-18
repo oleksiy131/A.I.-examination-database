@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.util.ArrayList; 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -17,14 +20,29 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.model.Roles;
+import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.RoleRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.repository.UserRepository;
 
 @Controller
 @RequestMapping("/instructor")
 public class InstructorController {
+	
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private ScheduleManagerRepository scheduleManagerRepository;
 	
 	@RequestMapping("/instructor_homepage")
 	public String showInstructorHomepage() {
@@ -87,13 +105,22 @@ public class InstructorController {
 		return "student-list";
 	}
 	
-	@GetMapping("/edit-student/{id}")
-    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+    @GetMapping("/list-smIV")
+    @PreAuthorize("hasRole('INSTRUCTOR')")
+    public String showSMIV(Model model) {
+        List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
+        model.addAttribute("ScheduleManager", ScheduleManager);
+        return "iv-schedule-manager-list";
+    }
+
+	
+	@GetMapping("/iv-edit-student/{id}")
+    public String showUpdateFormIV(@PathVariable("id") long id, Model model) {
 		Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         
         model.addAttribute("student", student);
-        return "edit-student";
+        return "iv-edit-student";
     }
 	
 	@PostMapping("/update/{id}")
@@ -116,7 +143,7 @@ public class InstructorController {
 //        student.setRole(student.getRole());
 //        student.setStudentPassword(student.getStudentPassword());
         studentRepository.save(student);
-        return "edit-confirmation";
+        return "iv-edit-confirmation";
     }
 	
 	@GetMapping("/student/delete/{id}")
@@ -127,8 +154,117 @@ public class InstructorController {
         return "edit-confirmation";
     }
 	
-	
+	@GetMapping("/iv-student-list")
+	@PreAuthorize("hasRole('SCHEDULE_MANAGER')")
+	public String showStudentsListIV(Model model) {
+		// Retrieve the list of students from the repository
+		List<Student> students = (List<Student>) studentRepository.findAll();
 
+		// Add the list of students to the model for rendering in the HTML template
+		model.addAttribute("students", students);
+
+		// Return the name of the HTML template to be displayed
+		return "iv-student-list";
+	}
+    
+	@GetMapping("/iv-create-student")
+	public String showCreateStudentFormIV() {
+		return "iv-create-student"; // This corresponds to the name of your HTML file
+	}
+	
+    @Transactional
+	@PostMapping("/createIV")
+	public String createIV(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+	    System.out.println("Inside student-createIV method");
+	    try {
+	        // Check if the student with the given username already exists
+	        if (studentRepository.findByStudentUsername(student.getStudentUsername()).isPresent()) {
+	            redirectAttributes.addFlashAttribute("errorMessage", "Student with given username already exists.");
+	            return "redirect:/create";
+	        }
+
+	        // Fetch the role with ID 2 and set it to the student
+	        Roles roles = roleRepository.findById(2L)
+	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+	        List<Roles> rolesList = new ArrayList<>();
+            rolesList.add(roles);
+            student.setRoles(rolesList);
+
+	        // Save the new student
+	        studentRepository.save(student);
+
+	        // Create and save the corresponding user
+	        User newUser = new User();
+	        newUser.setId(student.getStudentId());
+	        newUser.setUsername(student.getStudentUsername());
+	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
+		    newUser.setPassword(hashedPassword);
+	        newUser.setRoles(rolesList);
+
+
+            // Set enabled for the user as well
+            newUser.setEnabled(true);
+
+            userRepository.save(newUser);
+
+	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
+	        return "iv-upload-success";
+	    } catch (Exception e) {
+	        System.out.println("Failed to add student: " + e.getMessage());
+	        redirectAttributes.addFlashAttribute("errorMessage", "Failed to add student.");
+	        return "redirect:/fail";
+	    }
+	}
+    @PostMapping("/iv-update/{id}")
+    public String updateStudentIV(@PathVariable("id") long id, @Validated Student student, 
+      BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            student.setStudentId(id);
+            return "iv-update-user";
+        }
+        
+        // Debugging: Print the received student data
+        System.out.println("Received Student Data:");
+        System.out.println("ID: " + student.getStudentId());
+        System.out.println("First Name: " + student.getStudentFirstName());
+        System.out.println("Last Name: " + student.getStudentLastName());
+        System.out.println("Email: " + student.getStudentEmail());
+        System.out.println("Path Variable ID: " + id);
+        
+//        student.setStudentId(id);
+//        student.setRole(student.getRole());
+//        student.setStudentPassword(student.getStudentPassword());
+        studentRepository.save(student);
+        return "iv-edit-confirmation";
+    }
+    
+	@GetMapping("/associateIV")
+	public String associateStudentWithCourseFormIV(Model model) {
+		// Retrieve the list of students and courses from the repository
+		List<Student> students = studentRepository.findAll();
+		List<Course> courses = courseRepository.findAll();
+
+		// Add the lists of students and courses to the model for rendering in the HTML
+		// template
+		model.addAttribute("students", students);
+		model.addAttribute("courses", courses);
+
+		// Return the name of the HTML template for the form
+		return "iv-associate-students";
+	}
+	
+	@PostMapping("/associateIV")
+	public ResponseEntity<String> handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
+	    return new ResponseEntity<>("Student associated with course successfully!", HttpStatus.OK);
+	}
+	
+//	@GetMapping("/student/delete/{id}")
+//    public String deleteStudentSMV(@PathVariable("id") long id, Model model) {
+//        Student student = studentRepository.findById(id)
+//          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+//        studentRepository.delete(student);
+//        return "iv-edit-confirmation";
+//    }
    
 }
 

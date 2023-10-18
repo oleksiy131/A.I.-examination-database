@@ -150,20 +150,20 @@ public class AdministratorController {
 		return "associate-students";
 	}
 
-	@GetMapping("/associate-instructor")
-	public String associateInstructorWithCourseForm(Model model) {
-		// Retrieve the list of instructors and courses from the repository
-		List<Instructor> instructors = instructorRepository.findAll();
-		List<Course> courses = courseRepository.findAll();
-
-		// Add the lists of instructors and courses to the model for rendering in the
-		// HTML template
-		model.addAttribute("instructors", instructors);
-		model.addAttribute("courses", courses);
-
-		// Return the name of the HTML template for the form
-		return "associate-instructor";
-	}
+//	@GetMapping("/associate-instructor")
+//	public String associateInstructorWithCourseForm(Model model) {
+//		// Retrieve the list of instructors and courses from the repository
+//		List<Instructor> instructors = instructorRepository.findAll();
+//		List<Course> courses = courseRepository.findAll();
+//
+//		// Add the lists of instructors and courses to the model for rendering in the
+//		// HTML template
+//		model.addAttribute("instructors", instructors);
+//		model.addAttribute("courses", courses);
+//
+//		// Return the name of the HTML template for the form
+//		return "associate-instructor";
+//	}
 
 	// Endpoint to associate an instructor with a course
 	@PostMapping("/instructor/course/associate")
@@ -204,7 +204,7 @@ public class AdministratorController {
 	
 	@GetMapping("/students_list")
 	@PreAuthorize("hasRole('ADMINISTRATOR')")
-	public String showStudentsList(Model model) {
+	public String showStudentsListAV(Model model) {
 		// Retrieve the list of students from the repository
 		List<Student> students = (List<Student>) studentRepository.findAll();
 
