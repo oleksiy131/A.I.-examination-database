@@ -17,6 +17,15 @@ public class ExamQuestion {
     private String optionC;
     private String optionD;
     private String correctAnswer;
+    private String userAnswer; // Or the appropriate type
+
+    public String getUserAnswer() {
+        return userAnswer;
+    }
+
+    public void setUserAnswer(String userAnswer) {
+        this.userAnswer = userAnswer;
+    }
 	public Long getId() {
 		return id;
 	}

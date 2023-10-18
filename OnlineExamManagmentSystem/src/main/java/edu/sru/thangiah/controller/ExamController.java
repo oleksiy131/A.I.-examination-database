@@ -93,53 +93,47 @@ public class ExamController {
         if (exam != null) {
             // Check if the exam's duration is still valid
             if (isExamDurationValid(exam)) {
-                // Get the question IDs from the form
-                String[] questionIds = formParams.get("questionIds").split(",");
-
-                // Get the user's answers from the form
+                // Parse the form parameters to retrieve question IDs and corresponding user answers
                 Map<Long, String> userAnswers = new HashMap<>();
-                for (String questionId : questionIds) {
-                    String answer = formParams.get("answer_" + questionId);
-                    if (answer != null) {
-                        userAnswers.put(Long.parseLong(questionId), answer);
+                for (Map.Entry<String, String> entry : formParams.entrySet()) {
+                    if (entry.getKey().startsWith("answer_")) {
+                        Long questionId = Long.parseLong(entry.getKey().substring(7)); // Extract question ID from the key
+                        userAnswers.put(questionId, entry.getValue());
                     }
                 }
 
-                // Calculate the total score based on the submitted answers
+             // Calculate the total score and identify incorrect questions
                 int totalScore = 0;
+                List<ExamQuestion> incorrectQuestions = new ArrayList<>();
                 for (ExamQuestion question : exam.getQuestions()) {
-                    String correctAnswer = question.getCorrectAnswer();
                     String userAnswer = userAnswers.get(question.getId());
-
-                    if (correctAnswer.equalsIgnoreCase(userAnswer)) {
+                    question.setUserAnswer(userAnswer); // Recording the user's answer here.
+                    if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                         totalScore++;
+                    } else {
+                        incorrectQuestions.add(question);
                     }
                 }
 
                 // Obtain the authenticated user's ID
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User authenticatedUser = (User) authentication.getPrincipal(); // Assuming the principal is of type 'User'
+                Long userId = getUserIdFromAuthentication(authentication);
 
-                // Create an ExamSubmission object and set the examId and userAnswers
+                // Create an ExamSubmission object and populate it with data
                 ExamSubmission examSubmission = new ExamSubmission();
-                examSubmission.setUserId(authenticatedUser.getId());
+                examSubmission.setUserId(userId);
                 examSubmission.setExamId(id);
                 examSubmission.setAnswers(new ArrayList<>(userAnswers.values()));
                 examSubmission.setScore(totalScore);
 
-                // Create an ExamSubmissionEntity to store the submission details
-                ExamSubmissionEntity submissionEntity = new ExamSubmissionEntity();
-                submissionEntity.setUser(authenticatedUser);
-                submissionEntity.setExam(exam);
-                submissionEntity.setUserAnswers(examSubmission.getAnswers());
-                submissionEntity.setScore(examSubmission.getScore());
-                submissionEntity.setSubmissionTime(new Date()); // Set the current time as the submission time
+                // Save the exam submission to the database
+                saveExamSubmission(examSubmission, userId);
 
-                // Save the exam submission entity to the database
-                examSubmissionRepository.save(submissionEntity);
-
-                // Add the total score to the model and return the view name
+                // Add attributes to the model for the view
                 model.addAttribute("score", totalScore);
+                model.addAttribute("totalQuestions", exam.getQuestions().size());
+                model.addAttribute("incorrectQuestions", incorrectQuestions);
+
                 return "showScore"; // Thymeleaf template for displaying the total score
             } else {
                 model.addAttribute("message", "The exam has expired.");
@@ -150,6 +144,7 @@ public class ExamController {
 
         return "error"; // Thymeleaf template for displaying an error message
     }
+
 
 
 

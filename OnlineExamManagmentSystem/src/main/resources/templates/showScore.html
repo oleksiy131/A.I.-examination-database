@@ -5,7 +5,21 @@
 </head>
 <body>
     <h1>Your Exam Score</h1>
-    <p>Your score is: <strong th:text="${score}"></strong></p>
-    <p>Thank you for taking the exam!</p>
+    <p>Your score is: <strong th:text="${score}"></strong> out of <strong th:text="${totalQuestions}"></strong></p>
+
+    <h2>Review your answers</h2>
+    <div th:if="${incorrectQuestions.size() > 0}">
+    <p>The following questions were answered incorrectly:</p>
+    <ul>
+        <li th:each="question : ${incorrectQuestions}">
+            <p><strong>Question:</strong> <span th:text="${question.questionText}"></span></p>
+            <p><strong>Your Answer:</strong> <span th:text="${question.userAnswer}"></span></p> <!-- This line displays the user's answer -->
+            <p><strong>Correct Answer:</strong> <span th:text="${question.correctAnswer}"></span></p>
+        </li>
+    </ul>
+</div>
+    <div th:if="${incorrectQuestions.size() == 0}">
+        <p>Congratulations! You answered all questions correctly.</p>
+    </div>
 </body>
 </html>
