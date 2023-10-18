@@ -101,13 +101,13 @@ public class InstructorController {
 		return "student-list";
 	}
 	
-	@GetMapping("/edit-student/{id}")
-    public String showUpdateForm(@PathVariable("id") long id, Model model) {
+	@GetMapping("/iv-edit-student/{id}")
+    public String showUpdateFormIV(@PathVariable("id") long id, Model model) {
 		Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         
         model.addAttribute("student", student);
-        return "edit-student";
+        return "iv-edit-student";
     }
 	
 	@PostMapping("/update/{id}")
@@ -130,7 +130,7 @@ public class InstructorController {
 //        student.setRole(student.getRole());
 //        student.setStudentPassword(student.getStudentPassword());
         studentRepository.save(student);
-        return "edit-confirmation";
+        return "iv-edit-confirmation";
     }
 	
 	@GetMapping("/student/delete/{id}")
@@ -140,6 +140,20 @@ public class InstructorController {
         studentRepository.delete(student);
         return "edit-confirmation";
     }
+	
+	@GetMapping("/iv-student-list")
+	@PreAuthorize("hasRole('SCHEDULE_MANAGER')")
+	public String showStudentsListIV(Model model) {
+		// Retrieve the list of students from the repository
+		List<Student> students = (List<Student>) studentRepository.findAll();
+
+		// Add the list of students to the model for rendering in the HTML template
+		model.addAttribute("students", students);
+
+		// Return the name of the HTML template to be displayed
+		return "iv-student-list";
+	}
+    
 	@GetMapping("/iv-create-student")
 	public String showCreateStudentFormIV() {
 		return "iv-create-student"; // This corresponds to the name of your HTML file
@@ -188,7 +202,36 @@ public class InstructorController {
 	        return "redirect:/fail";
 	    }
 	}
-
+    @PostMapping("/iv-update/{id}")
+    public String updateStudentIV(@PathVariable("id") long id, @Validated Student student, 
+      BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            student.setStudentId(id);
+            return "iv-update-user";
+        }
+        
+        // Debugging: Print the received student data
+        System.out.println("Received Student Data:");
+        System.out.println("ID: " + student.getStudentId());
+        System.out.println("First Name: " + student.getStudentFirstName());
+        System.out.println("Last Name: " + student.getStudentLastName());
+        System.out.println("Email: " + student.getStudentEmail());
+        System.out.println("Path Variable ID: " + id);
+        
+//        student.setStudentId(id);
+//        student.setRole(student.getRole());
+//        student.setStudentPassword(student.getStudentPassword());
+        studentRepository.save(student);
+        return "iv-edit-confirmation";
+    }
+	
+//	@GetMapping("/student/delete/{id}")
+//    public String deleteStudentSMV(@PathVariable("id") long id, Model model) {
+//        Student student = studentRepository.findById(id)
+//          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+//        studentRepository.delete(student);
+//        return "iv-edit-confirmation";
+//    }
    
 }
 
