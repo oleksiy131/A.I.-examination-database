@@ -1,7 +1,8 @@
 package edu.sru.thangiah.controller;
 
+import java.io.File;
 import java.io.IOException;
-
+import java.io.InputStream;
 import java.util.ArrayList; 
 
 import java.util.List;
@@ -9,6 +10,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Course;
@@ -38,6 +45,7 @@ import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
+import edu.sru.thangiah.service.ExcelExportService;
 import edu.sru.thangiah.repository.UserRepository;
 
 @Controller
@@ -52,6 +60,8 @@ public class InstructorController {
 	private PasswordEncoder passwordEncoder;
 	@Autowired
 	private ScheduleManagerRepository scheduleManagerRepository;
+	@Autowired
+	private ExcelExportService excelExportService;
 	
 	@RequestMapping("/instructor_homepage")
 	public String showInstructorHomepage() {
@@ -368,6 +378,162 @@ public class InstructorController {
 	    return new ResponseEntity<>("Student associated with course successfully!", HttpStatus.OK);
 	}
 	
+	@GetMapping("/exportStudentIV")
+	public ResponseEntity<String> exportStudentDataIV() {
+	    try {
+	        // Fetches the list of students from the repository
+	        List<Student> students = (List<Student>) studentRepository.findAll(); 
+
+	        if (students != null && !students.isEmpty()) {
+	            // Get the user's downloads folder
+	            String userHome = System.getProperty("user.home");
+	            String downloadsDirectory = userHome + File.separator + "Downloads";
+	            
+	            // Define the file path in the downloads folder
+	            String filePath = downloadsDirectory + File.separator + "student_exported_data.xlsx";
+	            
+	            // Check if the file already exists
+	            File file = new File(filePath);
+	            boolean fileExists = file.exists();
+	            
+	            excelExportService.exportStudentData(students, filePath, fileExists);
+	            
+	            if (fileExists) {
+	                return ResponseEntity.ok("Student data updated successfully!");
+	            } else {
+	                return ResponseEntity.ok("Student data exported successfully!");
+	            }
+	        } else {
+	            return ResponseEntity.ok("No students found to export!");
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to export student data!");
+	    }
+	}
+	
+	@GetMapping("/uploadExcelIV")
+	public String importStudents() {
+		return "iv-import"; // This corresponds to the name of your HTML file
+	}
+	
+	@GetMapping("/iv-upload-success")
+	public String uploadSuccess() {
+		return "iv-upload-success"; // This corresponds to the name of your HTML file
+	}
+	
+	@Transactional
+	@PostMapping("/uploadExcelIV")
+	public String uploadExcelIV(@RequestParam("file") MultipartFile file) {
+	    if (file.isEmpty()) {
+	        // Handle empty file error
+	        return "redirect:/instructor/iv-import?error=emptyfile";
+	    }
+
+	    try (InputStream inputStream = file.getInputStream()) {
+	        Workbook workbook = WorkbookFactory.create(inputStream);
+	        Sheet sheet = workbook.getSheetAt(0); // Assuming the data is on the first sheet
+
+	        // Fetch the role with ID 2 once
+	        Roles role = roleRepository.findById(2L)
+	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+	        List<Roles> rolesList = new ArrayList<>();
+
+	        // Iterate through rows and columns to extract data
+	        for (Row row : sheet) {
+	            if (row.getRowNum() == 0) {
+	                // Skip the header row
+	                continue;
+	            }
+
+                Student student = new Student();
+
+
+                // Handle each cell in the row
+                for (int i = 0; i < row.getLastCellNum(); i++) {
+                    Cell cell = row.getCell(i);
+                    if (cell != null) {
+                        switch (cell.getCellType()) {
+                            case STRING:
+                                // Cell contains a string value
+                                switch (i) {
+                                    case 1:
+                                        student.setStudentFirstName(cell.getStringCellValue());
+                                        break;
+                                    case 2:
+                                        student.setStudentLastName(cell.getStringCellValue());
+                                        break;
+                                    case 3:
+                                        student.setStudentEmail(cell.getStringCellValue());
+                                        break;
+                                    case 4:
+                                        student.setStudentPassword(cell.getStringCellValue());
+                                        break;
+                                    case 5:
+                                        student.setStudentUsername(cell.getStringCellValue());
+                                        break;
+                                    // Add cases for other cells as needed
+                                }
+                                break;
+                            case NUMERIC:
+                                // Cell contains a numeric value
+                                double numericValue = cell.getNumericCellValue();
+                                switch (i) {
+                                    case 0:
+                                        student.setStudentId((long) numericValue);
+                                        System.out.println("Assigned Student ID: " + student.getStudentId());  // For debugging purposes
+
+                                        break;
+                                    case 6:
+                                        // Assuming column 6 contains numeric value for Credits Taken
+                                        student.setCreditsTaken((float) numericValue);
+                                        break;
+                                    // Handle numeric value for other cells if needed
+                                }
+                                break;
+                        }
+              
+                    }
+                }
+                
+                // Fetch the role with ID 2 and set it to the student
+                if (student.getStudentId() == null) {
+                    System.out.println("Skipped a row due to missing Student ID.");
+                    continue;
+                }
+
+                student.setRoles(rolesList);
+
+                Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
+                if (!existingStudent.isPresent()) {
+                    // Saving the student to the database since it doesn't exist
+                    studentRepository.save(student);
+                    User newUser = new User();
+                    newUser.setId(student.getStudentId());
+                    newUser.setUsername(student.getStudentUsername());
+                    
+                    // Encode the password before saving
+                    String encodedPassword = passwordEncoder.encode(student.getStudentPassword());
+                    newUser.setPassword(encodedPassword);
+                    
+                    newUser.setRoles(rolesList); 
+                    newUser.setEnabled(true);
+                    userRepository.save(newUser);
+                } else {
+                    // Handle the case when the student already exists, if needed
+                }
+            }
+
+            workbook.close();  // Close the workbook
+            return "redirect:/instructor/iv-upload-success";
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle file processing error
+            return "redirect:/instructor/iv-import?error=processing";
+        }
+    }
+	
 //	@GetMapping("/student/delete/{id}")
 //    public String deleteStudentSMV(@PathVariable("id") long id, Model model) {
 //        Student student = studentRepository.findById(id)
@@ -377,5 +543,6 @@ public class InstructorController {
 //    }
    
 }
+
 
 

@@ -15,11 +15,20 @@ import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
+import edu.sru.thangiah.service.ExcelExportService;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +39,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -65,6 +75,8 @@ public class ScheduleManagerController {
     
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ExcelExportService excelExportService;
     
 	@RequestMapping("/schedule_manager_homepage")
 	public String showScheduleManagerHomepage() {
@@ -574,6 +586,164 @@ public class ScheduleManagerController {
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         studentRepository.delete(student);
         return "smv-edit-confirmation";
+    }
+	
+	@GetMapping("/exportStudentSMV")
+	public ResponseEntity<String> exportStudentDataSMV() {
+	    try {
+	        // Fetches the list of students from the repository
+	        List<Student> students = (List<Student>) studentRepository.findAll(); 
+
+	        if (students != null && !students.isEmpty()) {
+	            // Get the user's downloads folder
+	            String userHome = System.getProperty("user.home");
+	            String downloadsDirectory = userHome + File.separator + "Downloads";
+	            
+	            // Define the file path in the downloads folder
+	            String filePath = downloadsDirectory + File.separator + "student_exported_data.xlsx";
+	            
+	            // Check if the file already exists
+	            File file = new File(filePath);
+	            boolean fileExists = file.exists();
+	            
+	            excelExportService.exportStudentData(students, filePath, fileExists);
+	            
+	            if (fileExists) {
+	                return ResponseEntity.ok("Student data updated successfully!");
+	            } else {
+	                return ResponseEntity.ok("Student data exported successfully!");
+	            }
+	        } else {
+	            return ResponseEntity.ok("No students found to export!");
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to export student data!");
+	    }
+	}
+	
+	//NTS
+	
+	@GetMapping("/uploadExcelSMV")
+	public String importStudentsSMV() {
+		return "smv-import"; // This corresponds to the name of your HTML file
+	}
+	
+	@GetMapping("/smv-upload-success")
+	public String uploadSuccessSMV() {
+		return "smv-upload-success"; // This corresponds to the name of your HTML file
+	}
+	
+	@Transactional
+	@PostMapping("/uploadExcelSMV")
+	public String uploadExcelSMV(@RequestParam("file") MultipartFile file) {
+	    if (file.isEmpty()) {
+	        // Handle empty file error
+	        return "redirect:/schedule-manager/smv-import?error=emptyfile";
+	    }
+
+	    try (InputStream inputStream = file.getInputStream()) {
+	        Workbook workbook = WorkbookFactory.create(inputStream);
+	        Sheet sheet = workbook.getSheetAt(0); // Assuming the data is on the first sheet
+
+	        // Fetch the role with ID 2 once
+	        Roles role = roleRepository.findById(2L)
+	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
+	        List<Roles> rolesList = new ArrayList<>();
+
+	        // Iterate through rows and columns to extract data
+	        for (Row row : sheet) {
+	            if (row.getRowNum() == 0) {
+	                // Skip the header row
+	                continue;
+	            }
+
+                Student student = new Student();
+
+
+                // Handle each cell in the row
+                for (int i = 0; i < row.getLastCellNum(); i++) {
+                    Cell cell = row.getCell(i);
+                    if (cell != null) {
+                        switch (cell.getCellType()) {
+                            case STRING:
+                                // Cell contains a string value
+                                switch (i) {
+                                    case 1:
+                                        student.setStudentFirstName(cell.getStringCellValue());
+                                        break;
+                                    case 2:
+                                        student.setStudentLastName(cell.getStringCellValue());
+                                        break;
+                                    case 3:
+                                        student.setStudentEmail(cell.getStringCellValue());
+                                        break;
+                                    case 4:
+                                        student.setStudentPassword(cell.getStringCellValue());
+                                        break;
+                                    case 5:
+                                        student.setStudentUsername(cell.getStringCellValue());
+                                        break;
+                                    // Add cases for other cells as needed
+                                }
+                                break;
+                            case NUMERIC:
+                                // Cell contains a numeric value
+                                double numericValue = cell.getNumericCellValue();
+                                switch (i) {
+                                    case 0:
+                                        student.setStudentId((long) numericValue);
+                                        System.out.println("Assigned Student ID: " + student.getStudentId());  // For debugging purposes
+
+                                        break;
+                                    case 6:
+                                        // Assuming column 6 contains numeric value for Credits Taken
+                                        student.setCreditsTaken((float) numericValue);
+                                        break;
+                                    // Handle numeric value for other cells if needed
+                                }
+                                break;
+                        }
+              
+                    }
+                }
+                
+                // Fetch the role with ID 2 and set it to the student
+                if (student.getStudentId() == null) {
+                    System.out.println("Skipped a row due to missing Student ID.");
+                    continue;
+                }
+
+                student.setRoles(rolesList);
+
+                Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
+                if (!existingStudent.isPresent()) {
+                    // Saving the student to the database since it doesn't exist
+                    studentRepository.save(student);
+                    User newUser = new User();
+                    newUser.setId(student.getStudentId());
+                    newUser.setUsername(student.getStudentUsername());
+                    
+                    // Encode the password before saving
+                    String encodedPassword = passwordEncoder.encode(student.getStudentPassword());
+                    newUser.setPassword(encodedPassword);
+                    
+                    newUser.setRoles(rolesList); 
+                    newUser.setEnabled(true);
+                    userRepository.save(newUser);
+                } else {
+                    // Handle the case when the student already exists, if needed
+                }
+            }
+
+            workbook.close();  // Close the workbook
+            return "redirect:/schedule-manager/smv-upload-success";
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle file processing error
+            return "redirect:/instructor/smv-import?error=processing";
+        }
     }
 }
 

@@ -1,0 +1,56 @@
+@startuml
+
+package "edu.sru.thangiah.web.dto" {
+    class UserRegistrationDto {
+        - Long id
+        - String firstName
+        - String lastName
+        ...
+        + UserRegistrationDto(Long id, ...)
+        + setId(Long id)
+        + getId(): Long
+        + ... 
+    }
+}
+
+package "edu.sru.thangiah.service" {
+    interface UserService {
+        + save(UserRegistrationDto registrationDto): User
+        + loadUserByUsername(String username): UserDetails
+    }
+    
+    class UserServiceImpl {
+        - UserRepository userRepository
+        + UserServiceImpl(UserRepository userRepository)
+        + save(UserRegistrationDto registrationDto): User
+        + loadUserByUsername(String username): UserDetails
+    }
+}
+
+package "edu.sru.thangiah.repository" {
+    interface UserRepository {
+        + save(User user): User
+        + findByUsername(String username): Optional<User>
+    }
+}
+
+package "edu.sru.thangiah.model" {
+    class User {
+        - Long id
+        - String firstName
+        - String lastName
+        ...
+        + User(Long id, ...)
+        + setId(Long id)
+        + getId(): Long
+        + ...
+    }
+}
+
+UserRegistrationDto --> User : converts to
+UserServiceImpl --> UserRegistrationDto : uses DTO
+UserServiceImpl ..> UserRepository : interacts with
+UserRepository ..> User : returns User
+UserRegistrationDto --> Role : uses
+
+@enduml
