@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Exam</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> <!-- Include jQuery -->
+    <script>
+function submitEditedQuestions() {
+    var questionsArray = [];
+
+    // Iterate through each question block
+    $("#editExamForm > div").each(function() {
+        var singleQuestion = {};
+        singleQuestion.questionText = $(this).find('textarea').val();
+
+        // Options are key-value pairs
+        singleQuestion.options = {};
+        $(this).find('div').each(function() {
+            var keyInput = $(this).find('input:first'); // Get the first input for the option key
+            var valueInput = $(this).find('input:last'); // Get the last input for the option value
+
+            // Check if both key and value inputs exist
+            if (keyInput.length > 0 && valueInput.length > 0) {
+                var key = keyInput.val();
+                var value = valueInput.val();
+                singleQuestion.options[key] = value;
+            }
+        });
+
+        singleQuestion.correctAnswer = $(this).find('input[type="text"]:last').val(); // Get the last input field (correct answer)
+        questionsArray.push(singleQuestion);
+    });
+
+    // AJAX request to the server
+    $.ajax({
+        type: "POST",
+        url: '/submitEditedExam',
+        data: JSON.stringify(questionsArray),
+        contentType: "application/json",
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function(response, status, xhr) {
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition) {
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches !== null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+            var blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            var downloadUrl = URL.createObjectURL(blob);
+            var a = document.createElement("a");
+            a.href = downloadUrl;
+            a.download = filename || "download.xlsx";
+            document.body.appendChild(a);
+            a.click();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.error("Error in operation: " + errorThrown);
+        }
+    });
+}
+
+    </script>
+    <style>
+        /* Add your CSS styles here */
+        textarea {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Exam Questions</h1>
+    <form id="editExamForm" method="post" onsubmit="event.preventDefault();"> <!-- Prevent the default form submission -->
+        <div th:each="question, iterStat : ${questions}">
+            <div>
+                <label>Question:</label>
+                <textarea th:name="|questions[${iterStat.index}].questionText|" th:text="${question.questionText}" rows="3" required></textarea>
+                
+                <div th:each="option, optionStat : ${question.options}">
+                    <label th:for="|options${iterStat.index}_${optionStat.index}|">Option [[${optionStat.index}]]:</label>
+                    <input type="text" th:id="|options${iterStat.index}_${optionStat.index}|" th:name="|questions[${iterStat.index}].options[${option.key}]|" th:value="${option.value}" required />
+                </div>
+
+                <label>Correct Answer:</label>
+                <!-- Assuming the correct answer is the key of the option -->
+                <input type="text" th:name="|questions[${iterStat.index}].correctAnswer|" th:value="${question.correctAnswer}" required />
+            </div>
+            <hr> <!-- Just a separator for visual clarity -->
+        </div>
+        <input type="button" value="Submit Edited Questions" onclick="submitEditedQuestions()"> <!-- Call the JavaScript function -->
+    </form>
+</body>
+</html>

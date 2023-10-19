@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Associate Instructor with Course</title>
+    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    
+</head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/navbar");
+});
+</script>
+
+<br>
+<br>
+<br>
+
+<body>
+    <h2>Associate Instructor with Course</h2>
+    
+    <form action="/schedule-manager/associate-instructor" method="POST">
+        <label for="instructorId">Select an Instructor:</label>
+        <select id="instructorId" name="instructorId">
+            <option th:each="instructor : ${instructors}" th:value="${instructor.instructorId}" th:text="${instructor.instructorFirstName + ' ' + instructor.instructorLastName}"></option>
+        </select>
+
+        <br><br>
+
+        <label for="courseId">Select a Course:</label>
+        <select id="courseId" name="courseId">
+            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+        </select>
+
+        <br><br>
+
+        <input type="submit" value="Associate Instructor with Course">
+    </form>
+</body>
+</html>

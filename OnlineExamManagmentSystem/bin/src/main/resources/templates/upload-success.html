@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #009688;
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #009688;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <i class="fas fa-check-circle success-icon"></i>
+        <h1>File Uploaded Successfully</h1>
+        <h4><a th:href="@{/navbar}">Click here to return to Home Screen</a></h4>
+        <p></p>
+    </div>
+</body>
+</html>

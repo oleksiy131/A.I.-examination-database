@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Instructor Page</title>
+</head>
+<body>
+    <h1>Welcome, Instructor!</h1>
+    
+    <!-- Dropdown menu for selecting a course -->
+    <form action="/instructor/enroll-students" method="post">
+        <label for="courseId">Select a Course:</label>
+        <select id="courseId" name="courseId">
+            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+        </select>
+        
+        <!-- Checkboxes to select students -->
+        <label>Enroll Students:</label>
+        <div th:each="student : ${students}">
+            <input type="checkbox" name="studentIds" th:value="${student.studentId}" th:text="${student.studentFirstName} ${student.studentLastName}">
+        </div>
+        
+        <button type="submit">Enroll Selected Students</button>
+    </form>
+</body>
+</html>

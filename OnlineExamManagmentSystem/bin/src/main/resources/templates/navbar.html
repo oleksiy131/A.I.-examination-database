@@ -1,0 +1,102 @@
+<!-- navbar.html -->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+	<link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+
+<body>
+	
+	
+    <!-- This div sets up a class called navbar that holds all the buttons. -->
+    <div class="navbar">
+        <!-- Home button -->
+        <div class="dropdown-nav">
+            <a th:href="@{/navbar}" class="dropbutton">
+            <i class="fas fa-home"></i> 
+        </a>
+        </div>
+        <!-- Management button -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Management</button>
+            <div class="dropdown-info">
+                <a href="/schedule-manager/page">Schedule Manager</a>
+                <a href="/class-import">Load a Class</a>
+                <a href="/register">Create Schedule Manager</a>
+                <a href="/exams">Chapters</a>
+                <a href="/classes">Exams</a>
+
+            </div>
+        </div>
+        <!-- Exam button -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Exam Generation</button>
+            <div class="dropdown-info">
+                <a href="/bot/choose-topic">Generate Exam with A.I.</a>
+                <a href="/instructor/pick-exam">Generate Exam Manually</a>
+                
+            </div>
+        </div>
+        <!-- Grading button -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Grading</button>
+            <div class="dropdown-info">
+                <a href="#">Exam Grading</a>
+            </div>
+        </div>
+        <!-- Reporting -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Reporting</button>
+            <div class="dropdown-info">
+                <a href="#">Exam Information</a>
+                <a href="#">IP Address</a>
+            </div>
+        </div>
+        <!-- Database button -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Database</button>
+            <div class="dropdown-info">
+            
+                <a href="/students">View All Students</a>
+                <a href="/schedule-manager/all">View All Schedule Managers</a>
+                <a href="/create-student">Add Students</a>
+                <a href="/create-instructor">Add Instructors</a>
+                <a href="/schedule-manager/add-course">Add Courses</a>
+                <a href="/associate">Assign Students</a>
+                <a href="/associate-instructor">Assign Instructors</a>
+                <a href="/export/students">Export To Excel</a>
+                <a href="/import">Import with Excel</a>
+                
+                
+                
+            </div>
+        </div>
+        <!-- Search Options -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Search Options</button>
+            <div class="dropdown-info">
+                <a href="#">View Details</a>
+            </div>
+        </div>
+            <div class = profile-nav>
+                <!-- search options --> 
+                <button class="dropbutton">Account
+                </button>
+            <div class="dropdown-info">
+    			<!--	<p>Username: <span th:text="${#authentication.principal.username}"></span></p>
+    				<p>ID: <span th:text="${#authentication.principal.id}"></span></p>
+    				<p>First Name: <span th:text="${#authentication.principal.firstName}"></span></p>
+    				<p>Last Name: <span th:text="${#authentication.principal.lastName}"></span></p>
+    				<p>Email: <span th:text="${#authentication.principal.email}"></span></p> -->
+    			<a href="#">Change Password</a>
+    			<a href="/logout">Logout</a>
+			</div>
+
+            </div>
+
+    </div>
+
+</body>
+</html>

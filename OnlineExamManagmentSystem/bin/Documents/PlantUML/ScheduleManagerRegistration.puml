@@ -1,0 +1,58 @@
+@startuml
+
+actor Administrator
+participant AdministratorController
+participant Model
+participant RedirectAttributes
+participant ScheduleManager
+participant Roles
+participant SMRepo
+participant roleRepository
+participant User
+participant userRepository
+
+Administrator -> AdministratorController: showRegistrationForm(model)
+activate AdministratorController
+AdministratorController -> Model: addAttribute("user", new User())
+Model --> AdministratorController: Model
+AdministratorController -> AdministratorController: return "register"
+deactivate AdministratorController
+
+Administrator -> AdministratorController: registerUser(manager, redirectAttributes)
+activate AdministratorController
+AdministratorController -> SMRepo: findBymanagerUsername(manager.getManagerUsername())
+activate SMRepo
+SMRepo --> AdministratorController: Optional<ScheduleManager>
+deactivate SMRepo
+
+alt If Manager with Given Username Exists
+  AdministratorController -> RedirectAttributes: addFlashAttribute("errorMessage", "Manager with given username already exists.")
+  activate RedirectAttributes
+  RedirectAttributes --> AdministratorController: RedirectAttributes
+  deactivate RedirectAttributes
+  AdministratorController -> AdministratorController: return "redirect:/register"
+alt else
+  AdministratorController -> roleRepository: findById(4L)
+  activate roleRepository
+  roleRepository --> AdministratorController: Optional<Roles>
+  deactivate roleRepository
+  AdministratorController -> AdministratorController: set Role
+  AdministratorController -> SMRepo: save(manager)
+  activate SMRepo
+  SMRepo --> AdministratorController: SMRepo
+  deactivate SMRepo
+  AdministratorController -> User: create User object
+  activate User
+  User --> AdministratorController: User object
+  deactivate User
+  AdministratorController -> userRepository: save(user)
+  activate userRepository
+  userRepository --> AdministratorController: userRepository
+  deactivate userRepository
+  AdministratorController -> Administrator: redirect to "/registration-confirmation"
+end
+
+deactivate AdministratorController
+
+@enduml
+
