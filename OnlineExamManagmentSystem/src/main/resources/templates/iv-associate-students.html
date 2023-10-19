@@ -4,93 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Associate Student with Course</title>
-        <link rel="stylesheet" th:href="@{/css/style.css}"/>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
-        
-    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
 </head>
+
+<div id="nav-placeholder">
+
+</div>
 
 <script>
 $(function(){
   $("#nav-placeholder").load("/instructor/instructor_homepage");
 });
 </script>
-
-    <!-- This div sets up a class called navbar that holds all the buttons. -->
-    <div class="navbar">
-     <!-- Home button -->
-        <div class="dropdown-nav">
-            <a th:href="@{/instructor/instructor_homepage}" class="dropbutton">
-            <i class="fas fa-home"></i> 
-        </a>
-        </div>
-        <!-- Management button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Management</button>
-            <div class="dropdown-info">
-                <a href="/class-import">Load a Class</a>
-                <a href="#">Classes</a>
-                <a href="/exams">Chapters</a>
-                <a href="/classes">Exams</a>
-            </div>
-        </div>
-        <!-- Exam button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Exam Generation</button>
-            <div class="dropdown-info">
-                <a href="/bot/choose-topic">Generate Exam</a>
-            </div>
-        </div>
-        <!-- Grading button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Grades & Classes</button>
-            <div class="dropdown-info">
-                <!-- Example links for instructor's classes -->
-                <a href="#">Class 1</a>
-                <a href="#">Class 2</a>
-            </div>
-        </div>
-        <!-- Reporting -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Reporting</button>
-            <div class="dropdown-info">
-                <a href="#">Exam Information</a>
-                <a href="#">IP Address</a>
-            </div>
-        </div>
-        <!-- Database button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Database</button>
-            <div class="dropdown-info">
-                <a href="/instructor/iv-student-list">View All Students</a>
-                <a href="/instructor/list-smIV">View All Schedule Managers</a>
-                <a href="/instructor/iv-create-student">Add Students</a>
-                <a href="/instructor/associateIV">Assign Students</a>
-                <a href="/export/students">Export To Excel</a>
-                <a href="/import">Import with Excel</a>
-                <a href="#">View all Administrators</a>
-            </div>
-        </div>
-        <!-- Search Options -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Search Options</button>
-            <div class="dropdown-info">
-                <a href="sidepanel.html">View Details</a>
-            </div>
-        </div>
-        <div class="profile-nav">
-            <!-- Account options -->
-            <button class="dropbutton">Account</button>
-            <div class="dropdown-info">
-                <a href="#">Change Password</a>
-                <a href="/logout">Logout</a>
-            </div>
-        </div>
-    </div>
-
-<br>
-<br>
-<br>
 
 <body>
     <h2>Associate Student with Course</h2>
