@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList; 
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -98,6 +99,7 @@ public class InstructorController {
             // Handle the exception appropriately
             e.printStackTrace();
         }
+       
         return "listExamQuestions";
     }
 
@@ -152,15 +154,26 @@ public class InstructorController {
     }
 
     @GetMapping("/exam/select-questions")
-    public String selectExamQuestions(Model model) {
+    public String selectExamQuestions(Model model, RedirectAttributes redirectAttributes) {
+        // Fetch all available exam questions to display for selection
         List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
         model.addAttribute("examQuestions", examQuestions);
         model.addAttribute("examDetails", new ExamDetails());
-        return "selectExamQuestions";
+
+        // Retrieve flash attributes and check if 'generatedExamId' is present
+        Map<String, ?> flashAttributes = redirectAttributes.getFlashAttributes();
+        if (flashAttributes.containsKey("generatedExamId")) {
+            Long generatedExamId = (Long) flashAttributes.get("generatedExamId");
+            String examLink = "http://localhost:8080/exam/" + generatedExamId;
+            model.addAttribute("examLink", examLink);
+        }
+
+        return "selectExamQuestions"; // This should be your Thymeleaf template for selecting exam questions.
     }
+
     
     @PostMapping("/exam/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails) {
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
         List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
 
         // Fetch selected questions from the database
@@ -173,14 +186,19 @@ public class InstructorController {
         exam.setExamName(examDetails.getExamName());
         exam.setDurationInMinutes(examDetails.getExamDuration());
         exam.setQuestions(selectedQuestions);
+     // Save the exam to the database
+        Exam savedExam = examRepository.save(exam);
 
-        // Save the exam to the database
-        examRepository.save(exam);
+        // Add the generated exam's ID to the model
+        model.addAttribute("generatedExamId", savedExam.getId());
 
-        return "redirect:/instructor/exam-questions"; // Redirect to exam questions list
+        // Also, add the exam questions to the model again as they were before
+        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
+        model.addAttribute("examQuestions", examQuestions);
+
+        // Return the same view which is used for selecting exam questions, not a new one
+        return "selectExamQuestions"; // This should be the name of your Thymeleaf template for selecting questions
     }
-    
- 
     @GetMapping("/list")
     public String showInstructorList(Model model) {
         List<Instructor> instructors = (List<Instructor>) instructorRepository.findAll();

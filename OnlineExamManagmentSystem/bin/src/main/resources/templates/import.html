@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .download-link {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .error {
+            background-color: #e74c3c;
+            color: #fff;
+        }
+
+        .success {
+            background-color: #27ae60;
+            color: #fff;
+        }
+
+        .info {
+            background-color: #808080;
+            color: #fff;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        /* File input styles */
+        .file-upload {
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 2px solid #ccc;
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            background-color: #2980b9;
+        }
+
+        .upload-button {
+            background-color: #2ecc71;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background-color: #27ae60;
+        }
+
+        /* Selected file indicator */
+        .selected-file {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Upload</h1>
+
+        <!-- New message -->
+        <div class="download-link">
+            <a href="/download/students">Download the Excel sheet to load data into</a>
+        </div>
+
+        <div class="message error" th:if="${param.error == 'emptyfile'}">Please select a file to upload.</div>
+        <div class="message error" th:if="${param.error == 'processing'}">Error processing the file.</div>
+        <div class="message success" th:if="${param.success == 'true'}">File uploaded successfully.</div>
+
+        <!-- Create the file upload form -->
+        <form method="post" action="/uploadExcel" enctype="multipart/form-data">
+            <label for="file" class="custom-file-upload">Choose File</label>
+            <input type="file" name="file" id="file" accept=".xlsx, .xls" class="file-upload" onchange="displaySelectedFile()">
+            <button type="submit" class="upload-button">Upload</button>
+            <div id="selected-file" class="selected-file"></div>
+        </form>
+    </div>
+
+    <script>
+        // JavaScript function to display selected file name
+        function displaySelectedFile() {
+            const fileInput = document.getElementById("file");
+            const selectedFileDiv = document.getElementById("selected-file");
+            
+            if (fileInput.files.length > 0) {
+                selectedFileDiv.textContent = "Selected file: " + fileInput.files[0].name;
+            } else {
+                selectedFileDiv.textContent = "";
+            }
+        }
+    </script>
+</body>
+</html>

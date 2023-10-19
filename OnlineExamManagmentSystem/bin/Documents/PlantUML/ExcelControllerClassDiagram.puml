@@ -1,0 +1,30 @@
+@startuml
+class User [[java:edu.sru.thangiah.model.User]] {
+	-id: Long
+	-firstName: String
+	-lastName: String
+	-email: String
+	-password: String
+	-username: String
+	-role: Role
+	-verificationCode: String
+	+User(id: Long, firstName: String, lastName: String, email: String, password: String, username: String, role: Role, verificationCode: String)
+	+User()
+	+getId(): Long
+	+setId(id: Long): void
+	+getFirstName(): String
+	+setFirstName(firstName: String): void
+	+getLastName(): String
+	+setLastName(lastName: String): void
+	+getEmail(): String
+	+setEmail(email: String): void
+	+getPassword(): String
+	+setPassword(password: String): void
+	+getUsername(): String
+	+setUsername(username: String): void
+	+getRole(): Role
+	+setRole(role: Role): void
+	+getVerificationCode(): String
+	+setVerificationCode(verificationCode: String): void
+}
+@enduml

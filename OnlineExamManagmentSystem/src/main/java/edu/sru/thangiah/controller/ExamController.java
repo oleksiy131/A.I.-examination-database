@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import edu.sru.thangiah.domain.Exam;
+import edu.sru.thangiah.domain.ExamDetails;
 import edu.sru.thangiah.domain.ExamQuestion;
 import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.ExamSubmission;
@@ -32,7 +35,10 @@ import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.ExamRepository;
 import edu.sru.thangiah.repository.ExamSubmissionRepository;
 import edu.sru.thangiah.repository.UserRepository;
+import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.service.ExamService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 /*
  *____  __    __        _ _ 
@@ -51,6 +57,9 @@ public class ExamController {
     private ExamService examService;
     
     @Autowired
+    private ExamQuestionService examQuestionService;
+    
+    @Autowired
     private UserRepository userRepository;
     
     @Autowired
@@ -62,6 +71,8 @@ public class ExamController {
     public ExamController(ExamService examService) {
         this.examService = examService;
     }
+    
+    
 
 
     @GetMapping("/{id}")
@@ -220,8 +231,33 @@ public class ExamController {
         }
     }
     
+    @PostMapping("/exam/generate")
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, RedirectAttributes redirectAttributes) {
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+
+        // Fetch selected questions from the database
+        List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
+            .map(examQuestionService::getExamQuestionById)
+            .collect(Collectors.toList());
+
+        // Create a new exam and set its properties
+        Exam exam = new Exam();
+        exam.setExamName(examDetails.getExamName());
+        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setQuestions(selectedQuestions);
+
+     // Save the exam to the database
+        Exam savedExam = examRepository.save(exam);
+
+        // Add the generated exam's ID as a flash attribute. This makes it available after the redirect.
+        redirectAttributes.addFlashAttribute("generatedExamId", savedExam.getId());
+
+        // Redirect to the GET request handler which displays the form. Replace 'viewName' with the actual view name or path.
+        return "redirect:/instructor/exam-questions";
+    }
 
 
+    
     // This method generates the exam and displays it to the user
     @RequestMapping("/generateExam/{chapter}")
     public String generateExam(Model model, @PathVariable("chapter") int chapter) {
@@ -229,6 +265,7 @@ public class ExamController {
         model.addAttribute("questions", questions);
         return "exam";
     }
+    
     
     @GetMapping("/pickExam/{chapter}")
     public String pickExam(@PathVariable int chapter, Model model) {

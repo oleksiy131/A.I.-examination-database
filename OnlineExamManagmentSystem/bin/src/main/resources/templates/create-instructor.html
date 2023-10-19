@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Instructor</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+		.home {
+		    display: flex;
+		    justify-content: center;
+		    align-items: center; 
+		    height: 100%; 
+		}
+		
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px;
+        }
+        
+        h4{
+			text-align: center;
+		}
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            margin: 20px auto;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+    </style>
+   	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+
+</head>
+
+<body>
+	
+    <h2>Create Instructor</h2>
+    <!-- Home button -->
+        <div class="home">
+            <a href="/navbar">
+            <i class="fas fa-home"></i> 
+        </a>
+        </div>
+        <br>
+    <form action="/schedule-manager/instructor/add" method="post">
+        <label for="id">ID:</label>
+        <input type="text" id="id" name="instructorId" required>
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="instructorFirstName" required>
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="instructorLastName" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="instructorEmail" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="instructorPassword" required>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="instructorUsername" required>
+
+        <label for="creditsTaught">Credits Taught:</label>
+        <input type="number" id="creditsTaught" name="creditsTaught" step="1.0" required>
+
+        <input type="submit" value="Create Instructor">
+    </form>
+    
+</body>
+</html>
