@@ -21,7 +21,8 @@
 </head>
 <body>
     <h1>Select Exam Questions for Exam</h1>
-    
+
+	
     <!-- Display the generated exam link if the 'generatedExamId' attribute is present -->
     <div th:if="${generatedExamId != null}">
         <p>Generated Exam Link: 
@@ -30,11 +31,10 @@
                target="_blank">Exam Link</a>
         </p>
         <p>Please copy the above link to share.</p>
-        
         <!-- Hyperlink to navigate back to the exam questions page -->
         <a href="/instructor/exam-questions">Back to Exam Questions Selection</a>
     </div>
-    
+
     <form th:action="@{/instructor/exam/generate}" method="post">
         <div class="question-list">
             <!-- Iterate through exam questions and create checkboxes -->

@@ -37,6 +37,8 @@ import edu.sru.thangiah.repository.ExamSubmissionRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.service.ExamService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 /*
  *____  __    __        _ _ 
@@ -69,6 +71,8 @@ public class ExamController {
     public ExamController(ExamService examService) {
         this.examService = examService;
     }
+    
+    
 
 
     @GetMapping("/{id}")
@@ -228,7 +232,7 @@ public class ExamController {
     }
     
     @PostMapping("/exam/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, RedirectAttributes redirectAttributes) {
         List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
 
         // Fetch selected questions from the database
@@ -242,20 +246,18 @@ public class ExamController {
         exam.setDurationInMinutes(examDetails.getExamDuration());
         exam.setQuestions(selectedQuestions);
 
-        // Save the exam to the database
+     // Save the exam to the database
         Exam savedExam = examRepository.save(exam);
 
-        // Add the generated exam's ID to the model
-        model.addAttribute("generatedExamId", savedExam.getId());
+        // Add the generated exam's ID as a flash attribute. This makes it available after the redirect.
+        redirectAttributes.addFlashAttribute("generatedExamId", savedExam.getId());
 
-        // Also, add the exam questions to the model again as they were before
-        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
-        model.addAttribute("examQuestions", examQuestions);
-
-        return "selectExamQuestions"; 
+        // Redirect to the GET request handler which displays the form. Replace 'viewName' with the actual view name or path.
+        return "redirect:/instructor/exam-questions";
     }
 
 
+    
     // This method generates the exam and displays it to the user
     @RequestMapping("/generateExam/{chapter}")
     public String generateExam(Model model, @PathVariable("chapter") int chapter) {
@@ -263,6 +265,7 @@ public class ExamController {
         model.addAttribute("questions", questions);
         return "exam";
     }
+    
     
     @GetMapping("/pickExam/{chapter}")
     public String pickExam(@PathVariable int chapter, Model model) {
