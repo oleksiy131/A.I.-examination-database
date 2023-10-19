@@ -247,5 +247,3 @@ B.	processing.
 C.	storing.
 D.	organizing.
 Ans: B
-
-
