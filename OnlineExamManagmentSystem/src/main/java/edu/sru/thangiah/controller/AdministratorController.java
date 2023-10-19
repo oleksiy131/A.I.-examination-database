@@ -195,6 +195,11 @@ public class AdministratorController {
 	public String uploadSuccess() {
 		return "upload-success"; // This corresponds to the name of your HTML file
 	}
+	
+	@GetMapping("/upload-fail")
+	public String uploadFail() {
+		return "upload-fail"; // This corresponds to the name of your HTML file
+	}
 
 	@GetMapping("/students")
 	public String showStudentList(Model model) {
