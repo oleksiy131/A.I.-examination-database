@@ -1,0 +1,32 @@
+@startuml
+title AI Exam Generation Bot
+
+participant "User" as User
+participant "CustomBotController" as CBC
+participant "RestTemplate" as RT
+participant "ExcelGeneratorService" as EGS
+participant "ChatGptResponse" as CGR
+
+User -> CBC : chooseTopic()
+CBC --> User : return ModelAndView("topic-choose")
+User -> CBC : setTopic(topic)
+CBC --> User : return ModelAndView("confirm-topic")
+User -> CBC : getQuiz()
+
+alt [Topic not set]
+    CBC -> User : throw IllegalArgumentException("Topic not set")
+else
+    loop 10 times
+        CBC -> CBC : generateQuestion(currentTopic)
+        CBC -> RT : postForObject(apiURL, request, ChatGptResponse.class)
+        RT --> CBC : Return question and choices
+    end
+end
+
+CBC --> User : return ModelAndView("quiz")
+User -> CBC : downloadQuiz()
+CBC -> EGS : generateExcel(quizData)
+EGS --> CBC : Return excelData
+CBC --> User : return ResponseEntity<byte[]>(excelData)
+
+@enduml
