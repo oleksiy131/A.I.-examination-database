@@ -21,7 +21,7 @@
         }
 
         h1 {
-            color: #009688;
+            color: #ec0000;
         }
 
         p {
@@ -31,17 +31,17 @@
 
         .success-icon {
             font-size: 60px;
-            color: #009688;
+            color: #ff0000;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <i class="fas fa-check-circle success-icon"></i>
-        <h1>Upload Successful</h1>
+        <h1>This Instructor does not exist.</h1>
+        <h2>Please contact your Schedule Manager to create this Instructor.</h2>
+        <h4><a th:href="@{/instructor/instructor_homepage}">Click here to return to Home Screen</a></h4>
         <p></p>
     </div>
-         <h4><a th:href="@{/schedule-manager/schedule_manager_homepage}">Click here to return to Home Screen</a></h4>
-    
 </body>
 </html>

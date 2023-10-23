@@ -6,13 +6,6 @@
     
 </head>
 
-<script>
-$(function(){
-  $("#nav-placeholder").load("/instructor/instructor_homepage");
-});
-</script>
-
-
 <body>
     <!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
@@ -26,17 +19,19 @@ $(function(){
         <div class="dropdown-nav">
             <button class="dropbutton">Management</button>
             <div class="dropdown-info">
-                <a href="/class-import">Load a Class</a>
+                <a href="/instructor/iv-class-import">Load a Class</a>
                 <a href="#">Classes</a>
-                <a href="/exams">Chapters</a>
-                <a href="/classes">Exams</a>
             </div>
         </div>
         <!-- Exam button -->
         <div class="dropdown-nav">
             <button class="dropbutton">Exam Generation</button>
             <div class="dropdown-info">
-                <a href="/bot/choose-topic">Generate Exam</a>
+                <a href="/bot/choose-topic">A.I. Exam Generation</a>
+ 				<a href="/instructor/exam/select-questions">Select Questions For Exam</a>
+ 				<a href="/instructor/exam-questions">Edit Exam Questions</a>
+ 				
+                
             </div>
         </div>
         <!-- Grading button -->
@@ -64,23 +59,20 @@ $(function(){
                 <a href="/instructor/list-smIV">View All Schedule Managers</a>
                 <a href="/instructor/iv-create-student">Add Students</a>
                 <a href="/instructor/associateIV">Assign Students</a>
-                <a href="/instructor/exportStudentIV">Export To Excel</a>
-                <a href="/instructor/uploadExcelIV">Import with Excel</a>
-                <a href="#">View all Administrators</a>
+
             </div>
         </div>
         <!-- Search Options -->
         <div class="dropdown-nav">
             <button class="dropbutton">Search Options</button>
             <div class="dropdown-info">
-                <a href="sidepanel.html">View Details</a>
+                <a href="#">View Details</a>
             </div>
         </div>
         <div class="profile-nav">
             <!-- Account options -->
             <button class="dropbutton">Account</button>
             <div class="dropdown-info">
-                <a href="#">Change Password</a>
                 <a href="/logout">Logout</a>
             </div>
         </div>

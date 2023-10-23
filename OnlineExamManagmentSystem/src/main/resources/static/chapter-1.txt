@@ -247,30 +247,3 @@ B.	processing.
 C.	storing.
 D.	organizing.
 Ans: B
-
-
-
-Abbreviation
-
-1. GUI
-Ans: Graphical User Interface
-
-2. IT
-Ans: Information Technology
-
-3. CPU
-Ans: Central Processing Unit
-
-4. OS
-Ans: Operating System
-
-5. KB
-Ans: KiloByte
-
-6. GB
-Ans: GigaByte
-
-9. AI
-Ans: Artificial Intelligence
-
-
