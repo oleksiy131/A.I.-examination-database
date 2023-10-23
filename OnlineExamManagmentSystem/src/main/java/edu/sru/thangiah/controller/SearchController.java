@@ -7,13 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import edu.sru.thangiah.domain.Student;
-import edu.sru.thangiah.repository.StudentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.StudentRepository;
 
@@ -49,9 +43,9 @@ public class SearchController {
             List<Student> students = studentRepository.findBystudentUsernameContaining(searchParam);
             model.addAttribute("students", students);
         } else {
-            model.addAttribute("students", List.of()); // Invalid search type
+            model.addAttribute("students", List.of()); 
         }
 
-        return "student-list"; // Return to the student list page with search results
+        return "student-list"; 
     }
 }
