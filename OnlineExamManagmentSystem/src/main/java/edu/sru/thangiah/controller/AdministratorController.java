@@ -413,5 +413,51 @@ public class AdministratorController {
 			// Handle the exception (e.g., log it)
 		}
 	}
+	
+	@GetMapping("/av-edit-instructor/{id}")
+	public String showUpdateFormInstructorAV(@PathVariable("id") long id, Model model) {
+	    Instructor instructor = instructorRepository.findById(id)
+	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
+	    
+	    model.addAttribute("instructor", instructor);
+	    return "av-edit-instructor"; 
+	}
+	
+	@GetMapping("/instructor/delete/{id}")
+	public String deleteInstructorAV(@PathVariable("id") long id, Model model) {
+	    Instructor instructor = instructorRepository.findById(id)
+	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
+	    instructorRepository.delete(instructor);
+	    return "av-instructor-edit-confirmation";
+	}
+
+
+	@PostMapping("/av-edit-instructor/{id}")
+	public String updateInstructorAV(@PathVariable("id") long id, @Validated Instructor instructor, 
+	  BindingResult result, Model model) {
+	    if (result.hasErrors()) {
+	        instructor.setInstructorId(id); 
+	        return "av-edit-instructor";
+	    }
+	    
+	    // Debugging: Print the received instructor data
+	    System.out.println("Received Instructor Data:");
+	    System.out.println("ID: " + instructor.getInstructorId());
+	    System.out.println("First Name: " + instructor.getInstructorFirstName());
+	    System.out.println("Last Name: " + instructor.getInstructorLastName());
+	    System.out.println("Email: " + instructor.getInstructorEmail());
+	    System.out.println("Path Variable ID: " + id);
+	    
+	    instructorRepository.save(instructor);
+	    return "av-instructor-edit-confirmation"; 
+	}
+
+	
+	@GetMapping("/list-instructors-av")
+	public String showInstructorsAV(Model model) {
+        List<Instructor> instructors = instructorRepository.findAll();
+        model.addAttribute("instructors", instructors);
+        return "av-instructor-list";
+    }
 
 }
