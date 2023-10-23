@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Instructor List</title>
-        <style>
+    <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -18,7 +18,7 @@
             text-align: center;
             background-color: #007055;
             color: #fff;
-            padding: 20px;
+            padding: 5px;
             margin: 0;
         }
 
@@ -44,10 +44,30 @@
         tr:hover {
             background-color: #f5f5f5;
         }
+         h4{
+			text-align: center;
+		}
     </style>
+    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
 </head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
+});
+</script>
+
 <body>
+	<br>
+	
     <h1>Instructor List</h1>
+       
     <table>
         <thead>
             <tr>
@@ -57,6 +77,9 @@
                 <th>Email</th>
                 <th>Username</th>
                 <th>Credits Taught</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -68,6 +91,10 @@
                 <td th:text="${instructor.instructorEmail}"></td>
                 <td th:text="${instructor.instructorUsername}"></td>
                 <td th:text="${instructor.creditsTaught}"></td>
+                <td><a th:href="@{/schedule-manager/smv-edit-instructor/{id}(id=${instructor.instructorId})}">Edit</a></td>
+                <td>
+                <a class="delete-link" th:href="@{/schedule-manager/instructor/delete/{id}(id=${instructor.instructorId})}" onclick="return confirm('Are you sure?')">Delete</a>
+        		</td>
             </tr>
         </tbody>
     </table>
