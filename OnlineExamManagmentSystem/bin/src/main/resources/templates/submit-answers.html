@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Results</title>
+    <!-- Add any additional CSS or JavaScript references here -->
+</head>
+<body>
+    <h1>Exam Results</h1>
+
+    <h2>Your Score: <span th:text="${score}"></span></h2>
+
+    <h3>Correct Answers:</h3>
+    <ul th:if="${correctAnswers.size() > 0}">
+        <li th:each="answer : ${correctAnswers}" th:text="${answer}"></li>
+    </ul>
+    <p th:if="${correctAnswers.size() == 0}">No correct answers.</p>
+
+    <!-- Inside  results display page -->
+	<h3>Incorrect Answers:</h3>
+	<ul th:if="${incorrectAnswersWithCorrections.size() > 0}">
+    <li th:each="entry : ${incorrectAnswersWithCorrections.entrySet()}" th:text="${entry.key + ' - Correct Answer: ' + entry.value}"></li>
+	</ul>
+	<p th:if="${incorrectAnswersWithCorrections.size() == 0}">No incorrect answers.</p>
+
+    
+    
+
+    <a href="/navbar">Return to homepage</a> 
+</body>
+</html>

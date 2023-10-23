@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to The Examination Software</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div class="navbar">
+        <!-- Students Section -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Students</button>
+            <div class="dropdown-info">
+                <a href="/students_list">View all Students</a>
+            </div>
+        </div>
+        
+        <!-- Instructors Section -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Instructors</button>
+            <div class="dropdown-info">
+                <a href="/list-instructors-av">View all Instructors</a>
+            </div>
+        </div>
+
+        <!-- Schedule Managers Section -->
+        <div class="dropdown-nav">
+            <button class="dropbutton">Schedule Managers</button>
+            <div class="dropdown-info">
+                <a href="/list-sm">View all ScheduleManagers</a>
+                <a href="/av-register">Create a ScheduleManager</a>
+            </div>
+        </div>
+
+        <!-- Account Section -->
+        <div class="profile-nav">
+            <button class="dropbutton">Account</button>
+            <div class="dropdown-info">
+                <form action="/logout" method="post">
+                    <button type="submit" style="width: 100%; text-align: left;">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

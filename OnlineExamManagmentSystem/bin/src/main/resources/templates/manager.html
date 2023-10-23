@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Manager</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    
+</head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
+});
+</script>
+
+<h1 align="center">Schedule Manager Control Panel</h1>
+
+<!-- Display success or failure messages -->
+<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+<div th:if="${failureMessage}" class="alert alert-danger" th:text="${failureMessage}"></div>
+
+<!-- All Instructors -->
+<h2>Show all Instructors</h2>
+
+<!-- Link -->
+<a href="instructor-list">
+    <button>Show Instructors</button>
+</a>
+
+<!-- Add a new Instructor -->
+<h2>Add New Instructor</h2>
+
+<!-- Link to Add Instructor page -->
+<a href="/schedule-manager/create-instructors">
+    <button>Add Instructor</button>
+</a>
+
+<!-- Add a new Course -->
+<h2>Add New Course</h2>
+
+<!-- Link to Add Course page -->
+<a href="/schedule-manager/add-courseSM">
+    <button>Add Course</button>
+</a>
+
+<h2>Assign Instructor To Course</h2>
+
+<!-- Link  -->
+<a href="/schedule-manager/associateSM">
+    <button>Associate Instructor</button>
+</a>
+
+<!-- Edit Instructor -->
+<h2>Edit Instructor</h2>
+
+<!-- Link  -->
+<a href="/edit-instructor">
+    <button>Edit Instructor Info</button>
+</a>
+
+
+<h2>Delete Instructor</h2>
+<form action="#" th:action="@{/schedule-manager/instructor/delete}" method="post">
+    <div class="form-group">
+        <label for="selectInstructorDelete">Select Instructor to Delete: (Please refresh the page before you do)</label>
+        <select id="selectInstructorDelete" name="instructorId" required>
+            <option value="" selected disabled>Choose an instructor</option>
+            <option th:each="instructor : ${instructors}" 
+                    th:value="${instructor.instructorId}" 
+                    th:text="${instructor.instructorFirstName} + ' ' + ${instructor.instructorLastName}"></option>
+        </select>
+    </div>
+    <button type="submit">Delete Instructor</button>
+</form>
+
+</body>
+</html>

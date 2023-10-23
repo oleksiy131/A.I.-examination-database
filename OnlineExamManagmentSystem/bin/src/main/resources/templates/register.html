@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Manager Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+        }
+        h4{
+			text-align: center;
+		}
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        select {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        select {
+            height: 36px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+	
+    <div class="container">
+		<h4><a th:href="@{/navbar}">Click here to return to Home Screen</a></h4>
+	<br>
+        <h1>Schedule Mangager Registration</h1>
+        <form action="/register" method="post">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="managerFirstName" required>
+
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="managerLastName" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="managerEmail" required>
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="managerUsername" required>
+            
+			<label for="password">Password:</label>
+            <input type="password" id="password" name="managerPassword" required>
+            
+            <input type="submit" value="Register">
+        </form>
+    </div>
+</body>
+</html>

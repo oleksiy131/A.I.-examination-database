@@ -1,0 +1,20 @@
+@startuml
+
+participant "User" as User
+participant "ExcelExportController" as EEC
+participant "StudentRepository" as SR
+participant "ExcelExportService" as EES
+participant "File" as File
+
+User -> EEC : GET /export/students
+EEC -> SR : Retrieve student records
+SR --> EEC : Student records
+EEC -> EES : Export student data
+EES -> File : Check if Excel file exists
+File --> EES : File exists?
+EES -> File : Update or create Excel file
+File --> EES : Export success/failure
+EES --> EEC : Export success/failure
+EEC --> User : Response message
+
+@enduml

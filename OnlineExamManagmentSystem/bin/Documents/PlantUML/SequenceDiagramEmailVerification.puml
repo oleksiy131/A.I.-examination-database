@@ -1,0 +1,24 @@
+@startuml
+!define ADMIN_CONTROLLER class AdministratorController [[java:edu.sru.thangiah.controller.AdministratorController]]
+!define EMAIL_SERVICE class EmailService [[java:edu.sru.thangiah.service.EmailService]]
+!define USER class User [[java:edu.sru.thangiah.model.User]]
+
+actor UserActor
+UserActor -> AdminCtrl: Register User
+activate AdminCtrl
+AdminCtrl -> UserObj: Create User
+activate UserObj
+AdminCtrl --> UserObj: User created
+AdminCtrl -> EmailSvc: Send Verification Email
+activate EmailSvc
+AdminCtrl --> EmailSvc: User
+AdminCtrl --> EmailSvc: Subject
+AdminCtrl --> EmailSvc: Message
+AdminCtrl -> EmailSvc: sendEmail(recipientEmail, subject, message)
+EmailSvc --> UserObj: Email sent
+deactivate EmailSvc
+AdminCtrl --> UserActor: Registration complete
+deactivate UserActor
+deactivate AdminCtrl
+deactivate UserObj
+@enduml
