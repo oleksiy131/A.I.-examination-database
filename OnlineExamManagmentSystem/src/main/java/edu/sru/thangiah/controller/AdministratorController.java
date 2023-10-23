@@ -428,7 +428,7 @@ public class AdministratorController {
 	    return "av-edit-instructor"; 
 	}
 	
-	@GetMapping("/instructor/delete/{id}")
+	@PostMapping("/instructor/delete/{id}")
 	public String deleteInstructorAV(@PathVariable("id") long id, Model model) {
 	    Instructor instructor = instructorRepository.findById(id)
 	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
