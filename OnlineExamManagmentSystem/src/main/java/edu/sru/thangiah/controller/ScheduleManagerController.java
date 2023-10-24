@@ -45,14 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-
-/*____  __    __        _ _ 
- / __ \/ /__ / /__ ___ (_|_)
-/ /_/ / / -_)  '_/(_-</ / / 
-\____/_/\__/_/\_\/___/_/_/  
-                        
- */
-
 @Controller
 @RequestMapping("/schedule-manager")
 public class ScheduleManagerController {
@@ -548,7 +540,11 @@ public class ScheduleManagerController {
     public String deleteStudentSMV(@PathVariable("id") long id, Model model) {
         Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        //you will need to also remove the student from their courses or its going to delete all the students associated with that course
+        
         studentRepository.delete(student);
+        
         return "smv-edit-confirmation";
     }
 	
@@ -722,7 +718,10 @@ public class ScheduleManagerController {
 	
 	 @PostMapping("/smv-upload")
 	    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
-	        if (file.isEmpty()) {
+	     
+		 boolean instructorCreated = false;
+		 
+		 if (file.isEmpty()) {
 	        	
 	            return "redirect:/schedule-manager/smv-import?error=emptyfile";
 	        }
@@ -733,6 +732,7 @@ public class ScheduleManagerController {
 	            Sheet sheet = workbook.getSheetAt(0);
 	            String courseNameFull = sheet.getRow(4).getCell(0).getStringCellValue();
 	            String instructorNameFull = sheet.getRow(2).getCell(0).getStringCellValue();
+	            String instructorEmailFull = sheet.getRow(1).getCell(0).getStringCellValue();
 	            String instructorIdString = sheet.getRow(3).getCell(0).getStringCellValue();
 	            String courseIdString = sheet.getRow(5).getCell(0).getStringCellValue();
 	            
@@ -763,6 +763,10 @@ public class ScheduleManagerController {
 	            //converting instructorId
 	            String instructorIdshort = removeBeforeColon(instructorIdString);
 	            long instructorId = Long.parseLong(instructorIdshort);
+	            
+	          //getting email for instructor
+	            String instructorEmail = removeBeforeColon(instructorEmailFull);
+	            String instructorUsername = parseEmail(instructorEmail);
 
 	            System.out.println(instructorId);
 	            System.out.println(InsFirstName);
@@ -773,13 +777,50 @@ public class ScheduleManagerController {
 	            Optional<Instructor> existingInstructor = instructorRepository.findById(instructorId);
 	            if (!existingInstructor.isPresent()) {
 
-	            	return "redirect:/schedule-manager/smv-upload-fail";
+	            	instructor.setInstructorId(instructorId);
+	            	instructor.setInstructorFirstName(InsFirstName);
+	            	instructor.setInstructorLastName(InsLastName);
+	            	instructor.setInstructorEmail(instructorEmail);
+	            	instructor.setInstructorUsername(instructorUsername);
+                    String hashedPassword = passwordEncoder.encode("instructor");
+                    instructor.setInstructorPassword(hashedPassword);
+                    
+	            	instructorRepository.save(instructor);
+	            	
+	            	instructorCreated = true;
+	            	
+	            	Roles roles = roleRepository.findById(3L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+            		List<Roles> rolesList = new ArrayList<>();
+            		rolesList.add(roles);
+            		instructor.setRoles(rolesList);
+	            	
+	            	Optional<User> existingUser = userRepository.findById(instructor.getInstructorId());
+                    if (!existingUser.isPresent()) {
+	                    User user = new User();
+	                    user.setEmail(instructor.getInstructorEmail());
+	                    user.setFirstName(instructor.getInstructorFirstName());
+	                    user.setLastName(instructor.getInstructorLastName());
+	                    user.setUsername(instructor.getInstructorUsername());
+	                    user.setPassword(hashedPassword);
+	                    user.setEnabled(true);
+	                    rolesList.add(roles);
+	            		user.setRoles(rolesList);
+	                    userRepository.save(user);
+                    }
+                    else {
+                    	System.out.println("Console LOG: User Id is already present in the database");
+                    }   
+	            	
+	            	course.setInstructor(instructor);
+	            	courseRepository.save(course);
+	            
 	            } else {
 	                // Associate instructor with the course
 	            	instructor = existingInstructor.get();
 	            	course.setInstructor(instructor);
 	            	courseRepository.save(course);
 	            }
+
 	            
 	            //this section adds the students id's, names, emails, generates usernames and default password
 	            
@@ -836,8 +877,8 @@ public class ScheduleManagerController {
 	                        studentRepository.save(student);
 
 	                        // Associate the student with the course
-	                        student.getCourses().add(course);
-	                        studentRepository.save(student);
+	                        //student.getCourses().add(course);
+	                        //studentRepository.save(student);
 	                    } else {
 	                        System.out.println("Console LOG: Student Id is already present in the database");
 	                    }
@@ -861,8 +902,12 @@ public class ScheduleManagerController {
 	                    
 	                }
 
+	                if (instructorCreated != true) {
 	                return "redirect:/schedule-manager/smv-upload-success";
-
+	                }
+	                else
+	                {
+	                	return "redirect:/schedule-manager/smv-upload-fail";	                }
 	            } catch (Exception e) {
 	                e.printStackTrace();
 	                return "redirect:/error";
@@ -900,4 +945,3 @@ public class ScheduleManagerController {
 	        }
 	    }
 }
-
