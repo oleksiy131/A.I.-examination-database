@@ -60,16 +60,24 @@
         .search-container button {
             margin: 5px;
         }
+
     </style>
+    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
 </head>
 
 <script>
 $(function(){
   $("#nav-placeholder").load("/instructor/instructor_homepage");
-});
-</script>
+
+<div id="nav-placeholder">
+
+</div>
 
 <body>
+	<br>
+	
     <h1>Instructor List</h1>
     
     <!-- Search form -->
@@ -86,6 +94,7 @@ $(function(){
         </form>
     </div>
     
+       
     <table>
         <thead>
             <tr>
@@ -95,6 +104,9 @@ $(function(){
                 <th>Email</th>
                 <th>Username</th>
                 <th>Credits Taught</th>
+                <th>Edit</th>
+                <th>Delete</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -106,6 +118,10 @@ $(function(){
                 <td th:text="${instructor.instructorEmail}"></td>
                 <td th:text="${instructor.instructorUsername}"></td>
                 <td th:text="${instructor.creditsTaught}"></td>
+                <td><a th:href="@{/schedule-manager/smv-edit-instructor/{id}(id=${instructor.instructorId})}">Edit</a></td>
+                <td>
+                <a class="delete-link" th:href="@{/schedule-manager/instructor/delete/{id}(id=${instructor.instructorId})}" onclick="return confirm('Are you sure?')">Delete</a>
+        		</td>
             </tr>
         </tbody>
     </table>

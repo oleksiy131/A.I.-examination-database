@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to The Examination Software</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="navbar">
+    <!-- Home button -->
+        <div class="dropdown-nav">
+            <a th:href="@{/admin_homepage}" class="dropbutton">
+            <i class="fas fa-home"></i> 
+        </a>
+        </div>
         <!-- Students Section -->
         <div class="dropdown-nav">
             <button class="dropbutton">Students</button>
@@ -29,7 +35,7 @@
         <div class="dropdown-nav">
             <button class="dropbutton">Schedule Managers</button>
             <div class="dropdown-info">
-                <a href="/list-sm">View all ScheduleManagers</a>
+                <a href="/list-schedule-managers-av">View all ScheduleManagers</a>
                 <a href="/av-register">Create a ScheduleManager</a>
             </div>
         </div>
@@ -38,9 +44,7 @@
         <div class="profile-nav">
             <button class="dropbutton">Account</button>
             <div class="dropdown-info">
-                <form action="/logout" method="post">
-                    <button type="submit" style="width: 100%; text-align: left;">Logout</button>
-                </form>
+                <a href="/logout">Logout</a>
             </div>
         </div>
     </div>

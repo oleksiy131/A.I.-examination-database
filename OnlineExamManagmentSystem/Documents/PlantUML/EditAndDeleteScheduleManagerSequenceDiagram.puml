@@ -1,0 +1,39 @@
+@startuml
+participant User
+participant Browser
+participant Controller
+participant SMRepo
+participant Model
+
+User -> Browser : Enter URL
+Browser -> Controller : HTTP GET /manager/delete/{id}
+Controller -> SMRepo : findById(id)
+SMRepo -> Controller : Return ScheduleManager
+Controller -> SMRepo : delete(scheduleManager)
+Controller -> Browser : Return View: av-schedule-manager-edit-confirmation
+
+User -> Browser : Navigate to Update Form
+Browser -> Controller : HTTP GET /av-edit-schedule-manager/{id}
+Controller -> SMRepo : findById(id)
+SMRepo -> Controller : Return ScheduleManager
+Controller -> Model : addAttribute("scheduleManager", scheduleManager)
+Controller -> Browser : Return View: av-edit-schedule-manager
+
+User -> Browser : Submit Update Form
+Browser -> Controller : HTTP POST /av-edit-schedule-manager/{id}
+alt Validation Error
+    Controller -> Model : addAttribute("errors", validationErrors)
+    Controller -> Browser : Return View: av-edit-schedule-manager
+else Validation Success
+    Controller -> SMRepo : save(manager)
+    Controller -> Browser : Return View: av-schedule-manager-edit-confirmation
+end
+
+User -> Browser : View List of Schedule Managers
+Browser -> Controller : HTTP GET /list-schedule-managers-av
+Controller -> SMRepo : findAll()
+SMRepo -> Controller : Return List<ScheduleManager>
+Controller -> Model : addAttribute("scheduleManager", scheduleManager)
+Controller -> Browser : Return View: av-schedule-manager-list
+
+@enduml

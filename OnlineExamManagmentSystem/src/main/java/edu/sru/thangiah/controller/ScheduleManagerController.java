@@ -45,14 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-
-/*____  __    __        _ _ 
- / __ \/ /__ / /__ ___ (_|_)
-/ /_/ / / -_)  '_/(_-</ / / 
-\____/_/\__/_/\_\/___/_/_/  
-                        
- */
-
 @Controller
 @RequestMapping("/schedule-manager")
 public class ScheduleManagerController {
@@ -84,18 +76,18 @@ public class ScheduleManagerController {
 	}
 
     
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+
     @GetMapping("/add-course")
     public String showCreateCourseForm() {
         return "add-course"; 
     }
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+
     @GetMapping("/add-courseSM")
     public String showCreateCourseFormSMV() {
         return "smv-add-course"; 
     }
     
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+
     @GetMapping("/instructor-list")
     public String showInstructorList(Model model) {
         List<Instructor> instructors = instructorRepository.findAll();
@@ -103,7 +95,7 @@ public class ScheduleManagerController {
         return "instructor-list";
     }
     
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
+
     @GetMapping("/create-instructor")
     public String showCreateInstructorForm() {
         return "create-instructor"; 
@@ -234,19 +226,13 @@ public class ScheduleManagerController {
 	 */
 
     
-    @GetMapping("/edit-instructor")
-    public String editInstructorForm(Model model, @RequestParam(required = false) Long instructorId) {
-        List<Instructor> instructors = instructorRepository.findAll();
-        model.addAttribute("instructors", instructors);
-
-        if (instructorId != null) {
-            Optional<Instructor> selectedInstructor = instructorRepository.findById(instructorId);
-            if (selectedInstructor.isPresent()) {
-                model.addAttribute("selectedInstructor", selectedInstructor.get());
-            }
-        }
-
-        return "edit-instructor"; 
+    @GetMapping("/iv-edit-student/{id}")
+    public String showUpdateFormIV(@PathVariable("id") long id, Model model) {
+		Student student = studentRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        model.addAttribute("student", student);
+        return "iv-edit-student";
     }
 
     
@@ -257,6 +243,8 @@ public class ScheduleManagerController {
         model.addAttribute("instructors", instructors);
         return "manager"; 
     }
+    
+    
 	/*
 	 * // Load/Create Instructor
 	 * 
@@ -393,7 +381,6 @@ public class ScheduleManagerController {
     
     
     // Load/Create Course
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/course/add")
     public ResponseEntity<?> addCourse(@ModelAttribute Course course){
         try {
@@ -405,7 +392,6 @@ public class ScheduleManagerController {
     }
 
     // Assign instructor to course
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/course/assign-instructor")
     public ResponseEntity<?> assignInstructorToCourse(
         @RequestParam Long courseId, 
@@ -427,77 +413,47 @@ public class ScheduleManagerController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @PostMapping("/instructor/edit")
-    public String editInstructor(@ModelAttribute Instructor updatedInstructor, RedirectAttributes redirectAttributes) {
-    	System.out.println("Inside Instructor Edit");
-        try {
-            // Find the instructor in the database
-            Optional<Instructor> existingInstructorOpt = instructorRepository.findById(updatedInstructor.getInstructorId());
-
-            if (existingInstructorOpt.isPresent()) {
-                Instructor existingInstructor = existingInstructorOpt.get();
-
-                // Update the instructor details
-                existingInstructor.setInstructorFirstName(updatedInstructor.getInstructorFirstName());
-                existingInstructor.setInstructorLastName(updatedInstructor.getInstructorLastName());
-                existingInstructor.setInstructorEmail(updatedInstructor.getInstructorEmail());
-                existingInstructor.setInstructorPassword(passwordEncoder.encode(updatedInstructor.getInstructorPassword()));
-                existingInstructor.setInstructorUsername(updatedInstructor.getInstructorUsername());
-                existingInstructor.setCreditsTaught(updatedInstructor.getCreditsTaught());
-
-                instructorRepository.save(existingInstructor);
-                redirectAttributes.addFlashAttribute("successMessage", "Instructor updated successfully.");
-                return "redirect:/schedule-manager/edit-instructor";
-            } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Instructor not found.");
-                return "redirect:/schedule-manager/edit-instructor";
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("Message", "Instructor updated successfully.");
-            return "redirect:/schedule-manager/page";
+    @GetMapping("/smv-edit-instructor/{id}")
+    public String showInstructorUpdateFormSMV(@PathVariable("id") long id, Model model) {
+    	Instructor instructor = instructorRepository.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        model.addAttribute("instructor", instructor);
+        return "smv-edit-instructor";
+    }
+    
+    @PostMapping("/update/{id}")
+    public String updateInstructorSMV(@PathVariable("id") long id, @Validated Instructor instructor, 
+      BindingResult result, Model model) {
+        if (result.hasErrors()) {
+        	instructor.setInstructorId(id);
+            return "update-user";
         }
+        
+        // Debugging: Print the received student data
+        System.out.println("Received Instructor Data:");
+	    System.out.println("ID: " + instructor.getInstructorId());
+	    System.out.println("First Name: " + instructor.getInstructorFirstName());
+	    System.out.println("Last Name: " + instructor.getInstructorLastName());
+	    System.out.println("Email: " + instructor.getInstructorEmail());
+	    System.out.println("Path Variable ID: " + id);
+        
+//        student.setStudentId(id);
+//        student.setRole(student.getRole());
+//        student.setStudentPassword(student.getStudentPassword());
+	    instructorRepository.save(instructor);
+        return "smv-edit-instructor-confirmation";
     }
 
     // Delete instructor
-    @PostMapping("/instructor/delete")	//This is VERY rough but i am working on this...
-    public ResponseEntity<?> deleteInstructor(@RequestParam Long instructorId) {
-    	
-    	boolean association = false;
-    	
-        try {
-            Instructor instructor = instructorRepository.findById(instructorId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Instructor not found: " + instructorId));
-
-            // Fetch the courses associated with this instructor
-            List<Course> courses = courseRepository.findAllByInstructor(instructor);
-
-            // to prevent deletion if the instructor is associated with any courses
-            if (!courses.isEmpty()) {
-            	association = true;
-            	
-            	 //  disassociate the instructor from their courses before deletion
-                for (Course course : courses) {
-                    course.setInstructor(null);
-                    courseRepository.save(course);
-                }
-                
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                        .body("{\"success\": false, \"message\": \"WARNING: Instructor is associated with one or more courses. The association is now removed. Refresh the page to DELETE the instructor.\"}");
-                
-            }
-
-
-            instructorRepository.deleteById(instructorId);
-            return ResponseEntity.ok().body("{\"success\": true, \"message\": \"Instructor deleted successfully.\"}");
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("{\"success\": false, \"message\": \"" + e.getMessage() + "\"}");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"success\": false, \"message\": \"Failed to delete instructor.\"}");
-        }
-    }
+    @GetMapping("/instructor/delete/{id}")
+	public String deleteInstructorSMV(@PathVariable("id") long id, Model model) {
+	    Instructor instructor = instructorRepository.findById(id)
+	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
+	    instructorRepository.delete(instructor);
+	    return "smv-edit-instructor-confirmation";
+	}
+    
     
 	@GetMapping("/create-students")
 	public String showCreateStudentFormSMV() {
@@ -584,7 +540,11 @@ public class ScheduleManagerController {
     public String deleteStudentSMV(@PathVariable("id") long id, Model model) {
         Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        //you will need to also remove the student from their courses or its going to delete all the students associated with that course
+        
         studentRepository.delete(student);
+        
         return "smv-edit-confirmation";
     }
 	
@@ -758,7 +718,10 @@ public class ScheduleManagerController {
 	
 	 @PostMapping("/smv-upload")
 	    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
-	        if (file.isEmpty()) {
+	     
+		 boolean instructorCreated = false;
+		 
+		 if (file.isEmpty()) {
 	        	
 	            return "redirect:/schedule-manager/smv-import?error=emptyfile";
 	        }
@@ -769,6 +732,7 @@ public class ScheduleManagerController {
 	            Sheet sheet = workbook.getSheetAt(0);
 	            String courseNameFull = sheet.getRow(4).getCell(0).getStringCellValue();
 	            String instructorNameFull = sheet.getRow(2).getCell(0).getStringCellValue();
+	            String instructorEmailFull = sheet.getRow(1).getCell(0).getStringCellValue();
 	            String instructorIdString = sheet.getRow(3).getCell(0).getStringCellValue();
 	            String courseIdString = sheet.getRow(5).getCell(0).getStringCellValue();
 	            
@@ -799,6 +763,10 @@ public class ScheduleManagerController {
 	            //converting instructorId
 	            String instructorIdshort = removeBeforeColon(instructorIdString);
 	            long instructorId = Long.parseLong(instructorIdshort);
+	            
+	          //getting email for instructor
+	            String instructorEmail = removeBeforeColon(instructorEmailFull);
+	            String instructorUsername = parseEmail(instructorEmail);
 
 	            System.out.println(instructorId);
 	            System.out.println(InsFirstName);
@@ -809,13 +777,50 @@ public class ScheduleManagerController {
 	            Optional<Instructor> existingInstructor = instructorRepository.findById(instructorId);
 	            if (!existingInstructor.isPresent()) {
 
-	            	return "redirect:/schedule-manager/smv-upload-fail";
+	            	instructor.setInstructorId(instructorId);
+	            	instructor.setInstructorFirstName(InsFirstName);
+	            	instructor.setInstructorLastName(InsLastName);
+	            	instructor.setInstructorEmail(instructorEmail);
+	            	instructor.setInstructorUsername(instructorUsername);
+                    String hashedPassword = passwordEncoder.encode("instructor");
+                    instructor.setInstructorPassword(hashedPassword);
+                    
+	            	instructorRepository.save(instructor);
+	            	
+	            	instructorCreated = true;
+	            	
+	            	Roles roles = roleRepository.findById(3L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+            		List<Roles> rolesList = new ArrayList<>();
+            		rolesList.add(roles);
+            		instructor.setRoles(rolesList);
+	            	
+	            	Optional<User> existingUser = userRepository.findById(instructor.getInstructorId());
+                    if (!existingUser.isPresent()) {
+	                    User user = new User();
+	                    user.setEmail(instructor.getInstructorEmail());
+	                    user.setFirstName(instructor.getInstructorFirstName());
+	                    user.setLastName(instructor.getInstructorLastName());
+	                    user.setUsername(instructor.getInstructorUsername());
+	                    user.setPassword(hashedPassword);
+	                    user.setEnabled(true);
+	                    rolesList.add(roles);
+	            		user.setRoles(rolesList);
+	                    userRepository.save(user);
+                    }
+                    else {
+                    	System.out.println("Console LOG: User Id is already present in the database");
+                    }   
+	            	
+	            	course.setInstructor(instructor);
+	            	courseRepository.save(course);
+	            
 	            } else {
 	                // Associate instructor with the course
 	            	instructor = existingInstructor.get();
 	            	course.setInstructor(instructor);
 	            	courseRepository.save(course);
 	            }
+
 	            
 	            //this section adds the students id's, names, emails, generates usernames and default password
 	            
@@ -872,8 +877,8 @@ public class ScheduleManagerController {
 	                        studentRepository.save(student);
 
 	                        // Associate the student with the course
-	                        student.getCourses().add(course);
-	                        studentRepository.save(student);
+	                        //student.getCourses().add(course);
+	                        //studentRepository.save(student);
 	                    } else {
 	                        System.out.println("Console LOG: Student Id is already present in the database");
 	                    }
@@ -897,8 +902,12 @@ public class ScheduleManagerController {
 	                    
 	                }
 
+	                if (instructorCreated != true) {
 	                return "redirect:/schedule-manager/smv-upload-success";
-
+	                }
+	                else
+	                {
+	                	return "redirect:/schedule-manager/smv-upload-fail";	                }
 	            } catch (Exception e) {
 	                e.printStackTrace();
 	                return "redirect:/error";
@@ -936,4 +945,3 @@ public class ScheduleManagerController {
 	        }
 	    }
 }
-

@@ -18,7 +18,7 @@
             text-align: center;
             background-color: #007055;
             color: #fff;
-            padding: 20px;
+            padding: 5px;
             margin: 0;
         }
 
@@ -48,11 +48,27 @@
 			text-align: center;
 		}
     </style>
+    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    
+    
 </head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/admin_homepage");
+});
+</script>
+
+<br>
+
 <body>
     <h1>Instructor List</h1>
        
-     <h4><a th:href="@{/admin_homepage}">Click here to return to Home Screen</a></h4>
 
     <table>
         <thead>
@@ -79,9 +95,7 @@
                 <td th:text="${instructor.creditsTaught}"></td>
                 <td><a th:href="@{/av-edit-instructor/{id}(id=${instructor.instructorId})}">Edit</a></td>
                 <td>
-                <form th:action="@{/instructor/delete/{id}(id=${instructor.instructorId})}" method="post">
-                <input type="submit" value="Delete" class="delete-link" onclick="return confirm('Are you sure?')" />
-                </form>
+                <a class="delete-link" th:href="@{/instructor/delete/{id}(id=${instructor.instructorId})}" onclick="return confirm('Are you sure?')">Delete</a>
         		</td>
             </tr>
         </tbody>

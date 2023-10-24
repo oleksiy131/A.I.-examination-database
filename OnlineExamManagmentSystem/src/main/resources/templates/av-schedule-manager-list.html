@@ -18,7 +18,7 @@
             text-align: center;
             background-color: #007055; /* updated color */
             color: #fff;
-            padding: 20px;
+            padding: 5px;
             margin: 0;
         }
 
@@ -49,11 +49,28 @@
 			text-align: center;
 		}
     </style>
+    
+    
+        <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    
+    
 </head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<br>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/admin_homepage");
+});
+</script>
+
 <body>
 	
     <h1>Schedule Manager List</h1>
-    <h4><a th:href="@{/admin_homepage}">Click here to return to Home Screen</a></h4>
     <table>
         <thead>
             <tr>
@@ -62,16 +79,22 @@
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
             <!-- Use Thymeleaf to iterate through the list of schedule managers -->
-            <tr th:each="ScheduleManager : ${ScheduleManager}">
-                <td th:text="${ScheduleManager.managerId}"></td>
-                <td th:text="${ScheduleManager.managerUsername}"></td>
-                <td th:text="${ScheduleManager.managerFirstName}"></td>
-                <td th:text="${ScheduleManager.managerLastName}"></td>
-                <td th:text="${ScheduleManager.managerEmail}"></td>
+            <tr th:each="scheduleManager : ${scheduleManager}">
+                <td th:text="${scheduleManager.managerId}"></td>
+                <td th:text="${scheduleManager.managerUsername}"></td>
+                <td th:text="${scheduleManager.managerFirstName}"></td>
+                <td th:text="${scheduleManager.managerLastName}"></td>
+                <td th:text="${scheduleManager.managerEmail}"></td>
+                <td><a th:href="@{/av-edit-schedule-manager/{id}(id=${scheduleManager.managerId})}">Edit</a></td>
+                <td>
+                <a class="delete-link" th:href="@{/manager/delete/{id}(id=${scheduleManager.managerId})}" onclick="return confirm('Are you sure?')">Delete</a>
+        		</td>
             </tr>
         </tbody>
     </table>
