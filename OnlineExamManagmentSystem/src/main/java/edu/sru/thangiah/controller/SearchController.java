@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 
 @Controller
@@ -16,6 +18,42 @@ public class SearchController {
 
     @Autowired
     private StudentRepository studentRepository;
+    
+    @Autowired
+    private InstructorRepository instructorRepository;
+
+    @GetMapping("/instructor/search")
+    public String searchInstructors(
+        @RequestParam("searchType") String searchType,
+        @RequestParam("searchParam") String searchParam,
+        Model model
+    ) {
+        // Perform the instructor search based on searchType and searchParam
+        if ("id".equalsIgnoreCase(searchType)) {
+            try {
+                Long instructorId = Long.parseLong(searchParam);
+                Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
+                if (instructor != null) {
+                    model.addAttribute("instructors", List.of(instructor));
+                } else {
+                    model.addAttribute("instructors", List.of());
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("instructors", List.of());
+            }
+        } else if ("name".equalsIgnoreCase(searchType)) {
+            List<Instructor> instructors = instructorRepository.findByInstructorFirstNameContaining(searchParam);
+            model.addAttribute("instructors", instructors);
+        } else if ("username".equalsIgnoreCase(searchType)) {
+            List<Instructor> instructors = instructorRepository.findByInstructorUsernameContaining(searchParam);
+            model.addAttribute("instructors", instructors);
+        } else {
+            model.addAttribute("instructors", List.of());
+        }
+
+        return "instructor-list";
+    }
+
 
     @GetMapping("/student/search")
     public String searchStudents(
