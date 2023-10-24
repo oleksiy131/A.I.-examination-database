@@ -66,9 +66,6 @@ public class AdministratorController {
 	private ScheduleManagerRepository SMRepo;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
-	@Autowired
-	private ScheduleManagerRepository scheduleManagerRepository;
-
 
 	// This method handles HTTP POST requests to create a new Administrator.
 	@PostMapping("/process_login")
@@ -220,13 +217,6 @@ public class AdministratorController {
 		return "av-student-list";
 	}
 	
-    @GetMapping("/list-sm")
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public String showSM(Model model) {
-        List<ScheduleManager> ScheduleManager = scheduleManagerRepository.findAll();
-        model.addAttribute("ScheduleManager", ScheduleManager);
-        return "av-schedule-manager-list";
-    }
 
 	@PostMapping("/student/course/associate")
 	public ResponseEntity<String> associateStudentWithCourse(@RequestParam Long studentId, @RequestParam Long courseId,
@@ -428,7 +418,7 @@ public class AdministratorController {
 	    return "av-edit-instructor"; 
 	}
 	
-	@PostMapping("/instructor/delete/{id}")
+	@GetMapping("/instructor/delete/{id}")
 	public String deleteInstructorAV(@PathVariable("id") long id, Model model) {
 	    Instructor instructor = instructorRepository.findById(id)
 	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
@@ -463,6 +453,52 @@ public class AdministratorController {
         List<Instructor> instructors = instructorRepository.findAll();
         model.addAttribute("instructors", instructors);
         return "av-instructor-list";
+    }
+	
+	@GetMapping("/manager/delete/{id}")
+    public String deleteScheduleManagerAV(@PathVariable("id") long id, Model model) {
+        ScheduleManager scheduleManager = SMRepo.findById(id)
+          .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        SMRepo.delete(scheduleManager);
+        return "av-schedule-manager-edit-confirmation";
+    }
+	
+	@GetMapping("/av-edit-schedule-manager/{id}")
+	public String showUpdateFormScheduleManagerAV(@PathVariable("id") long id, Model model) {
+	    ScheduleManager scheduleManager = SMRepo.findById(id)
+	      .orElseThrow(() -> new IllegalArgumentException("Invalid Schedule Manager Id:" + id));
+	    
+	    model.addAttribute("scheduleManager", scheduleManager);
+	    return "av-edit-schedule-manager"; 
+	}
+	
+	@PostMapping("/av-edit-schedule-manager/{id}")
+	public String updateScheduleManagersAV(@PathVariable("id") long id, @Validated ScheduleManager manager, 
+	  BindingResult result, Model model) {
+	    if (result.hasErrors()) {
+	    	manager.setManagerId(id); 
+	        return "av-edit-schedule-manager";
+	    }
+	    
+	    // Debugging: Print the received instructor data
+	    System.out.println("Received Instructor Data:");
+	    System.out.println("ID: " + manager.getManagerId());
+	    System.out.println("First Name: " + manager.getManagerFirstName());
+	    System.out.println("Last Name: " + manager.getManagerLastName());
+	    System.out.println("Email: " + manager.getManagerEmail());
+	    System.out.println("Path Variable ID: " + id);
+
+	    
+	    SMRepo.save(manager);
+	    return "av-schedule-manager-edit-confirmation"; 
+	}
+
+	
+	@GetMapping("/list-schedule-managers-av")
+	public String showScheduleManagersAV(Model model) {
+        List<ScheduleManager> scheduleManager = SMRepo.findAll();
+        model.addAttribute("scheduleManager", scheduleManager);
+        return "av-schedule-manager-list";
     }
 
 }
