@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.sru.thangiah.domain.Instructor;
+import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.InstructorRepository;
+import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 
 @Controller
@@ -21,6 +23,9 @@ public class SearchController {
     
     @Autowired
     private InstructorRepository instructorRepository;
+    
+    @Autowired
+    private ScheduleManagerRepository scheduleManagerRepository;
 
     @GetMapping("/instructor/search")
     public String searchInstructors(
@@ -53,6 +58,40 @@ public class SearchController {
 
         return "instructor-list";
     }
+    
+    @GetMapping("/schedule-manager/search")
+    public String searchScheduleManagers(
+        @RequestParam("searchType") String searchType,
+        @RequestParam("searchParam") String searchParam,
+        Model model
+    ) {
+        // Perform the schedule manager search based on searchType and searchParam
+        if ("id".equalsIgnoreCase(searchType)) {
+            try {
+                Long managerId = Long.parseLong(searchParam);
+                ScheduleManager manager = scheduleManagerRepository.findById(managerId).orElse(null);
+                if (manager != null) {
+                    model.addAttribute("scheduleManagers", List.of(manager));
+                } else {
+                    model.addAttribute("scheduleManagers", List.of());
+                }
+            } catch (NumberFormatException e) {
+                model.addAttribute("scheduleManagers", List.of());
+            }
+        } else if ("name".equalsIgnoreCase(searchType)) {
+            List<ScheduleManager> managers = scheduleManagerRepository.findByManagerFirstNameContaining(searchParam);
+            model.addAttribute("scheduleManagers", managers);
+        } else if ("username".equalsIgnoreCase(searchType)) {
+            List<ScheduleManager> managers = scheduleManagerRepository.findByManagerUsernameContaining(searchParam);
+            model.addAttribute("scheduleManagers", managers);
+        } else {
+            model.addAttribute("scheduleManagers", List.of());
+        }
+
+        return "schedule-manager-list";
+    }
+    
+    
 
 
     @GetMapping("/student/search")
