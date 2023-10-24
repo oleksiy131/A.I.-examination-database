@@ -68,15 +68,20 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+        
+        #nav-placeholder {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it stays on top of other content */
+        }
     </style>
     
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     
 </head>
-
-<div id="nav-placeholder">
-
-</div>
+<body>
 
 <script>
 $(function(){
@@ -84,11 +89,16 @@ $(function(){
 });
 </script>
 
+<div id="nav-placeholder"></div>
+
+
 <br>
 
-<body>
 	
     <div class="container">
+    
+    
+    
 		<h4><a th:href="@{/admin_homepage}">Click here to return to Home Screen</a></h4>
 	<br>
         <h1>Schedule Mangager Registration</h1>
