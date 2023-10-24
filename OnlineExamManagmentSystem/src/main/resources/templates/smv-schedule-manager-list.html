@@ -16,9 +16,9 @@
 
         h1 {
             text-align: center;
-            background-color: #007055; /* updated color */
+            background-color: #007055;
             color: #fff;
-            padding: 20px;
+            padding: 5px;
             margin: 0;
         }
 
@@ -37,23 +37,56 @@
         }
 
         th {
-            background-color: #007055; /* updated color */
+            background-color: #007055;
             color: #fff;
         }
 
         tr:hover {
             background-color: #f5f5f5;
         }
-        
-        h4{
-			text-align: center;
-		}
+
+        h4 {
+            text-align: center;
+        }
+
+        .search-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .search-container label,
+        .search-container select,
+        .search-container input[type="text"],
+        .search-container button {
+            margin: 5px;
+        }
     </style>
 </head>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
+});
+</script>
+
 <body>
 	
     <h1>Schedule Manager List</h1>
-    <h4><a th:href="@{/schedule-manager/schedule_manager_homepage}">Click here to return to Home Screen</a></h4>
+    
+     <!-- Search form -->
+    <div class="search-container">
+        <form th:action="@{/schedule-manager/search}" method="GET">
+            <label for="searchType">Search by:</label>
+            <select id="searchType" name="searchType">
+                <option value="id">ID</option>
+                <option value="name">Name</option>
+                <option value="username">Username</option>
+            </select>
+            <input type="text" id="searchParam" name="searchParam" placeholder="Enter search value">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+    
     <table>
         <thead>
             <tr>

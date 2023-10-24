@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.sru.thangiah.domain.Exam;
+import edu.sru.thangiah.domain.ExamQuestion;
 import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.Question;
+import edu.sru.thangiah.repository.ExamQuestionRepository;
 import edu.sru.thangiah.repository.ExamRepository;
 
 import java.io.ByteArrayInputStream;
@@ -32,6 +34,9 @@ public class ExamService {
     
     @Autowired
     private ExamRepository examRepository;
+    
+    @Autowired
+    private ExamQuestionRepository examQuestionRepository;
 
     private List<Question> allQuestions = new ArrayList<>();
 
@@ -206,6 +211,19 @@ public class ExamService {
             throw new RuntimeException("Failed to convert input stream to byte array", e);
         }
     }
+
+    public List<Integer> getAllChapters() {
+        // This method should interact with the repository to fetch all distinct chapters available.
+        // Assuming you have a method in your repository class that fetches all unique chapter numbers.
+        return examQuestionRepository.findAllDistinctChapters();
+    }
+
+    public List<ExamQuestion> generateQuestionsForChapter(int chapter) {
+        // This method fetches questions from a specific chapter.
+        // Assumes you have a method in your repository to find questions by chapter.
+        return examQuestionRepository.findQuestionsByChapter(chapter);
+    }
+
     
 
     

@@ -12,4 +12,7 @@ public interface ExamQuestionService {
     void saveExamQuestion(ExamQuestion examQuestion);
     void deleteExamQuestion(Long id);
     void readExamQuestionsFromFile() throws IOException;
+    List<ExamQuestion> getQuestionsByChapter(int chapter);
+    public List<ExamQuestion> generateQuestionsForChapter(int chapter);
+    public List<Integer> getAllChapters();
 }

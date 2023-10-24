@@ -1,0 +1,180 @@
+1.	The electronic device inside the computer that can be flipped to an on or off state is called a:
+A.	bit.
+B.	switch.
+C.	button.
+D.	binary component.
+Ans: B	
+
+2.	The earliest electronic switches in computers were:
+A.	integrated circuits.
+B.	transistors.
+C.	vacuum tubes.
+D.	magnetic core.
+Ans: C	
+
+3.	ENIAC was the first:
+A.	computer to use transistors.
+B.	integrated circuit device.
+C.	form of binary language.
+D.	electronic digital computer.
+Ans: D	
+
+
+
+4.	The Electronic Numerical Integrator and Computer was composed of ____________.
+A.	bytes.
+B.	bits.
+C.	vacuum tubes.
+D.	heat transistors.
+Ans: C	
+
+
+5.	A major disadvantage of vacuum tubes as computing switches is that they:
+A.	cannot conduct electricity.
+B.	generate too much heat.
+C.	cannot represent binary language symbols.
+D.	are too small for significant computing tasks.
+Ans: B	
+
+
+6.	A commonly used material that acts as a semiconductor for computers is:
+A.	silicon.
+B.	transistor.
+C.	diode.
+D.	chip.
+Ans: A	
+
+
+7.	Chip is a common nickname for:
+A.	transistor.
+B.	integrated circuit.
+C.	resistor.
+D.	semiconductor.
+Ans: B	
+
+
+
+8.	The first microprocessors were created using:
+A.	early transistors.
+B.	vacuum tubes.
+C.	integrated circuits.
+D.	digital dividers.
+Ans: C	
+
+
+9.	Today’s chips are composed of tens of millions of:
+A.	integrated circuits.
+B.	transistors.
+C.	microprocessors.
+D.	hertz.
+Ans: B	
+
+11.	Computer arithmetic is accomplished using the ____________ number system.
+A.	binary
+B.	octal
+C.	decimal
+D.	hexadecimal
+Ans: A	
+
+15.	The number of digits in the hexadecimal numbering system is:
+A.	12.
+B.	16.
+C.	18.
+D.	20.
+Ans: B	
+
+17.	There are eight binary digits in a single:
+A.	word.
+B.	byte.
+C.	register.
+D.	bit.
+Ans: B	
+
+
+19.	An eight-bit character representation commonly used in most modern-day PCs is:
+A.	ASCII.
+B.	EBCDIC.
+C.	Unicode.
+D.	Assembly.
+Ans: A	
+
+20.	Unicode’s advantage over ASCII is that it:
+A.	requires less storage space.
+B.	supports character representation of many international languages.
+C.	allows a maximum of 256 different characters to be represented.
+D.	provides a hexadecimal notation for CPU processing. 
+Ans: B	
+
+24.	Clock speed in modern PC processors is measured in:
+A.	Mbps.
+B.	GHz.
+C.	milliseconds.
+D.	GB.
+Ans: B	
+
+
+26.	The proper sequence of actions in a machine cycle is:
+A.	decode --> fetch --> execute --> store.
+B.	fetch --> decode --> execute --> store.
+C.	fetch --> execute --> decode --> store.
+D.	execute --> decode --> store --> fetch.
+Ans: B	
+
+
+32.	The ____________ is responsible for decoding instructions.
+A.	ALU
+B.	Level 1 cache
+C.	Level 2 cache
+D.	control unit
+Ans: D	
+
+34.	The symbolic notation that represents the binary code recognized by a CPU in a human-readable form is 
+called ____________ language.
+A.	control
+B.	binary
+C.	assembly
+D.	machine
+Ans: C	
+
+35.	The portion of the machine cycle performed by the arithmetic logic unit is the _____________ stage.
+A.	calculation
+B.	execute
+C.	fetch
+D.	decode
+Ans: B	
+
+
+37.	The time required for fetching data or instructions from RAM to the typical desktop CPU can be measured 
+as a few:
+A.	milliseconds.
+B.	picoseconds.
+C.	nanoseconds.
+D.	microseconds.
+Ans: C	
+
+
+40.	A system’s local bus runs between the:
+A.	motherboard and system ports.
+B.	CPU and main RAM.
+C.	hard disk and the main RAM.
+D.	control unit and the CPU’s registers.
+Ans: B	
+
+
+41.	A bus’s data transfer speed is determined by its:
+A.	word size and clock speed.
+B.	word size and RAM type.
+C.	bus width and clock speed.
+D.	expansion settings and clock speed.
+Ans: C	
+
+47.	Pipelining refers to:
+A.	splitting an instruction into pieces, with each sent to a separate processor.
+B.	processing multiple instructions simultaneously, each at a different stage of the machine cycle.
+C.	applying a common instruction to multiple data items at the same time.
+D.	installing several CPUs into the computer, in order to enable processing instructions in parallel.
+Ans: B	
+
+
+
+
