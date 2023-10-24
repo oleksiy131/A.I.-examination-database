@@ -368,6 +368,7 @@ public class AdministratorController {
     }
 	
 	@GetMapping("/student/delete/{id}")
+	@PreAuthorize("hasRole('ADMINISTRATOR')")
     public String deleteStudentAV(@PathVariable("id") long id, Model model) {
         Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
