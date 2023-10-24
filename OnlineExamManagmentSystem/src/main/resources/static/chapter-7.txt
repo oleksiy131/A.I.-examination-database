@@ -1,0 +1,406 @@
+1.	Which of the following is an example of a network node?
+A.	Twisted pair cable
+B.	Client-server architecture
+C.	Printer
+D.	NOS
+Ans: C	
+
+
+2.	The network architecture used in most home networks is:
+A.	client-server LAN.
+B.	peer-to-peer LAN.
+C.	client-server WAN.
+D.	peer-to-peer WAN.
+Ans: B	
+
+
+3.	The term peer-to-peer refers to a category of:
+A.	network control.
+B.	network node distance.
+C.	network packet routing.
+D.	network transmission media.
+Ans: A	
+
+
+4.	Which of the following is most likely to be configured as a client-server local area network?
+A.	Two computers connected together
+B.	Ten or more nodes in a business office
+C.	All the computers in a multi-national corporation
+D.	A wireless home network
+Ans: B	
+
+
+5.	The term that refers to a communication channel between nodes in a network is:
+A.	transmission medium.
+B.	URL.
+C.	server computer.
+D.	router.
+Ans: A	
+
+
+6.	The transmission medium composed of glass fibers (or possibly plastic) is called:
+A.	coaxial.
+B.	wireless.
+C.	twisted pair.
+D.	fiber optic.
+Ans: D	
+
+7.	The transmission medium with the highest bandwidth is:
+A.	coaxial.
+B.	fiber optic.
+C.	twisted pair.
+D.	infrared wireless.
+Ans: B	
+
+
+8.	A network interface card is a type of:
+A.	network adapter.
+B.	network operating system.
+C.	network adapter only for a P2P network.
+D.	network transmission medium.
+Ans: A	
+
+
+9.	A hub is a type of:
+A.	network adapter.
+B.	network operating system.
+C.	network navigation device.
+D.	network transmission medium.
+Ans: C	
+
+
+10.	If you want to maximize the data transfer rate in your peer-to-peer network, your best option is:
+A.	power line.
+B.	Ethernet.
+C.	phone line.
+D.	wireless.
+Ans: B	
+
+
+11.	With a pass-through connection to a phone line network adapter, there is no need for a:
+A.	jack splitter.
+B.	telephone line.
+C.	HPNA adapter.
+D.	telephone.
+Ans: A	
+
+
+12.	Which of the following is true of Ethernet-based networks?
+A.	They require the use of wireless access points.
+B.	They require the use of HPNA adapters.
+C.	They require the use of cable modems.
+D.	They require the use of hubs or routers.
+Ans: D	
+
+
+13.	The most likely use of a router in a home network is to:
+A.	allow multiple computers in the network to connect to the Internet.
+B.	establish client-server access to shared network resources.
+C.	allow individual nodes of an Ethernet-based network to communicate with each other.
+D.	allow two computers to communicate in a wireless network.
+Ans: A	
+
+
+14.	The sharpest degradation in bandwidth as distance between nodes in the network increase will occur in a(n) 
+____________ network.
+A.	power line
+B.	Ethernet
+C.	phone line
+D.	wireless
+Ans: D	
+
+
+15.	Hubs are required in order to enable local communication between nodes in a(n) ____________ network.
+A.	power line
+B.	Ethernet
+C.	phone line
+D.	wireless
+Ans: B	
+
+
+16.	Which of the following types of network adapter card is most likely to be pre-installed in a typical home 
+computer?
+A.	10/100 Mbps NIC
+B.	Power line adapter
+C.	Wireless adapter
+D.	HPNA adapter
+Ans: A	
+
+
+19.	A wireless network uses ____________ as its transmission media.
+A.	sound waves
+B.	radio waves
+C.	twisted pair
+D.	fiber optics
+Ans: B	
+
+
+20.	The 802.11 (or Wi-Fi) standard pertains to:
+A.	Ethernet cables.
+B.	cable routers.
+C.	wireless networks.
+D.	connector jacks.
+Ans: C	
+
+
+21.	The main difference between the various 802.11 standards is the:
+A.	data transfer rate.
+B.	maximum allowable cable length.
+C.	simplicity of installation.
+D.	collision detection rate.
+Ans: A	
+
+
+22.	The purpose of a wireless transceiver is to:
+A.	modulate digital signals for transmission along telephone lines.
+B.	convert electrical signals into radio waves.
+C.	control traffic of data packets in an Ethernet network.
+D.	connect different networks together.
+Ans: B	
+
+
+23.	A wireless access point serves a function similar to a(n):
+A.	hub.
+B.	router.
+C.	gateway.
+D.	Ethernet port.
+Ans: A	
+
+
+24.	If computers in a wireless network are unable to communicate with each other, it would be useful to install 
+a(n):
+A.	router.
+B.	Internet portal.
+C.	cable modem.
+D.	wireless access point.
+Ans: D	
+
+
+25.	In network terminology, the word gateway is most closely synonymous to:
+A.	hub.
+B.	router.
+C.	wireless adapter.
+D.	Ethernet port.
+Ans: B	
+
+26.	Windows XP assists with configuring home networks via a:
+A.	network hub.
+B.	disk drive.
+C.	wizard.
+D.	CD.
+Ans: C	
+
+
+27.	A white-hat hacker is likely to:
+A.	break into a computer system for the purpose of identity theft.
+B.	claim to provide a social good by identifying vulnerabilities in a computer system.
+C.	release a Trojan horse on a home computer in order to launch a DOS attack.
+D.	build a firewall to protect a computer from unauthorized access.
+Ans: B	
+
+
+28.	The act of bombarding a system with such a high volume of requests that it results in an inability to allow 
+legitimate users to access the system is called:
+A.	hacking.
+B.	zombie creation. 
+C.	denial of service.
+D.	a Trojan horse.
+Ans: C	
+
+
+29.	A program that appears to perform a useful task but, in addition, does something malicious in the background is called a:
+A.	firewall.
+B.	backdoor program. 
+C.	packet sniffer.
+D.	Trojan horse.
+Ans: D	
+
+
+30.	Script kiddies are:
+A.	computer experts who create computer programs for the purpose of cyberterrorism.
+B.	amateurs who obtain easy-to-use software in order to hack into someone’s computer. 
+C.	marketing specialists who obtain consumer information by searching the Internet.
+D.	youthful entrepreneurs who develop software to protect computer resources.
+Ans: B	
+
+
+31.	A numbered communication gateway that is assigned for a commonly used network service such as SMTP 
+or HTTP is called a(n):
+A.	protocol.
+B.	Internet portal. 
+C.	logical port.
+D.	packet filter.
+Ans: C	
+
+
+32.	A software program designed to prevent unauthorized access to a computer system is called a(n):
+A.	firewall.
+B.	backdoor program. 
+C.	portal.
+D.	antivirus program.
+Ans: A	
+
+
+33.	Hardware firewalls are typically built in as components of:
+A.	NIC cards.
+B.	routers. 
+C.	Ethernet cables.
+D.	device drivers.
+Ans: B	
+
+
+34.	A common method used by firewalls for maximizing computer security is:
+A.	closing physical ports.
+B.	blocking access to logical ports. 
+C.	disabling Internet browsers.
+D.	detecting and removing viruses.
+Ans: B	
+
+
+35.	Broadband Internet users are vulnerable to hacking risks because of:
+A.	static addressing.
+B.	IP addressing. 
+C.	network address translation.
+D.	dynamic addressing.
+Ans: A	
+
+
+36.	A firewall’s ability to selectively allow logical port access to only a subset of users or computers that 
+request access is accomplished via:
+A.	packet filtering.
+B.	logical port blocking. 
+C.	network address translation.
+D.	network key distribution.
+Ans: A	
+
+
+
+37.	An ISP will assign a ____________ to a user’s computer when the user logs in.
+A.	logical port
+B.	physical port 
+C.	dynamic address
+D.	static address
+Ans: C	
+
+
+38.	A purpose of network address translation is to:
+A.	translate an IP address to a text-based URL.
+B.	hide user IP addresses from the Internet. 
+C.	convert logical to physical port configurations.
+D.	dynamically assign IP addresses via an ISP.
+Ans: B	
+
+
+39.	A computer program that attaches itself to another program and spreads itself to other computers via 
+replication when files are exchanged is called a:
+A.	Trojan horse.
+B.	backdoor program. 
+C.	cracker.
+D.	virus.
+Ans: D	
+
+
+40.	____________ viruses will be loaded into memory immediately when the computer starts up, even before 
+virus detection software can load.
+A.	Boot sector
+B.	Logic bomb 
+C.	Master system
+D.	Startup
+Ans: A	
+
+
+41.	____________ viruses are typically attached to document files, such as those used for word processing or 
+spreadsheets.
+A.	Document
+B.	File 
+C.	System
+D.	Macro
+Ans: D	
+
+
+42.	The ____________ virus is an example of a logic bomb.
+A.	Michelangelo
+B.	Melissa 
+C.	Code Red
+D.	Trojan
+Ans: A	
+
+
+43.	Which of the following actions is LEAST likely to cause your computer to be infected with a virus?
+A.	Sharing a floppy disk
+B.	Downloading and executing a file from the Internet
+C.	Opening an e-mail message
+D.	Downloading and executing an e-mail attachment
+Ans: C	
+
+
+44.	In 1999, the Melissa virus was distributed to many computers primarily via:
+A.	floppy disk.
+B.	FTP. 
+C.	e-mail.
+D.	Web pages.
+Ans: C	
+
+
+45.	Unlike viruses, worms do not:
+A.	replicate themselves.
+B.	rely on host files. 
+C.	cause damage to computer systems.
+D.	have identifying signatures.
+Ans: B	
+
+
+46.	A virus that executes only when certain conditions occur is called a:
+A.	worm.
+B.	conditional virus. 
+C.	stealth virus.
+D.	logic bomb.
+Ans: D	
+
+
+47.	The category of virus that disguises itself by rewriting its code is called:
+A.	multipartite.
+B.	polymorphic. 
+C.	stealth.
+D.	rewriteable.
+Ans: B	
+
+
+48.	A virus’s signature is:
+A.	its file name.
+B.	the name of its author. 
+C.	a combination of its size, memory location, and creation date.
+D.	a unique portion of its program code.
+Ans: D	
+
+
+
+
+
+
+49.	Antivirus software should be run to check the hard drive on your computer:
+A.	about once per week.
+B.	every day. 
+C.	whenever you log in to your system.
+D.	whenever you receive a warning message via the Internet.
+Ans: A	
+
+
+50.	In order to ensure that your antivirus software is best able to identify and destroy the most recently created 
+viruses, you should:
+A.	use its auto-update feature.
+B.	reinstall the software periodically. 
+C.	purchase a new version.
+D.	run it to check your hard-drive.
+Ans: A	
+
+
+51.	Operating systems such as Windows XP periodically provide security ____________ to overcome their 
+vulnerabilities to invasion from hackers.
+A.	white hats
+B.	patches
+C.	worms
+D.	sentinels
+Ans: B	
+
+

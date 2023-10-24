@@ -1,31 +1,32 @@
 package edu.sru.thangiah.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Transient;
 
-@Entity
+@Entity 
 public class ExamQuestion {
-    
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+
+    @Column(columnDefinition = "TEXT")
     private String questionText;
+    
+    @Transient // This annotation means the field won't be persisted in the database
+    private String userAnswer;
+    
     private String optionA;
     private String optionB;
     private String optionC;
     private String optionD;
     private String correctAnswer;
-    private String userAnswer; 
-
-    public String getUserAnswer() {
-        return userAnswer;
-    }
-
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
-    }
+    private int chapter;
+    
 	public Long getId() {
 		return id;
 	}
@@ -68,7 +69,21 @@ public class ExamQuestion {
 	public void setCorrectAnswer(String correctAnswer) {
 		this.correctAnswer = correctAnswer;
 	}
+	public int getChapter() {
+		return chapter;
+	}
+	public void setChapter(int chapter) {
+		this.chapter = chapter;
+	}
+	public String getUserAnswer() {
+		return userAnswer;
+	}
+	public void setUserAnswer(String userAnswer) {
+		this.userAnswer = userAnswer;
+	} 
+	
+	
     
     
-    // Standard getters and setters
+    
 }

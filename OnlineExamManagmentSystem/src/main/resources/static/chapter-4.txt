@@ -1,0 +1,330 @@
+1.	The following tasks are all performed by productivity software EXCEPT:
+A.	word processing.
+B.	file compression.
+C.	personal information management.
+D.	spreadsheet modeling.
+Ans: B	
+
+2.	The following are all ways of formatting your word processing document EXCEPT:
+A.	translating text to different languages.
+B.	selecting font sizes and styles.
+C.	setting margins.
+D.	inserting bullets or numbered lists.
+Ans: A	
+
+3.	In a spreadsheet, the intersection between a column and a row is called a(n):
+A.	intersect box.
+B.	address.
+C.	cell.
+D.	worksheet.
+Ans: C	
+
+4.	The cell address C5 indicates that the cell:
+A.	contains a label value of “C5.”
+B.	is at the fifth row, third column of the worksheet.
+C.	is at the third row, fifth column of the worksheet.
+D.	is performing a calculation involving a variable called “C.” 
+Ans: B	
+
+
+5.	In a spreadsheet, an expression involving mathematical operators, cell addresses, and possibly numbers, is 
+called a:
+A.	formula.
+B.	function.
+C.	calculation.
+D.	value. 
+Ans: A	
+
+6.	AVERAGE and SUM are examples of:
+A.	formulas.
+B.	functions.
+C.	fields.
+D.	tables. 
+Ans: B	
+
+
+7.	Performing “what-if” analyses is most commonly accomplished using ____________ software.
+A.	spreadsheet
+B.	database
+C.	presentation
+D.	PIM 
+Ans: A	
+
+
+8.	Which of the following will NOT be used in a calculation?
+A.	Value
+B.	Label
+C.	Function
+D.	Formula 
+Ans: B	
+
+
+9.	Slide layouts and design templates are features of ____________ software.
+A.	spreadsheet
+B.	database
+C.	presentation
+D.	word processing 
+Ans: C	
+
+10.	Determining the order and sequence by which text and images will appear on a slide is done using:
+A.	slide layouts.
+B.	slide sorters.
+C.	slide transitions.
+D.	animation effects. 
+Ans: D	
+
+
+11.	Lotus Organizer and Corel Central are examples of ____________ software.
+A.	analytical
+B.	database
+C.	presentation
+D.	PIM 
+Ans: D	
+
+
+12.	For which of the following tasks would PIM software be most useful?
+A.	Drafting a memo
+B.	Maintaining a schedule
+C.	Calculating a budget
+D.	Keeping track of recipes
+Ans: B	
+
+
+13.	The smallest unit of information in a database is called a:
+A.	byte.
+B.	record.
+C.	field.
+D.	cell. 
+Ans: C	
+
+
+14.	In a database of employees, all the information about a particular person would constitute a:
+A.	file.
+B.	record.
+C.	field.
+D.	table. 
+Ans: B	
+
+
+15.	A table is a collection of:
+A.	files.
+B.	worksheets.
+C.	fields.
+D.	records. 
+Ans: D	
+
+
+16.	A ____________ is a small program that helps to automate a frequently used series of commands in most 
+productivity software tools.
+A.	template
+B.	macro
+C.	utility
+D.	wizard
+Ans: B	
+
+
+17.	If you are using a template in a productivity software application, you are most likely trying to:
+A.	assign a basic theme or structure to the file with which you are working.
+B.	perform a series of steps in a time-efficient manner.
+C.	gain assistance in performing complicated tasks.
+D.	combine different documents together to form a single integrated whole.
+Ans: A	
+
+
+18.	Software providers who develop many productivity tools may also provide stripped-down versions that 
+combine the simpler features of these tools bundled together into a(n):
+A.	software suite.
+B.	personal information manager.
+C.	integrated software application.
+D.	limited software edition.
+Ans: C	
+
+19.	Microsoft Office is an example of a(n):
+A.	software suite.
+B.	open-source product.
+C.	integrated software application.
+D.	business-management application.
+Ans: A	
+
+20.	When talking to a speech recognition program, the program divides each second of your speech into 100 
+separate:
+A.	phonemes.
+B.	codes.
+C.	samples.
+D.	words.
+Ans: C	
+
+
+21.	A speech recognition system’s codebook values are matched against a database of ____________ as an 
+early step in word construction.
+A.	phonemes
+B.	codes
+C.	samples
+D.	words
+Ans: A	
+
+22.	Quicken and TurboTax are both personal financial products developed by:
+A.	Microsoft.
+B.	Corel.
+C.	Intuit.
+D.	Adobe.
+Ans: C	
+
+23.	Individuals who want software to assist in automated checkbook balancing and bill paying for their 
+personal bank and credit card accounts will likely use which of the following software products?
+A.	Microsoft Project
+B.	QuickBooks
+C.	Acrobat
+D.	Quicken 
+Ans: D	
+
+
+24.	Small business owners who want software to assist in managing accounts payable and receivable will likely 
+use which of the following software products?
+A.	QuickBooks
+B.	Business Plan Pro
+C.	Quicken 
+D.	Microsoft Project
+Ans: A	
+
+
+25.	If you want software to assist in estimating the time it takes for a sequence of tasks to be accomplished and 
+to track the progress of people working on these tasks, which of the following software products would you 
+use?
+A.	Microsoft Project
+B.	Front Page
+C.	Business Plan Pro
+D.	Visio 
+Ans: A	
+
+
+26.	Which of the following software products is most appropriate for plotting out your company’s corporate 
+strategy?
+A.	Microsoft Project
+B.	Front Page
+C.	Business Plan Pro
+D.	Visio 
+Ans: C	
+
+
+27.	The category of software most appropriate for controlling the design and layout of complex documents like 
+newsletters and brochures is:
+A.	word processing.
+B.	computer-aided design.
+C.	Web page authoring.
+D.	desktop publishing. 
+Ans: D	
+
+
+28.	Which of the following software products would you use in order to enhance the quality of a photograph 
+that you have recently imported from your digital camera, and would likely have been included with the 
+digital camera when you bought it?
+A.	ArcSoft
+B.	Visio
+C.	Dreamweaver
+D.	TurboCad 
+Ans: A	
+
+
+29.	Drawing flow charts, block diagrams, and other technical graphics is best accomplished using which of the 
+following software products?
+A.	Jasc Paint Shop Pro
+B.	Microsoft Visio
+C.	Macromedia Dreamweaver
+D.	Adobe Illustrator 
+Ans: B	
+
+
+30.	CAD software is most likely to be used by:
+A.	Web designers.
+B.	engineers.
+C.	project managers.
+D.	magazine editors. 
+Ans: B	
+
+
+31.	Which of the following software products is the most appropriate for developing Web pages?
+A.	Adobe PageMaker
+B.	ArcSoft
+C.	Macromedia Dreamweaver
+D.	Corel Draw 
+Ans: C	
+
+32.	WebCT and Blackboard are two popular software products for:
+A.	Web page development.
+B.	course management.
+C.	group communications.
+D.	multimedia entertainment. 
+Ans: B	
+
+
+33.	Which of the following software products is considered a type of reference software?
+A.	Encarta
+B.	WebCT
+C.	Front Page
+D.	QuickTime 
+Ans: A	
+
+
+34.	ESRB is a(n):
+A.	company that develops entertainment software.
+B.	organization that determines age-appropriate ratings for video games.
+C.	software product that helps block inappropriate Web content from minors.
+D.	educational software development tool. 
+Ans: B	
+
+
+35.	The general category of software that enables people in different locations to work together on common 
+projects is called:
+A.	project management software.
+B.	virtual reality.
+C.	groupware.
+D.	videoconferencing. 
+Ans: C	
+
+
+36.	Which of the following would you use to quickly find the answers to questions that users most commonly 
+have about a software product?
+A.	The Office assistant
+B.	The company’s Knowledge Base
+C.	The program’s Help index
+D.	The company’s FAQ site
+Ans: D	
+
+
+37.	Which of the following is an automated help feature that gives tips on tasks you are performing as you 
+perform them?
+A.	The Office assistant
+B.	PCShowAndTell.com
+C.	A screen tip
+D.	An online chat helpdesk 
+Ans: A	
+
+
+38.	Software that you can use for a trial period before paying for it is called:
+A.	freeware.
+B.	beta software.
+C.	shareware.
+D.	standard software. 
+Ans: C	
+
+
+39.	A minor modification to a software product, usually to fix bugs, is commonly termed a(n):
+A.	upgrade.
+B.	download.
+C.	version.
+D.	release. 
+Ans: D	
+
+40.	What is the most common type of compatibility that a software manufacturer will provide for new versions 
+of their software?
+A.	Both backward and forward compatibility
+B.	Neither backward nor forward compatibility
+C.	Backward compatibility but not forward compatibility
+D.	Forward compatibility but not backward compatibility 
+Ans: C	
+
+
+
+
+

@@ -6,6 +6,7 @@ public class ExamDetails {
     private List<Long> selectedExamQuestionIds;
     private String examName;
     private int examDuration; // Duration in minutes
+    private int chapter;
     
     
 	public List<Long> getSelectedExamQuestionIds() {
@@ -26,6 +27,13 @@ public class ExamDetails {
 	public void setExamDuration(int examDuration) {
 		this.examDuration = examDuration;
 	}
+	public int getChapter() {
+		return chapter;
+	}
+	public void setChapter(int chapter) {
+		this.chapter = chapter;
+	}
+	
 
     
     

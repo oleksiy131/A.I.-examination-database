@@ -72,8 +72,82 @@ public class ExamController {
         this.examService = examService;
     }
     
+    @PostMapping("/generate")
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model, RedirectAttributes redirectAttributes) {
+        // Check if the list of selected question IDs is not null or empty
+        if (examDetails.getSelectedExamQuestionIds() == null || examDetails.getSelectedExamQuestionIds().isEmpty()) {
+        	System.out.println("LOG: getSelectedExamQuestionIds is NULL");
+            // Redirect back to the form page and display an error message.
+            redirectAttributes.addFlashAttribute("error", "No questions were selected for the exam.");
+            return "redirect:/exam/generateExam"; // assuming 'generateExam' is the path to your form
+        }
+
+        // If there are selected questions, continue with the exam generation process.
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+
+        // Fetch the selected questions from the database.
+        List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
+            .map(examQuestionService::getExamQuestionById)
+            .collect(Collectors.toList());
+
+        // Create a new Exam instance and set its properties.
+        Exam exam = new Exam();
+        exam.setExamName(examDetails.getExamName());
+        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setQuestions(selectedQuestions);
+
+        // Save the newly created exam instance to the database.
+        Exam savedExam = examRepository.save(exam);
+
+        // Redirect to a handler method that presents the exam link.
+        return "redirect:/exam/" + savedExam.getId() + "/link";
+    }
     
 
+
+    @GetMapping("/{id}/link")
+    public String showExamLink(@PathVariable Long id, Model model) {
+        Exam exam = examRepository.findById(id).orElse(null); // Fetching the exam from the database.
+
+        if (exam == null) {
+            model.addAttribute("message", "Exam not found");
+            return "error-page"; // This should be your error view page.
+        }
+
+        // Construct the link that students will use to take the exam. This URL pattern should match your students' exam taking page.
+        String examLink = "/exam/take/" + id;
+
+        model.addAttribute("exam", exam); // For displaying other exam details.
+        model.addAttribute("examLink", examLink); // The actual link students will use.
+
+        return "display-exam-link"; // This view will display the exam link and details to the faculty.
+    }
+    
+    
+
+    // Method to display chapter selection. This method will need a corresponding HTML file to display options.
+    @GetMapping("/selectChapter")
+    public String selectChapter(Model model) {
+        // Assuming you have a service method that can retrieve all available chapters.
+        List<Integer> chapters = examService.getAllChapters();
+        model.addAttribute("chapters", chapters);
+        return "selectChapter"; // This is a Thymeleaf template that needs to be created.
+    }
+    
+    // Method to handle chapter selection and redirect to exam generation.
+    @PostMapping("/selectChapter")
+    public String handleChapterSelection(@RequestParam("selectedChapter") int chapter, RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("selectedChapter", chapter);
+        return "redirect:/exam/generateExam"; // This redirects to the exam generation method.
+    }
+    
+    @GetMapping("/generateExam")
+    public String generateExam(@ModelAttribute("selectedChapter") int chapter, Model model) {
+        // Generate questions based on the selected chapter.
+        List<ExamQuestion> questions = examService.generateQuestionsForChapter(chapter);
+        model.addAttribute("questions", questions);
+        return "generateExam"; // This is a Thymeleaf template that needs to be created.
+    }
 
     @GetMapping("/{id}")
     public String takeExam(@PathVariable Long id, Model model) {
@@ -94,6 +168,30 @@ public class ExamController {
 
         return "error"; 
     }
+    
+    @GetMapping("/exam/{id}/link")
+    public String generateExamLink(@PathVariable Long id, Model model) {
+        // Get the exam details from the database using the provided id
+        Exam exam = examRepository.findById(id).orElse(null);
+
+        // Check if the exam exists
+        if (exam == null) {
+            // Handle the case where the exam does not exist
+            model.addAttribute("message", "The requested exam does not exist.");
+            return "error"; // Name of your error view template
+        }
+
+        // Create the exam link
+        String examLink = "/exam/take/" + id; // Adjust the link based on your URL structure
+
+        // Add attributes to the model
+        model.addAttribute("examLink", examLink);
+        model.addAttribute("exam", exam);
+
+        // Return the name of the view template that will display the exam link
+        return "examLink"; // You need to create this new Thymeleaf template
+    }
+
 
     @PostMapping("/submit/{id}")
     public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model) {
@@ -233,29 +331,27 @@ public class ExamController {
     
     @PostMapping("/exam/generate")
     public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, RedirectAttributes redirectAttributes) {
-        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+        // Assuming examDetails now includes a field for 'chapter' which is populated from the form.
+        int chapter = examDetails.getChapter();
 
-        // Fetch selected questions from the database
-        List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
-            .map(examQuestionService::getExamQuestionById)
-            .collect(Collectors.toList());
+        // Fetch selected questions based on the chapter.
+        List<ExamQuestion> selectedQuestions = examService.generateQuestionsForChapter(chapter);
 
-        // Create a new exam and set its properties
+        // Create a new exam and set its properties.
         Exam exam = new Exam();
         exam.setExamName(examDetails.getExamName());
         exam.setDurationInMinutes(examDetails.getExamDuration());
         exam.setQuestions(selectedQuestions);
 
-     // Save the exam to the database
+        // Save the exam to the database.
         Exam savedExam = examRepository.save(exam);
 
         // Add the generated exam's ID as a flash attribute. This makes it available after the redirect.
         redirectAttributes.addFlashAttribute("generatedExamId", savedExam.getId());
 
-        // Redirect to the GET request handler which displays the form. Replace 'viewName' with the actual view name or path.
-        return "redirect:/instructor/exam-questions";
+        // Redirect to the GET request handler which displays the form.
+        return "redirect:/exam/questions"; // Or to the appropriate URL after exam generation.
     }
-
 
     
     // This method generates the exam and displays it to the user
