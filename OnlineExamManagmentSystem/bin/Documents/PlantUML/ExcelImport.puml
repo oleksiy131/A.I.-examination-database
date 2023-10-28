@@ -1,0 +1,22 @@
+@startuml
+actor Administrator as Admin
+participant System
+participant "Excel File" as ExcelFile
+
+Admin -> System: Initiate Import
+System -> System: Receive Request
+System -> Admin: Request File Selection
+Admin -> ExcelFile: Select Excel File
+Admin -> System: Submit File
+System -> System: Validate File
+System -> System: Process File
+System -> ExcelFile: Open File
+System -> ExcelFile: Read Data
+loop For each row in the sheet
+    System -> System: Create Student Object
+    System -> System: Extract Data
+    System -> System: Check Existing Student
+    System -> System: Save Student to Database
+end
+System -> Admin: RedirectInternal Server Error
+@enduml

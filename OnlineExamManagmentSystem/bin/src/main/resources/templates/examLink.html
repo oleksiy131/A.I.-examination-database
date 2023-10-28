@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Exam Link</title>
+</head>
+<body>
+    <h1>Exam Created Successfully</h1>
+    <p>Here is the link you can distribute to students:</p>
+    <a th:href="@{${examLink}}" th:text="${examLink}">Exam Link</a>
+    <!-- Add any other details you want to display about the exam -->
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!-- exams.html -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+            display: inline-block;
+            width: 45%;
+            padding: 10px;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        li:hover {
+            background-color: #2980b9;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/instructor/instructor_homepage");
+});
+</script>
+
+<br><br>
+<br>
+
+<body>
+    <div class="container">
+        <h1>Please choose your exam</h1>
+        <p>Select an exam:</p>
+        <ul>
+            <li>Chapter 1 exam</li>
+            <li>Chapter 2 exam</li>
+            <li>Mid-Term Exam</li>
+            <li>Finals exam</li>
+        </ul>
+    </div>
+</body>
+</html>

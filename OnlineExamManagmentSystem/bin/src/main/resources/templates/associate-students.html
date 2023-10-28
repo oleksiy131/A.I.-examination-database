@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associate Student with Course</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+</head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/navbar");
+});
+</script>
+
+<br>
+<br>
+<br>
+
+<body>
+    <h2>Associate Student with Course</h2>
+    <form id="associateStudentWithCourseForm" action="/student/course/associate" method="POST">
+        <label for="studentId">Select a Student:</label>
+        <select id="studentId" name="studentId">
+            <!-- Use Thymeleaf each loop to iterate over a list of students -->
+            <option th:each="student : ${students}" th:value="${student.studentId}" th:text="${student.studentFirstName + ' ' + student.studentLastName}"></option>
+        </select>
+
+        <br><br>
+
+        <label for="courseId">Select a Course:</label>
+        <select id="courseId" name="courseId">
+            <!-- Using Thymeleaf each loop to iterate over a list of courses -->
+            <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+        </select>
+
+        <br><br>
+
+        <input type="submit" value="Associate Student with Course">
+    </form>
+
+    <!-- JavaScript for handling form submission -->
+    <script>
+      $(document).ready(function () {
+    $('#associateStudentWithCourseForm').submit(function (event) {
+        event.preventDefault();
+
+        // Serialize form data
+        var formData = $(this).serialize();
+        console.log("Form Data: ", formData); // Debug
+
+        $.ajax({
+            type: 'POST',
+            url: '/student/course/associate',
+            data: formData,
+            success: function (response) {
+                console.log("Response: ", response); // Debug
+                alert(response);
+            },
+            error: function (error) {
+                console.log("Error: ", error); // Debug
+                alert('Error: ' + error.responseText);
+            }
+        });
+    });
+});
+
+
+    </script>
+</body>
+</html>

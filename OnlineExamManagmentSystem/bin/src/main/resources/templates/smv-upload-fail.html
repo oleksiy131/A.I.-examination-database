@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #ec0000;
+        }
+
+        h2 {
+            color: rgb(0, 215, 0);
+        }
+
+        p {
+            font-size: 18px;
+            color: #333;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <i class="fas fa-check-circle success-icon"></i>
+    <h1>This Instructor did not exist.</h1>
+    <h2>So it was created.</h2>
+    <h3>If this was a mistake please take a look at the <a th:href="@{/schedule-manager/instructor-list}">instructor list</a> to correct this.</h3>
+    <h4><a th:href="@{/schedule-manager/schedule_manager_homepage}">Click here to return to Home Screen</a></h4>
+    <p></p>
+</div>
+</body>
+</html>

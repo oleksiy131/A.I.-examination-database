@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Select Exam Questions for Exam</title>
+    <style>
+        /* Add some CSS for formatting */
+        .question-list {
+            display: flex;
+            flex-direction: column;
+            margin-top: 20px;
+        }
+        .question-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .question-checkbox {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select Exam Questions for Exam</h1>
+
+	
+    <!-- Display the generated exam link if the 'generatedExamId' attribute is present -->
+    <div th:if="${generatedExamId != null}">
+        <p>Generated Exam Link: 
+            <a th:href="@{'http://localhost:8080/exam/' + ${generatedExamId}}" 
+               th:text="@{'http://localhost:8080/exam/' + ${generatedExamId}}" 
+               target="_blank">Exam Link</a>
+        </p>
+        <p>Please copy the above link to share.</p>
+        <!-- Hyperlink to navigate back to the exam questions page -->
+        <a href="/instructor/exam-questions">Back to Exam Questions Selection</a>
+    </div>
+
+    <form th:action="@{/exam/exam/generate}" method="post">
+        <div class="question-list">
+            <!-- Iterate through exam questions and create checkboxes -->
+            <label>Select Exam Questions:</label>
+            <div th:each="examQuestion : ${examQuestions}" class="question-item">
+                <input type="checkbox" class="question-checkbox" name="selectedExamQuestionIds" th:value="${examQuestion.id}" />
+                <label th:text="${examQuestion.questionText}"></label>
+            </div>
+        </div>
+        <label>Exam Name:</label>
+        <input type="text" name="examName" />
+        <label>Exam Duration (minutes):</label>
+        <input type="number" name="examDuration" />
+        <input type="submit" value="Generate Exam" />
+    </form>
+</body>
+</html>

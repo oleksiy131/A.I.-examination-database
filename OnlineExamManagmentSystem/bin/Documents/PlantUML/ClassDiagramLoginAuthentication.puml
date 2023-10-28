@@ -1,0 +1,68 @@
+@startuml
+ 
+package edu.sru.thangiah.config {
+    class CustomAuthenticationSuccessHandler {
+        - onAuthenticationSuccess(request, response, authentication) : void
+    }
+    CustomAuthenticationSuccessHandler --|> SimpleUrlAuthenticationSuccessHandler : Extends
+ 
+    class SecurityConfig {
+        - userDetailsService : UserDetailsService
+        - successHandler : CustomAuthenticationSuccessHandler
+        - passwordEncoder : PasswordEncoder
+        + passwordEncoder() : PasswordEncoder
+        + configure(http) : DefaultSecurityFilterChain
+        - configureGlobal(auth) : void
+    }
+}
+ 
+SecurityConfig o-- UserDetailsService
+SecurityConfig o-- CustomAuthenticationSuccessHandler
+ 
+package edu.sru.thangiah.model {
+ 
+    class Roles {
+        - id : Long
+        - name : String
+        + SCHEDULE_MANAGER : String {static}
+        + getId() : Long
+        + setName(name : String) : void
+    }
+ 
+    class User {
+        - id : Long
+        - firstName : String
+        - lastName : String
+        - email : String
+        - password : String
+        - username : String
+        - verificationCode : String
+        - verified : boolean
+        - enabled : boolean
+        - roles : List<Roles>
+        + getAuthorities() : Collection<GrantedAuthority>
+        + getUsername() : String
+        + isVerified() : boolean
+    }
+ 
+    enum Role {
+        ADMINISTRATOR,
+        SCHEDULE_MANAGER,
+        STUDENT,
+        INSTRUCTOR
+    }
+}
+ 
+User "1" o-- "0..*" Roles : has roles
+User o-- Role : has a
+ 
+package edu.sru.thangiah.repository {
+    interface UserRepository {
+        + findByUsername(username : String) : Optional<User>
+        + findByVerificationCode(verificationCode : String) : User
+    }
+}
+ 
+UserRepository ..> User : uses
+ 
+@enduml

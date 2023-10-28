@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Exam Question</title>
+    <!-- Inline CSS for simplicity. Consider external CSS for larger projects. -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        input[type="submit"] {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Exam Question</h1>
+    <form th:action="@{/instructor/exam-questions/update}" th:object="${examQuestion}" method="post">
+        <input type="hidden" th:field="*{id}" />
+        <!-- Grouping each label and input pair within a 'form-group' div -->
+        <div class="form-group">
+            <label>Question Text:</label>
+            <input type="text" th:field="*{questionText}" />
+        </div>
+        <div class="form-group">
+            <label>Option A:</label>
+            <input type="text" th:field="*{optionA}" />
+        </div>
+        <div class="form-group">
+            <label>Option B:</label>
+            <input type="text" th:field="*{optionB}" />
+        </div>
+        <div class="form-group">
+            <label>Option C:</label>
+            <input type="text" th:field="*{optionC}" />
+        </div>
+        <div class="form-group">
+            <label>Option D:</label>
+            <input type="text" th:field="*{optionD}" />
+        </div>
+        <div class="form-group">
+            <label>Correct Answer:</label>
+            <input type="text" th:field="*{correctAnswer}" />
+        </div>
+        <input type="submit" value="Save" />
+    </form>
+</body>
+</html>

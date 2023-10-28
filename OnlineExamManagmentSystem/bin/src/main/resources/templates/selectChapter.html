@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Select Chapter</title>
+</head>
+<body>
+
+<h2>Select a Chapter to Generate an Exam</h2>
+
+<form action="#" th:action="@{/exam/selectChapter}" th:object="${selectedChapter}" method="post">
+    <label for="chapter">Choose a chapter:</label>
+    <select id="chapter" name="selectedChapter">
+        <option value="" th:each="chapter : ${chapters}" th:value="${chapter}" th:text="${'Chapter ' + chapter}">Chapter</option>
+    </select>
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

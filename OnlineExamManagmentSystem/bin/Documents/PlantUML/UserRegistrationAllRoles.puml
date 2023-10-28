@@ -1,0 +1,49 @@
+@startuml
+
+class AdminController{
+  + registerUser(firstName: String, lastName: String, email: String, password: String, username: String, role: String): String
+}
+
+class Administrator {
+  - adminFirstName: String
+  - adminLastName: String
+  - adminEmail: String
+  - adminUsername: String
+  - adminPassword: String
+}
+
+class ScheduleManager {
+  - managerFirstName: String
+  - managerLastName: String
+  - managerEmail: String
+  - managerUsername: String
+  - managerPassword: String
+}
+
+class Student {
+  - studentFirstName: String
+  - studentLastName: String
+  - studentEmail: String
+  - studentUsername: String
+  - studentPassword: String
+}
+
+class Instructor {
+  - instructorFirstName: String
+  - instructorLastName: String
+  - instructorEmail: String
+  - instructorUsername: String
+  - instructorPassword: String
+}
+
+AdminController--> Administrator: registerUser()
+AdminController--> ScheduleManager: registerUser()
+AdminController--> Student: registerUser()
+AdminController--> Instructor: registerUser()
+
+Administrator--> AdministratorRepository
+ScheduleManager --> ScheduleManagerRepository
+Student --> StudentRepository
+Instructor--> InstructorRepository
+@enduml
+
