@@ -104,29 +104,25 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 	        return examQuestionRepository.findByChapter(chapter);
 	    }
 
-	@Override
-	public List<ExamQuestion> getAllExamQuestions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 @Override
+	 public List<ExamQuestion> getAllExamQuestions() {
+	     return examQuestionRepository.findAll();
+	 }
 
-	@Override
-	public ExamQuestion getExamQuestionById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 @Override
+	 public ExamQuestion getExamQuestionById(Long id) {
+	     return examQuestionRepository.findById(id).orElse(null);
+	 }
 
-	@Override
-	public void saveExamQuestion(ExamQuestion examQuestion) {
-		// TODO Auto-generated method stub
-		
-	}
+	 @Override
+	 public void saveExamQuestion(ExamQuestion examQuestion) {
+	     examQuestionRepository.save(examQuestion);
+	 }
 
-	@Override
-	public void deleteExamQuestion(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
+	 @Override
+	 public void deleteExamQuestion(Long id) {
+	     examQuestionRepository.deleteById(id);
+	 }
 
 	@Override
 	public void readExamQuestionsFromFile() throws IOException {

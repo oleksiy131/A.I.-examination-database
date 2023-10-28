@@ -72,35 +72,40 @@ public class ExamController {
         this.examService = examService;
     }
     
+
     @PostMapping("/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model, RedirectAttributes redirectAttributes) {
-        // Check if the list of selected question IDs is not null or empty
-        if (examDetails.getSelectedExamQuestionIds() == null || examDetails.getSelectedExamQuestionIds().isEmpty()) {
-        	System.out.println("LOG: getSelectedExamQuestionIds is NULL");
-            // Redirect back to the form page and display an error message.
-            redirectAttributes.addFlashAttribute("error", "No questions were selected for the exam.");
-            return "redirect:/exam/generateExam"; // assuming 'generateExam' is the path to your form
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+        
+        if (selectedExamQuestionIds == null) {
+        	System.out.println("selected question is empty bruh");
         }
 
-        // If there are selected questions, continue with the exam generation process.
-        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
-
-        // Fetch the selected questions from the database.
+     // Fetch selected questions from the database
         List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
             .map(examQuestionService::getExamQuestionById)
             .collect(Collectors.toList());
 
-        // Create a new Exam instance and set its properties.
+        // Create a new exam and set its properties
         Exam exam = new Exam();
         exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
         exam.setQuestions(selectedQuestions);
+        System.out.println("Question set: " + exam.getQuestions());
 
-        // Save the newly created exam instance to the database.
+        
+     // Save the exam to the database
         Exam savedExam = examRepository.save(exam);
 
-        // Redirect to a handler method that presents the exam link.
-        return "redirect:/exam/" + savedExam.getId() + "/link";
+        // Add the generated exam's ID to the model
+        model.addAttribute("generatedExamId", savedExam.getId());
+
+        // Also, add the exam questions to the model again as they were before
+        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
+        model.addAttribute("examQuestions", examQuestions);
+
+        // Return the same view which is used for selecting exam questions, not a new one
+        return "generateExam"; // This should be the name of your Thymeleaf template for selecting questions
     }
     
 
@@ -150,7 +155,7 @@ public class ExamController {
     }
 
     @GetMapping("/{id}")
-    public String takeExam(@PathVariable Long id, Model model) {
+    public String takeExamz(@PathVariable Long id, Model model) {
         // Retrieve the exam by ID from the repository
         Exam exam = examService.getExamById(id);
 
@@ -167,6 +172,28 @@ public class ExamController {
         }
 
         return "error"; 
+    }
+    
+    @GetMapping("/take/{id}")
+    public String takeExam(@PathVariable Long id, Model model) {
+        // Retrieve the exam by ID from the repository
+        Exam exam = examService.getExamById(id);
+        
+        System.out.println("Questions retrieved: " + exam.getQuestions());
+
+        if (exam != null) {
+            // Check if the exam's duration is still valid
+            //if (isExamDurationValid(exam)) {
+                model.addAttribute("exam", exam);
+                return "takeExam"; 
+          //  } else {
+          //      model.addAttribute("message", "The exam has expired.");
+          //  }
+        } else {
+            model.addAttribute("message", "Exam not found.");
+        }
+
+        return "error"; // name of your error view template
     }
     
     @GetMapping("/exam/{id}/link")
@@ -269,14 +296,17 @@ public class ExamController {
     }
 
     private boolean isExamDurationValid(Exam exam) {
-        LocalDateTime now = LocalDateTime.now(); // Current date and time
-
-        // Calculate the exam's end time based on its duration
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime examEndTime = exam.getStartTime().plusMinutes(exam.getDurationInMinutes());
 
-        // Check if the current time is before the exam's end time
+        // Debugging lines: print times to the console or examine them in your debugger.
+        System.out.println("Current Time: " + now);
+        System.out.println("Exam Start Time: " + exam.getStartTime());
+        System.out.println("Exam End Time: " + examEndTime);
+
         return now.isBefore(examEndTime);
     }
+
 
 
  // Implement this method to calculate the total score
@@ -340,7 +370,7 @@ public class ExamController {
         // Create a new exam and set its properties.
         Exam exam = new Exam();
         exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
         exam.setQuestions(selectedQuestions);
 
         // Save the exam to the database.

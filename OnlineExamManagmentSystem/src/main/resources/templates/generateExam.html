@@ -15,13 +15,13 @@
     <input type="text" id="examName" name="examName" required><br><br>
 
     <label for="duration">Duration (in minutes):</label><br>
-    <input type="number" id="duration" name="duration" required><br><br>
+    <input type="number" id="durationInMinutes" name="durationInMinutes" required><br><br>
 
     <h3>Select Questions:</h3>
     <!-- Displaying questions with checkboxes for selection -->
     <div th:each="question, iterStat : ${questions}">
-        <!-- Corrected name attribute to group question IDs -->
-        <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedQuestionIds" />
+        <!-- Corrected name attribute to match the field in the ExamDetails class -->
+        <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedExamQuestionIds" />
         <label th:for="${'question' + iterStat.index}" th:text="${question.questionText}">Question Text</label><br>
         
         <!-- Displaying options for each question -->
