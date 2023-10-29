@@ -73,10 +73,10 @@ $(function(){
         <thead>
             <tr>
                 <th>ID</th>
+				<th>Username</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
-                <th>Username</th>
                <!-- <th>Password</th> -->
               <!--  <th>Enrolled Credits</th> -->
                 <th>Edit</th>
@@ -88,10 +88,10 @@ $(function(){
             <!-- Use Thymeleaf to iterate through the list of students -->
             <tr th:each="student : ${students}">
                 <td th:text="${student.studentId}"></td>
+                <td th:text="${student.studentUsername}"></td>
                 <td th:text="${student.studentFirstName}"></td>
                 <td th:text="${student.studentLastName}"></td>
                 <td th:text="${student.studentEmail}"></td>
-                <td th:text="${student.studentUsername}"></td>
            <!--     <td th:text="${student.studentPassword}"></td> -->
                <!-- <td th:text="${student.creditsTaken}"></td> -->
                 <td><a th:href="@{/av-edit-student/{id}(id=${student.studentId})}">Edit</a></td>
