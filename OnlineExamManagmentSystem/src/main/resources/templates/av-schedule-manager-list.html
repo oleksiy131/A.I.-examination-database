@@ -76,7 +76,7 @@ $(function(){
             <tr>
                 <th>ID</th>
                 <th>Username</th>
-                <th>Password</th>
+              <!--  <th>Password</th> -->
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
@@ -89,7 +89,7 @@ $(function(){
             <tr th:each="scheduleManager : ${scheduleManager}">
                 <td th:text="${scheduleManager.managerId}"></td>
                 <td th:text="${scheduleManager.managerUsername}"></td>
-                <td th:text="${scheduleManager.managerPassword}"></td>
+              <!--  <td th:text="${scheduleManager.managerPassword}"></td> -->
                 <td th:text="${scheduleManager.managerFirstName}"></td>
                 <td th:text="${scheduleManager.managerLastName}"></td>
                 <td th:text="${scheduleManager.managerEmail}"></td>

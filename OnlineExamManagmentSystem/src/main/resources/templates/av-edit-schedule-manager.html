@@ -87,9 +87,26 @@
 	}
 	
 </style>
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
 </head>
+
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/admin_homepage");
+});
+</script>
+
 <body>
-	<h4><a th:href="@{/admin_homepage}">Click here to return to Home Screen</a></h4>
+
+<br>
+
 <form th:action="@{/av-edit-schedule-manager/{id}(id=${scheduleManager.managerId})}" 
       th:object="${scheduleManager}" 
       method="post">

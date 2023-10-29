@@ -78,7 +78,7 @@ $(function(){
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Username</th>
-                <th>Password</th>
+               <!-- <th>Password</th> -->
                 <th>Edit</th>
                 <th>Delete</th>
                 
@@ -92,7 +92,7 @@ $(function(){
                 <td th:text="${instructor.instructorLastName}"></td>
                 <td th:text="${instructor.instructorEmail}"></td>
                 <td th:text="${instructor.instructorUsername}"></td>
-                <td th:text="${instructor.instructorPassword}"></td>
+              <!--  <td th:text="${instructor.instructorPassword}"></td> -->
                 <td><a th:href="@{/av-edit-instructor/{id}(id=${instructor.instructorId})}">Edit</a></td>
                 <td>
                 <a class="delete-link" th:href="@{/instructor/delete/{id}(id=${instructor.instructorId})}" onclick="return confirm('Are you sure?')">Delete</a>
