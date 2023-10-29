@@ -231,21 +231,25 @@ public class ExamController {
                 // Parse the form parameters to retrieve question IDs and corresponding user answers
                 Map<Long, String> userAnswers = new HashMap<>();
                 for (Map.Entry<String, String> entry : formParams.entrySet()) {
-                    if (entry.getKey().startsWith("answer_")) {
-                        Long questionId = Long.parseLong(entry.getKey().substring(7)); // Extract question ID from the key
+                    // Assuming the formParams keys are in the format "answers[questionId]"
+                    String key = entry.getKey();
+                    if (key.startsWith("answers[")) {
+                        String questionIdStr = key.substring(key.indexOf('[') + 1, key.indexOf(']'));
+                        Long questionId = Long.parseLong(questionIdStr);
                         userAnswers.put(questionId, entry.getValue());
                     }
                 }
 
-             // Calculate the total score and identify incorrect questions
+                // Calculate the total score and identify incorrect questions
                 int totalScore = 0;
                 List<ExamQuestion> incorrectQuestions = new ArrayList<>();
                 for (ExamQuestion question : exam.getQuestions()) {
                     String userAnswer = userAnswers.get(question.getId());
-                    question.setUserAnswer(userAnswer); // Recording the user's answer here.
                     if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                         totalScore++;
                     } else {
+                        // If the answer is incorrect, set the user's answer for review and add to the list
+                        question.setUserAnswer(userAnswer); // Ensure the 'userAnswer' field exists in your ExamQuestion class
                         incorrectQuestions.add(question);
                     }
                 }
@@ -264,12 +268,12 @@ public class ExamController {
                 // Save the exam submission to the database
                 saveExamSubmission(examSubmission, userId);
 
-                // Add attributes to the model for the view
+             // Add attributes to the model for the view
                 model.addAttribute("score", totalScore);
                 model.addAttribute("totalQuestions", exam.getQuestions().size());
                 model.addAttribute("incorrectQuestions", incorrectQuestions);
 
-                return "showScore"; 
+                return "showScore"; // This is your Thymeleaf template
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }
@@ -277,7 +281,7 @@ public class ExamController {
             model.addAttribute("message", "Exam not found.");
         }
 
-        return "error"; 
+        return "error"; // This can be a generic error page or specific to this context
     }
 
 
