@@ -184,7 +184,7 @@ public class InstructorController {
         // Create a new exam and set its properties
         Exam exam = new Exam();
         exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
         exam.setQuestions(selectedQuestions);
      // Save the exam to the database
         Exam savedExam = examRepository.save(exam);

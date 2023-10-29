@@ -72,35 +72,40 @@ public class ExamController {
         this.examService = examService;
     }
     
+
     @PostMapping("/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model, RedirectAttributes redirectAttributes) {
-        // Check if the list of selected question IDs is not null or empty
-        if (examDetails.getSelectedExamQuestionIds() == null || examDetails.getSelectedExamQuestionIds().isEmpty()) {
-        	System.out.println("LOG: getSelectedExamQuestionIds is NULL");
-            // Redirect back to the form page and display an error message.
-            redirectAttributes.addFlashAttribute("error", "No questions were selected for the exam.");
-            return "redirect:/exam/generateExam"; // assuming 'generateExam' is the path to your form
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+        
+        if (selectedExamQuestionIds == null) {
+        	System.out.println("selected question is empty bruh");
         }
 
-        // If there are selected questions, continue with the exam generation process.
-        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
-
-        // Fetch the selected questions from the database.
+     // Fetch selected questions from the database
         List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
             .map(examQuestionService::getExamQuestionById)
             .collect(Collectors.toList());
 
-        // Create a new Exam instance and set its properties.
+        // Create a new exam and set its properties
         Exam exam = new Exam();
         exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
         exam.setQuestions(selectedQuestions);
+        System.out.println("Question set: " + exam.getQuestions());
 
-        // Save the newly created exam instance to the database.
+        
+     // Save the exam to the database
         Exam savedExam = examRepository.save(exam);
 
-        // Redirect to a handler method that presents the exam link.
-        return "redirect:/exam/" + savedExam.getId() + "/link";
+        // Add the generated exam's ID to the model
+        model.addAttribute("generatedExamId", savedExam.getId());
+
+        // Also, add the exam questions to the model again as they were before
+        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
+        model.addAttribute("examQuestions", examQuestions);
+
+        // Return the same view which is used for selecting exam questions, not a new one
+        return "generateExam"; // This should be the name of your Thymeleaf template for selecting questions
     }
     
 
@@ -150,7 +155,7 @@ public class ExamController {
     }
 
     @GetMapping("/{id}")
-    public String takeExam(@PathVariable Long id, Model model) {
+    public String takeExamz(@PathVariable Long id, Model model) {
         // Retrieve the exam by ID from the repository
         Exam exam = examService.getExamById(id);
 
@@ -167,6 +172,28 @@ public class ExamController {
         }
 
         return "error"; 
+    }
+    
+    @GetMapping("/take/{id}")
+    public String takeExam(@PathVariable Long id, Model model) {
+        // Retrieve the exam by ID from the repository
+        Exam exam = examService.getExamById(id);
+        
+        System.out.println("Questions retrieved: " + exam.getQuestions());
+
+        if (exam != null) {
+            // Check if the exam's duration is still valid
+            if (isExamDurationValid(exam)) {
+                model.addAttribute("exam", exam);
+                return "takeExam"; 
+            } else {
+                model.addAttribute("message", "The exam has expired.");
+            }
+        } else {
+            model.addAttribute("message", "Exam not found.");
+        }
+
+        return "error"; // name of your error view template
     }
     
     @GetMapping("/exam/{id}/link")
@@ -204,21 +231,25 @@ public class ExamController {
                 // Parse the form parameters to retrieve question IDs and corresponding user answers
                 Map<Long, String> userAnswers = new HashMap<>();
                 for (Map.Entry<String, String> entry : formParams.entrySet()) {
-                    if (entry.getKey().startsWith("answer_")) {
-                        Long questionId = Long.parseLong(entry.getKey().substring(7)); // Extract question ID from the key
+                    // Assuming the formParams keys are in the format "answers[questionId]"
+                    String key = entry.getKey();
+                    if (key.startsWith("answers[")) {
+                        String questionIdStr = key.substring(key.indexOf('[') + 1, key.indexOf(']'));
+                        Long questionId = Long.parseLong(questionIdStr);
                         userAnswers.put(questionId, entry.getValue());
                     }
                 }
 
-             // Calculate the total score and identify incorrect questions
+                // Calculate the total score and identify incorrect questions
                 int totalScore = 0;
                 List<ExamQuestion> incorrectQuestions = new ArrayList<>();
                 for (ExamQuestion question : exam.getQuestions()) {
                     String userAnswer = userAnswers.get(question.getId());
-                    question.setUserAnswer(userAnswer); // Recording the user's answer here.
                     if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                         totalScore++;
                     } else {
+                        // If the answer is incorrect, set the user's answer for review and add to the list
+                        question.setUserAnswer(userAnswer); // Ensure the 'userAnswer' field exists in your ExamQuestion class
                         incorrectQuestions.add(question);
                     }
                 }
@@ -237,12 +268,12 @@ public class ExamController {
                 // Save the exam submission to the database
                 saveExamSubmission(examSubmission, userId);
 
-                // Add attributes to the model for the view
+             // Add attributes to the model for the view
                 model.addAttribute("score", totalScore);
                 model.addAttribute("totalQuestions", exam.getQuestions().size());
                 model.addAttribute("incorrectQuestions", incorrectQuestions);
 
-                return "showScore"; 
+                return "showScore"; // This is your Thymeleaf template
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }
@@ -250,7 +281,7 @@ public class ExamController {
             model.addAttribute("message", "Exam not found.");
         }
 
-        return "error"; 
+        return "error"; // This can be a generic error page or specific to this context
     }
 
 
@@ -269,14 +300,17 @@ public class ExamController {
     }
 
     private boolean isExamDurationValid(Exam exam) {
-        LocalDateTime now = LocalDateTime.now(); // Current date and time
-
-        // Calculate the exam's end time based on its duration
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime examEndTime = exam.getStartTime().plusMinutes(exam.getDurationInMinutes());
 
-        // Check if the current time is before the exam's end time
+        // Debugging lines: print times to the console or examine them in your debugger.
+        System.out.println("Current Time: " + now);
+        System.out.println("Exam Start Time: " + exam.getStartTime());
+        System.out.println("Exam End Time: " + examEndTime);
+
         return now.isBefore(examEndTime);
     }
+
 
 
  // Implement this method to calculate the total score
@@ -340,7 +374,7 @@ public class ExamController {
         // Create a new exam and set its properties.
         Exam exam = new Exam();
         exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getExamDuration());
+        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
         exam.setQuestions(selectedQuestions);
 
         // Save the exam to the database.

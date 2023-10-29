@@ -8,6 +8,19 @@
 
 <h2>Generate Exam</h2>
 
+<!-- Display the generated exam link if the 'generatedExamId' attribute is present -->
+    <div th:if="${generatedExamId != null}">
+        <p>Generated Exam Link: 
+            <a th:href="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+               th:text="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+               target="_blank">Exam Link</a>
+        </p>
+        <p>Please copy the above link to share.</p>
+        
+        <!-- Hyperlink to navigate back to the exam questions page -->
+        <a href="/instructor/exam-questions">Back to Exam Questions Selection</a>
+    </div>
+
 <form action="#" th:action="@{/exam/generate}" method="post">
     <input type="hidden" name="chapter" th:value="${selectedChapter}" />
 
@@ -15,13 +28,13 @@
     <input type="text" id="examName" name="examName" required><br><br>
 
     <label for="duration">Duration (in minutes):</label><br>
-    <input type="number" id="duration" name="duration" required><br><br>
+    <input type="number" id="durationInMinutes" name="durationInMinutes" required><br><br>
 
     <h3>Select Questions:</h3>
     <!-- Displaying questions with checkboxes for selection -->
     <div th:each="question, iterStat : ${questions}">
-        <!-- Corrected name attribute to group question IDs -->
-        <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedQuestionIds" />
+        <!-- Corrected name attribute to match the field in the ExamDetails class -->
+        <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedExamQuestionIds" />
         <label th:for="${'question' + iterStat.index}" th:text="${question.questionText}">Question Text</label><br>
         
         <!-- Displaying options for each question -->
