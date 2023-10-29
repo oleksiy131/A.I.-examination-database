@@ -84,6 +84,8 @@
 <body>
     <div class="exam-container">
         <h1>[[${exam.examName}]]</h1>
+        
+        <div class="timer" id="timer"></div>
 
         <!-- Start of the form -->
         <form th:action="@{/exam/submit/{id}(id=${exam.id})}" method="post">

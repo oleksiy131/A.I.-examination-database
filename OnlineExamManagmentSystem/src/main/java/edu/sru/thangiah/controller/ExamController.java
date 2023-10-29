@@ -183,12 +183,12 @@ public class ExamController {
 
         if (exam != null) {
             // Check if the exam's duration is still valid
-            //if (isExamDurationValid(exam)) {
+            if (isExamDurationValid(exam)) {
                 model.addAttribute("exam", exam);
                 return "takeExam"; 
-          //  } else {
-          //      model.addAttribute("message", "The exam has expired.");
-          //  }
+            } else {
+                model.addAttribute("message", "The exam has expired.");
+            }
         } else {
             model.addAttribute("message", "Exam not found.");
         }
