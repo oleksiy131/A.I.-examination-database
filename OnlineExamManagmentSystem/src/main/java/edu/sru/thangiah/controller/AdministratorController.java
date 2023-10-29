@@ -346,11 +346,20 @@ public class AdministratorController {
 	
 	@PostMapping("/av-update/{id}")
     public String updateStudentAV(@PathVariable("id") long id, @Validated Student student, 
-      BindingResult result, Model model) {
+      BindingResult result, Model model, @RequestParam("newPassword") String newStudentPassword, 
+	  @RequestParam("confirmPassword") String confirmStudentPassword) {
         if (result.hasErrors()) {
             student.setStudentId(id);
-            return "av-update-user";
+            return "av-edit-student";
         }
+        // Validate the new password and confirm password
+	    if (!newStudentPassword.equals(confirmStudentPassword)) {
+	        model.addAttribute("passwordError", "Passwords do not match");
+	        return "av-edit-student";
+	    }
+	    
+	    String encryptedPassword = passwordEncoder.encode(newStudentPassword);
+	    student.setStudentPassword(encryptedPassword);
         
         // Debugging: Print the received student data
         System.out.println("Received Student Data:");
@@ -364,6 +373,14 @@ public class AdministratorController {
 //        student.setRole(student.getRole());
 //        student.setStudentPassword(student.getStudentPassword());
         studentRepository.save(student);
+        
+     // Create or update user information
+	    User user = userRepository.findByUsername(student.getStudentUsername())
+	        .orElse(new User());  // Create a new user if not found
+	    user.setUsername(student.getStudentUsername());
+	    user.setPassword(encryptedPassword);
+	    user.setEmail(student.getStudentEmail());
+	    userRepository.save(user);
         return "av-edit-confirmation";
     }
 	
@@ -430,11 +447,21 @@ public class AdministratorController {
 
 	@PostMapping("/av-edit-instructor/{id}")
 	public String updateInstructorAV(@PathVariable("id") long id, @Validated Instructor instructor, 
-	  BindingResult result, Model model) {
+	  BindingResult result, Model model, @RequestParam("newPassword") String newInstructorPassword, 
+	  @RequestParam("confirmPassword") String confirmInstructorPassword) {
 	    if (result.hasErrors()) {
 	        instructor.setInstructorId(id); 
 	        return "av-edit-instructor";
 	    }
+	    
+	 // Validate the new password and confirm password
+	    if (!newInstructorPassword.equals(confirmInstructorPassword)) {
+	        model.addAttribute("passwordError", "Passwords do not match");
+	        return "av-edit-instructor";
+	    }
+	    
+	    String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
+	    instructor.setInstructorPassword(encryptedPassword);
 	    
 	    // Debugging: Print the received instructor data
 	    System.out.println("Received Instructor Data:");
@@ -445,6 +472,14 @@ public class AdministratorController {
 	    System.out.println("Path Variable ID: " + id);
 	    
 	    instructorRepository.save(instructor);
+	    
+	    // Create or update user information
+	    User user = userRepository.findByUsername(instructor.getInstructorUsername())
+	        .orElse(new User());  // Create a new user if not found
+	    user.setUsername(instructor.getInstructorUsername());
+	    user.setPassword(encryptedPassword);
+	    user.setEmail(instructor.getInstructorEmail());
+	    userRepository.save(user);
 	    return "av-instructor-edit-confirmation"; 
 	}
 
@@ -475,11 +510,21 @@ public class AdministratorController {
 	
 	@PostMapping("/av-edit-schedule-manager/{id}")
 	public String updateScheduleManagersAV(@PathVariable("id") long id, @Validated ScheduleManager manager, 
-	  BindingResult result, Model model) {
+	  BindingResult result, Model model, @RequestParam("newPassword") String newManagerPassword, 
+	  @RequestParam("confirmPassword") String confirmManagerPassword) {
 	    if (result.hasErrors()) {
 	    	manager.setManagerId(id); 
 	        return "av-edit-schedule-manager";
 	    }
+	    
+	 // Validate the new password and confirm password
+	    if (!newManagerPassword.equals(confirmManagerPassword)) {
+	        model.addAttribute("passwordError", "Passwords do not match");
+	        return "av-edit-schedule-manager";
+	    }
+	    
+	    String encryptedPassword = passwordEncoder.encode(newManagerPassword);
+	    manager.setManagerPassword(encryptedPassword);
 	    
 	    // Debugging: Print the received instructor data
 	    System.out.println("Received Instructor Data:");
@@ -491,6 +536,14 @@ public class AdministratorController {
 
 	    
 	    SMRepo.save(manager);
+	    
+	    // Create or update user information
+	    User user = userRepository.findByUsername(manager.getManagerUsername())
+	        .orElse(new User());  // Create a new user if not found
+	    user.setUsername(manager.getManagerUsername());
+	    user.setPassword(encryptedPassword);
+	    user.setEmail(manager.getManagerEmail());
+	    userRepository.save(user);
 	    return "av-schedule-manager-edit-confirmation"; 
 	}
 

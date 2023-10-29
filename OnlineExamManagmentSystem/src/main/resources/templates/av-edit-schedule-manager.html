@@ -25,7 +25,7 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"] {
+  input[type="text"], input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -118,8 +118,23 @@
     <span class="error" th:if="${#fields.hasErrors('managerUsername')}" th:errors="*{managerUsername}"></span>
     <br>
     
+    <!-- New Password Field -->
+	<label for="newPassword">New Password</label>
+	<input type="password" id="newPassword" name="newPassword" placeholder="New Password:" required>
+	<span class="error"></span>
+	<br>
+	
+
+	<!-- Confirm New Password Field -->
+	<label for="confirmPassword">Confirm New Password</label>
+	<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password:" required>
+	<span class="error"></span>
+    <br>
+
+	<!-- Password Error Message -->
+	<span class="error" th:if="${passwordError}" th:text="${passwordError}"></span>
+    
     <!-- Hidden Fields -->
-    <input type="hidden" th:field="*{managerPassword}">
     <input type="hidden" th:field="*{managerId}">
     
     <!-- Submit Button -->
