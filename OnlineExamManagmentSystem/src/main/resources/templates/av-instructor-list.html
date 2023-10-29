@@ -74,10 +74,10 @@ $(function(){
         <thead>
             <tr>
                 <th>ID</th>
+                <th>Username</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Email</th>
-                <th>Username</th>
                <!-- <th>Password</th> -->
                 <th>Edit</th>
                 <th>Delete</th>
@@ -88,10 +88,10 @@ $(function(){
             <!-- Use Thymeleaf to iterate through the list of instructors -->
             <tr th:each="instructor : ${instructors}">
                 <td th:text="${instructor.instructorId}"></td>
+                <td th:text="${instructor.instructorUsername}"></td>
                 <td th:text="${instructor.instructorFirstName}"></td>
                 <td th:text="${instructor.instructorLastName}"></td>
                 <td th:text="${instructor.instructorEmail}"></td>
-                <td th:text="${instructor.instructorUsername}"></td>
               <!--  <td th:text="${instructor.instructorPassword}"></td> -->
                 <td><a th:href="@{/av-edit-instructor/{id}(id=${instructor.instructorId})}">Edit</a></td>
                 <td>
