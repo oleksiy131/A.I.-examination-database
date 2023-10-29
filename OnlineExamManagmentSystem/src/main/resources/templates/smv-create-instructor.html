@@ -74,19 +74,27 @@
         }
     </style>
    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 
 </head>
+
+
+<div id="nav-placeholder">
+
+</div>
+
+<br>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
+});
+</script>
 
 <body>
 	
     <h2>Create Instructor</h2>
-    <!-- Home button -->
-        <div class="home">
-            <a href="/schedule-manager/schedule_manager_homepage">
-            <i class="fas fa-home"></i> 
-        </a>
-        </div>
-        <br>
+
     <form action="/schedule-manager/add" method="post">
         <label for="id">ID:</label>
         <input type="text" id="id" name="instructorId" required>
