@@ -344,6 +344,7 @@ public class AdministratorController {
         return "av-edit-student";
     }
 	
+	@Transactional
 	@PostMapping("/av-update/{id}")
     public String updateStudentAV(@PathVariable("id") long id, @Validated Student student, 
       BindingResult result, Model model, @RequestParam("newPassword") String newStudentPassword, 
@@ -352,14 +353,32 @@ public class AdministratorController {
             student.setStudentId(id);
             return "av-edit-student";
         }
-        // Validate the new password and confirm password
-	    if (!newStudentPassword.equals(confirmStudentPassword)) {
-	        model.addAttribute("passwordError", "Passwords do not match");
-	        return "av-edit-student";
-	    }
-	    
-	    String encryptedPassword = passwordEncoder.encode(newStudentPassword);
-	    student.setStudentPassword(encryptedPassword);
+        // Fetch the user (or create a new one if not found)
+        User user = userRepository.findByUsername(student.getStudentUsername())
+                .orElse(new User());  
+
+        // Only process password if both fields are not empty
+        if (!newStudentPassword.isEmpty() && !confirmStudentPassword.isEmpty()) {
+            // Validate the new password and confirm password
+            if (!newStudentPassword.equals(confirmStudentPassword)) {
+                model.addAttribute("passwordError", "Passwords do not match");
+                return "av-edit-student";
+            }
+            
+            String encryptedPassword = passwordEncoder.encode(newStudentPassword);
+            student.setStudentPassword(encryptedPassword);
+            
+            // Update user's password
+            user.setPassword(encryptedPassword);
+        }
+
+        // Update other user properties
+        user.setUsername(student.getStudentUsername());
+        user.setEmail(student.getStudentEmail());
+        userRepository.save(user);  // Save the user to userRepository
+
+        // Save the student
+        studentRepository.save(student);
         
         // Debugging: Print the received student data
         System.out.println("Received Student Data:");
@@ -369,18 +388,6 @@ public class AdministratorController {
         System.out.println("Email: " + student.getStudentEmail());
         System.out.println("Path Variable ID: " + id);
         
-//        student.setStudentId(id);
-//        student.setRole(student.getRole());
-//        student.setStudentPassword(student.getStudentPassword());
-        studentRepository.save(student);
-        
-     // Create or update user information
-	    User user = userRepository.findByUsername(student.getStudentUsername())
-	        .orElse(new User());  // Create a new user if not found
-	    user.setUsername(student.getStudentUsername());
-	    user.setPassword(encryptedPassword);
-	    user.setEmail(student.getStudentEmail());
-	    userRepository.save(user);
         return "av-edit-confirmation";
     }
 	
@@ -444,7 +451,7 @@ public class AdministratorController {
 	    return "av-instructor-edit-confirmation";
 	}
 
-
+	@Transactional
 	@PostMapping("/av-edit-instructor/{id}")
 	public String updateInstructorAV(@PathVariable("id") long id, @Validated Instructor instructor, 
 	  BindingResult result, Model model, @RequestParam("newPassword") String newInstructorPassword, 
@@ -454,14 +461,33 @@ public class AdministratorController {
 	        return "av-edit-instructor";
 	    }
 	    
-	 // Validate the new password and confirm password
-	    if (!newInstructorPassword.equals(confirmInstructorPassword)) {
-	        model.addAttribute("passwordError", "Passwords do not match");
-	        return "av-edit-instructor";
-	    }
 	    
-	    String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
-	    instructor.setInstructorPassword(encryptedPassword);
+	    // Fetch the user (or create a new one if not found)
+	    User user = userRepository.findByUsername(instructor.getInstructorUsername())
+	            .orElse(new User());  
+
+	    // Only process password if both fields are not empty
+	    if (!newInstructorPassword.isEmpty() && !confirmInstructorPassword.isEmpty()) {
+	        // Validate the new password and confirm password
+	        if (!newInstructorPassword.equals(confirmInstructorPassword)) {
+	            model.addAttribute("passwordError", "Passwords do not match");
+	            return "av-edit-instructor";
+	        }
+	        
+	        String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
+	        instructor.setInstructorPassword(encryptedPassword);
+	        
+	        // Update user's password
+	        user.setPassword(encryptedPassword);
+	    }
+
+	    // Update other user properties
+	    user.setUsername(instructor.getInstructorUsername());
+	    user.setEmail(instructor.getInstructorEmail());
+	    userRepository.save(user);  // Save the user to userRepository
+
+	    // Save the instructor
+	    instructorRepository.save(instructor);
 	    
 	    // Debugging: Print the received instructor data
 	    System.out.println("Received Instructor Data:");
@@ -471,18 +497,8 @@ public class AdministratorController {
 	    System.out.println("Email: " + instructor.getInstructorEmail());
 	    System.out.println("Path Variable ID: " + id);
 	    
-	    instructorRepository.save(instructor);
-	    
-	    // Create or update user information
-	    User user = userRepository.findByUsername(instructor.getInstructorUsername())
-	        .orElse(new User());  // Create a new user if not found
-	    user.setUsername(instructor.getInstructorUsername());
-	    user.setPassword(encryptedPassword);
-	    user.setEmail(instructor.getInstructorEmail());
-	    userRepository.save(user);
 	    return "av-instructor-edit-confirmation"; 
 	}
-
 	
 	@GetMapping("/list-instructors-av")
 	public String showInstructorsAV(Model model) {
@@ -508,6 +524,7 @@ public class AdministratorController {
 	    return "av-edit-schedule-manager"; 
 	}
 	
+	@Transactional
 	@PostMapping("/av-edit-schedule-manager/{id}")
 	public String updateScheduleManagersAV(@PathVariable("id") long id, @Validated ScheduleManager manager, 
 	  BindingResult result, Model model, @RequestParam("newPassword") String newManagerPassword, 
@@ -517,14 +534,32 @@ public class AdministratorController {
 	        return "av-edit-schedule-manager";
 	    }
 	    
-	 // Validate the new password and confirm password
-	    if (!newManagerPassword.equals(confirmManagerPassword)) {
-	        model.addAttribute("passwordError", "Passwords do not match");
-	        return "av-edit-schedule-manager";
-	    }
+	    // Fetch the user (or create a new one if not found)
+	    User user = userRepository.findByUsername(manager.getManagerUsername())
+	            .orElse(new User());  
 	    
-	    String encryptedPassword = passwordEncoder.encode(newManagerPassword);
-	    manager.setManagerPassword(encryptedPassword);
+	    // Only process password if both fields are not empty
+	    if (!newManagerPassword.isEmpty() && !confirmManagerPassword.isEmpty()) {
+	        // Validate the new password and confirm password
+	        if (!newManagerPassword.equals(confirmManagerPassword)) {
+	            model.addAttribute("passwordError", "Passwords do not match");
+	            return "av-edit-schedule-manager";
+	        }
+	        
+	        String encryptedPassword = passwordEncoder.encode(newManagerPassword);
+	        manager.setManagerPassword(encryptedPassword);
+	        
+	        // Update user's password
+	        user.setPassword(encryptedPassword);
+	    }
+
+	    // Update other user properties
+	    user.setUsername(manager.getManagerUsername());
+	    user.setEmail(manager.getManagerEmail());
+	    userRepository.save(user);  // Save the user to userRepository
+
+	    // Save the manager
+	    SMRepo.save(manager);
 	    
 	    // Debugging: Print the received instructor data
 	    System.out.println("Received Instructor Data:");
@@ -533,17 +568,7 @@ public class AdministratorController {
 	    System.out.println("Last Name: " + manager.getManagerLastName());
 	    System.out.println("Email: " + manager.getManagerEmail());
 	    System.out.println("Path Variable ID: " + id);
-
 	    
-	    SMRepo.save(manager);
-	    
-	    // Create or update user information
-	    User user = userRepository.findByUsername(manager.getManagerUsername())
-	        .orElse(new User());  // Create a new user if not found
-	    user.setUsername(manager.getManagerUsername());
-	    user.setPassword(encryptedPassword);
-	    user.setEmail(manager.getManagerEmail());
-	    userRepository.save(user);
 	    return "av-schedule-manager-edit-confirmation"; 
 	}
 
@@ -554,5 +579,5 @@ public class AdministratorController {
         model.addAttribute("scheduleManager", scheduleManager);
         return "av-schedule-manager-list";
     }
-
+	
 }
