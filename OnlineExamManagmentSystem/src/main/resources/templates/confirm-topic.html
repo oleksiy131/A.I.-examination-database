@@ -1,17 +1,78 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Confirm Topic</title>
+    <style>
+        /* Progress bar container styling */
+        .progress-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        /* Progress bar styling with animation */
+        #progressBar {
+            height: 30px;
+            background-color: #4CAF50;
+            width: 0%;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated gradient for a dynamic look */
+        #progressBar::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(255,255,255,0.5), rgba(255,255,255,0.2));
+            animation: gradientAnimation 3s infinite;
+        }
+
+        /* Keyframes for gradient animation */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 100% 0;
+            }
+            100% {
+                background-position: -100% 0;
+            }
+        }
+    </style>
 </head>
 <body>
+
+<!-- Existing content of your HTML page -->
+
+<!-- Updated progress bar HTML element -->
+<div class="progress-container">
+    <div id="progressBar"></div>
+</div>
+
     <p>You have chosen the topic: <strong th:text="${topic}"></strong>. Is this correct? (Upon confirming, please wait for the exam to load) </p>
     <button id="confirmButton">Yes, proceed</button>
 
-    <script type="text/javascript">
-        document.getElementById('confirmButton').addEventListener('click', function() {
-            window.location.href = '/bot/quiz';
+<!-- JavaScript to periodically fetch the progress and update the progress bar -->
+<script>
+function updateProgressBar() {
+    fetch('/bot/getProgress')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('progressBar').style.width = data + '%';
+            if (data < 100) {
+                setTimeout(updateProgressBar, 100);  // Check progress every 1/10 of a second
+            }
         });
-    </script>
+}
+
+document.getElementById('confirmButton').addEventListener('click', function() {
+    window.location.href = '/bot/quiz';
+    updateProgressBar();  // Start updating the progress bar
+});
+</script>
 </body>
 </html>
