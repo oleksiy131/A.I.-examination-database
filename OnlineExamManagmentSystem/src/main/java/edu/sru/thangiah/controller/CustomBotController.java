@@ -54,6 +54,13 @@ public class CustomBotController {
     
     private String currentTopic;
     
+    private int progress = 0;
+
+    @GetMapping("/getProgress")
+    public ResponseEntity<Integer> getProgress() {
+        return new ResponseEntity<>(progress, HttpStatus.OK);
+    }
+    
     @GetMapping("/choose-topic")
     public ModelAndView chooseTopic() {
         return new ModelAndView("topic-choose");
@@ -78,6 +85,7 @@ public class CustomBotController {
     
     @GetMapping("/quiz")
     public ModelAndView getQuiz() {
+        progress = 0;  // Reset progress
         if (currentTopic == null || currentTopic.isEmpty()) {
             throw new IllegalArgumentException("Topic not set");
         }
@@ -120,11 +128,19 @@ public class CustomBotController {
         questionMap.put("question", lines[0]);
         questionMap.put("choices", choices);
         
+        // Increment the progress by 10% for each question generated
+        progress += 10;
+        if (progress > 100) {
+            progress = 100;
+        }
+        
         return questionMap;
     }
+
     
     @PostMapping("/quiz")
     public ModelAndView getQuiz(@RequestParam("topic") String topic) {
+        progress = 0;  // Reset progress
         quizData = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             quizData.add(generateQuestion(topic));
