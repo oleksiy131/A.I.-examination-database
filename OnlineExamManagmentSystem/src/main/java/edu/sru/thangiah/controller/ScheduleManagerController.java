@@ -515,11 +515,36 @@ public class ScheduleManagerController {
 
 	@PostMapping("/smv-update/{id}")
     public String updateStudentSMV(@PathVariable("id") long id, @Validated Student student, 
-      BindingResult result, Model model) {
+      BindingResult result, Model model, @RequestParam("newPassword") String newStudentPassword, 
+	  @RequestParam("confirmPassword") String confirmStudentPassword) {
         if (result.hasErrors()) {
             student.setStudentId(id);
             return "smv-update-user";
         }
+        
+     // checking the user to exist and creating it if it does not already exist
+        User user = userRepository.findByUsername(student.getStudentUsername())
+                .orElse(new User());  
+
+        // checking that both the password and the confirm password field are the same
+        if (!newStudentPassword.isEmpty() && !confirmStudentPassword.isEmpty()) {
+            if (!newStudentPassword.equals(confirmStudentPassword)) {
+                model.addAttribute("passwordError", "Passwords do not match");
+                return "smv-edit-student";
+            }
+            
+            String encryptedPassword = passwordEncoder.encode(newStudentPassword);
+            student.setStudentPassword(encryptedPassword);
+            
+            // updating the users password
+            user.setPassword(encryptedPassword);
+        }
+
+        // updating the users username and email to match the student
+        user.setUsername(student.getStudentUsername());
+        user.setEmail(student.getStudentEmail());
+        userRepository.save(user);  // Save the user to userRepository
+
         
         // Debugging: Print the received student data
         System.out.println("Received Student Data:");
