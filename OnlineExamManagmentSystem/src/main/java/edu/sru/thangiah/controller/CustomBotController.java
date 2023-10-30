@@ -85,6 +85,7 @@ public class CustomBotController {
     
     @GetMapping("/quiz")
     public ModelAndView getQuiz() {
+        progress = 0;  // Reset progress
         if (currentTopic == null || currentTopic.isEmpty()) {
             throw new IllegalArgumentException("Topic not set");
         }
