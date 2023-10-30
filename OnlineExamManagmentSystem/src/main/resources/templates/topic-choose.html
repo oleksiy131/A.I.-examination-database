@@ -98,7 +98,10 @@
 
     <script>
         $(function(){
-            $("#nav-placeholder").load("/instructor/instructor_homepage");
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
         });
     </script>
 

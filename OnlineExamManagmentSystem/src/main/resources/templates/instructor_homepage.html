@@ -1,13 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <link rel="stylesheet" th:href="@{/css/style.css}"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
-    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            color: #333;
+        }
+
+        #videoBackground {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- This div sets up a class called navbar that holds all the buttons. -->
+
+    <video autoplay muted loop id="videoBackground">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-man-writing-a-chemical-formula-on-the-blackboard-23537-large.mp4" type="video/mp4">
+    </video>
+
+<!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
      <!-- Home button -->
         <div class="dropdown-nav">
@@ -75,6 +105,7 @@
                 <a href="/logout">Logout</a>
             </div>
         </div>
-    </div>
+
 </body>
+
 </html>
