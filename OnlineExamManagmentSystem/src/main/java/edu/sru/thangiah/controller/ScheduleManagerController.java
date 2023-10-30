@@ -944,4 +944,50 @@ public class ScheduleManagerController {
 	            return email;
 	        }
 	    }
+	    
+		@GetMapping("/delete/{id}")
+		public String deleteClassSMV(@PathVariable("id") long id, Model model) {
+		    Course course = courseRepository.findById(id)
+		      .orElseThrow(() -> new IllegalArgumentException("Invalid course Id:" + id));
+		    courseRepository.delete(course);
+		    return "smv-edit-class-confirmation";
+		}
+		
+		@GetMapping("/smv-class-list")
+		public String showClassListSMV(Model model) {
+			// Retrieve the list of students from the repository
+			List<Course> course = (List<Course>) courseRepository.findAll();
+
+			// Add the list of students to the model for rendering in the HTML template
+			model.addAttribute("course", course);
+
+			// Return the name of the HTML template to be displayed
+			return "smv-class-list";
+		}
+		@GetMapping("/smv-edit-class/{id}")
+		public String showUpdateClassSMV(@PathVariable("id") long id, Model model) {
+		    Course course = courseRepository.findById(id)
+		      .orElseThrow(() -> new IllegalArgumentException("Invalid Course Id:" + id));
+		    
+		    model.addAttribute("course", course);
+		    return "smv-edit-class"; 
+		}
+		
+		@PostMapping("/smv-edit-class/{id}")
+	    public String updateClassSMV(@PathVariable("id") long id, @Validated Course course, 
+	      BindingResult result, Model model) {
+	        if (result.hasErrors()) {
+	            course.setId(id);
+	            return "smv-edit-class";
+	        }
+	        // Debugging: Print the received student data
+	        System.out.println("Received Class Data:");
+	        System.out.println("ID: " + course.getId());
+	        System.out.println("Course Name: " + course.getCourseName());
+	        System.out.println("Path Variable ID: " + id);
+	        
+	        courseRepository.save(course);
+	        return "smv-edit-class-confirmation";
+	    }
+
 }

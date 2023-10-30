@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Edit Class</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+
+  form {
+    max-width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  input[type="submit"],
+  button {
+    background-color: #007055;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  input[type="submit"]:hover,
+  button:hover {
+    background-color: #02795d;
+  }
+
+  a {
+    text-decoration: none;
+    color: #007bff;
+    margin-left: 10px;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .error {
+    color: #ff0000;
+    font-size: 12px;
+  }
+
+  .center-delete {
+    text-align: center;
+    margin-top: 20px; 
+  }
+
+  .delete-link {
+    text-decoration: none;
+    background-color: #007055; 
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .delete-link:hover {
+    background-color: #ff0000;
+  }
+  
+  h4{
+	text-align: center;
+	}
+		
+	
+</style>
+
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+
+</head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/admin_homepage");
+});
+</script>
+
+<br>
+<body>
+
+<form action="#" 
+  th:action="@{/schedule-manager/smv-edit-class/{id}(id=${course.id})}" 
+  th:object="${course}" 
+  method="post">
+    <!-- <label for="name">Course ID</label>
+    <input type="text" th:field="*{id}" id="id" placeholder="id">
+    <span class="error" th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></span> -->
+    
+    <label for="name">Course Name</label>
+    <input type="text" th:field="*{courseName}" id="name" placeholder="Name">
+    <span class="error" th:if="${#fields.hasErrors('courseName')}" th:errors="*{courseName}"></span>
+    
+    <input type="hidden" th:field="*{id}" name="fieldName" value="hiddenValue">
+    
+    
+    <input type="submit" value="Update Class"> 
+    <button type="button" onclick="history.back()">Cancel</button>   
+      
+</form>
+
+<div class="center-delete">
+    <a class="delete-link" th:href="@{/schedule-manager/delete/{id}(id=${course.id})}">Delete</a>
+</div>
+
+</body>
+</html>
