@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -142,7 +144,7 @@ public class InstructorController {
             System.out.println("CONSOLE LOG: Question with ID " + examQuestion.getId() + " not found.");
         }
 
-        return "redirect:/instructor/exam-questions";
+        return "redirect:/exam/selectChapter";
     }
 
 
@@ -749,6 +751,90 @@ public class InstructorController {
 	            return email;
 	        }
 	    }
+	    
+	    
+	    @GetMapping("/iv-account-management")
+		public String accountManager(Model model){
+			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			
+			System.out.println(auth.getName());
+			System.out.println(auth.getPrincipal());
+			System.out.println(auth.getDetails());
+			
+			String instructorUser = auth.getName();
+			
+			List<Instructor> instructor = instructorRepository.findByInstructorUsernameContaining(instructorUser);
+			
+			model.addAttribute("instructor", instructor);
+						
+			return "iv-account-management";
+		}
+	    
+	    
+	    @GetMapping("/iv-edit-current-instructor/{id}")
+		public String editingCurrentUser(@PathVariable("id") long id, Model model) {
+	    	Instructor instructor = instructorRepository.findById(id)
+	    		      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
+	    		    
+	    		    model.addAttribute("instructor", instructor);
+		    return "iv-edit-current-instructor"; 
+		}
+	    
+	    
+	    @Transactional
+		@PostMapping("/iv-edit-instructor/{id}")
+		public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated Instructor instructor, 
+		  BindingResult result, Model model, @RequestParam("newPassword") String newInstructorPassword, 
+		  @RequestParam("confirmPassword") String confirmInstructorPassword) {
+		    if (result.hasErrors()) {
+		        instructor.setInstructorId(id); 
+		        return "iv-edit-current-instructor";
+		    }
+		    
+		    
+		    // Fetch the user (or create a new one if not found)
+		    User user = userRepository.findByUsername(instructor.getInstructorUsername())
+		            .orElse(new User());  
+
+		    // Only process password if both fields are not empty
+		    if (!newInstructorPassword.isEmpty() || !confirmInstructorPassword.isEmpty()) {
+		        // Validate the new password and confirm password
+		        if (!newInstructorPassword.equals(confirmInstructorPassword)) {
+		            model.addAttribute("passwordError", "Passwords do not match");
+		            //model.addAttribute("instructor", instructor);
+		            return "iv-edit-current-instructor";
+		        }
+		        
+		        String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
+		        instructor.setInstructorPassword(encryptedPassword);
+		        
+		        // Update user's password
+		        user.setPassword(encryptedPassword);
+		    }
+
+		    // Update other user properties
+		    user.setUsername(instructor.getInstructorUsername());
+		    user.setEmail(instructor.getInstructorEmail());
+		    userRepository.save(user);  // Save the user to userRepository
+
+		    // Save the instructor
+		    instructorRepository.save(instructor);
+		    
+		    // Debugging: Print the received instructor data
+		    System.out.println("Received Instructor Data:");
+		    System.out.println("ID: " + instructor.getInstructorId());
+		    System.out.println("First Name: " + instructor.getInstructorFirstName());
+		    System.out.println("Last Name: " + instructor.getInstructorLastName());
+		    System.out.println("Email: " + instructor.getInstructorEmail());
+		    System.out.println("Path Variable ID: " + id);
+		    
+		    return "iv-instructor-edit-confirmation"; 
+		}
+	    
+	    
+	    
+	    
    
 }
 

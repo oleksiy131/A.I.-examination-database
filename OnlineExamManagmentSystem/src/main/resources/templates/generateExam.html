@@ -3,23 +3,46 @@
 <head>
     <title>Generate Exam</title>
     <!-- Include any other head elements here (e.g., styling) -->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto !important;    
+    position: relative;
+    color: #333;
+    background-color: #f4f4f4; /* Light background for better contrast */
+}
+        h1,h2 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+    </style>
 </head>
 <body>
 
-<h2>Generate Exam</h2>
+<!-- Navbar placeholder -->
+<div id="nav-placeholder"></div>
+
+<h2>Generate Exam From Selected Questions</h2>
 
 <!-- Display the generated exam link if the 'generatedExamId' attribute is present -->
-    <div th:if="${generatedExamId != null}">
-        <p>Generated Exam Link: 
-            <a th:href="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
-               th:text="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
-               target="_blank">Exam Link</a>
-        </p>
-        <p>Please copy the above link to share.</p>
-        
-        <!-- Hyperlink to navigate back to the exam questions page -->
-        <a href="/instructor/exam-questions">Back to Exam Questions Selection</a>
-    </div>
+<div th:if="${generatedExamId != null}">
+    <p>Generated Exam Link: 
+        <a th:href="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+           th:text="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+           target="_blank">Exam Link</a>
+    </p>
+    <p>Please copy the above link to share.</p>
+    
+    <!-- Hyperlink to navigate back to the exam questions page -->
+    <a href="/instructor/exam-questions">Back to Exam Questions Selection</a>
+</div>
 
 <form action="#" th:action="@{/exam/generate}" method="post">
     <input type="hidden" name="chapter" th:value="${selectedChapter}" />
@@ -29,6 +52,9 @@
 
     <label for="duration">Duration (in minutes):</label><br>
     <input type="number" id="durationInMinutes" name="durationInMinutes" required><br><br>
+    
+    <input type="submit" value="Generate">
+    
 
     <h3>Select Questions:</h3>
     <!-- Displaying questions with checkboxes for selection -->
@@ -36,6 +62,9 @@
         <!-- Corrected name attribute to match the field in the ExamDetails class -->
         <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedExamQuestionIds" />
         <label th:for="${'question' + iterStat.index}" th:text="${question.questionText}">Question Text</label><br>
+        
+         <!-- Edit button -->
+    	<a th:href="@{'/instructor/exam-questions/edit/' + ${question.id}}">Edit</a><br>
         
         <!-- Displaying options for each question -->
         <ul>
@@ -46,8 +75,16 @@
         </ul>
     </div>
 
-    <input type="submit" value="Generate">
 </form>
+
+<script>
+    $(function(){
+        $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+            // Once the navbar content is loaded, remove any video elements from the loaded content
+            $("#nav-placeholder video").remove();
+        });
+    });
+</script>
 
 </body>
 </html>

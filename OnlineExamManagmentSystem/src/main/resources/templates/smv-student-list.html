@@ -75,7 +75,7 @@ $(function(){
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Username</th>
-                <th>Enrolled Credits</th>
+                <th>     </th>
                 
             </tr>
         </thead>
@@ -87,7 +87,6 @@ $(function(){
                 <td th:text="${student.studentLastName}"></td>
                 <td th:text="${student.studentEmail}"></td>
                 <td th:text="${student.studentUsername}"></td>
-                <td th:text="${student.creditsTaken}"></td>
                 <td><a th:href="@{/schedule-manager/smv-edit-student/{id}(id=${student.studentId})}">Edit</a></td>
             </tr>
         </tbody>

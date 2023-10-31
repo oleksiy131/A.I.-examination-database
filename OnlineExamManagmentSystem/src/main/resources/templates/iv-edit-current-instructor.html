@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Add User</title>
+<title>Edit User</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -25,7 +25,7 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"] {
+  input[type="text"], input[type="password"] {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -85,32 +85,30 @@
   h4{
 	text-align: center;
 	}
-	.home {
-		    display: flex;
-		    justify-content: center;
-		    align-items: center; 
-		    height: 100%; 
-		}
 	
 </style>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 
 </head>
-<br>
-<br>
+
+
+<div id="nav-placeholder"></div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/instructor/instructor_homepage");
+});
+</script>
+
 <body>
-	    <!-- Home button -->
-        <div class="home">
-            <a th:href="@{/schedule-manager/schedule_manager_homepage}">
-            <i class="fas fa-home"></i> 
-        </a>
-        </div>
-        <br>
-<form action="#" 
-  th:action="@{/schedule-manager/update/{id}(id=${instructor.instructorId})}" 
-  th:object="${instructor}" 
-  method="post">
+
+<br>
+
+<form th:action="@{/instructor/iv-edit-instructor/{id}(id=${instructor.instructorId})}" 
+      th:object="${instructor}" 
+      method="post">
+      
     <label for="name">First Name</label>
     <input type="text" th:field="*{instructorFirstName}" id="name" placeholder="Name">
     <span class="error" th:if="${#fields.hasErrors('instructorFirstName')}" th:errors="*{instructorFirstName}"></span>
@@ -127,20 +125,26 @@
     <input type="text" th:field="*{instructorUsername}" id="name" placeholder="Name">
     <span class="error" th:if="${#fields.hasErrors('instructorUsername')}" th:errors="*{instructorUsername}"></span>
     
-    <input type="hidden" th:field="*{instructorPassword}" name="fieldName" value="hiddenValue">
+	<!-- New Password Field -->
+	<label for="newPassword">New Password</label>
+	<input type="password" id="newPassword" name="newPassword" placeholder="New Password">
+	<span class="error"></span>
+
+	<!-- Confirm New Password Field -->
+	<label for="confirmPassword">Confirm New Password</label>
+	<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password">
+	<span class="error"></span>
+
+	<!-- Password Error Message -->
+	<span class="error" th:if="${passwordError}" th:text="${passwordError}"></span>
+    
     <input type="hidden" th:field="*{creditsTaught}" name="fieldName" value="hiddenValue">
     <input type="hidden" th:field="*{instructorId}" name="fieldName" value="hiddenValue">
     
     <input type="submit" value="Update User">   
+    <button type="button" onclick="history.back()">Cancel</button>   
+    
 </form>
-
-<div class="center-delete">
-    <a class="delete-link" th:href="@{/instructor/delete/{id}(id=${instructor.instructorId})}">Delete</a>
-</div>
-
-<div class="center-delete">
-    <a class="delete-link" th:href="@{/schedule-manager/instructor-list}">Cancel</a>
-</div>
 
 </body>
 </html>

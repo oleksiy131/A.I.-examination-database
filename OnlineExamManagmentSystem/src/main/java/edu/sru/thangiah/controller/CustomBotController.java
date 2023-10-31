@@ -13,10 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +35,7 @@ import edu.sru.thangiah.web.dto.ChatGptResponse;
                         
  */
 
-@RestController
+@Controller
 @RequestMapping("/bot")
 public class CustomBotController {
 	
@@ -54,18 +56,32 @@ public class CustomBotController {
     
     private String currentTopic;
     
+    private int progress = 0;
+
+    @GetMapping("/getProgress")
+    public ResponseEntity<Integer> getProgress() {
+        return new ResponseEntity<>(progress, HttpStatus.OK);
+    }
+    
     @GetMapping("/choose-topic")
     public ModelAndView chooseTopic() {
         return new ModelAndView("topic-choose");
     }
+    
+    @GetMapping("/chatbox")
+    public String showChatbox() {
+        return "chat-bot";
+    }
 
     
     @GetMapping("/chat")
+    @ResponseBody
     public String chat(@RequestParam("prompt") String prompt){
-        ChatGPTRequest request=new ChatGPTRequest(model, prompt);
+        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         return chatGptResponse.getChoices().get(0).getMessage().getContent();
     }
+
     
     @PostMapping("/setTopic")
     public ModelAndView setTopic(@RequestParam("topic") String topic) {
@@ -78,6 +94,7 @@ public class CustomBotController {
     
     @GetMapping("/quiz")
     public ModelAndView getQuiz() {
+        progress = 0;  // Reset progress
         if (currentTopic == null || currentTopic.isEmpty()) {
             throw new IllegalArgumentException("Topic not set");
         }
@@ -120,11 +137,19 @@ public class CustomBotController {
         questionMap.put("question", lines[0]);
         questionMap.put("choices", choices);
         
+        // Increment the progress by 10% for each question generated
+        progress += 10;
+        if (progress > 100) {
+            progress = 100;
+        }
+        
         return questionMap;
     }
+
     
     @PostMapping("/quiz")
     public ModelAndView getQuiz(@RequestParam("topic") String topic) {
+        progress = 0;  // Reset progress
         quizData = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             quizData.add(generateQuestion(topic));
@@ -134,6 +159,39 @@ public class CustomBotController {
         modelAndView.addObject("quizData", quizData);
         return modelAndView;
     }
+    
+    @GetMapping("/download/txt")
+    public ResponseEntity<byte[]> downloadQuizTxt() throws IOException {
+        String txtContent = generateTxtContent(quizData);
+        byte[] txtData = txtContent.getBytes();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentDispositionFormData("attachment", "quiz.txt");
+
+        return new ResponseEntity<>(txtData, headers, HttpStatus.OK);
+    }
+
+    private String generateTxtContent(List<Map<String, Object>> quizData) {
+        StringBuilder sb = new StringBuilder();
+        int questionNumber = 1;
+        
+        for (Map<String, Object> questionMap : quizData) {
+            sb.append(questionNumber++).append(". ").append(questionMap.get("question")).append("\n");
+            
+            List<String> choices = (List<String>) questionMap.get("choices");
+            for (String choice : choices) {
+                sb.append(choice).append("\n");
+            }
+            
+            // Extract the correct answer from the questionMap
+            String answer = (String) questionMap.get("answer");
+            sb.append("Ans: ").append(answer).append("\n\n");  // Append correct answer and add a new line for separation
+        }
+
+        return sb.toString();
+    }
+
 
 
   

@@ -25,8 +25,8 @@
     margin-bottom: 5px;
   }
 
-  input[type="text"] {
-    width: 100%;
+  input[type="text"], input[type="password"]  {
+    width: 95%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -77,8 +77,22 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  
+  .cancel-link {
+    text-decoration: none;
+    background-color: #007055; 
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
   .delete-link:hover {
+    background-color: #ff0000;
+  }
+  
+  .cancel-link:hover {
     background-color: #ff0000;
   }
   
@@ -109,8 +123,20 @@
     <label for="name">Username</label>
     <input type="text" th:field="*{studentUsername}" id="name" placeholder="Name">
     <span class="error" th:if="${#fields.hasErrors('studentUsername')}" th:errors="*{studentUsername}"></span>
+
+	<label for="newPassword">New Password</label>
+	<input type="password" id="newPassword" name="newPassword" placeholder="New Password:">
+	<span class="error"></span>
+	<br>
+
+	<label for="confirmPassword">Confirm New Password</label>
+	<input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password:">
+	<span class="error"></span>
+    <br>
+
+	<span class="error" th:if="${passwordError}" th:text="${passwordError}"></span>
     
-    <input type="hidden" th:field="*{studentPassword}" name="fieldName" value="hiddenValue">
+   <!-- <input type="hidden" th:field="*{studentPassword}" name="fieldName" value="hiddenValue"> -->
     <input type="hidden" th:field="*{creditsTaken}" name="fieldName" value="hiddenValue">
     <input type="hidden" th:field="*{studentId}" name="fieldName" value="hiddenValue">
     
@@ -119,6 +145,10 @@
 
 <div class="center-delete">
     <a class="delete-link" th:href="@{/schedule-manager/student/delete/{id}(id=${student.studentId})}">Delete</a>
+</div>
+
+<div class="center-delete">
+    <a class="cancel-link" th:href="@{/schedule-manager/list-students}">Cancel</a>
 </div>
 
 </body>
