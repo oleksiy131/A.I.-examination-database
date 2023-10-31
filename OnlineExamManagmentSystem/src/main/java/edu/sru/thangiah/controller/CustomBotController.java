@@ -13,10 +13,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,7 +35,7 @@ import edu.sru.thangiah.web.dto.ChatGptResponse;
                         
  */
 
-@RestController
+@Controller
 @RequestMapping("/bot")
 public class CustomBotController {
 	
@@ -65,14 +67,21 @@ public class CustomBotController {
     public ModelAndView chooseTopic() {
         return new ModelAndView("topic-choose");
     }
+    
+    @GetMapping("/chatbox")
+    public String showChatbox() {
+        return "chat-bot";
+    }
 
     
     @GetMapping("/chat")
+    @ResponseBody
     public String chat(@RequestParam("prompt") String prompt){
-        ChatGPTRequest request=new ChatGPTRequest(model, prompt);
+        ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         return chatGptResponse.getChoices().get(0).getMessage().getContent();
     }
+
     
     @PostMapping("/setTopic")
     public ModelAndView setTopic(@RequestParam("topic") String topic) {
