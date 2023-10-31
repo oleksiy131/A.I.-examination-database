@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +82,86 @@ public class AdministratorController {
 		return "admin_homepage";
 		
 	}
+	
+	
+	@GetMapping("/av-account-management")
+	public String accountManager(Model model){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		System.out.println(auth.getName());
+		System.out.println(auth.getPrincipal());
+		System.out.println(auth.getDetails());
+		
+		String instructorUser = auth.getName();
+		
+		List<Administrator> administrator = administratorRepository.findByAdminUsernameContaining(instructorUser);
+		
+		model.addAttribute("administrator", administrator);
+					
+		return "av-account-management";
+	}
+	
+	
+	@GetMapping("/av-edit-current-admin/{id}")
+	public String editingCurrentUser(@PathVariable("id") long id, Model model) {
+		Administrator administrator = administratorRepository.findById(id)
+    		      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
+    		    
+    		    model.addAttribute("administrator", administrator);
+	    return "av-edit-current-admin"; 
+	}
 
+	  @Transactional
+			@PostMapping("/av-edit-admin/{id}")
+			public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated Administrator administrator , 
+			  BindingResult result, Model model, @RequestParam("newPassword") String newAdminpassword, 
+			  @RequestParam("confirmPassword") String confirmAdminPassword) {
+			    if (result.hasErrors()) {
+			    	administrator.setAdminId(id); 
+			        return "av-edit-current-admin";
+			    }
+			    
+			    
+			    // Fetch the user (or create a new one if not found)
+			    User user = userRepository.findByUsername(administrator.getAdminUsername())
+			            .orElse(new User());  
+
+			    // Only process password if both fields are not empty
+			    if (!newAdminpassword.isEmpty() || !confirmAdminPassword.isEmpty()) {
+			        // Validate the new password and confirm password
+			        if (!newAdminpassword.equals(confirmAdminPassword)) {
+			            model.addAttribute("passwordError", "Passwords do not match");
+			            model.addAttribute("administrator", administrator);
+			            return "av-edit-current-admin";
+			        }
+			        
+			        String encryptedPassword = passwordEncoder.encode(confirmAdminPassword);
+			        administrator.setAdminPassword(confirmAdminPassword);
+			        
+			        // Update user's password
+			        user.setPassword(encryptedPassword);
+			    }
+
+			    // Update other user properties
+			    user.setUsername(administrator.getAdminUsername());
+			    user.setEmail(administrator.getAdminEmail());
+			    userRepository.save(user);  // Save the user to userRepository
+
+			    // Save the instructor
+			    administratorRepository.save(administrator);
+			    
+			    // Debugging: Print the received instructor data
+			    System.out.println("Received Instructor Data:");
+			    System.out.println("ID: " + administrator.getAdminId());
+			    System.out.println("First Name: " + administrator.getAdminFirstName());
+			    System.out.println("Last Name: " + administrator.getAdminFirstName());
+			    System.out.println("Email: " + administrator.getAdminEmail());
+			    System.out.println("Path Variable ID: " + id);
+			    
+			    return "av-admin-edit-confirmation"; 
+			}
+	
 
 	@GetMapping("/exams")
 	public String examsPage() {
