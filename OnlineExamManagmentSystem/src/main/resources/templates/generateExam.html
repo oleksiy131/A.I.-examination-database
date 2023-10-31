@@ -37,6 +37,9 @@
         <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedExamQuestionIds" />
         <label th:for="${'question' + iterStat.index}" th:text="${question.questionText}">Question Text</label><br>
         
+         <!-- Edit button -->
+    	<a th:href="@{'/instructor/exam-questions/edit/' + ${question.id}}">Edit</a><br>
+        
         <!-- Displaying options for each question -->
         <ul>
             <li th:text="${question.optionA}">Option A</li>

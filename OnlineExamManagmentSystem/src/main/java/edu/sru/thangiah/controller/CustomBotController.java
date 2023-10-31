@@ -159,6 +159,39 @@ public class CustomBotController {
         modelAndView.addObject("quizData", quizData);
         return modelAndView;
     }
+    
+    @GetMapping("/download/txt")
+    public ResponseEntity<byte[]> downloadQuizTxt() throws IOException {
+        String txtContent = generateTxtContent(quizData);
+        byte[] txtData = txtContent.getBytes();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentDispositionFormData("attachment", "quiz.txt");
+
+        return new ResponseEntity<>(txtData, headers, HttpStatus.OK);
+    }
+
+    private String generateTxtContent(List<Map<String, Object>> quizData) {
+        StringBuilder sb = new StringBuilder();
+        int questionNumber = 1;
+        
+        for (Map<String, Object> questionMap : quizData) {
+            sb.append(questionNumber++).append(". ").append(questionMap.get("question")).append("\n");
+            
+            List<String> choices = (List<String>) questionMap.get("choices");
+            for (String choice : choices) {
+                sb.append(choice).append("\n");
+            }
+            
+            // Extract the correct answer from the questionMap
+            String answer = (String) questionMap.get("answer");
+            sb.append("Ans: ").append(answer).append("\n\n");  // Append correct answer and add a new line for separation
+        }
+
+        return sb.toString();
+    }
+
 
 
   
