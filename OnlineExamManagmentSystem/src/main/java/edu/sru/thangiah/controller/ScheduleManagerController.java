@@ -30,9 +30,12 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +51,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Controller
 @RequestMapping("/schedule-manager")
 public class ScheduleManagerController {
-
+	
+	
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -72,11 +76,94 @@ public class ScheduleManagerController {
     
 	@RequestMapping("/schedule_manager_homepage")
 	public String showScheduleManagerHomepage() {
+		
 		return "schedule_manager_homepage";
 	}
+	
+	
+	@GetMapping("/smv-account-management")
+	public String passwordReset(Model model){
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		System.out.println(auth.getName());
+		System.out.println(auth.getPrincipal());
+		System.out.println(auth.getDetails());
+		
+		String managerUser = auth.getName();
+		
+		List<ScheduleManager> manager = scheduleManagerRepository.findByManagerUsernameContaining(managerUser);
+		
+		//System.out.println(CurrentManager.);
+		
+		model.addAttribute("manager", manager);
+					
+		return "smv-password-reset";
+	}
+	
 
-    
+	@GetMapping("/smv-edit-current-manager/{id}")
+	public String editingCurrentUser(@PathVariable("id") long id, Model model) {
+	    ScheduleManager manager = scheduleManagerRepository.findById(id)
+	      .orElseThrow(() -> new IllegalArgumentException("Invalid Schedule Manager Id:" + id));
+	    
+	    model.addAttribute("manager", manager);
+	    return "smv-edit-current-manager"; 
+	}
+	
+	@Transactional
+	@PostMapping("/smv-edit-current-user/{id}")
+	public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated ScheduleManager manager, 
+	  BindingResult result, Model model, @RequestParam("newPassword") String newManagerPassword, 
+	  @RequestParam("confirmPassword") String confirmManagerPassword) {
+	    if (result.hasErrors()) {
+	    	manager.setManagerId(id); 
+	        return "smv-edit-current-manager";
+	    }
+	    
+	    // Fetch the user (or create a new one if not found)
+	    User user = userRepository.findByUsername(manager.getManagerUsername())
+	            .orElse(new User());  
+	    
+	    //System.out.println(model);
+	    // Only process password if both fields are not empty
+	    if (!newManagerPassword.isEmpty() || !confirmManagerPassword.isEmpty()) {
+	        // Validate the new password and confirm password
+	        if (!newManagerPassword.equals(confirmManagerPassword)) {
+	            model.addAttribute("passwordError", "Passwords do not match");
+	            model.addAttribute("manager", manager);
+	            return "smv-edit-current-manager";
+	        }
+	        
+	        
+	        String encryptedPassword = passwordEncoder.encode(newManagerPassword);
+	        manager.setManagerPassword(encryptedPassword);
+	        
+	        // Update user's password
+	        user.setPassword(encryptedPassword);
+	    }
 
+	    // Update other user properties
+	    user.setUsername(manager.getManagerUsername());
+	    user.setEmail(manager.getManagerEmail());
+	    userRepository.save(user);  // Save the user to userRepository
+
+	    // Save the manager
+	    scheduleManagerRepository.save(manager);
+	    
+	    // Debugging: Print the received instructor data
+	    System.out.println("Received Instructor Data:");
+	    System.out.println("ID: " + manager.getManagerId());
+	    System.out.println("First Name: " + manager.getManagerFirstName());
+	    System.out.println("Last Name: " + manager.getManagerLastName());
+	    System.out.println("Email: " + manager.getManagerEmail());
+	    System.out.println("Path Variable ID: " + id);
+	    
+	    return "smv-user-edit-confirmation"; 
+	}
+	
+
+	
     @GetMapping("/add-course")
     public String showCreateCourseForm() {
         return "add-course"; 
@@ -1014,5 +1101,8 @@ public class ScheduleManagerController {
 	        courseRepository.save(course);
 	        return "smv-edit-class-confirmation";
 	    }
+		
+		
+		
 
 }
