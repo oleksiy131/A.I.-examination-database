@@ -127,11 +127,11 @@ public class ScheduleManagerController {
 	    
 	    //System.out.println(model);
 	    // Only process password if both fields are not empty
-	    if (!newManagerPassword.isEmpty() && !confirmManagerPassword.isEmpty()) {
+	    if (!newManagerPassword.isEmpty() || !confirmManagerPassword.isEmpty()) {
 	        // Validate the new password and confirm password
 	        if (!newManagerPassword.equals(confirmManagerPassword)) {
-	        	
 	            model.addAttribute("passwordError", "Passwords do not match");
+	            model.addAttribute("manager", manager);
 	            return "smv-edit-current-manager";
 	        }
 	        
