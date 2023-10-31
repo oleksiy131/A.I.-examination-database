@@ -22,11 +22,24 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	
 	@Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        // Get the role of the logged in user
+        
+		// Get the entered password directly from the request
+	    String enteredPassword = request.getParameter("password");
+		
+		// Get the role of the logged in user
         String userRole = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .findFirst() 
                 .orElse("");
+        
+//       Check for default passwords and redirect accordingly
+      if ("instructor".equals(enteredPassword) && "INSTRUCTOR".equals(userRole)) {
+          response.sendRedirect("/instructor/iv-account-management");
+          return;
+      } else if ("student".equals(enteredPassword) && "STUDENT".equals(userRole)) {
+         response.sendRedirect("/student/course/sv-account-managment");
+          return;
+      }
 
         // Redirect user based on their role
         switch (userRole) {
