@@ -142,7 +142,7 @@ public class InstructorController {
             System.out.println("CONSOLE LOG: Question with ID " + examQuestion.getId() + " not found.");
         }
 
-        return "redirect:/instructor/exam-questions";
+        return "redirect:/exam/selectChapter";
     }
 
 

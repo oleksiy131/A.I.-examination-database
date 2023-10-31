@@ -34,8 +34,10 @@
     </style>
 </head>
 <body>
-    <h1>Edit Exam Question</h1>
-    <form th:action="@{/instructor/exam-questions/update}" th:object="${examQuestion}" method="post">
+	
+    	<h1>Edit Exam Question</h1>
+    	
+    	<form th:action="@{/instructor/exam-questions/update}" th:object="${examQuestion}" method="post">
         <input type="hidden" th:field="*{id}" />
         <!-- Grouping each label and input pair within a 'form-group' div -->
         <div class="form-group">
