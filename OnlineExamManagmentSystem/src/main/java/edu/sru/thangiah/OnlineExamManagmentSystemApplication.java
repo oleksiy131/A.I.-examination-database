@@ -89,9 +89,9 @@ public class OnlineExamManagmentSystemApplication {
     public CommandLineRunner setupDefaultUser() {
         return args -> {
             createUserIfNotFound("root", "software", "ADMINISTRATOR");
-            createUserIfNotFound("student", "student", "STUDENT");
-            createUserIfNotFound("instructor", "instructor", "INSTRUCTOR");
-            createUserIfNotFound("schedulemanager", "schedulemanager", "SCHEDULE_MANAGER");
+            createUserIfNotFound("student", "software", "STUDENT");
+            createUserIfNotFound("instructor", "software", "INSTRUCTOR");
+            createUserIfNotFound("schedulemanager", "software", "SCHEDULE_MANAGER");
         };
     }
 
