@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Generate Exam</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto !important;    
+    position: relative;
+    color: #333;
+    background-color: #f4f4f4; /* Light background for better contrast */
+}
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+
+    <h1>Exam Creation Form</h1>
+
+    <form id="examForm">
+        <label for="examName">Exam Name:</label>
+        <input type="text" id="examName" name="examName" oninput="updateUI()"><br><br>
+
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" onchange="updateUI()"><br><br>
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" onchange="updateUI()"><br><br>
+
+        <label for="examTime">Exam Time:</label>
+        <input type="time" id="examTime" name="examTime" onchange="updateUI()"><br><br>
+
+        <label for="duration">Duration (in minutes):</label>
+        <input type="number" id="duration" name="duration" oninput="updateUI()"><br><br>
+
+        <button type="button" onclick="addQuiz()">Add Quiz</button>
+    </form>
+
+    <div id="examInfo">
+        <h2>Exam Information</h2>
+        <p id="infoName"></p>
+        <p id="infoDates"></p>
+        <p id="infoTime"></p>
+        <p id="infoDuration"></p>
+    </div>
+
+    <script>
+        function updateUI() {
+            var name = document.getElementById('examName').value;
+            var startDate = document.getElementById('startDate').value;
+            var endDate = document.getElementById('endDate').value;
+            var time = document.getElementById('examTime').value;
+            var duration = document.getElementById('duration').value;
+
+            document.getElementById('infoName').textContent = 'Exam Name: ' + name;
+            document.getElementById('infoDates').textContent = 'Start Date: ' + startDate + ' - End Date: ' + endDate;
+            document.getElementById('infoTime').textContent = 'Time: ' + time;
+            document.getElementById('infoDuration').textContent = 'Duration: ' + duration + ' minutes';
+        }
+
+        function addQuiz() {
+            // Functionality to add the quiz goes here
+            alert('Quiz Added!');
+        }
+        
+        $(function(){
+        $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+            // Once the navbar content is loaded, remove any video elements from the loaded content
+            $("#nav-placeholder video").remove();
+        });
+    });
+    </script>
+</body>
+</html>
