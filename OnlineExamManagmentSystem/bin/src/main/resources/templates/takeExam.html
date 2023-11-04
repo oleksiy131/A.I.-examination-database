@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Take Exam - [[${exam.examName}]]</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #555;
+        }
+        .exam-container {
+            background-color: #fff;
+            margin: auto;
+            padding: 2em;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+        h1 {
+            color: #444;
+            margin-bottom: 0.5em;
+        }
+        .question {
+            margin-bottom: 1.5em;
+        }
+        .question h2 {
+            margin-bottom: 0.5em;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 0.5em;
+        }
+        .options input[type="radio"] {
+            margin-right: 0.5em;
+        }
+        input[type="submit"] {
+            padding: 0.5em 1em;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .timer {
+            margin-bottom: 20px;
+            font-size: larger;
+            color: red;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var durationInMinutes = [[${exam.durationInMinutes}]];
+            var totalSeconds = durationInMinutes * 60;
+
+            function updateTimer() {
+                var timerElement = document.getElementById('timer');
+                var minutes = Math.floor(totalSeconds / 60);
+                var seconds = totalSeconds % 60;
+
+                timerElement.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+
+                if (totalSeconds <= 0) {
+                    clearInterval(countdown);
+                    alert('Time is up!');
+                } else {
+                    totalSeconds--;
+                }
+            }
+
+            var countdown = setInterval(updateTimer, 1000);
+            updateTimer();
+        });
+    </script>
+</head>
+<body>
+    <div class="exam-container">
+        <h1>[[${exam.examName}]]</h1>
+        
+        <div class="timer" id="timer"></div>
+
+        <!-- Start of the form -->
+        <form th:action="@{/exam/submit/{id}(id=${exam.id})}" method="post">
+            <div th:each="question, iterStat : ${exam.questions}" class="question">
+                <h2 th:text="${question.questionText}"></h2>
+                <ul class="options">
+                    <li><label><input type="radio" th:name="${'answers[' + question.id + ']'}" th:value="A" /> A. [[${question.optionA}]]</label></li>
+                    <li><label><input type="radio" th:name="${'answers[' + question.id + ']'}" th:value="B" /> B. [[${question.optionB}]]</label></li>
+                    <li><label><input type="radio" th:name="${'answers[' + question.id + ']'}" th:value="C" /> C. [[${question.optionC}]]</label></li>
+                    <li><label><input type="radio" th:name="${'answers[' + question.id + ']'}" th:value="D" /> D. [[${question.optionD}]]</label></li>
+                </ul>
+            </div>
+
+            <!-- Submit button -->
+            <input type="submit" value="Submit Answers">
+        </form>
+        <!-- End of the form -->
+
+    </div>
+</body>
+</html>

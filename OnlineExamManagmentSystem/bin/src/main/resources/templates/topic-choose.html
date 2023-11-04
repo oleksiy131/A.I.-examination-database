@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Topic Input</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+            color: #333;
+        }
+
+        #videoBackground {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            object-fit: cover;
+            opacity: 0.7;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+
+        form {
+            max-width: 500px;
+            padding: 20px;
+            margin: 40px auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        form input[type="submit"] {
+            background-color: #007055;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #004c3b;
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+</head>
+
+<body>
+
+    <video autoplay muted loop id="videoBackground">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-a-laptop-and-four-screens-running-green-text-scripts-50749-large.mp4" type="video/mp4">
+    </video>
+
+    <div id="nav-placeholder"></div>
+
+    <h1>Welcome To Our A.I. Generation System</h1>
+
+    <form action="/bot/setTopic" method="post">
+        <label for="topic">Choose a topic for your examination:
+            <br>Artificial Intelligence will generate 10 multiple choice questions for you.</label><br>
+        <input type="text" id="topic" name="topic" required><br>
+        <input type="submit" value="Submit">
+    </form>
+
+    <script>
+        $(function(){
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
+        });
+    </script>
+
+</body>
+
+</html>

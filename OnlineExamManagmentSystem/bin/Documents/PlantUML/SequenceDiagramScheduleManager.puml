@@ -1,0 +1,47 @@
+@startuml
+
+participant "User" as User
+participant "ScheduleManagerController" as SMC
+participant "InstructorRepository" as IR
+participant "CourseRepository" as CR
+participant "Database" as DB
+
+User -> SMC : Request Instructor List
+SMC -> IR : findAll()
+IR -> DB : SELECT * FROM Instructors
+DB --> IR : Return Data
+IR --> SMC : Return Instructor List
+SMC --> User : Display Instructor List
+
+User -> SMC : Add New Instructor
+SMC -> IR : save(instructor)
+IR -> DB : INSERT INTO Instructors VALUES (...)
+DB --> IR : Return Confirmation
+IR --> SMC : Return Confirmation
+SMC --> User : Display Confirmation
+
+User -> SMC : Add New Course
+SMC -> CR : save(course)
+CR -> DB : INSERT INTO Courses VALUES (...)
+DB --> CR : Return Confirmation
+CR --> SMC : Return Confirmation
+SMC --> User : Display Confirmation
+
+User -> SMC : Assign Instructor to Course
+SMC -> CR : findById(courseId)
+CR -> DB : SELECT * FROM Courses WHERE id=courseId
+DB --> CR : Return Course
+CR --> SMC : Return Course
+
+SMC -> IR : findById(instructorId)
+IR -> DB : SELECT * FROM Instructors WHERE id=instructorId
+DB --> IR : Return Instructor
+IR --> SMC : Return Instructor
+
+SMC -> CR : save(course)
+CR -> DB : UPDATE Courses SET instructor_id=instructorId WHERE id=courseId
+DB --> CR : Return Confirmation
+CR --> SMC : Return Confirmation
+SMC --> User : Display Confirmation
+
+@enduml
