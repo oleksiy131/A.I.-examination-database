@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +38,11 @@ import edu.sru.thangiah.repository.ExamSubmissionRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.service.ExamService;
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 /*
@@ -71,6 +76,33 @@ public class ExamController {
     public ExamController(ExamService examService) {
         this.examService = examService;
     }
+    
+    @PostMapping("/manual-auto-generate")
+    public ResponseEntity<String> generateExam(@RequestParam("numBlanks") int numBlanks, HttpSession session) {
+        try {
+            // Generate the fill-in-the-blanks questions based on the number selected by the user
+            List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
+
+            // Store the number of fill-in-the-blanks and the questions in the session
+            session.setAttribute("numBlanks", numBlanks);
+            session.setAttribute("blanksQuestions", blanksQuestions);
+
+            // Print each question to the server console
+            for (ExamQuestion question : blanksQuestions) {
+                System.out.println(question);
+            }
+
+            // You can still return the list as a JSON if you want to send it to the client
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(blanksQuestions);
+
+            return ResponseEntity.ok(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Failed to read blanks: " + e.getMessage());
+        }
+    }
+
     
 
     @PostMapping("/generate")

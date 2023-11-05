@@ -104,6 +104,18 @@ public class InstructorController {
        
         return "listExamQuestions";
     }
+    
+    
+    
+    @GetMapping("/exam-landing-page")
+    public String showExamLandingPage() {
+        return "exam-landing-page";
+    }
+    
+    @GetMapping("/exam/auto-generate")
+    public String showAutoExamPage() {
+        return "automatic-exam-generation";
+    }
 
     @GetMapping("/exam-questions/new")
     public String showExamQuestionForm(Model model) {

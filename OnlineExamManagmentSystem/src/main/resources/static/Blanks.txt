@@ -1,0 +1,128 @@
+1. GUI
+Ans: Graphical User Interface
+
+2. IT
+Ans: Information Technology
+
+3. CPU
+Ans: Central Processing Unit
+
+4. OS
+Ans: Operating System
+
+5. KB
+Ans: KiloByte
+
+6. GB
+Ans: GigaByte
+
+9. AI
+Ans: Artificial Intelligence
+
+102. OCR
+Ans: Optical Character Recognition
+
+107. LCD
+Ans: Liquid Crystal Display
+
+107. CRT
+Ans: Cathode Ray Tube
+
+107. CPU
+Ans: Central Processing Unit
+
+107. ROM
+Ans: Read Only Memory
+
+107. RAM
+Ans: Random Access Memory
+
+108. USB 
+Ans: Universal Serial Bus
+
+108. PDA
+Ans: Personal Digital Assistant
+
+102. IP
+Ans: Internet Protocol
+
+107. PCMCIA
+Ans: Personal Memory Card International Association
+
+107. DSL
+Ans: Digital Subscriber Line
+
+107. ISDN
+Ans: Integrated Services Digital Network
+
+107. ISP
+Ans: Internet Service Provider
+
+107. PDA
+Ans: Personal Digital Assistant
+
+108. URL
+Ans: Uniform Resource Locator
+
+108. HTTP
+Ans: Hypertext Transfer Protocol
+
+108. FTP
+Ans: File Transfer Protocol
+
+108. TLD
+Ans: Top-Level Domain
+
+108. B2C
+Ans: Business-to-consumer
+
+108. B2B
+Ans: Business-to-business
+
+108. C2C
+Ans: Consumer-to-consumer
+
+102. PIM
+Ans: Personal Information Manager
+
+107. DB
+Ans: Database
+
+107. GPS
+Ans: Global Positioning System
+
+107. CPU
+Ans: Central Processing Unit
+
+107. CAD
+Ans: Computer-Aided Design
+
+107. FAQ
+Ans: Frequently Asked Questions
+
+108. CRM
+Ans: Customer Relationship Management
+
+108. DTP
+Ans: Desktop Publishing
+
+1. RTOS
+Ans: Real-Time Operating System
+
+2. PnP
+Ans: Plug and Play
+
+3. BIOS
+Ans: Basic Input/Output System
+
+4. CRT
+Ans: Cathode-Ray Tube
+
+5. LCD
+Ans: Liquid Crystal Display
+
+6. POST
+Ans: Power-on self-test
+
+9. FAT
+Ans: File Allocation Table

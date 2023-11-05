@@ -29,6 +29,21 @@ public class ExamQuestion {
     private String correctAnswer;
     private int chapter;
     
+    @Override
+    public String toString() {
+        return "ExamQuestion{" +
+                "id=" + id +
+                ", questionText='" + questionText + '\'' +
+                ", optionA='" + optionA + '\'' +
+                ", optionB='" + optionB + '\'' +
+                ", optionC='" + optionC + '\'' +
+                ", optionD='" + optionD + '\'' +
+                ", correctAnswer='" + correctAnswer + '\'' +
+                ", chapter=" + chapter +
+                '}';
+    }
+
+    
 	public Long getId() {
 		return id;
 	}
