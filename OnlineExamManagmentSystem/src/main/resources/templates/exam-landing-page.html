@@ -44,7 +44,9 @@ body {
         <label for="duration">Duration (in minutes):</label>
         <input type="number" id="duration" name="duration" oninput="updateUI()"><br><br>
 
-        <button type="button" onclick="addQuiz()">Add Quiz</button>
+        <button type="button" onclick="addQuiz()">Manual Exam Generation</button>
+        <button type="button" onclick="addAutoQuiz()">Automatic Exam Generation</button>
+        
     </form>
 
     <div id="examInfo">
@@ -69,10 +71,13 @@ body {
             document.getElementById('infoDuration').textContent = 'Duration: ' + duration + ' minutes';
         }
 
-        function addQuiz() {
-            // Functionality to add the quiz goes here
-            alert('Quiz Added!');
-        }
+		function addQuiz() {
+    			window.location.href = 'http://localhost:8080/exam/selectChapter';
+		}
+		function addAutoQuiz() {
+    			window.location.href = 'http://localhost:8080/instructor/exam/auto-generate';
+		}
+
         
         $(function(){
         $("#nav-placeholder").load("/instructor/instructor_homepage", function() {

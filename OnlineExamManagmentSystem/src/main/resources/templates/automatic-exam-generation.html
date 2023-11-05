@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Automatic Exam Generation</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <style>
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto !important;    
+    position: relative;
+    color: #333;
+    background-color: #f4f4f4; /* Light background for better contrast */
+}
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+
+    <h1>Automatic Exam Generation</h1>
+    
+    <label for="chapterSelection">Chapter Selection:</label>
+    <select id="chapterSelection">
+        <option value="1">Chapter 1</option>
+        <option value="2">Chapter 2</option>
+        <option value="3">Chapter 3</option>
+        <option value="4">Chapter 4</option>
+        <option value="5">Chapter 5</option>
+        <option value="6">Chapter 6</option>
+        <option value="7">Chapter 7</option>
+        <option value="8">Chapter 8</option>
+        <option value="9">Chapter 9</option>
+    </select> <br>
+    
+    <label for="numMultipleChoice">Number of Multiple Choice Questions:</label>
+    <select id="numMultipleChoice">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select> <br>
+
+    <label for="numTrueFalse">Number of True/False Questions:</label>
+    <select id="numTrueFalse">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+    </select> <br>
+    
+    
+    <button type="button" onclick="generateQuiz()">Generate Exam</button>
+    
+    
+<script>
+    $(function(){
+        $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+            // Once the navbar content is loaded, remove any video elements from the loaded content
+            $("#nav-placeholder video").remove();
+        });
+    });
+</script>
+
+</body>
+</html>
