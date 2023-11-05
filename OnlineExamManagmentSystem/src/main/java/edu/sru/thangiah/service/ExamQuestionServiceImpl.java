@@ -7,10 +7,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,10 +38,18 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
             try {
                 loadQuestionsFromFile(chapter);
             } catch (IOException e) {
-                e.printStackTrace(); 
+                e.printStackTrace();
             }
         }
+}
+    
+    // Method to read and parse fill-in-the-blank questions when the 'Generate Exam' is clicked
+    @Transactional
+    public List<ExamQuestion> generateFillInTheBlanksQuestions(int numberOfQuestions) throws IOException {
+        List<ExamQuestion> blanksQuestions = readBlanksFromFile();
+        return blanksQuestions.subList(0, Math.min(numberOfQuestions, blanksQuestions.size()));
     }
+
 
     private void loadQuestionsFromFile(int chapter) throws IOException {
         String filePath = "classpath:static/chapter-" + chapter + ".txt";
@@ -86,15 +97,46 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         reader.close();
     }
     
+    public List<ExamQuestion> readBlanksFromFile() throws IOException {        
+    	String filePath = "classpath:static/Blanks.txt";
+        InputStream inputStream = resourceLoader.getResource(filePath).getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        List<ExamQuestion> blanksQuestions = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile("^(\\d+)\\. (.*)");
+        String line;
+        ExamQuestion question = null;
+
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = pattern.matcher(line.trim());
+            if (matcher.matches()) {
+                if (question != null) {
+                    examQuestionRepository.save(question);
+                    blanksQuestions.add(question);
+                }
+                question = new ExamQuestion();
+                question.setQuestionText(matcher.group(2));
+            } else if (line.startsWith("Ans:")) {
+                if (question != null) {
+                    question.setCorrectAnswer(line.substring(4).trim());
+                }
+            }
+        }
+
+        if (question != null) {
+            examQuestionRepository.save(question);
+            blanksQuestions.add(question);
+        }
+
+        reader.close();
+        return blanksQuestions;
+    }
+    
     public List<Integer> getAllChapters() {
-        // This method should interact with the repository to fetch all distinct chapters available.
-        // Assuming you have a method in your repository class that fetches all unique chapter numbers.
         return examQuestionRepository.findAllDistinctChapters();
     }
     
     public List<ExamQuestion> generateQuestionsForChapter(int chapter) {
-        // This method fetches questions from a specific chapter.
-        // Assumes you have a method in your repository to find questions by chapter.
         return examQuestionRepository.findQuestionsByChapter(chapter);
     }
 

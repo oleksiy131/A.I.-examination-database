@@ -14,14 +14,15 @@ public class Exam {
     private String examName;
     private int durationInMinutes;
     private LocalDateTime startTime;
+    
+
+    @ManyToMany
+    private List<ExamQuestion> questions;
 
     public Exam() {
         this.startTime = LocalDateTime.now(); // Sets the startTime to the current date and time.
     }
 
-    @ManyToMany
-    private List<ExamQuestion> questions;
-    
     // Getter and setter for startTime
     public LocalDateTime getStartTime() {
         return startTime;

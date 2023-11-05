@@ -15,4 +15,5 @@ public interface ExamQuestionService {
     List<ExamQuestion> getQuestionsByChapter(int chapter);
     public List<ExamQuestion> generateQuestionsForChapter(int chapter);
     public List<Integer> getAllChapters();
-}
+    List<ExamQuestion> readBlanksFromFile() throws IOException;
+	List<ExamQuestion> generateFillInTheBlanksQuestions(int numBlanks) throws IOException;}
