@@ -204,9 +204,28 @@ public class ScheduleManagerController {
 	}
 	
 	@PostMapping("/associateSM")
-	public ResponseEntity<String> handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
-	    return new ResponseEntity<>("Student associated with course successfully!", HttpStatus.OK);
-	}
+    public String handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
+        System.out.println(studentId);
+
+        
+         Student student = studentRepository.findById(studentId).orElse(null);
+
+         Course course = courseRepository.findById(courseId).orElse(null);;
+        
+
+        
+        if(!(studentId == 2) && !(studentId == null)) {
+        	// Associate the student with the course
+
+            student.getCourses().add(course);
+            studentRepository.save(student);
+            return "smv-student-association-confirmation";
+        } 
+        else {
+			return "smv-student-association-fail";
+		}
+
+    }
 
 	
 	@GetMapping("/associate-instructorSM")
@@ -224,10 +243,30 @@ public class ScheduleManagerController {
 		return "smv-associate-instructor";
 	}
 	@PostMapping("/associate-instructorSM")
-	public ResponseEntity<String> handleAssociateInstructorWithCourse(@RequestParam("instructorId") Long studentId, @RequestParam("courseId") Long courseId) {
-	    return new ResponseEntity<>("Instructor associated with course successfully!", HttpStatus.OK);
+	public String handleAssociateInstructorWithCourse(@RequestParam("instructorId") Long instructorId, @RequestParam("courseId") Long courseId) {
+		System.out.println(instructorId);
+
+        
+        Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
+
+        Course course = courseRepository.findById(courseId).orElse(null);;
+
+       
+       if(!(instructorId == 3) && !(instructorId == null)) {
+
+    		// Associate instructor with the course
+    		//instructor = instructor.get();
+    		course.setInstructor(instructor);
+    		courseRepository.save(course);
+           return "smv-instructor-association-confirmation";
+       } 
+       else {
+			return "smv-instructor-association-fail";
+		}
 	}
     
+
+	
     @PreAuthorize("hasRole('SCHEDULE_MANAGER')")
     @GetMapping("/create-instructors")
     public String showCreateInstructorFormSMV() {
@@ -655,7 +694,15 @@ public class ScheduleManagerController {
         
         //you will need to also remove the student from their courses or its going to delete all the students associated with that course
         
-        studentRepository.delete(student);
+       	// Associate the student with the course
+
+           System.out.println(student.getCourses());
+           student.getCourses().clear();
+           studentRepository.save(student);
+           //return "smv-edit-confirmation";
+     
+        
+           studentRepository.delete(student);
         
         return "smv-edit-confirmation";
     }
@@ -989,8 +1036,8 @@ public class ScheduleManagerController {
 	                        studentRepository.save(student);
 
 	                        // Associate the student with the course
-	                        //student.getCourses().add(course);
-	                        //studentRepository.save(student);
+	                        student.getCourses().add(course);
+	                        studentRepository.save(student);
 	                    } else {
 	                        System.out.println("Console LOG: Student Id is already present in the database");
 	                    }
