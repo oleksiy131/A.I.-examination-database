@@ -3,6 +3,7 @@ package edu.sru.thangiah.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList; 
 
 import java.util.List;
@@ -112,7 +113,45 @@ public class InstructorController {
         return "exam-landing-page";
     }
     
-    @GetMapping("/exam/auto-generate")
+	@PostMapping("/exam-landing-page")
+	public String captureExamLandingPageData(@RequestParam(name = "manual", required = false) String generateManualExam,
+			@RequestParam(name = "auto", required = false) String otherAction,
+			@RequestParam("examName") String examName, @RequestParam("startDate") LocalDateTime startDate,
+			@RequestParam("endDate") LocalDateTime endDate,
+			// @RequestParam("examTime") String examTime,
+			@RequestParam("duration") int duration) {
+		System.out.println(examName);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		// System.out.println(examTime);
+		System.out.println(duration);
+
+//		if (!(duration > 0)) {
+//			return "redirect:/instructor/exam-landing-page";
+//		} else {
+			Exam exam = new Exam();
+			exam.setExamName(examName);
+			exam.setStartTime(startDate);
+			exam.setEndTime(endDate);
+			exam.setDurationInMinutes(duration);
+
+			// Save the exam to the database
+			examRepository.save(exam);
+
+			if (generateManualExam != null) {
+				return "redirect:/exam/selectChapter";
+			} else if (otherAction != null) {
+				// Handle the "Other Action" button click
+				return "redirect:/instructor/auto-generate";
+			} else {
+				return "error";
+			}
+
+		//}
+	}
+    
+    
+    @GetMapping("/auto-generate")
     public String showAutoExamPage() {
         return "automatic-exam-generation";
     }
