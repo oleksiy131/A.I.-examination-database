@@ -42,33 +42,6 @@ $(function(){
 
         <input type="submit" value="Associate Instructor with Course">
     </form>
-       <!-- JavaScript for handling form submission -->
-        <script>
-      $(document).ready(function () {
-    $('#associateInstructorWithCourseFormSMV').submit(function (event) {
-        event.preventDefault();
 
-        // Serialize form data
-        var formData = $(this).serialize();
-        console.log("Form Data: ", formData); // Debug
-
-        $.ajax({
-            type: 'POST',
-            url: '/schedule-manager/associate-instructorSM',
-            data: formData,
-            success: function (response) {
-                console.log("Response: ", response); // Debug
-                alert(response);
-            },
-            error: function (error) {
-                console.log("Error: ", error); // Debug
-                alert('Error: ' + error.responseText);
-            }
-        });
-    });
-});
-
-
-    </script>
 </body>
 </html>
