@@ -27,14 +27,16 @@ $(function(){
     
     <form id="associateInstructorWithCourseFormSMV" action="/schedule-manager/associate-instructorSM" method="POST">
         <label for="instructorId">Select an Instructor:</label>
-        <select id="instructorId" name="instructorId">
+        <select id="instructorId" name="instructorId" required>
+            <option value="">Please select an instructor</option>
             <option th:each="instructor : ${instructors}" th:value="${instructor.instructorId}" th:text="${instructor.instructorFirstName + ' ' + instructor.instructorLastName}"></option>
         </select>
 
         <br><br>
 
         <label for="courseId">Select a Course:</label>
-        <select id="courseId" name="courseId">
+        <select id="courseId" name="courseId" required>
+            <option value="">Please Select Course via ID</option>
             <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
         </select>
 
@@ -42,6 +44,18 @@ $(function(){
 
         <input type="submit" value="Associate Instructor with Course">
     </form>
+    
+       <script>
+        document.getElementById('associateInstructorWithCourseFormSMV').onsubmit = function(event) {
+            var instructorId = document.getElementById('instructorId').value;
+            var courseId = document.getElementById('courseId').value;
+
+            if(instructorId === '' || courseId === '') {
+                event.preventDefault(); // Prevent form submission
+                alert('Please select both an instructor and a course.');
+            }
+        };
+    </script>
 
 </body>
 </html>

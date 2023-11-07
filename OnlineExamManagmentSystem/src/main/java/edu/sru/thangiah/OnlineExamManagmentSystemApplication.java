@@ -88,10 +88,10 @@ public class OnlineExamManagmentSystemApplication {
     @Bean
     public CommandLineRunner setupDefaultUser() {
         return args -> {
-            createUserIfNotFound("root", "software", "ADMINISTRATOR", "admin@sru.edu", "Admin", "Root");
-            createUserIfNotFound("student", "software", "STUDENT", "student@sru.edu", "Student", "User");
-            createUserIfNotFound("instructor", "software", "INSTRUCTOR", "instructor@sru.edu", "Instructor", "User");
-            createUserIfNotFound("schedulemanager", "software", "SCHEDULE_MANAGER", "manager@sru.edu", "Manager", "User");
+            createUserIfNotFound("root", "software", "ADMINISTRATOR", "admin@sru.edu", "Default", "Root");
+            createUserIfNotFound("student", "software", "STUDENT", "student@sru.edu", "Default", "Student");
+            createUserIfNotFound("instructor", "software", "INSTRUCTOR", "instructor@sru.edu", "Default", "Instructor");
+            createUserIfNotFound("schedulemanager", "software", "SCHEDULE_MANAGER", "manager@sru.edu", "Default", "Manager");
         };
     }
 
@@ -126,7 +126,7 @@ public class OnlineExamManagmentSystemApplication {
                 admin.setUser(user);
                 admin.setAdminPassword(passwordEncoder.encode(password));
                 admin.setAdminEmail("admin@sru.edu");
-                admin.setAdminFirstName("Admin");
+                admin.setAdminFirstName("Default");
                 admin.setAdminLastName("Root");
                 administratorRepository.save(admin);
             }
@@ -136,8 +136,8 @@ public class OnlineExamManagmentSystemApplication {
                 student.setUser(user);
                 student.setStudentPassword(passwordEncoder.encode(password));
                 student.setStudentEmail("student@sru.edu");
-                student.setStudentFirstName("Student");
-                student.setStudentLastName("User");
+                student.setStudentFirstName("Default");
+                student.setStudentLastName("Student");
                 studentRepository.save(student);
             }
             if (roleName.equals("INSTRUCTOR")) {
@@ -146,8 +146,8 @@ public class OnlineExamManagmentSystemApplication {
                 instructor.setUser(user);
                 instructor.setInstructorPassword(passwordEncoder.encode(password));
                 instructor.setInstructorEmail("instructor@sru.edu");
-                instructor.setInstructorFirstName("Instructor");
-                instructor.setInstructorLastName("User");
+                instructor.setInstructorFirstName("Default");
+                instructor.setInstructorLastName("Instructor");
                 instructorRepository.save(instructor);
             }
             
@@ -157,7 +157,7 @@ public class OnlineExamManagmentSystemApplication {
                 scheduleManager.setManagerUsername(username);
                 scheduleManager.setManagerPassword(passwordEncoder.encode(password));
                 scheduleManager.setManagerEmail("sm@sru.edu");
-                scheduleManager.setManagerFirstName("Schedule");
+                scheduleManager.setManagerFirstName("Default");
                 scheduleManager.setManagerLastName("Manager");
                 scheduleManagerRepository.save(scheduleManager);
             }

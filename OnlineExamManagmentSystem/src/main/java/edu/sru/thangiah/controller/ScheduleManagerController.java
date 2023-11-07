@@ -207,6 +207,10 @@ public class ScheduleManagerController {
 	@PostMapping("/associateSM")
     public String handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
         System.out.println(studentId);
+        if(studentId == null || courseId == null) {
+            // Redirect back to the form with an error message
+            return "redirect:/associateSM?error=Please select both a student and a course.";
+        }
 
         
          Student student = studentRepository.findById(studentId).orElse(null);
@@ -246,6 +250,10 @@ public class ScheduleManagerController {
 	@PostMapping("/associate-instructorSM")
 	public String handleAssociateInstructorWithCourse(@RequestParam("instructorId") Long instructorId, @RequestParam("courseId") Long courseId) {
 		System.out.println(instructorId);
+		 if(instructorId == null || courseId == null) {
+		        // Redirect back to the form with an error message
+		        return "redirect:/associate-instructorSM?error=Please select both an instructor and a course.";
+		    }
 
         
         Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
