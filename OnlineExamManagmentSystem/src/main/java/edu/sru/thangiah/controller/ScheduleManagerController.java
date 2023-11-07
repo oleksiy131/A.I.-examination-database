@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -572,13 +573,29 @@ public class ScheduleManagerController {
     }
 
     // Delete instructor
+    @Transactional
     @GetMapping("/instructor/delete/{id}")
 	public String deleteInstructorSMV(@PathVariable("id") long id, Model model) {
 	    Instructor instructor = instructorRepository.findById(id)
 	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
-	    instructorRepository.delete(instructor);
-	    return "smv-edit-instructor-confirmation";
-	}
+	    
+	    // Get all courses associated with the instructor
+	    Set<Course> courses = instructor.getCourses();
+	    
+	    if (courses != null) {
+	        // Iterate over the courses and set the instructor to null
+	        for (Course course : courses) {
+	            course.setInstructor(null);
+	            // Save the course to update the association in the database
+	            courseRepository.save(course);
+	        }
+	    }
+  
+     
+        instructorRepository.delete(instructor);
+     
+     return "smv-edit-instructor-confirmation";
+ }
     
     
 	@GetMapping("/create-students")
