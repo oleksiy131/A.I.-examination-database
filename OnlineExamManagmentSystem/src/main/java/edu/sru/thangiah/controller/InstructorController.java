@@ -144,7 +144,6 @@ public class InstructorController {
             return "error";
         }
     }
-
     
     
     @GetMapping("/auto-generate")
@@ -337,8 +336,13 @@ public class InstructorController {
     public String deleteStudent(@PathVariable("id") long id, Model model) {
         Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        System.out.println(student.getCourses());
+        student.getCourses().clear();
+        studentRepository.save(student);
+        
         studentRepository.delete(student);
-        return "edit-confirmation";
+        return "iv-edit-confirmation";
     }
 	
 	@GetMapping("/iv-student-list")
@@ -465,8 +469,26 @@ public class InstructorController {
 	}
 	
 	@PostMapping("/associateIV")
-	public ResponseEntity<String> handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
-	    return new ResponseEntity<>("Student associated with course successfully!", HttpStatus.OK);
+	public String handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
+		System.out.println(studentId);
+
+        
+        Student student = studentRepository.findById(studentId).orElse(null);
+
+        Course course = courseRepository.findById(courseId).orElse(null);;
+       
+
+       
+       if(!(studentId == 2) && !(studentId == null)) {
+       	// Associate the student with the course
+
+           student.getCourses().add(course);
+           studentRepository.save(student);
+           return "iv-student-association-confirmation";
+       } 
+       else {
+			return "iv-student-association-fail";
+		}
 	}
 	
 	@GetMapping("/exportStudentIV")

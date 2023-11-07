@@ -77,8 +77,22 @@
     border-radius: 5px;
     cursor: pointer;
   }
+  
+  .cancel-link {
+    text-decoration: none;
+    background-color: #007055; 
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 
   .delete-link:hover {
+    background-color: #ff0000;
+  }
+  
+  .cancel-link:hover {
     background-color: #ff0000;
   }
   
@@ -118,7 +132,11 @@
 </form>
 
 <div class="center-delete">
-    <a class="delete-link" th:href="@{/student/delete/{id}(id=${student.studentId})}">Delete</a>
+    <a class="delete-link" th:href="@{/instructor/student/delete/{id}(id=${student.studentId})}">Delete</a>
+</div>
+
+<div class="center-delete">
+    <a class="cancel-link" th:href="@{/instructor/iv-student-list}">Cancel</a>
 </div>
 
 </body>

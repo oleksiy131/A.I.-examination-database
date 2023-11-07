@@ -487,6 +487,11 @@ public class AdministratorController {
     public String deleteStudentAV(@PathVariable("id") long id, Model model) {
         Student student = studentRepository.findById(id)
           .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
+        
+        System.out.println(student.getCourses());
+        student.getCourses().clear();
+        studentRepository.save(student);
+        
         studentRepository.delete(student);
         return "av-edit-confirmation";
     }

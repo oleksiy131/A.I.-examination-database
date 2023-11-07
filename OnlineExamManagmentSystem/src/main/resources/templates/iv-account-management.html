@@ -104,5 +104,19 @@ $(function(){
             <a th:href="@{/instructor/iv-edit-current-instructor/{id}(id=${instructor.instructorId})}">Edit</a>
         </div>
     </div>
+    
+     <script>
+        // You would render this variable dynamically based on the session attribute.
+        var changePasswordMessage = "Please change the default password to a more personalized password."; // Placeholder for server-rendered value
+
+        window.onload = function() {
+            // Check if there is a message to display
+            if (changePasswordMessage) {
+                // Display an alert or open a model with the message
+                alert(changePasswordMessage);
+            }
+        };
+    </script>
+    
 </body>
 </html>
