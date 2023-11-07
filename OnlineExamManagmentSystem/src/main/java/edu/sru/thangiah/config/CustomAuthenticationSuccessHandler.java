@@ -15,6 +15,7 @@ import edu.sru.thangiah.model.Roles;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Component
 public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -23,23 +24,29 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 	@Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         
-		// Get the entered password directly from the request
-	    String enteredPassword = request.getParameter("password");
-		
-		// Get the role of the logged in user
+        // Get the entered password directly from the request
+        String enteredPassword = request.getParameter("password");
+
+        // Get the role of the logged in user
         String userRole = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .findFirst() 
+                .findFirst()
                 .orElse("");
-        
-//       Check for default passwords and redirect accordingly
-      if ("instructor".equals(enteredPassword) && "INSTRUCTOR".equals(userRole)) {
-          response.sendRedirect("/instructor/iv-account-management");
-          return;
-      } else if ("student".equals(enteredPassword) && "STUDENT".equals(userRole)) {
-         response.sendRedirect("/student/course/sv-account-management");
-          return;
-      }
+
+        // Create HttpSession object
+        HttpSession session = request.getSession();
+
+        // Check for default passwords and redirect accordingly
+        if ("instructor".equals(enteredPassword) && "INSTRUCTOR".equals(userRole)) {
+        	 System.out.println("Redirecting instructor with default password"); // Logging for debugging
+             session.setAttribute("changePassword", "Please change your password from a default password before continuing.");
+             response.sendRedirect("/instructor/iv-account-management");
+            return;
+        } else if ("student".equals(enteredPassword) && "STUDENT".equals(userRole)) {
+        	 System.out.println("Redirecting student with default password"); // Logging for debugging
+             session.setAttribute("changePassword", "Please change your password from a default password before continuing.");
+             response.sendRedirect("/student/course/sv-account-management");
+        }
 
         // Redirect user based on their role
         switch (userRole) {
