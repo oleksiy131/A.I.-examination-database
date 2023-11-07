@@ -719,7 +719,7 @@ public class ScheduleManagerController {
         
         //you will need to also remove the student from their courses or its going to delete all the students associated with that course
         
-       	// Associate the student with the course
+       	// remove the student from the courses
 
            System.out.println(student.getCourses());
            student.getCourses().clear();
