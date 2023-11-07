@@ -70,6 +70,7 @@ public class ExamController {
         this.examService = examService;
     }
     
+    
     @PostMapping("/manual-auto-generate")
     public ResponseEntity<String> generateExam(
             @RequestParam("chapter") int chapter, 
@@ -108,7 +109,6 @@ public class ExamController {
 
         return ResponseEntity.ok().body(String.valueOf(exam.getId()));
     }
-
     @PostMapping("/generate")
     public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, 
                                Model model, 
@@ -147,14 +147,12 @@ public class ExamController {
         // Add the exam ID to the model for the confirmation page
         model.addAttribute("generatedExamId", exam.getId());
 
-        // Also, add the exam questions to the model again
-        List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
-        model.addAttribute("examQuestions", examQuestions);
+        // Add the list of selected questions to the model
+        model.addAttribute("selectedQuestions", selectedQuestions); // This line ensures the selected questions are passed to the view
 
         // Return the view that confirms the exam generation
         return "examGeneratedConfirmation"; // Redirect to a confirmation page
     }
-
 
     @GetMapping("/{id}/link")
     public String showExamLink(@PathVariable Long id, Model model) {
