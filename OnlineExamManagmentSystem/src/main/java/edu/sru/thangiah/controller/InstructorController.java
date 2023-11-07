@@ -3,6 +3,7 @@ package edu.sru.thangiah.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList; 
 
 import java.util.List;
@@ -112,7 +113,45 @@ public class InstructorController {
         return "exam-landing-page";
     }
     
-    @GetMapping("/exam/auto-generate")
+	@PostMapping("/exam-landing-page")
+	public String captureExamLandingPageData(@RequestParam(name = "manual", required = false) String generateManualExam,
+			@RequestParam(name = "auto", required = false) String otherAction,
+			@RequestParam("examName") String examName, @RequestParam("startDate") LocalDateTime startDate,
+			@RequestParam("endDate") LocalDateTime endDate,
+			// @RequestParam("examTime") String examTime,
+			@RequestParam("duration") int duration) {
+		System.out.println(examName);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		// System.out.println(examTime);
+		System.out.println(duration);
+
+//		if (!(duration > 0)) {
+//			return "redirect:/instructor/exam-landing-page";
+//		} else {
+			Exam exam = new Exam();
+			exam.setExamName(examName);
+			exam.setStartTime(startDate);
+			exam.setEndTime(endDate);
+			exam.setDurationInMinutes(duration);
+
+			// Save the exam to the database
+			examRepository.save(exam);
+
+			if (generateManualExam != null) {
+				return "redirect:/exam/selectChapter";
+			} else if (otherAction != null) {
+				// Handle the "Other Action" button click
+				return "redirect:/instructor/auto-generate";
+			} else {
+				return "error";
+			}
+
+		//}
+	}
+    
+    
+    @GetMapping("/auto-generate")
     public String showAutoExamPage() {
         return "automatic-exam-generation";
     }
@@ -307,7 +346,6 @@ public class InstructorController {
     }
 	
 	@GetMapping("/iv-student-list")
-	@PreAuthorize("hasRole('SCHEDULE_MANAGER')")
 	public String showStudentsListIV(Model model) {
 		// Retrieve the list of students from the repository
 		List<Student> students = (List<Student>) studentRepository.findAll();
@@ -318,6 +356,31 @@ public class InstructorController {
 		// Return the name of the HTML template to be displayed
 		return "iv-student-list";
 	}
+	
+	@GetMapping("/enable-disable-student/{id}")
+	public String enableDisableStudent(@PathVariable Long id, @RequestParam boolean enabled) {
+	    // Find the student by id
+	    Optional<Student> studentOpt = studentRepository.findById(id);
+	    if (studentOpt.isPresent()) {
+	        Student student = studentOpt.get();
+	        // Toggle the enabled state
+	        boolean newEnabledStatus = !student.isEnabled();
+	        student.setEnabled(newEnabledStatus);
+	        // Save the updated student
+	        studentRepository.save(student);
+	        
+	        // Now, find the associated User entity and update its enabled status
+	        Optional<User> userOpt = userRepository.findByUsername(student.getStudentUsername());
+	        if (userOpt.isPresent()) {
+	            User user = userOpt.get();
+	            user.setEnabled(newEnabledStatus);
+	            userRepository.save(user);
+	        }
+	    }
+	    // Redirect back to the student list
+	    return "redirect:/instructor/iv-student-list";
+	}
+
     
 	@GetMapping("/iv-create-student")
 	public String showCreateStudentFormIV() {
@@ -797,8 +860,8 @@ public class InstructorController {
 	    @Transactional
 		@PostMapping("/iv-edit-instructor/{id}")
 		public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated Instructor instructor, 
-		  BindingResult result, Model model, @RequestParam("newPassword") String newInstructorPassword, 
-		  @RequestParam("confirmPassword") String confirmInstructorPassword) {
+		  BindingResult result, Model model, @RequestParam(value = "currentPassword", required = false) String currentPassword, @RequestParam(value = "newPassword", required = false) String newInstructorPassword, 
+		  @RequestParam(value = "confirmPassword", required = false) String confirmInstructorPassword) {
 		    if (result.hasErrors()) {
 		        instructor.setInstructorId(id); 
 		        return "iv-edit-current-instructor";
@@ -808,31 +871,39 @@ public class InstructorController {
 		    // Fetch the user (or create a new one if not found)
 		    User user = userRepository.findByUsername(instructor.getInstructorUsername())
 		            .orElse(new User());  
+		    
+		    boolean passwordError = false;
 
-		    // Only process password if both fields are not empty
-		    if (!newInstructorPassword.isEmpty() || !confirmInstructorPassword.isEmpty()) {
-		        // Validate the new password and confirm password
-		        if (!newInstructorPassword.equals(confirmInstructorPassword)) {
-		            model.addAttribute("passwordError", "Passwords do not match");
-		            //model.addAttribute("instructor", instructor);
-		            return "iv-edit-current-instructor";
+		    // Only process passwords if new password fields are filled
+		    if (newInstructorPassword != null && !newInstructorPassword.isEmpty()) {
+		        // Verify current password
+		        if (currentPassword != null && !passwordEncoder.matches(currentPassword, user.getPassword())) {
+		            model.addAttribute("passwordError", "Current password is incorrect");
+		            passwordError = true;
+		        } 
+		        // Check if new passwords match
+		        else if (!newInstructorPassword.equals(confirmInstructorPassword)) {
+		            model.addAttribute("passwordError", "New passwords do not match");
+		            passwordError = true;
+		        } 
+		        // Process password update if there's no error
+		        else {
+		            String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
+		            instructor.setInstructorPassword(encryptedPassword);
+		            user.setPassword(encryptedPassword);
+		            userRepository.save(user);  // Save the user to userRepository
 		        }
-		        
-		        String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
-		        instructor.setInstructorPassword(encryptedPassword);
-		        
-		        // Update user's password
-		        user.setPassword(encryptedPassword);
 		    }
 
-		    // Update other user properties
-		    user.setUsername(instructor.getInstructorUsername());
-		    user.setEmail(instructor.getInstructorEmail());
-		    userRepository.save(user);  // Save the user to userRepository
+		    // Save the instructor regardless of password change
+		    instructorRepository.save(instructor);  // Save the instructor
 
-		    // Save the instructor
-		    instructorRepository.save(instructor);
-		    
+		    // If there was a password error, re-display the form
+		    if (passwordError) {
+		        model.addAttribute("instructor", instructor);
+		        return "iv-edit-current-instructor";
+		    }
+
 		    // Debugging: Print the received instructor data
 		    System.out.println("Received Instructor Data:");
 		    System.out.println("ID: " + instructor.getInstructorId());
@@ -843,11 +914,6 @@ public class InstructorController {
 		    
 		    return "iv-instructor-edit-confirmation"; 
 		}
-	    
-	    
-	    
-	    
-   
 }
 
 

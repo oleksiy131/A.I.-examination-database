@@ -14,9 +14,18 @@ public class Exam {
     private String examName;
     private int durationInMinutes;
     private LocalDateTime startTime;
+    private LocalDateTime endTime;
     
 
-    @ManyToMany
+    public LocalDateTime getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(LocalDateTime endTime) {
+		this.endTime = endTime;
+	}
+
+	@ManyToMany
     private List<ExamQuestion> questions;
 
     public Exam() {

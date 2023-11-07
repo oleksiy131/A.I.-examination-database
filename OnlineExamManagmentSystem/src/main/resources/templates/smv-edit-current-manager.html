@@ -129,6 +129,13 @@ $(function(){
     <span class="error" th:if="${#fields.hasErrors('managerEmail')}" th:errors="*{managerEmail}"></span>
     <br>
     
+    <!-- Current Password Field -->
+	<label for="currentPassword">Current Password:</label>
+	<input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password:">
+	<span class="error"></span>
+	<br>
+    
+    
     <!-- New Password Field -->
 	<label for="newPassword">New Password</label>
 	<input type="password" id="newPassword" name="newPassword" placeholder="New Password:">

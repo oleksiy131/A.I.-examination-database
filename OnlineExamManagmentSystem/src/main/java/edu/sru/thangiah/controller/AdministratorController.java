@@ -115,32 +115,43 @@ public class AdministratorController {
 	  @Transactional
 			@PostMapping("/av-edit-admin/{id}")
 			public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated Administrator administrator , 
-			  BindingResult result, Model model, @RequestParam("newPassword") String newAdminpassword, 
-			  @RequestParam("confirmPassword") String confirmAdminPassword) {
+			  BindingResult result, Model model,@RequestParam(value = "currentPassword", required = false) String currentPassword, @RequestParam(value = "newPassword", required = false) String newAdminPassword, 
+			  @RequestParam(value = "confirmPassword", required = false) String confirmAdminPassword) {
 			    if (result.hasErrors()) {
 			    	administrator.setAdminId(id); 
 			        return "av-edit-current-admin";
 			    }
 			    
 			    
-			    // Fetch the user (or create a new one if not found)
 			    User user = userRepository.findByUsername(administrator.getAdminUsername())
 			            .orElse(new User());  
 
-			    // Only process password if both fields are not empty
-			    if (!newAdminpassword.isEmpty() || !confirmAdminPassword.isEmpty()) {
+			    boolean passwordError = false;
+
+			    // Only process password if new password fields are filled
+			    if (newAdminPassword != null && !newAdminPassword.isEmpty()) {
+			        // Verify current password if provided
+			        if (currentPassword != null && !passwordEncoder.matches(currentPassword, user.getPassword())) {
+			            model.addAttribute("passwordError", "Current password is incorrect");
+			            passwordError = true;
+			        } 
 			        // Validate the new password and confirm password
-			        if (!newAdminpassword.equals(confirmAdminPassword)) {
+			        else if (!newAdminPassword.equals(confirmAdminPassword)) {
 			            model.addAttribute("passwordError", "Passwords do not match");
-			            model.addAttribute("administrator", administrator);
-			            return "av-edit-current-admin";
+			            passwordError = true;
+			        } 
+			        // Encrypt and set the new password if there's no error
+			        else {
+			            String encryptedPassword = passwordEncoder.encode(newAdminPassword);
+			            administrator.setAdminPassword(encryptedPassword);
+			            user.setPassword(encryptedPassword); // Update the user's password
 			        }
-			        
-			        String encryptedPassword = passwordEncoder.encode(confirmAdminPassword);
-			        administrator.setAdminPassword(confirmAdminPassword);
-			        
-			        // Update user's password
-			        user.setPassword(encryptedPassword);
+			    }
+
+			    // If there was a password error, re-display the form
+			    if (passwordError) {
+			        model.addAttribute("administrator", administrator);
+			        return "av-edit-current-admin";
 			    }
 
 			    // Update other user properties
@@ -148,9 +159,8 @@ public class AdministratorController {
 			    user.setEmail(administrator.getAdminEmail());
 			    userRepository.save(user);  // Save the user to userRepository
 
-			    // Save the instructor
+			    // Save the administrator
 			    administratorRepository.save(administrator);
-			    
 			    // Debugging: Print the received instructor data
 			    System.out.println("Received Instructor Data:");
 			    System.out.println("ID: " + administrator.getAdminId());

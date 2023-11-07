@@ -1,7 +1,7 @@
 package edu.sru.thangiah.domain;
 
 
-import java.util.HashSet;
+import java.util.HashSet; 
 import java.util.List;
 import java.util.Set; 
 
@@ -81,6 +81,9 @@ public class Student {
     @JoinColumn(name = "role_id")
     private List<Roles> roles;
     
+    @Column(name = "enabled")
+    private boolean enabled = true;
+    
 
 	public Long getStudentId() {
 		return studentId;
@@ -138,9 +141,6 @@ public class Student {
 		this.creditsTaken = creditsTaken;
 	}
 	
-	
-
-	
 	public List<Roles> getRoles() {
 		return roles;
 	}
@@ -149,6 +149,13 @@ public class Student {
 		this.roles = roles;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public Student(long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
 			String studentEmail, String studentPassword, String studentUsername, float creditsTaken,
@@ -168,6 +175,10 @@ public class Student {
 	public Student() {
 		this.courses = new HashSet<>();
 	}
+	public void toggleEnabled() {
+	    this.enabled = !this.enabled;
+	}
+
 
 	public void setUser(User Student) {
 		this.studentFirstName = Student.getFirstName();

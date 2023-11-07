@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -114,8 +115,8 @@ public class ScheduleManagerController {
 	@Transactional
 	@PostMapping("/smv-edit-current-user/{id}")
 	public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated ScheduleManager manager, 
-	  BindingResult result, Model model, @RequestParam("newPassword") String newManagerPassword, 
-	  @RequestParam("confirmPassword") String confirmManagerPassword) {
+	  BindingResult result, Model model, @RequestParam(value = "currentPassword", required = false) String currentPassword, @RequestParam(value = "newPassword", required = false) String newManagerPassword, 
+	  @RequestParam(value="confirmPassword", required=false) String confirmManagerPassword) {
 	    if (result.hasErrors()) {
 	    	manager.setManagerId(id); 
 	        return "smv-edit-current-manager";
@@ -123,44 +124,44 @@ public class ScheduleManagerController {
 	    
 	    // Fetch the user (or create a new one if not found)
 	    User user = userRepository.findByUsername(manager.getManagerUsername())
-	            .orElse(new User());  
+	            .orElse(new User());
 	    
-	    //System.out.println(model);
-	    // Only process password if both fields are not empty
-	    if (!newManagerPassword.isEmpty() || !confirmManagerPassword.isEmpty()) {
-	        // Validate the new password and confirm password
-	        if (!newManagerPassword.equals(confirmManagerPassword)) {
-	            model.addAttribute("passwordError", "Passwords do not match");
-	            model.addAttribute("manager", manager);
-	            return "smv-edit-current-manager";
+	    boolean passwordError = false;
+
+	    // Only process passwords if new password fields are filled
+	    if (newManagerPassword != null && !newManagerPassword.isEmpty()) {
+	        // Verify current password
+	        if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+	            model.addAttribute("passwordError", "Current password is incorrect");
+	            passwordError = true;
+	        } 
+	        // Check if new passwords match
+	        else if (!newManagerPassword.equals(confirmManagerPassword)) {
+	            model.addAttribute("passwordError", "New passwords do not match");
+	            passwordError = true;
+	        } 
+	        // Process password update if there's no error
+	        else {
+	            String encryptedPassword = passwordEncoder.encode(newManagerPassword);
+	            manager.setManagerPassword(encryptedPassword);
+	            user.setPassword(encryptedPassword);
+	            userRepository.save(user);  // Save the user to userRepository
 	        }
-	        
-	        
-	        String encryptedPassword = passwordEncoder.encode(newManagerPassword);
-	        manager.setManagerPassword(encryptedPassword);
-	        
-	        // Update user's password
-	        user.setPassword(encryptedPassword);
 	    }
 
-	    // Update other user properties
-	    user.setUsername(manager.getManagerUsername());
-	    user.setEmail(manager.getManagerEmail());
-	    userRepository.save(user);  // Save the user to userRepository
+	    // Save the manager regardless of password change
+	    scheduleManagerRepository.save(manager);  // Save the manager
 
-	    // Save the manager
-	    scheduleManagerRepository.save(manager);
-	    
-	    // Debugging: Print the received instructor data
-	    System.out.println("Received Instructor Data:");
-	    System.out.println("ID: " + manager.getManagerId());
-	    System.out.println("First Name: " + manager.getManagerFirstName());
-	    System.out.println("Last Name: " + manager.getManagerLastName());
-	    System.out.println("Email: " + manager.getManagerEmail());
-	    System.out.println("Path Variable ID: " + id);
-	    
+	    // If there was a password error, re-display the form
+	    if (passwordError) {
+	        model.addAttribute("manager", manager);
+	        return "smv-edit-current-manager";
+	    }
+
+	    // If everything is fine, redirect to the confirmation page
 	    return "smv-user-edit-confirmation"; 
 	}
+
 	
 
 	
@@ -204,9 +205,32 @@ public class ScheduleManagerController {
 	}
 	
 	@PostMapping("/associateSM")
-	public ResponseEntity<String> handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
-	    return new ResponseEntity<>("Student associated with course successfully!", HttpStatus.OK);
-	}
+    public String handleAssociateStudentWithCourse(@RequestParam("studentId") Long studentId, @RequestParam("courseId") Long courseId) {
+        System.out.println(studentId);
+        if(studentId == null || courseId == null) {
+            // Redirect back to the form with an error message
+            return "redirect:/associateSM?error=Please select both a student and a course.";
+        }
+
+        
+         Student student = studentRepository.findById(studentId).orElse(null);
+
+         Course course = courseRepository.findById(courseId).orElse(null);;
+        
+
+        
+         if(student != null && course != null) {
+        	// Associate the student with the course
+
+            student.getCourses().add(course);
+            studentRepository.save(student);
+            return "smv-student-association-confirmation";
+        } 
+        else {
+			return "smv-student-association-fail";
+		}
+
+    }
 
 	
 	@GetMapping("/associate-instructorSM")
@@ -224,10 +248,34 @@ public class ScheduleManagerController {
 		return "smv-associate-instructor";
 	}
 	@PostMapping("/associate-instructorSM")
-	public ResponseEntity<String> handleAssociateInstructorWithCourse(@RequestParam("instructorId") Long studentId, @RequestParam("courseId") Long courseId) {
-	    return new ResponseEntity<>("Instructor associated with course successfully!", HttpStatus.OK);
+	public String handleAssociateInstructorWithCourse(@RequestParam("instructorId") Long instructorId, @RequestParam("courseId") Long courseId) {
+		System.out.println(instructorId);
+		 if(instructorId == null || courseId == null) {
+		        // Redirect back to the form with an error message
+		        return "redirect:/associate-instructorSM?error=Please select both an instructor and a course.";
+		    }
+
+        
+        Instructor instructor = instructorRepository.findById(instructorId).orElse(null);
+
+        Course course = courseRepository.findById(courseId).orElse(null);;
+
+       
+        if(instructor != null && course != null) {
+
+    		// Associate instructor with the course
+    		//instructor = instructor.get();
+    		course.setInstructor(instructor);
+    		courseRepository.save(course);
+           return "smv-instructor-association-confirmation";
+       } 
+       else {
+			return "smv-instructor-association-fail";
+		}
 	}
     
+
+	
     @PreAuthorize("hasRole('SCHEDULE_MANAGER')")
     @GetMapping("/create-instructors")
     public String showCreateInstructorFormSMV() {
@@ -533,13 +581,29 @@ public class ScheduleManagerController {
     }
 
     // Delete instructor
+    @Transactional
     @GetMapping("/instructor/delete/{id}")
 	public String deleteInstructorSMV(@PathVariable("id") long id, Model model) {
 	    Instructor instructor = instructorRepository.findById(id)
 	      .orElseThrow(() -> new IllegalArgumentException("Invalid instructor Id:" + id));
-	    instructorRepository.delete(instructor);
-	    return "smv-edit-instructor-confirmation";
-	}
+	    
+	    // Get all courses associated with the instructor
+	    Set<Course> courses = instructor.getCourses();
+	    
+	    if (courses != null) {
+	        // Iterate over the courses and set the instructor to null
+	        for (Course course : courses) {
+	            course.setInstructor(null);
+	            // Save the course to update the association in the database
+	            courseRepository.save(course);
+	        }
+	    }
+  
+     
+        instructorRepository.delete(instructor);
+     
+     return "smv-edit-instructor-confirmation";
+ }
     
     
 	@GetMapping("/create-students")
@@ -655,7 +719,15 @@ public class ScheduleManagerController {
         
         //you will need to also remove the student from their courses or its going to delete all the students associated with that course
         
-        studentRepository.delete(student);
+       	// Associate the student with the course
+
+           System.out.println(student.getCourses());
+           student.getCourses().clear();
+           studentRepository.save(student);
+           //return "smv-edit-confirmation";
+     
+        
+           studentRepository.delete(student);
         
         return "smv-edit-confirmation";
     }
@@ -989,8 +1061,8 @@ public class ScheduleManagerController {
 	                        studentRepository.save(student);
 
 	                        // Associate the student with the course
-	                        //student.getCourses().add(course);
-	                        //studentRepository.save(student);
+	                        student.getCourses().add(course);
+	                        studentRepository.save(student);
 	                    } else {
 	                        System.out.println("Console LOG: Student Id is already present in the database");
 	                    }

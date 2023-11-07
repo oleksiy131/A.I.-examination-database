@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Generate Exam</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <style>
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto !important;    
-    position: relative;
-    color: #333;
-    background-color: #f4f4f4; /* Light background for better contrast */
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto !important;
+            position: relative;
+            color: #333;
+            background-color: #f4f4f4;
+            /* Light background for better contrast */
+        }
+
         h1 {
             text-align: center;
             background-color: rgba(0, 112, 85, 0.7);
@@ -23,37 +26,46 @@ body {
         }
     </style>
 </head>
+
 <body>
     <div id="nav-placeholder"></div>
 
     <h1>Exam Creation Form</h1>
 
-    <form id="examForm">
+    <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return validateDuration()">
         <label for="examName">Exam Name:</label>
         <input type="text" id="examName" name="examName" oninput="updateUI()"><br><br>
 
         <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" onchange="updateUI()"><br><br>
+        <input type="datetime-local" id="startDate" name="startDate" onchange="updateUI()"><br><br>
 
         <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" onchange="updateUI()"><br><br>
+        <input type="datetime-local" id="endDate" name="endDate" onchange="updateUI()"><br><br>
 
-        <label for="examTime">Exam Time:</label>
-        <input type="time" id="examTime" name="examTime" onchange="updateUI()"><br><br>
+        <!-- <label for="examTime">Exam Time:</label>
+        <input type="datetime-local" id="examTime" name="examTime" onchange="updateUI()"><br><br> -->
 
         <label for="duration">Duration (in minutes):</label>
         <input type="number" id="duration" name="duration" oninput="updateUI()"><br><br>
 
-        <button type="button" onclick="addQuiz()">Manual Exam Generation</button>
+        <input type="submit" name="manual" value="Manual Exam Generation">
+        <input type="submit" name="auto" value="Automatic Exam Generation">
+
+        <!--<button type="button" onclick="addQuiz()">Manual Exam Generation</button>
         <button type="button" onclick="addAutoQuiz()">Automatic Exam Generation</button>
-        
+        -->
     </form>
+
+    <div id="popup" style="display: none; position: absolute; background-color: #007055; color: #fff; padding: 5px 10px; border: 1px solid rgb(0, 0, 0); white-space: nowrap;">
+    The duration cannot be 0 or negative.
+	</div>
+
 
     <div id="examInfo">
         <h2>Exam Information</h2>
         <p id="infoName"></p>
         <p id="infoDates"></p>
-        <p id="infoTime"></p>
+        <!--<p id="infoTime">/p>-->
         <p id="infoDuration"></p>
     </div>
 
@@ -62,29 +74,34 @@ body {
             var name = document.getElementById('examName').value;
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
-            var time = document.getElementById('examTime').value;
+            //var time = document.getElementById('examTime').value;
             var duration = document.getElementById('duration').value;
 
             document.getElementById('infoName').textContent = 'Exam Name: ' + name;
             document.getElementById('infoDates').textContent = 'Start Date: ' + startDate + ' - End Date: ' + endDate;
-            document.getElementById('infoTime').textContent = 'Time: ' + time;
+            //document.getElementById('infoTime').textContent = 'Time: ' + time;
             document.getElementById('infoDuration').textContent = 'Duration: ' + duration + ' minutes';
         }
 
-		function addQuiz() {
-    			window.location.href = 'http://localhost:8080/exam/selectChapter';
-		}
-		function addAutoQuiz() {
-    			window.location.href = 'http://localhost:8080/instructor/exam/auto-generate';
-		}
 
-        
-        $(function(){
-        $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
-            // Once the navbar content is loaded, remove any video elements from the loaded content
-            $("#nav-placeholder video").remove();
+        function validateDuration() {
+            var duration = parseInt(document.getElementById("duration").value, 10);
+            if (!(duration > 0)) {
+                // Show the popup
+                document.getElementById("popup").style.display = "block";
+                // Prevent form submission
+                return false;
+            }
+            return true; // Allow form submission if duration is valid
+        }
+
+        $(function () {
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function () {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
         });
-    });
     </script>
 </body>
+
 </html>
