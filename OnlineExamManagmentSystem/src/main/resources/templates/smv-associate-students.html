@@ -26,16 +26,18 @@ $(function(){
     <h2>Associate Student with Course</h2>
     <form id="associateStudentWithCourseFormSMV" action="/schedule-manager/associateSM" method="POST">
         <label for="studentId">Select a Student:</label>
-        <select id="studentId" name="studentId">
+        <select id="studentId" name="studentId" required>
             <!-- Use Thymeleaf each loop to iterate over a list of students -->
+            <option value="">Please select a student</option>
             <option th:each="student : ${students}" th:value="${student.studentId}" th:text="${student.studentFirstName + ' ' + student.studentLastName}"></option>
         </select>
 
         <br><br>
 
         <label for="courseId">Select a Course:</label>
-        <select id="courseId" name="courseId">
+        <select id="courseId" name="courseId" required>
             <!-- Using Thymeleaf each loop to iterate over a list of courses -->
+			<option value="">Please Select Course via ID</option>
             <option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
         </select>
 
@@ -44,6 +46,17 @@ $(function(){
         <input type="submit" value="Associate Student with Course">
     </form>
 
+	 <script>
+        document.getElementById('associateStudentWithCourseFormSMV').onsubmit = function(event) {
+            var studentId = document.getElementById('studentId').value;
+            var courseId = document.getElementById('courseId').value;
 
+            if(studentId === '' || courseId === '') {
+                event.preventDefault(); // Prevent form submission
+                alert('Please select both a student and a course.');
+            }
+        };
+    </script>
+	
 </body>
 </html>
