@@ -121,7 +121,12 @@ function generateQuiz() {
     $.ajax({
         type: 'POST',
         url: '/exam/manual-auto-generate',
-        data: {numBlanks: numBlanks}, // Send the number of blanks to the server
+        data: {
+            chapter: selectedChapter,
+            numMultipleChoice: numMCQ,
+            numTrueFalse: numTrueFalse,
+            numBlanks: numBlanks
+        },
         success: function(response) {
             // Handle the response, which now includes the generated questions
             console.log(response);
@@ -131,6 +136,7 @@ function generateQuiz() {
         }
     });
 }
+
 
     </script>
 </body>

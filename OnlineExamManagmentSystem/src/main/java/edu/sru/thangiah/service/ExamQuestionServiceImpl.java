@@ -92,6 +92,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
                 // Save the current exam question to the repository
                 currentExamQuestion.setChapter(chapter); // setting the chapter number for the question
                 examQuestionRepository.save(currentExamQuestion);
+                System.out.println("Saved Question: " + currentExamQuestion);
             }
         }
         reader.close();
@@ -132,6 +133,56 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         return blanksQuestions;
     }
     
+    public List<ExamQuestion> readTrueFalseFromFile() throws IOException {
+        String filePath = "classpath:static/true-false.txt";
+        Resource resource = resourceLoader.getResource(filePath);
+        InputStream inputStream = resource.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        List<ExamQuestion> trueFalseQuestions = new ArrayList<>();
+
+        // Regular expression to identify the question number and text
+        Pattern questionPattern = Pattern.compile("^(\\d+)\\.\\s+(.*)$");
+        // This pattern matches "Ans: A" or "Ans: B"
+        Pattern answerPattern = Pattern.compile("^Ans:\\s+([AB])$");
+
+        String line;
+        ExamQuestion question = null;
+
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+            Matcher questionMatcher = questionPattern.matcher(line);
+
+            if (questionMatcher.matches()) {
+                if (question != null) {
+                    // Save the previous question
+                    examQuestionRepository.save(question);
+                    trueFalseQuestions.add(question);
+                }
+                // Start a new question
+                question = new ExamQuestion();
+                question.setQuestionText(questionMatcher.group(2));
+            } else {
+                Matcher answerMatcher = answerPattern.matcher(line);
+                if (answerMatcher.matches()) {
+                    // This is the answer line
+                    if (question != null) {
+                        question.setCorrectAnswer(answerMatcher.group(1)); // Captures "A" or "B"
+                    }
+                }
+            }
+        }
+
+        // Save the last question if there is one
+        if (question != null) {
+            examQuestionRepository.save(question);
+            trueFalseQuestions.add(question);
+        }
+
+        reader.close();
+        return trueFalseQuestions;
+    }
+
+
     public List<Integer> getAllChapters() {
         return examQuestionRepository.findAllDistinctChapters();
     }

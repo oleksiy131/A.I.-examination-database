@@ -3,10 +3,13 @@ package edu.sru.thangiah.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -68,32 +71,43 @@ public class ExamController {
     }
     
     @PostMapping("/manual-auto-generate")
-    public ResponseEntity<String> generateExam(@RequestParam("numBlanks") int numBlanks, HttpSession session) {
-        try {
-            // Generate the fill-in-the-blanks questions based on the number selected by the user
-            List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
-
-            // Store the number of fill-in-the-blanks and the questions in the session
-            session.setAttribute("numBlanks", numBlanks);
-            session.setAttribute("blanksQuestions", blanksQuestions);
-
-            // Print each question to the server console
-            for (ExamQuestion question : blanksQuestions) {
-                System.out.println(question);
-            }
-
-            // You can still return the list as a JSON if you want to send it to the client
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(blanksQuestions);
-
-            return ResponseEntity.ok(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Failed to read blanks: " + e.getMessage());
+    public ResponseEntity<String> generateExam(
+            @RequestParam("chapter") int chapter, 
+            @RequestParam("numMultipleChoice") int numMultipleChoice,
+            @RequestParam("numTrueFalse") int numTrueFalse,
+            @RequestParam("numBlanks") int numBlanks,
+            HttpSession session) throws IOException {
+        
+        Long examId = (Long) session.getAttribute("currentExamId");
+        if (examId == null) {
+            return ResponseEntity.badRequest().body("No exam initiated for question generation.");
         }
-    }
 
-    
+        Optional<Exam> existingExam = examRepository.findById(examId);
+        if (!existingExam.isPresent()) {
+            return ResponseEntity.badRequest().body("Exam does not exist.");
+        }
+        Exam exam = existingExam.get();
+
+        List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
+        List<ExamQuestion> trueFalseQuestions = examQuestionService.readTrueFalseFromFile();
+        trueFalseQuestions = trueFalseQuestions.subList(0, Math.min(numTrueFalse, trueFalseQuestions.size()));
+        List<ExamQuestion> allQuestionsForChapter = examQuestionService.generateQuestionsForChapter(chapter);
+        List<ExamQuestion> multipleChoiceQuestions = allQuestionsForChapter.stream()
+                .filter(q -> q.getOptionA() != null && q.getOptionB() != null && q.getOptionC() != null && q.getOptionD() != null)
+                .limit(numMultipleChoice)
+                .collect(Collectors.toList());
+
+        List<ExamQuestion> combinedQuestions = new ArrayList<>();
+        combinedQuestions.addAll(blanksQuestions);
+        combinedQuestions.addAll(trueFalseQuestions);
+        combinedQuestions.addAll(multipleChoiceQuestions);
+        exam.setQuestions(combinedQuestions);
+
+        examRepository.save(exam);
+
+        return ResponseEntity.ok().body(String.valueOf(exam.getId()));
+    }
 
     @PostMapping("/generate")
     public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
@@ -110,6 +124,8 @@ public class ExamController {
 
         // Create a new exam and set its properties
         Exam exam = new Exam();
+        Long temp = exam.getId();
+        
         exam.setExamName(examDetails.getExamName());
         exam.setDurationInMinutes(examDetails.getDurationInMinutes());
         exam.setQuestions(selectedQuestions);
@@ -198,26 +214,33 @@ public class ExamController {
     
     @GetMapping("/take/{id}")
     public String takeExam(@PathVariable Long id, Model model) {
-        // Retrieve the exam by ID from the repository
-        Exam exam = examService.getExamById(id);
-        
-        System.out.println("Questions retrieved: " + exam.getQuestions());
-
-        if (exam != null) {
-            // Check if the exam's duration is still valid
-            if (isExamDurationValid(exam)) {
-                model.addAttribute("exam", exam);
-                return "takeExam"; 
+        try {
+            Exam exam = examService.getExamById(id);
+            if (exam != null) {
+                List<ExamQuestion> questions = exam.getQuestions();
+                if (questions != null && !questions.isEmpty()) {
+                    model.addAttribute("exam", exam);
+                    // Log to check if the questions are retrieved successfully
+                    System.out.println("Exam with ID " + id + " has the following questions: " + questions);
+                    return "takeExam"; // The name of the Thymeleaf template
+                } else {
+                    // Log for debugging: No questions found for the exam
+                    System.out.println("No questions found for the exam with ID " + id);
+                    model.addAttribute("message", "No questions available for this exam.");
+                }
             } else {
-                model.addAttribute("message", "The exam has expired.");
+                // Log for debugging: Exam not found
+                System.out.println("Exam not found with ID " + id);
+                model.addAttribute("message", "Exam not found.");
             }
-        } else {
-            model.addAttribute("message", "Exam not found.");
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            System.out.println("An error occurred while trying to take the exam with ID " + id + ": " + e.getMessage());
+            model.addAttribute("message", "An error occurred while retrieving the exam details.");
         }
-
-        return "error"; // name of your error view template
+        return "error"; // The name of the error view template
     }
-    
+
     @GetMapping("/exam/{id}/link")
     public String generateExamLink(@PathVariable Long id, Model model) {
         // Get the exam details from the database using the provided id
