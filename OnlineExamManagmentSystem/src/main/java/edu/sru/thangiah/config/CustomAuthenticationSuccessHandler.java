@@ -37,7 +37,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
           response.sendRedirect("/instructor/iv-account-management");
           return;
       } else if ("student".equals(enteredPassword) && "STUDENT".equals(userRole)) {
-         response.sendRedirect("/student/course/sv-account-managment");
+         response.sendRedirect("/student/course/sv-account-management");
           return;
       }
 

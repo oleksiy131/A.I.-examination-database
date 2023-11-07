@@ -135,37 +135,50 @@ public class StudentController
 	@Transactional
 	@PostMapping("/sv-edit-student/{id}")
 	public String saveCurrentUserEdits(@PathVariable("id") long id, @Validated Student student, 
-		      BindingResult result, Model model, @RequestParam("newPassword") String newStudentPassword, 
-			  @RequestParam("confirmPassword") String confirmStudentPassword) {
+		      BindingResult result, Model model, @RequestParam(value = "currentPassword", required = false) String currentPassword, @RequestParam("newPassword") String newStudentPassword, 
+			  @RequestParam(value = "confirmPassword", required = false) String confirmStudentPassword) {
 		        if (result.hasErrors()) {
 		            student.setStudentId(id);
 		            return "sv-edit-current-student";
 		        }
 		        
-		     // checking the user to exist and creating it if it does not already exist
+		        // Fetch the user (or create a new one if not found)
 		        User user = userRepository.findByUsername(student.getStudentUsername())
 		                .orElse(new User());  
 
-		        // checking that both the password and the confirm password field are the same
-		        if (!newStudentPassword.isEmpty() || !confirmStudentPassword.isEmpty()) {
-		            if (!newStudentPassword.equals(confirmStudentPassword)) {
-		                model.addAttribute("passwordError", "Passwords do not match");
-		                return "sv-edit-current-student";
+		        boolean passwordError = false;
+
+		        // Only process passwords if new password fields are filled
+		        if (newStudentPassword != null && !newStudentPassword.isEmpty()) {
+		            // Verify current password if provided
+		            if (currentPassword != null && !passwordEncoder.matches(currentPassword, user.getPassword())) {
+		                model.addAttribute("passwordError", "Current password is incorrect");
+		                passwordError = true;
+		            } 
+		            // Check that both the new password and the confirm password field are the same
+		            else if (!newStudentPassword.equals(confirmStudentPassword)) {
+		                model.addAttribute("passwordError", "New passwords do not match");
+		                passwordError = true;
+		            } 
+		            // Encrypt and set the new password if there's no error
+		            else {
+		                String encryptedPassword = passwordEncoder.encode(newStudentPassword);
+		                student.setStudentPassword(encryptedPassword);
+		                user.setPassword(encryptedPassword); // Update the user's password
 		            }
-		            
-		            String encryptedPassword = passwordEncoder.encode(newStudentPassword);
-		            student.setStudentPassword(encryptedPassword);
-		            
-		            // updating the users password
-		            user.setPassword(encryptedPassword);
 		        }
 
-		        // updating the users username and email to match the student
+		        // If there was a password error, re-display the form
+		        if (passwordError) {
+		            model.addAttribute("student", student);
+		            return "sv-edit-current-student";
+		        }
+
+		        // Update the user's username and email to match the student
 		        user.setUsername(student.getStudentUsername());
 		        user.setEmail(student.getStudentEmail());
 		        userRepository.save(user);  // Save the user to userRepository
 
-		        
 		        // Debugging: Print the received student data
 		        System.out.println("Received Student Data:");
 		        System.out.println("ID: " + student.getStudentId());
@@ -174,6 +187,7 @@ public class StudentController
 		        System.out.println("Email: " + student.getStudentEmail());
 		        System.out.println("Path Variable ID: " + id);
 		        
+
 //		        student.setStudentId(id);
 //		        student.setRole(student.getRole());
 //		        student.setStudentPassword(student.getStudentPassword());

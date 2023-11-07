@@ -44,16 +44,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-
-/*
- *____  __    __        _ _ 
- / __ \/ /__ / /__ ___ (_|_)
-/ /_/ / / -_)  '_/(_-</ / / 
-\____/_/\__/_/\_\/___/_/_/  
-
-                        
- */
-
 @Controller
 @RequestMapping("/exam")
 public class ExamController {

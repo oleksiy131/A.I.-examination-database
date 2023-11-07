@@ -98,7 +98,9 @@ $(function(){
                 <th>Last Name</th>
                 <th>Email</th>
                 <th>Username</th>
-                <th>     </th>
+                <th>Edit</th>
+                <th>Enable/Disable<th>
+
                 
             </tr>
         </thead>
@@ -111,6 +113,9 @@ $(function(){
                 <td th:text="${student.studentEmail}"></td>
                 <td th:text="${student.studentUsername}"></td>
                 <td><a th:href="@{/instructor/iv-edit-student/{id}(id=${student.studentId})}">Edit</a></td>
+                <td><a th:href="@{/instructor/enable-disable-student/{id}(id=${student.studentId},
+                		 enabled=${student.enabled})}" th:text="${student.enabled} ? 'Disable' : 'Enable'"></a>
+                		 	</td>
             </tr>
         </tbody>
     </table>

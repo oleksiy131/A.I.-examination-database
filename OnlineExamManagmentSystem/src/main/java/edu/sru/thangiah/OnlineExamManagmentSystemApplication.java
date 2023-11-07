@@ -88,12 +88,13 @@ public class OnlineExamManagmentSystemApplication {
     @Bean
     public CommandLineRunner setupDefaultUser() {
         return args -> {
-            createUserIfNotFound("root", "software", "ADMINISTRATOR");
-            createUserIfNotFound("student", "software", "STUDENT");
-            createUserIfNotFound("instructor", "software", "INSTRUCTOR");
-            createUserIfNotFound("schedulemanager", "software", "SCHEDULE_MANAGER");
+            createUserIfNotFound("root", "software", "ADMINISTRATOR", "admin@sru.edu", "Default", "Root");
+            createUserIfNotFound("student", "software", "STUDENT", "student@sru.edu", "Default", "Student");
+            createUserIfNotFound("instructor", "software", "INSTRUCTOR", "instructor@sru.edu", "Default", "Instructor");
+            createUserIfNotFound("schedulemanager", "software", "SCHEDULE_MANAGER", "manager@sru.edu", "Default", "Manager");
         };
     }
+
 
     private void createRoleIfNotFound(String roleName) {
         if (!roleRepository.findByName(roleName).isPresent()) {
@@ -101,11 +102,14 @@ public class OnlineExamManagmentSystemApplication {
         }
     }
 
-    private void createUserIfNotFound(String username, String password, String roleName) {
+    private void createUserIfNotFound(String username, String password, String roleName, String email, String firstName, String lastName) {
         if (!userRepository.findByUsername(username).isPresent()) {
-            User user = new User();
-            user.setUsername(username);
-            user.setPassword(passwordEncoder.encode(password));
+        	User user = new User();
+            user.setUsername(username);// set the username
+            user.setPassword(passwordEncoder.encode(password));//set the password
+            user.setEmail(email); // Set the email
+            user.setFirstName(firstName); // Set the first name
+            user.setLastName(lastName); // Set the last name
 
             Roles role = roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -121,6 +125,9 @@ public class OnlineExamManagmentSystemApplication {
                 Administrator admin = new Administrator();
                 admin.setUser(user);
                 admin.setAdminPassword(passwordEncoder.encode(password));
+                admin.setAdminEmail("admin@sru.edu");
+                admin.setAdminFirstName("Default");
+                admin.setAdminLastName("Root");
                 administratorRepository.save(admin);
             }
             if (roleName.equals("STUDENT")) {
@@ -128,6 +135,9 @@ public class OnlineExamManagmentSystemApplication {
                 student.setStudentId((long) 2L);
                 student.setUser(user);
                 student.setStudentPassword(passwordEncoder.encode(password));
+                student.setStudentEmail("student@sru.edu");
+                student.setStudentFirstName("Default");
+                student.setStudentLastName("Student");
                 studentRepository.save(student);
             }
             if (roleName.equals("INSTRUCTOR")) {
@@ -135,6 +145,9 @@ public class OnlineExamManagmentSystemApplication {
                 instructor.setInstructorId((long) 3L);
                 instructor.setUser(user);
                 instructor.setInstructorPassword(passwordEncoder.encode(password));
+                instructor.setInstructorEmail("instructor@sru.edu");
+                instructor.setInstructorFirstName("Default");
+                instructor.setInstructorLastName("Instructor");
                 instructorRepository.save(instructor);
             }
             
@@ -143,6 +156,9 @@ public class OnlineExamManagmentSystemApplication {
                 scheduleManager.setUser(user);
                 scheduleManager.setManagerUsername(username);
                 scheduleManager.setManagerPassword(passwordEncoder.encode(password));
+                scheduleManager.setManagerEmail("sm@sru.edu");
+                scheduleManager.setManagerFirstName("Default");
+                scheduleManager.setManagerLastName("Manager");
                 scheduleManagerRepository.save(scheduleManager);
             }
         }
