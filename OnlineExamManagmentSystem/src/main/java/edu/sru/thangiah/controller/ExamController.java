@@ -3,10 +3,13 @@ package edu.sru.thangiah.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -68,68 +71,89 @@ public class ExamController {
     }
     
     @PostMapping("/manual-auto-generate")
-    public ResponseEntity<String> generateExam(@RequestParam("numBlanks") int numBlanks, HttpSession session) {
-        try {
-            // Generate the fill-in-the-blanks questions based on the number selected by the user
-            List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
-
-            // Store the number of fill-in-the-blanks and the questions in the session
-            session.setAttribute("numBlanks", numBlanks);
-            session.setAttribute("blanksQuestions", blanksQuestions);
-
-            // Print each question to the server console
-            for (ExamQuestion question : blanksQuestions) {
-                System.out.println(question);
-            }
-
-            // You can still return the list as a JSON if you want to send it to the client
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(blanksQuestions);
-
-            return ResponseEntity.ok(json);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Failed to read blanks: " + e.getMessage());
+    public ResponseEntity<String> generateExam(
+            @RequestParam("chapter") int chapter, 
+            @RequestParam("numMultipleChoice") int numMultipleChoice,
+            @RequestParam("numTrueFalse") int numTrueFalse,
+            @RequestParam("numBlanks") int numBlanks,
+            HttpSession session) throws IOException {
+        
+        Long examId = (Long) session.getAttribute("currentExamId");
+        if (examId == null) {
+            return ResponseEntity.badRequest().body("No exam initiated for question generation.");
         }
+
+        Optional<Exam> existingExam = examRepository.findById(examId);
+        if (!existingExam.isPresent()) {
+            return ResponseEntity.badRequest().body("Exam does not exist.");
+        }
+        Exam exam = existingExam.get();
+
+        List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
+        List<ExamQuestion> trueFalseQuestions = examQuestionService.readTrueFalseFromFile();
+        trueFalseQuestions = trueFalseQuestions.subList(0, Math.min(numTrueFalse, trueFalseQuestions.size()));
+        List<ExamQuestion> allQuestionsForChapter = examQuestionService.generateQuestionsForChapter(chapter);
+        List<ExamQuestion> multipleChoiceQuestions = allQuestionsForChapter.stream()
+                .filter(q -> q.getOptionA() != null && q.getOptionB() != null && q.getOptionC() != null && q.getOptionD() != null)
+                .limit(numMultipleChoice)
+                .collect(Collectors.toList());
+
+        List<ExamQuestion> combinedQuestions = new ArrayList<>();
+        combinedQuestions.addAll(blanksQuestions);
+        combinedQuestions.addAll(trueFalseQuestions);
+        combinedQuestions.addAll(multipleChoiceQuestions);
+        exam.setQuestions(combinedQuestions);
+
+        examRepository.save(exam);
+
+        return ResponseEntity.ok().body(String.valueOf(exam.getId()));
     }
 
-    
-
     @PostMapping("/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
-        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
-        
-        if (selectedExamQuestionIds == null) {
-        	System.out.println("selected question is empty bruh");
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, 
+                               Model model, 
+                               HttpSession session) {
+        // Fetch the exam ID from the session
+        Long examId = (Long) session.getAttribute("currentExamId");
+        if (examId == null) {
+            // Handle error: No exam ID available
+            return "errorPage"; // Redirect to an error page or handle accordingly
         }
 
-     // Fetch selected questions from the database
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+        if (selectedExamQuestionIds == null || selectedExamQuestionIds.isEmpty()) {
+            System.out.println("Selected questions are empty bruh");
+            // Handle the case where no questions were selected
+            return "redirect:/path-to-question-selection"; 
+        }
+
+        // Fetch the existing exam instead of creating a new one
+        Optional<Exam> optionalExam = examRepository.findById(examId);
+        if (!optionalExam.isPresent()) {
+            // Handle the case where the exam does not exist
+            return "errorPage"; // Redirect to an error page or handle accordingly
+        }
+        Exam exam = optionalExam.get();
+
+        // Fetch selected questions from the database and add them to the exam
         List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
-            .map(examQuestionService::getExamQuestionById)
-            .collect(Collectors.toList());
-
-        // Create a new exam and set its properties
-        Exam exam = new Exam();
-        exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
+                .map(examQuestionService::getExamQuestionById)
+                .collect(Collectors.toList());
         exam.setQuestions(selectedQuestions);
-        System.out.println("Question set: " + exam.getQuestions());
 
-        
-     // Save the exam to the database
-        Exam savedExam = examRepository.save(exam);
+        // Save the updated exam to the database
+        examRepository.save(exam);
 
-        // Add the generated exam's ID to the model
-        model.addAttribute("generatedExamId", savedExam.getId());
+        // Add the exam ID to the model for the confirmation page
+        model.addAttribute("generatedExamId", exam.getId());
 
-        // Also, add the exam questions to the model again as they were before
+        // Also, add the exam questions to the model again
         List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
         model.addAttribute("examQuestions", examQuestions);
 
-        // Return the same view which is used for selecting exam questions, not a new one
-        return "generateExam"; // This should be the name of your Thymeleaf template for selecting questions
+        // Return the view that confirms the exam generation
+        return "examGeneratedConfirmation"; // Redirect to a confirmation page
     }
-    
 
 
     @GetMapping("/{id}/link")
@@ -198,26 +222,33 @@ public class ExamController {
     
     @GetMapping("/take/{id}")
     public String takeExam(@PathVariable Long id, Model model) {
-        // Retrieve the exam by ID from the repository
-        Exam exam = examService.getExamById(id);
-        
-        System.out.println("Questions retrieved: " + exam.getQuestions());
-
-        if (exam != null) {
-            // Check if the exam's duration is still valid
-            if (isExamDurationValid(exam)) {
-                model.addAttribute("exam", exam);
-                return "takeExam"; 
+        try {
+            Exam exam = examService.getExamById(id);
+            if (exam != null) {
+                List<ExamQuestion> questions = exam.getQuestions();
+                if (questions != null && !questions.isEmpty()) {
+                    model.addAttribute("exam", exam);
+                    // Log to check if the questions are retrieved successfully
+                    System.out.println("Exam with ID " + id + " has the following questions: " + questions);
+                    return "takeExam"; // The name of the Thymeleaf template
+                } else {
+                    // Log for debugging: No questions found for the exam
+                    System.out.println("No questions found for the exam with ID " + id);
+                    model.addAttribute("message", "No questions available for this exam.");
+                }
             } else {
-                model.addAttribute("message", "The exam has expired.");
+                // Log for debugging: Exam not found
+                System.out.println("Exam not found with ID " + id);
+                model.addAttribute("message", "Exam not found.");
             }
-        } else {
-            model.addAttribute("message", "Exam not found.");
+        } catch (Exception e) {
+            // Log the exception for debugging purposes
+            System.out.println("An error occurred while trying to take the exam with ID " + id + ": " + e.getMessage());
+            model.addAttribute("message", "An error occurred while retrieving the exam details.");
         }
-
-        return "error"; // name of your error view template
+        return "error"; // The name of the error view template
     }
-    
+
     @GetMapping("/exam/{id}/link")
     public String generateExamLink(@PathVariable Long id, Model model) {
         // Get the exam details from the database using the provided id

@@ -56,57 +56,39 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         Resource resource = resourceLoader.getResource(filePath);
         InputStream inputStream = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
-        // Regular expression to identify the question number and text
         Pattern questionPattern = Pattern.compile("^(\\d+)\\.(.*)");
-
         String line;
         while ((line = reader.readLine()) != null) {
             line = line.trim();
-
-            if (line.isEmpty()) {
-                continue; // Skip empty lines
-            }
-
+            if (line.isEmpty()) continue;
             Matcher matcher = questionPattern.matcher(line);
             if (matcher.matches()) {
-                // This line is the start of a new question
                 ExamQuestion currentExamQuestion = new ExamQuestion();
-                currentExamQuestion.setQuestionText(matcher.group(2).trim()); // Group 2 is the question text
-
-                // We are within a question - parse answer options and correct answer
+                currentExamQuestion.setQuestionText(matcher.group(2).trim());
+                currentExamQuestion.setQuestionType(ExamQuestion.QuestionType.MULTIPLE_CHOICE);
                 while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                    if (line.startsWith("A.")) {
-                        currentExamQuestion.setOptionA(line.substring(2).trim());
-                    } else if (line.startsWith("B.")) {
-                        currentExamQuestion.setOptionB(line.substring(2).trim());
-                    } else if (line.startsWith("C.")) {
-                        currentExamQuestion.setOptionC(line.substring(2).trim());
-                    } else if (line.startsWith("D.")) {
-                        currentExamQuestion.setOptionD(line.substring(2).trim());
-                    } else if (line.startsWith("Ans:")) {
-                        currentExamQuestion.setCorrectAnswer(line.substring(4).trim());
-                    }
+                    if (line.startsWith("A.")) currentExamQuestion.setOptionA(line.substring(2).trim());
+                    else if (line.startsWith("B.")) currentExamQuestion.setOptionB(line.substring(2).trim());
+                    else if (line.startsWith("C.")) currentExamQuestion.setOptionC(line.substring(2).trim());
+                    else if (line.startsWith("D.")) currentExamQuestion.setOptionD(line.substring(2).trim());
+                    else if (line.startsWith("Ans:")) currentExamQuestion.setCorrectAnswer(line.substring(4).trim());
                 }
-
-                // Save the current exam question to the repository
-                currentExamQuestion.setChapter(chapter); // setting the chapter number for the question
+                currentExamQuestion.setChapter(chapter);
                 examQuestionRepository.save(currentExamQuestion);
             }
         }
         reader.close();
     }
+
     
     public List<ExamQuestion> readBlanksFromFile() throws IOException {        
-    	String filePath = "classpath:static/Blanks.txt";
+        String filePath = "classpath:static/Blanks.txt";
         InputStream inputStream = resourceLoader.getResource(filePath).getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         List<ExamQuestion> blanksQuestions = new ArrayList<>();
-
         Pattern pattern = Pattern.compile("^(\\d+)\\. (.*)");
         String line;
         ExamQuestion question = null;
-
         while ((line = reader.readLine()) != null) {
             Matcher matcher = pattern.matcher(line.trim());
             if (matcher.matches()) {
@@ -116,22 +98,68 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
                 }
                 question = new ExamQuestion();
                 question.setQuestionText(matcher.group(2));
+                question.setQuestionType(ExamQuestion.QuestionType.FILL_IN_THE_BLANK);
             } else if (line.startsWith("Ans:")) {
                 if (question != null) {
                     question.setCorrectAnswer(line.substring(4).trim());
                 }
             }
         }
-
         if (question != null) {
             examQuestionRepository.save(question);
             blanksQuestions.add(question);
         }
-
         reader.close();
         return blanksQuestions;
     }
+
     
+    public List<ExamQuestion> readTrueFalseFromFile() throws IOException {
+        String filePath = "classpath:static/true-false.txt";
+        Resource resource = resourceLoader.getResource(filePath);
+        InputStream inputStream = resource.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        List<ExamQuestion> trueFalseQuestions = new ArrayList<>();
+        Pattern questionPattern = Pattern.compile("^(\\d+)\\.\\s+(.*)$");
+        Pattern answerPattern = Pattern.compile("^Ans:\\s+([AB])$");
+        String line;
+        ExamQuestion question = null;
+
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+            Matcher questionMatcher = questionPattern.matcher(line);
+            if (questionMatcher.matches()) {
+                if (question != null) {
+                    examQuestionRepository.save(question);
+                    trueFalseQuestions.add(question);
+                }
+                question = new ExamQuestion();
+                question.setQuestionText(questionMatcher.group(2));
+                question.setQuestionType(ExamQuestion.QuestionType.TRUE_FALSE);
+                question.setOptionA("True"); // Set option A as "True"
+                question.setOptionB("False"); // Set option B as "False"
+            } else {
+                Matcher answerMatcher = answerPattern.matcher(line);
+                if (answerMatcher.matches()) {
+                    if (question != null) {
+                        question.setCorrectAnswer(answerMatcher.group(1).equals("A") ? "True" : "False");
+                    }
+                }
+            }
+        }
+
+        if (question != null) {
+            examQuestionRepository.save(question);
+            trueFalseQuestions.add(question);
+        }
+
+        reader.close();
+        return trueFalseQuestions;
+    }
+
+
+
+
     public List<Integer> getAllChapters() {
         return examQuestionRepository.findAllDistinctChapters();
     }

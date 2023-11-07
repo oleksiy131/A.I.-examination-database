@@ -50,6 +50,7 @@ import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.service.ExcelExportService;
+import jakarta.servlet.http.HttpSession;
 import edu.sru.thangiah.repository.UserRepository;
 
 @Controller
@@ -113,44 +114,36 @@ public class InstructorController {
         return "exam-landing-page";
     }
     
-	@PostMapping("/exam-landing-page")
-	public String captureExamLandingPageData(@RequestParam(name = "manual", required = false) String generateManualExam,
-			@RequestParam(name = "auto", required = false) String otherAction,
-			@RequestParam("examName") String examName, @RequestParam("startDate") LocalDateTime startDate,
-			@RequestParam("endDate") LocalDateTime endDate,
-			// @RequestParam("examTime") String examTime,
-			@RequestParam("duration") int duration) {
-		System.out.println(examName);
-		System.out.println(startDate);
-		System.out.println(endDate);
-		// System.out.println(examTime);
-		System.out.println(duration);
+    @PostMapping("/exam-landing-page")
+    public String captureExamLandingPageData(
+            @RequestParam(name = "manual", required = false) String generateManualExam,
+            @RequestParam(name = "auto", required = false) String otherAction,
+            @RequestParam("examName") String examName, 
+            @RequestParam("startDate") LocalDateTime startDate,
+            @RequestParam("endDate") LocalDateTime endDate,
+            @RequestParam("duration") int duration,
+            HttpSession session) {
+        
+        Exam exam = new Exam();
+        exam.setExamName(examName);
+        exam.setStartTime(startDate);
+        exam.setEndTime(endDate);
+        exam.setDurationInMinutes(duration);
+        
+     // Log the duration to verify it's correct
+        System.out.println("Duration received: " + duration);
 
-//		if (!(duration > 0)) {
-//			return "redirect:/instructor/exam-landing-page";
-//		} else {
-			Exam exam = new Exam();
-			exam.setExamName(examName);
-			exam.setStartTime(startDate);
-			exam.setEndTime(endDate);
-			exam.setDurationInMinutes(duration);
+        Exam savedExam = examRepository.save(exam);
+        session.setAttribute("currentExamId", savedExam.getId());
 
-			// Save the exam to the database
-			examRepository.save(exam);
-
-			Long examId = exam.getId();	
-			
-			if (generateManualExam != null) {
-				return "redirect:/exam/selectChapter";
-			} else if (otherAction != null) {
-				// Handle the "Other Action" button click
-				return "redirect:/instructor/auto-generate";
-			} else {
-				return "error";
-			}
-
-		//}
-	}
+        if (generateManualExam != null) {
+            return "redirect:/exam/selectChapter";
+        } else if (otherAction != null) {
+            return "redirect:/instructor/auto-generate";
+        } else {
+            return "error";
+        }
+    }
     
     
     @GetMapping("/auto-generate")

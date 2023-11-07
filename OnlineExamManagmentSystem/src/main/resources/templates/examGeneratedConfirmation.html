@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Exam Generation Confirmation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #007055;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            margin: -20px -20px 20px -20px;
+        }
+        .exam-info {
+            margin-bottom: 20px;
+        }
+        .exam-info h3 {
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .question {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>Exam Generated Successfully</h1>
+    </div>
+
+    <!-- Display the generated exam link if the 'generatedExamId' attribute is present -->
+    <div th:if="${generatedExamId != null}">
+        <p>Generated Exam Link: 
+            <a th:href="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+               th:text="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+               target="_blank">Exam Link</a>
+        </p>
+        <p>Please copy the above link to share.</p>
+    </div>
+
+    <div class="exam-info">
+        <h3>Exam Details:</h3>
+        <p><strong>ID:</strong> <span th:text="${generatedExamId}"></span></p>
+        <p><strong>Duration:</strong> <span th:text="${examDetails.durationInMinutes} + ' minutes'"></span></p>
+    </div>
+    
+    <div>
+        <h3>Selected Questions:</h3>
+        <!-- Loop over the selected questions rather than all questions -->
+        <div th:each="question : ${selectedQuestions}">
+            <div class="question">
+                <p th:text="${question.questionText}"></p>
+                <ul>
+                    <li th:if="${question.optionA != null}" th:text="'A) ' + ${question.optionA}"></li>
+                    <li th:if="${question.optionB != null}" th:text="'B) ' + ${question.optionB}"></li>
+                    <li th:if="${question.optionC != null}" th:text="'C) ' + ${question.optionC}"></li>
+                    <li th:if="${question.optionD != null}" th:text="'D) ' + ${question.optionD}"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <a href="/instructor/instructor_homepage">Back to Dashboard</a>
+</div>
+
+</body>
+</html>

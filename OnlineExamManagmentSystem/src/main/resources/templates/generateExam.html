@@ -4,15 +4,15 @@
     <title>Generate Exam</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <style>
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto !important;    
-    position: relative;
-    color: #333;
-    background-color: #f4f4f4; /* Light background for better contrast */
-}
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto !important;    
+            position: relative;
+            color: #333;
+            background-color: #f4f4f4; /* Light background for better contrast */
+        }
         h1,h2 {
             text-align: center;
             background-color: rgba(0, 112, 85, 0.7);
@@ -44,16 +44,9 @@ body {
 </div>
 
 <form action="#" th:action="@{/exam/generate}" method="post">
-    <input type="hidden" name="chapter" th:value="${selectedChapter}" />
-
-    <label for="examName">Exam Name:</label><br>
-    <input type="text" id="examName" name="examName" required><br><br>
-
-    <label for="duration">Duration (in minutes):</label><br>
-    <input type="number" id="durationInMinutes" name="durationInMinutes" required><br><br>
-    
-    <input type="submit" value="Generate">
-    
+    <!-- The hidden field to pass the exam ID -->
+	
+	<input type="hidden" name="examId" th:value="${currentExamId}" />
 
     <h3>Select Questions:</h3>
     <!-- Displaying questions with checkboxes for selection -->
@@ -62,8 +55,8 @@ body {
         <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="selectedExamQuestionIds" />
         <label th:for="${'question' + iterStat.index}" th:text="${question.questionText}">Question Text</label><br>
         
-         <!-- Edit button -->
-    	<a th:href="@{'/instructor/exam-questions/edit/' + ${question.id}}">Edit</a><br>
+        <!-- Edit button -->
+        <a th:href="@{'/instructor/exam-questions/edit/' + ${question.id}}">Edit</a><br>
         
         <!-- Displaying options for each question -->
         <ul>
@@ -73,7 +66,8 @@ body {
             <li th:text="${question.optionD}">Option D</li>
         </ul>
     </div>
-
+    
+    <input type="submit" value="Generate">
 </form>
 
 <script>

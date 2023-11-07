@@ -11,6 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity 
 public class ExamQuestion {
+	
+	 public enum QuestionType {
+	        MULTIPLE_CHOICE,
+	        TRUE_FALSE,
+	        FILL_IN_THE_BLANK
+	    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -28,6 +34,7 @@ public class ExamQuestion {
     private String optionD;
     private String correctAnswer;
     private int chapter;
+    private QuestionType questionType; 
     
     @Override
     public String toString() {
@@ -40,6 +47,7 @@ public class ExamQuestion {
                 ", optionD='" + optionD + '\'' +
                 ", correctAnswer='" + correctAnswer + '\'' +
                 ", chapter=" + chapter +
+                ", questionType=" + questionType +
                 '}';
     }
 
@@ -98,6 +106,14 @@ public class ExamQuestion {
 	public void setUserAnswer(String userAnswer) {
 		this.userAnswer = userAnswer;
 	} 
+	
+	public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
 	
 	
     
