@@ -1,128 +1,128 @@
-1. GUI
+1. Please write what the following stands for: GUI
 Ans: Graphical User Interface
 
-2. IT
+2. Please write what the following stands for: IT
 Ans: Information Technology
 
-3. CPU
+3. Please write what the following stands for: CPU
 Ans: Central Processing Unit
 
-4. OS
+4. Please write what the following stands for: OS
 Ans: Operating System
 
-5. KB
+5. Please write what the following stands for: KB
 Ans: KiloByte
 
-6. GB
+6. Please write what the following stands for: GB
 Ans: GigaByte
 
-9. AI
+9. Please write what the following stands for: AI
 Ans: Artificial Intelligence
 
-102. OCR
+102. Please write what the following stands for: OCR
 Ans: Optical Character Recognition
 
-107. LCD
+107. Please write what the following stands for: LCD
 Ans: Liquid Crystal Display
 
-107. CRT
+107. Please write what the following stands for: CRT
 Ans: Cathode Ray Tube
 
-107. CPU
+107. Please write what the following stands for: CPU
 Ans: Central Processing Unit
 
-107. ROM
+107. Please write what the following stands for: ROM
 Ans: Read Only Memory
 
-107. RAM
+107. Please write what the following stands for: RAM
 Ans: Random Access Memory
 
-108. USB 
+108. Please write what the following stands for: USB 
 Ans: Universal Serial Bus
 
-108. PDA
+108. Please write what the following stands for: PDA
 Ans: Personal Digital Assistant
 
-102. IP
+102. Please write what the following stands for: IP
 Ans: Internet Protocol
 
-107. PCMCIA
+107. Please write what the following stands for: PCMCIA
 Ans: Personal Memory Card International Association
 
-107. DSL
+107. Please write what the following stands for: DSL
 Ans: Digital Subscriber Line
 
-107. ISDN
+107. Please write what the following stands for: ISDN
 Ans: Integrated Services Digital Network
 
-107. ISP
+107. Please write what the following stands for: ISP
 Ans: Internet Service Provider
 
-107. PDA
+107. Please write what the following stands for: PDA
 Ans: Personal Digital Assistant
 
-108. URL
+108. Please write what the following stands for: URL
 Ans: Uniform Resource Locator
 
-108. HTTP
+108. Please write what the following stands for: HTTP
 Ans: Hypertext Transfer Protocol
 
-108. FTP
+108. Please write what the following stands for: FTP
 Ans: File Transfer Protocol
 
-108. TLD
+108. Please write what the following stands for: TLD
 Ans: Top-Level Domain
 
-108. B2C
+108. Please write what the following stands for: B2C
 Ans: Business-to-consumer
 
-108. B2B
+108. Please write what the following stands for: B2B
 Ans: Business-to-business
 
-108. C2C
+108. Please write what the following stands for: C2C
 Ans: Consumer-to-consumer
 
-102. PIM
+102. Please write what the following stands for: PIM
 Ans: Personal Information Manager
 
-107. DB
+107. Please write what the following stands for: DB
 Ans: Database
 
-107. GPS
+107. Please write what the following stands for: GPS
 Ans: Global Positioning System
 
-107. CPU
+107. Please write what the following stands for: CPU
 Ans: Central Processing Unit
 
-107. CAD
+107. Please write what the following stands for: CAD
 Ans: Computer-Aided Design
 
-107. FAQ
+107. Please write what the following stands for: FAQ
 Ans: Frequently Asked Questions
 
-108. CRM
+108. Please write what the following stands for: CRM
 Ans: Customer Relationship Management
 
-108. DTP
+108. Please write what the following stands for: DTP
 Ans: Desktop Publishing
 
-1. RTOS
+1. Please write what the following stands for: RTOS
 Ans: Real-Time Operating System
 
-2. PnP
+2. Please write what the following stands for: PnP
 Ans: Plug and Play
 
-3. BIOS
+3. Please write what the following stands for: BIOS
 Ans: Basic Input/Output System
 
-4. CRT
+4. Please write what the following stands for: CRT
 Ans: Cathode-Ray Tube
 
-5. LCD
+5. Please write what the following stands for: LCD
 Ans: Liquid Crystal Display
 
-6. POST
+6. Please write what the following stands for: POST
 Ans: Power-on self-test
 
-9. FAT
+9. Please write what the following stands for: FAT
 Ans: File Allocation Table
