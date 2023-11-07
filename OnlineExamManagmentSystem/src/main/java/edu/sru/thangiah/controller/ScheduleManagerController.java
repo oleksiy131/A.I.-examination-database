@@ -219,7 +219,7 @@ public class ScheduleManagerController {
         
 
         
-        if(!(studentId == 2) && !(studentId == null)) {
+         if(student != null && course != null) {
         	// Associate the student with the course
 
             student.getCourses().add(course);
@@ -261,7 +261,7 @@ public class ScheduleManagerController {
         Course course = courseRepository.findById(courseId).orElse(null);;
 
        
-       if(!(instructorId == 3) && !(instructorId == null)) {
+        if(instructor != null && course != null) {
 
     		// Associate instructor with the course
     		//instructor = instructor.get();
