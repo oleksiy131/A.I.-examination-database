@@ -1,6 +1,6 @@
 package edu.sru.thangiah.model;
 
-import java.util.ArrayList;
+import java.util.ArrayList; 
 import java.util.Collection;
 
 import java.util.List;
@@ -67,7 +67,7 @@ public class User implements UserDetails{
     
 
     private boolean verified;
-    private boolean enabled;
+    private boolean enabled = true;
 
 	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", 

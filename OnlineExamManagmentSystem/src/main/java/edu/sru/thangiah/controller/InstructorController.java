@@ -346,7 +346,6 @@ public class InstructorController {
     }
 	
 	@GetMapping("/iv-student-list")
-	@PreAuthorize("hasRole('SCHEDULE_MANAGER')")
 	public String showStudentsListIV(Model model) {
 		// Retrieve the list of students from the repository
 		List<Student> students = (List<Student>) studentRepository.findAll();
@@ -357,6 +356,31 @@ public class InstructorController {
 		// Return the name of the HTML template to be displayed
 		return "iv-student-list";
 	}
+	
+	@GetMapping("/enable-disable-student/{id}")
+	public String enableDisableStudent(@PathVariable Long id, @RequestParam boolean enabled) {
+	    // Find the student by id
+	    Optional<Student> studentOpt = studentRepository.findById(id);
+	    if (studentOpt.isPresent()) {
+	        Student student = studentOpt.get();
+	        // Toggle the enabled state
+	        boolean newEnabledStatus = !student.isEnabled();
+	        student.setEnabled(newEnabledStatus);
+	        // Save the updated student
+	        studentRepository.save(student);
+	        
+	        // Now, find the associated User entity and update its enabled status
+	        Optional<User> userOpt = userRepository.findByUsername(student.getStudentUsername());
+	        if (userOpt.isPresent()) {
+	            User user = userOpt.get();
+	            user.setEnabled(newEnabledStatus);
+	            userRepository.save(user);
+	        }
+	    }
+	    // Redirect back to the student list
+	    return "redirect:/instructor/iv-student-list";
+	}
+
     
 	@GetMapping("/iv-create-student")
 	public String showCreateStudentFormIV() {
