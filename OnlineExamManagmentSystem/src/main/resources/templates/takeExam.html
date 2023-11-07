@@ -58,8 +58,9 @@
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var durationInMinutes = [[${exam.durationInMinutes}]];
-            var totalSeconds = durationInMinutes * 60;
+        var durationInMinutes = [[${exam.durationInMinutes}]];
+        console.log("Exam duration in minutes (from Thymeleaf):", durationInMinutes);
+        var totalSeconds = durationInMinutes * 60;
 
             function updateTimer() {
                 var timerElement = document.getElementById('timer');

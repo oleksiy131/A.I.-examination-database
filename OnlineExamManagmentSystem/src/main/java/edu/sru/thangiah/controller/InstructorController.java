@@ -129,6 +129,9 @@ public class InstructorController {
         exam.setStartTime(startDate);
         exam.setEndTime(endDate);
         exam.setDurationInMinutes(duration);
+        
+     // Log the duration to verify it's correct
+        System.out.println("Duration received: " + duration);
 
         Exam savedExam = examRepository.save(exam);
         session.setAttribute("currentExamId", savedExam.getId());

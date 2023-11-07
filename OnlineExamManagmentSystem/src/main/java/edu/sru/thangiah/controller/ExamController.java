@@ -110,42 +110,50 @@ public class ExamController {
     }
 
     @PostMapping("/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, Model model) {
-        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
-        
-        if (selectedExamQuestionIds == null) {
-        	System.out.println("selected question is empty bruh");
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, 
+                               Model model, 
+                               HttpSession session) {
+        // Fetch the exam ID from the session
+        Long examId = (Long) session.getAttribute("currentExamId");
+        if (examId == null) {
+            // Handle error: No exam ID available
+            return "errorPage"; // Redirect to an error page or handle accordingly
         }
 
-     // Fetch selected questions from the database
+        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
+        if (selectedExamQuestionIds == null || selectedExamQuestionIds.isEmpty()) {
+            System.out.println("Selected questions are empty bruh");
+            // Handle the case where no questions were selected
+            return "redirect:/path-to-question-selection"; 
+        }
+
+        // Fetch the existing exam instead of creating a new one
+        Optional<Exam> optionalExam = examRepository.findById(examId);
+        if (!optionalExam.isPresent()) {
+            // Handle the case where the exam does not exist
+            return "errorPage"; // Redirect to an error page or handle accordingly
+        }
+        Exam exam = optionalExam.get();
+
+        // Fetch selected questions from the database and add them to the exam
         List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
-            .map(examQuestionService::getExamQuestionById)
-            .collect(Collectors.toList());
-
-        // Create a new exam and set its properties
-        Exam exam = new Exam();
-        Long temp = exam.getId();
-        
-        exam.setExamName(examDetails.getExamName());
-        exam.setDurationInMinutes(examDetails.getDurationInMinutes());
+                .map(examQuestionService::getExamQuestionById)
+                .collect(Collectors.toList());
         exam.setQuestions(selectedQuestions);
-        System.out.println("Question set: " + exam.getQuestions());
 
-        
-     // Save the exam to the database
-        Exam savedExam = examRepository.save(exam);
+        // Save the updated exam to the database
+        examRepository.save(exam);
 
-        // Add the generated exam's ID to the model
-        model.addAttribute("generatedExamId", savedExam.getId());
+        // Add the exam ID to the model for the confirmation page
+        model.addAttribute("generatedExamId", exam.getId());
 
-        // Also, add the exam questions to the model again as they were before
+        // Also, add the exam questions to the model again
         List<ExamQuestion> examQuestions = examQuestionService.getAllExamQuestions();
         model.addAttribute("examQuestions", examQuestions);
 
-        // Return the same view which is used for selecting exam questions, not a new one
-        return "generateExam"; // This should be the name of your Thymeleaf template for selecting questions
+        // Return the view that confirms the exam generation
+        return "examGeneratedConfirmation"; // Redirect to a confirmation page
     }
-    
 
 
     @GetMapping("/{id}/link")
