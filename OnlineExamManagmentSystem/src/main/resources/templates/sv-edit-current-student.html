@@ -121,6 +121,12 @@ $(function(){
     <input type="text" th:field="*{studentEmail}" id="email" placeholder="Email">
     <span class="error" th:if="${#fields.hasErrors('studentEmail')}" th:errors="*{studentEmail}"></span>
     
+    <!-- Current Password Field -->
+	<label for="currentPassword">Current Password:</label>
+	<input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password">
+	<span class="error"></span>
+    
+    
         <!-- New Password Field -->
 	<label for="newPassword">New Password</label>
 	<input type="password" id="newPassword" name="newPassword" placeholder="New Password:">
