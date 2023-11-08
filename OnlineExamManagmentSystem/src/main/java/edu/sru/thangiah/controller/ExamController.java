@@ -109,6 +109,23 @@ public class ExamController {
 
         return ResponseEntity.ok().body(String.valueOf(exam.getId()));
     }
+    
+    @GetMapping("/confirmation/{examId}")
+    public String confirmExam(@PathVariable Long examId, Model model) {
+        Optional<Exam> exam = examRepository.findById(examId);
+        if (!exam.isPresent()) {
+            // Handle the case where the exam does not exist
+            return "error"; 
+        }
+        
+        model.addAttribute("generatedExamId", examId);
+        model.addAttribute("examDetails", exam.get());
+        model.addAttribute("selectedQuestions", exam.get().getQuestions());
+        return "autoExamConfirmation"; 
+    }
+
+    
+    
     @PostMapping("/generate")
     public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, 
                                Model model, 
