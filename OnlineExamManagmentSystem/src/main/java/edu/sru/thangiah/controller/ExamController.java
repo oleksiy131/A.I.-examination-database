@@ -117,7 +117,7 @@ public class ExamController {
         Long examId = (Long) session.getAttribute("currentExamId");
         if (examId == null) {
             // Handle error: No exam ID available
-            return "errorPage"; // Redirect to an error page or handle accordingly
+            return "error"; // Redirect to an error page or handle accordingly
         }
 
         List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
@@ -131,7 +131,7 @@ public class ExamController {
         Optional<Exam> optionalExam = examRepository.findById(examId);
         if (!optionalExam.isPresent()) {
             // Handle the case where the exam does not exist
-            return "errorPage"; // Redirect to an error page or handle accordingly
+            return "error"; // Redirect to an error page or handle accordingly
         }
         Exam exam = optionalExam.get();
 
