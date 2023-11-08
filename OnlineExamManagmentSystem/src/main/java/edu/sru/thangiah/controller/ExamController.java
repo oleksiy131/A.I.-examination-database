@@ -300,7 +300,7 @@ public class ExamController {
                         totalScore++;
                     } else {
                         // If the answer is incorrect, set the user's answer for review and add to the list
-                        question.setUserAnswer(userAnswer); // Ensure the 'userAnswer' field exists in your ExamQuestion class
+                        question.setUserAnswer(userAnswer);
                         incorrectQuestions.add(question);
                     }
                 }
@@ -324,7 +324,7 @@ public class ExamController {
                 model.addAttribute("totalQuestions", exam.getQuestions().size());
                 model.addAttribute("incorrectQuestions", incorrectQuestions);
 
-                return "showScore"; // This is your Thymeleaf template
+                return "showScore"; 
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }
