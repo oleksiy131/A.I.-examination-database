@@ -3,13 +3,11 @@ package edu.sru.thangiah.controller;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sru.thangiah.domain.Exam;
 import edu.sru.thangiah.domain.ExamDetails;
@@ -42,10 +41,6 @@ import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.service.ExamService;
 import jakarta.servlet.http.HttpSession;
-
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 @RequestMapping("/exam")

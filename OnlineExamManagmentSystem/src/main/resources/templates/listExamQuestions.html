@@ -1,9 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>List of Exam Questions</title>
+    <title>All Exam Questions</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto !important;
+            position: relative;
+            color: #333;
+            background-color: #f4f4f4; /* Light background for better contrast */
+        }
+
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+    </style>
 </head>
 <body>
+    <div id="nav-placeholder"></div>
+
+
     <h1>List of Exam Questions</h1>
     <table>
         <tr>
@@ -18,5 +42,15 @@
         </tr>
     </table>
     <a href="/instructor/exam-questions/new">Add New Exam Question</a>
+    
+    <script>
+        $(document).ready(function() {
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
+        });
+    </script>
+    
 </body>
 </html>

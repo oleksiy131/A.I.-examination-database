@@ -3,17 +3,17 @@ package edu.sru.thangiah.domain;
 import java.util.List;
 
 import org.springframework.lang.NonNull;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+
 import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity

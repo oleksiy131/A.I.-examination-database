@@ -1,12 +1,12 @@
 package edu.sru.thangiah.service;
 
-import edu.sru.thangiah.domain.Student;
-import edu.sru.thangiah.repository.StudentRepository;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import edu.sru.thangiah.domain.Student;
+import edu.sru.thangiah.repository.StudentRepository;
 
 @Service
 public class StudentService {
