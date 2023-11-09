@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -108,6 +109,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         if (question != null) {
             examQuestionRepository.save(question);
             blanksQuestions.add(question);
+            Collections.shuffle(blanksQuestions);
         }
         reader.close();
         return blanksQuestions;
@@ -142,7 +144,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
                 Matcher answerMatcher = answerPattern.matcher(line);
                 if (answerMatcher.matches()) {
                     if (question != null) {
-                        question.setCorrectAnswer(answerMatcher.group(1).equals("A") ? "True" : "False");
+                        question.setCorrectAnswer(answerMatcher.group(1).equals("A") ? "A" : "B");
                     }
                 }
             }
@@ -151,6 +153,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         if (question != null) {
             examQuestionRepository.save(question);
             trueFalseQuestions.add(question);
+            Collections.shuffle(trueFalseQuestions);
         }
 
         reader.close();

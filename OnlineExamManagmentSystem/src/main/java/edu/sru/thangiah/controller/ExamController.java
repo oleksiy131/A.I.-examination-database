@@ -109,6 +109,23 @@ public class ExamController {
 
         return ResponseEntity.ok().body(String.valueOf(exam.getId()));
     }
+    
+    @GetMapping("/confirmation/{examId}")
+    public String confirmExam(@PathVariable Long examId, Model model) {
+        Optional<Exam> exam = examRepository.findById(examId);
+        if (!exam.isPresent()) {
+            // Handle the case where the exam does not exist
+            return "error"; 
+        }
+        
+        model.addAttribute("generatedExamId", examId);
+        model.addAttribute("examDetails", exam.get());
+        model.addAttribute("selectedQuestions", exam.get().getQuestions());
+        return "autoExamConfirmation"; 
+    }
+
+    
+    
     @PostMapping("/generate")
     public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, 
                                Model model, 
@@ -117,7 +134,7 @@ public class ExamController {
         Long examId = (Long) session.getAttribute("currentExamId");
         if (examId == null) {
             // Handle error: No exam ID available
-            return "errorPage"; // Redirect to an error page or handle accordingly
+            return "error"; // Redirect to an error page or handle accordingly
         }
 
         List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
@@ -131,7 +148,7 @@ public class ExamController {
         Optional<Exam> optionalExam = examRepository.findById(examId);
         if (!optionalExam.isPresent()) {
             // Handle the case where the exam does not exist
-            return "errorPage"; // Redirect to an error page or handle accordingly
+            return "error"; // Redirect to an error page or handle accordingly
         }
         Exam exam = optionalExam.get();
 
@@ -300,7 +317,7 @@ public class ExamController {
                         totalScore++;
                     } else {
                         // If the answer is incorrect, set the user's answer for review and add to the list
-                        question.setUserAnswer(userAnswer); // Ensure the 'userAnswer' field exists in your ExamQuestion class
+                        question.setUserAnswer(userAnswer);
                         incorrectQuestions.add(question);
                     }
                 }
@@ -324,7 +341,7 @@ public class ExamController {
                 model.addAttribute("totalQuestions", exam.getQuestions().size());
                 model.addAttribute("incorrectQuestions", incorrectQuestions);
 
-                return "showScore"; // This is your Thymeleaf template
+                return "showScore"; 
             } else {
                 model.addAttribute("message", "The exam has expired.");
             }

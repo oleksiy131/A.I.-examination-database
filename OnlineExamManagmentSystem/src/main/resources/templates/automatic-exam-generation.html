@@ -128,14 +128,15 @@ function generateQuiz() {
             numBlanks: numBlanks
         },
         success: function(response) {
-            // Handle the response, which now includes the generated questions
-            console.log(response);
+            // Redirect to the confirmation page with the exam ID
+            window.location.href = "/exam/confirmation/" + response;
         },
         error: function(xhr, status, error) {
             console.error("An error occurred: " + error);
         }
     });
 }
+
 
 
     </script>
