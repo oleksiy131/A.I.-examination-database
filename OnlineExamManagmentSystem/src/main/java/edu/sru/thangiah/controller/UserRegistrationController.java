@@ -1,13 +1,8 @@
 package edu.sru.thangiah.controller;
 
 import org.springframework.stereotype.Controller;
-//import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import edu.sru.thangiah.service.UserService;
-import edu.sru.thangiah.web.dto.UserRegistrationDto;
 
 @Controller
 //@RequestMapping("/register")
