@@ -403,6 +403,7 @@ public class ExamController {
             // Set the relevant properties of the entity based on the examSubmission object
             submissionEntity.setUser(user);
             submissionEntity.setExam(exam);
+            submissionEntity.setSubmissionTime(LocalDateTime.now());
             submissionEntity.setUserAnswers(examSubmission.getAnswers());
             submissionEntity.setScore(examSubmission.getScore());
 
