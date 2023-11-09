@@ -900,203 +900,205 @@ public class ScheduleManagerController {
 		return "smv-class-import"; // This corresponds to the name of your HTML file
 	}
 	
-	 @PostMapping("/smv-upload")
-	    public String upload(@RequestParam("file") MultipartFile file) throws IOException {
-	     
-		 boolean instructorCreated = false;
-		 
-		 if (file.isEmpty()) {
-	        	
-	            return "redirect:/schedule-manager/smv-import?error=emptyfile";
-	        }
-	        
-	        	InputStream is = file.getInputStream();
-	            Workbook workbook = WorkbookFactory.create(is);
-	        	
-	            Sheet sheet = workbook.getSheetAt(0);
-	            String courseNameFull = sheet.getRow(4).getCell(0).getStringCellValue();
-	            String instructorNameFull = sheet.getRow(2).getCell(0).getStringCellValue();
-	            String instructorEmailFull = sheet.getRow(1).getCell(0).getStringCellValue();
-	            String instructorIdString = sheet.getRow(3).getCell(0).getStringCellValue();
-	            String courseIdString = sheet.getRow(5).getCell(0).getStringCellValue();
-	            
-	            System.out.println(instructorIdString);
-	            System.out.println(instructorNameFull);
-	            System.out.println(courseNameFull);
-	            System.out.println(courseIdString);
-	            
-	            // converting courseId
-	            String courseIdShort = removeBeforeColon(courseIdString);            
-	            long courseId = Long.parseLong(courseIdShort);
-	            
-	            System.out.println(courseId);
-	            String courseName = removeBeforeColon(courseNameFull); 
-	            System.out.println(courseName);
-	            
-	            // Create and save course
-	            Course course = new Course();
-	            course.setId(courseId);
-	            course.setCourseName(courseName);
-	            courseRepository.save(course);
-	            
-	            String parsedInstructorName = removeBeforeColon(instructorNameFull);
-	            String[] instructorsNames = extractNames(parsedInstructorName);
-	            String InsFirstName = instructorsNames[1];
-	            String InsLastName = instructorsNames[0];
-	            
-	            //converting instructorId
-	            String instructorIdshort = removeBeforeColon(instructorIdString);
-	            long instructorId = Long.parseLong(instructorIdshort);
-	            
-	          //getting email for instructor
-	            String instructorEmail = removeBeforeColon(instructorEmailFull);
-	            String instructorUsername = parseEmail(instructorEmail);
+	@PostMapping("/smv-upload")
+	public String upload(@RequestParam("file") MultipartFile file) throws IOException {
 
-	            System.out.println(instructorId);
-	            System.out.println(InsFirstName);
-	            System.out.println(InsLastName);
-	            
-	            Instructor instructor = new Instructor();
+		boolean instructorCreated = false;
 
-	            Optional<Instructor> existingInstructor = instructorRepository.findById(instructorId);
-	            if (!existingInstructor.isPresent()) {
+		if (file.isEmpty()) {
 
-	            	instructor.setInstructorId(instructorId);
-	            	instructor.setInstructorFirstName(InsFirstName);
-	            	instructor.setInstructorLastName(InsLastName);
-	            	instructor.setInstructorEmail(instructorEmail);
-	            	instructor.setInstructorUsername(instructorUsername);
-                    String hashedPassword = passwordEncoder.encode("instructor");
-                    instructor.setInstructorPassword(hashedPassword);
-                    
-	            	instructorRepository.save(instructor);
-	            	
-	            	instructorCreated = true;
-	            	
-	            	Roles roles = roleRepository.findById(3L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
-            		List<Roles> rolesList = new ArrayList<>();
-            		rolesList.add(roles);
-            		instructor.setRoles(rolesList);
-	            	
-	            	Optional<User> existingUser = userRepository.findById(instructor.getInstructorId());
-                    if (!existingUser.isPresent()) {
-	                    User user = new User();
-	                    user.setEmail(instructor.getInstructorEmail());
-	                    user.setFirstName(instructor.getInstructorFirstName());
-	                    user.setLastName(instructor.getInstructorLastName());
-	                    user.setUsername(instructor.getInstructorUsername());
-	                    user.setPassword(hashedPassword);
-	                    user.setEnabled(true);
-	                    rolesList.add(roles);
-	            		user.setRoles(rolesList);
-	                    userRepository.save(user);
-                    }
-                    else {
-                    	System.out.println("Console LOG: User Id is already present in the database");
-                    }   
-	            	
-	            	course.setInstructor(instructor);
-	            	courseRepository.save(course);
-	            
-	            } else {
-	                // Associate instructor with the course
-	            	instructor = existingInstructor.get();
-	            	course.setInstructor(instructor);
-	            	courseRepository.save(course);
-	            }
+			return "redirect:/schedule-manager/smv-import?error=emptyfile";
+		}
 
-	            
-	            //this section adds the students id's, names, emails, generates usernames and default password
-	            
-	            try {
-	                for (int i = 8; i <= sheet.getLastRowNum(); i++) {
-	                    Row row = sheet.getRow(i);
-	                    if (row == null) {  // null check
-	                        System.out.println("Encountered null row. Stopping processing.");
-	                        break; // This will exit the loop when a null row is encountered.
-	                    }
-	                    
-	                    Student student = new Student();
-	                    String StuFirstName;
-	                    String StuLastName;
-	                    long StudentID;
-	                    String studentEmail;
-	                    
-	                    if (row.getCell(0) != null) {
-	                        StudentID = (long) row.getCell(0).getNumericCellValue();
-	                        System.out.println(StudentID);
-	                        student.setStudentId(StudentID);
-	                    }
-	                    
-	                    if (row.getCell(1) != null) {
-	                        String StudentName = row.getCell(1).getStringCellValue();
-	                        String[] StudentNames = extractNames(StudentName);
-	                        StuFirstName = StudentNames[1];
-	                        StuLastName = StudentNames[0];
-	                        student.setStudentFirstName(StuFirstName);
-	                        student.setStudentLastName(StuLastName);
-	                    }
-	                    if (row.getCell(2) != null) {
-	                        studentEmail = row.getCell(2).getStringCellValue();
-	                        System.out.println(studentEmail);
-	                        student.setStudentEmail(studentEmail);
-	                        String username = parseEmail(studentEmail);
-	                        student.setStudentUsername(username);
-	                        System.out.println(username);
-	                    }
-	                    
-	                    Roles roles = roleRepository.findById(2L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
-	            		List<Roles> rolesList = new ArrayList<>();
-	            		rolesList.add(roles);
-	            		student.setRoles(rolesList);
+		InputStream is = file.getInputStream();
+		Workbook workbook = WorkbookFactory.create(is);
 
-	                    student.setStudentPassword("student");
-	                    String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
-	                    student.setStudentPassword(hashedPassword);
+		Sheet sheet = workbook.getSheetAt(0);
+		String courseNameFull = sheet.getRow(4).getCell(0).getStringCellValue();
+		String instructorNameFull = sheet.getRow(2).getCell(0).getStringCellValue();
+		String instructorEmailFull = sheet.getRow(1).getCell(0).getStringCellValue();
+		String instructorIdString = sheet.getRow(3).getCell(0).getStringCellValue();
+		String courseIdString = sheet.getRow(5).getCell(0).getStringCellValue();
 
-	                    // Check if the student already exists in the database
-	                    Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
-	                    if (!existingStudent.isPresent()) {
-	                        // Student does not exist, save it
-	                        studentRepository.save(student);
+		System.out.println(instructorIdString);
+		System.out.println(instructorNameFull);
+		System.out.println(courseNameFull);
+		System.out.println(courseIdString);
 
-	                        // Associate the student with the course
-	                        student.getCourses().add(course);
-	                        studentRepository.save(student);
-	                    } else {
-	                        System.out.println("Console LOG: Student Id is already present in the database");
-	                    }
-	                    
-	                    Optional<User> existingUser = userRepository.findById(student.getStudentId());
-	                    if (!existingUser.isPresent()) {
-		                    User user = new User();
-		                    user.setEmail(student.getStudentEmail());
-		                    user.setFirstName(student.getStudentFirstName());
-		                    user.setLastName(student.getStudentLastName());
-		                    user.setUsername(student.getStudentUsername());
-		                    user.setPassword(hashedPassword);
-		                    user.setEnabled(true);
-		                    rolesList.add(roles);
-		            		user.setRoles(rolesList);
-		                    userRepository.save(user);
-	                    }
-	                    else {
-	                    	System.out.println("Console LOG: User Id is already present in the database");
-	                    }                    
-	                    
-	                }
+		// converting courseId
+		String courseIdShort = removeBeforeColon(courseIdString);
+		long courseId = Long.parseLong(courseIdShort);
 
-	                if (instructorCreated != true) {
-	                return "redirect:/schedule-manager/smv-upload-success";
-	                }
-	                else
-	                {
-	                	return "redirect:/schedule-manager/smv-upload-fail";	                }
-	            } catch (Exception e) {
-	                e.printStackTrace();
-	                return "redirect:/error";
-	            }
-	        }
+		System.out.println(courseId);
+		String courseName = removeBeforeColon(courseNameFull);
+		System.out.println(courseName);
+		
+		
+		
+		Course course = new Course();
+		course.setId(courseId);
+		course.setCourseName(courseName);
+		courseRepository.save(course);
+
+		
+		
+		String parsedInstructorName = removeBeforeColon(instructorNameFull);
+		String[] instructorsNames = extractNames(parsedInstructorName);
+		String InsFirstName = instructorsNames[1];
+		String InsLastName = instructorsNames[0];
+
+		// converting instructorId
+		String instructorIdshort = removeBeforeColon(instructorIdString);
+		long instructorId = Long.parseLong(instructorIdshort);
+
+		// getting email for instructor
+		String instructorEmail = removeBeforeColon(instructorEmailFull);
+		String instructorUsername = parseEmail(instructorEmail);
+
+		System.out.println(instructorId);
+		System.out.println(InsFirstName);
+		System.out.println(InsLastName);
+
+		Instructor instructor = new Instructor();
+
+		Optional<Instructor> existingInstructor = instructorRepository.findByInstructorUsername(instructorUsername);
+		if (!existingInstructor.isPresent()) {
+
+			instructor.setInstructorId(instructorId);
+			instructor.setInstructorFirstName(InsFirstName);
+			instructor.setInstructorLastName(InsLastName);
+			instructor.setInstructorEmail(instructorEmail);
+			instructor.setInstructorUsername(instructorUsername);
+			String hashedPassword = passwordEncoder.encode("instructor");
+			instructor.setInstructorPassword(hashedPassword);
+
+			instructorRepository.save(instructor);
+
+			instructorCreated = true;
+
+			Roles roles = roleRepository.findById(3L)
+					.orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+			List<Roles> rolesList = new ArrayList<>();
+			rolesList.add(roles);
+			instructor.setRoles(rolesList);
+
+			Optional<User> existingUser = userRepository.findByUsername(instructor.getInstructorUsername());
+			if (!existingUser.isPresent()) {
+				User user = new User();
+				user.setEmail(instructor.getInstructorEmail());
+				user.setFirstName(instructor.getInstructorFirstName());
+				user.setLastName(instructor.getInstructorLastName());
+				user.setUsername(instructor.getInstructorUsername());
+				user.setPassword(hashedPassword);
+				user.setEnabled(true);
+				rolesList.add(roles);
+				user.setRoles(rolesList);
+				userRepository.save(user);
+			} else {
+				System.out.println("Console LOG: User Id is already present in the database");
+			}
+
+			course.setInstructor(instructor);
+			courseRepository.save(course);
+
+		} else {
+			// Associate instructor with the course
+			instructor = existingInstructor.get();
+			course.setInstructor(instructor);
+			courseRepository.save(course);
+		}
+
+		// this section adds the students id's, names, emails, generates usernames and
+		// default password
+
+		try {
+			for (int i = 8; i <= sheet.getLastRowNum(); i++) {
+				Row row = sheet.getRow(i);
+				if (row == null) { // null check
+					System.out.println("Encountered null row. Stopping processing.");
+					break; // This will exit the loop when a null row is encountered.
+				}
+
+				Student student = new Student();
+				String StuFirstName;
+				String StuLastName;
+				long StudentID;
+				String studentEmail;
+
+				if (row.getCell(0) != null) {
+					StudentID = (long) row.getCell(0).getNumericCellValue();
+					System.out.println(StudentID);
+					student.setStudentId(StudentID);
+				}
+
+				if (row.getCell(1) != null) {
+					String StudentName = row.getCell(1).getStringCellValue();
+					String[] StudentNames = extractNames(StudentName);
+					StuFirstName = StudentNames[1];
+					StuLastName = StudentNames[0];
+					student.setStudentFirstName(StuFirstName);
+					student.setStudentLastName(StuLastName);
+				}
+				if (row.getCell(2) != null) {
+					studentEmail = row.getCell(2).getStringCellValue();
+					System.out.println(studentEmail);
+					student.setStudentEmail(studentEmail);
+					String username = parseEmail(studentEmail);
+					student.setStudentUsername(username);
+					System.out.println(username);
+				}
+
+				Roles roles = roleRepository.findById(2L)
+						.orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+				List<Roles> rolesList = new ArrayList<>();
+				rolesList.add(roles);
+				student.setRoles(rolesList);
+
+				student.setStudentPassword("student" + student.getStudentId());
+				String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
+				student.setStudentPassword(hashedPassword);
+
+				// Check if the student already exists in the database
+				Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
+				if (!existingStudent.isPresent()) {
+					// Student does not exist, save it
+					studentRepository.save(student);
+
+					// Associate the student with the course
+					student.getCourses().add(course);
+					studentRepository.save(student);
+				} else {
+					System.out.println("Console LOG: Student Id is already present in the database");
+				}
+
+				Optional<User> existingUser = userRepository.findByUsername(student.getStudentUsername());
+				if (!existingUser.isPresent()) {
+					User user = new User();
+					user.setEmail(student.getStudentEmail());
+					user.setFirstName(student.getStudentFirstName());
+					user.setLastName(student.getStudentLastName());
+					user.setUsername(student.getStudentUsername());
+					user.setPassword(hashedPassword);
+					user.setEnabled(true);
+					rolesList.add(roles);
+					user.setRoles(rolesList);
+					userRepository.save(user);
+				} else {
+					System.out.println("Console LOG: User Id is already present in the database");
+				}
+
+			}
+
+			if (instructorCreated != true) {
+				return "redirect:/schedule-manager/smv-upload-success";
+			} else {
+				return "redirect:/schedule-manager/smv-upload-fail";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "redirect:/error";
+		}
+	}
 	    
 	    public static String removeBeforeColon(String input) {
 	        int colonIndex = input.indexOf(":");
