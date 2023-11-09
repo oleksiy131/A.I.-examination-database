@@ -2,47 +2,79 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Edit Exam Question</title>
-    <!-- Inline CSS for simplicity. Consider external CSS for larger projects. -->
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto !important;
+            position: relative;
+            color: #333;
+            background-color: #f4f4f4; /* Light background for better contrast */
         }
+
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+
+        /* Style for form input elements */
         .form-group {
-            margin-bottom: 1rem;
+            margin: 10px;
         }
+
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
+
         .form-group input[type="text"] {
-            width: 100%;
-            padding: 0.5rem;
-            font-size: 1rem;
+            width: 100%; /* Full width */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        input[type="submit"] {
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
+
+        .form-group input[type="submit"] {
+            background-color: #007055;
             color: white;
-            background-color: #007bff;
+            padding: 10px 15px;
+            margin: 10px 0;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
+            font-weight: bold;
         }
-        input[type="submit"]:hover {
-            background-color: #0056b3;
+
+        .form-group input[type="submit"]:hover {
+            background-color: #005c43;
+        }
+
+        /* Additional style for the question text input to ensure visibility of long text */
+        .form-group input[name="questionText"] {
+            min-width: 0; /* Override any browser-specific minimum widths */
+            width: 100%; /* Specify a width that will fit the container */
         }
     </style>
 </head>
 <body>
-	
-    	<h1>Edit Exam Question</h1>
-    	
-    	<form th:action="@{/instructor/exam-questions/update}" th:object="${examQuestion}" method="post">
+
+    <div id="nav-placeholder"></div>
+
+    <h1>Edit Exam Question</h1>
+    
+    <form th:action="@{/instructor/exam-questions/update}" th:object="${examQuestion}" method="post">
         <input type="hidden" th:field="*{id}" />
-        <!-- Grouping each label and input pair within a 'form-group' div -->
         <div class="form-group">
             <label>Question Text:</label>
-            <input type="text" th:field="*{questionText}" />
+            <input type="text" th:field="*{questionText}" name="questionText" />
         </div>
         <div class="form-group">
             <label>Option A:</label>
@@ -64,7 +96,18 @@
             <label>Correct Answer:</label>
             <input type="text" th:field="*{correctAnswer}" />
         </div>
-        <input type="submit" value="Save" />
+        <div class="form-group">
+            <input type="submit" value="Save" />
+        </div>
     </form>
+    
+    <script>
+        $(document).ready(function() {
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
+        });
+    </script>
 </body>
 </html>
