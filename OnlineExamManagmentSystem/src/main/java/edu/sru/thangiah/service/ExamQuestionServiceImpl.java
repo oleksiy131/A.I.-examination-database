@@ -144,7 +144,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
                 Matcher answerMatcher = answerPattern.matcher(line);
                 if (answerMatcher.matches()) {
                     if (question != null) {
-                        question.setCorrectAnswer(answerMatcher.group(1).equals("A") ? "True" : "False");
+                        question.setCorrectAnswer(answerMatcher.group(1).equals("A") ? "A" : "B");
                     }
                 }
             }
