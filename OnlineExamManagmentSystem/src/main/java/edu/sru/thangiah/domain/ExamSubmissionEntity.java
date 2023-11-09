@@ -4,6 +4,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import edu.sru.thangiah.model.User;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -27,11 +29,18 @@ public class ExamSubmissionEntity {
     @ElementCollection
     private List<String> userAnswers; // Change the field type to List<String>
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date submissionTime;
 
-    private int score;
+    private LocalDateTime submissionTime;
+
+    public LocalDateTime getSubmissionTime() {
+		return submissionTime;
+	}
+
+	public void setSubmissionTime(LocalDateTime submissionTime) {
+		this.submissionTime = submissionTime;
+	}
+
+	private int score;
 
     // Constructors, getters, and setters
 
@@ -65,14 +74,6 @@ public class ExamSubmissionEntity {
 
     public void setUserAnswers(List<String> userAnswers) {
         this.userAnswers = userAnswers;
-    }
-
-    public Date getSubmissionTime() {
-        return submissionTime;
-    }
-
-    public void setSubmissionTime(Date submissionTime) {
-        this.submissionTime = submissionTime;
     }
 
     public int getScore() {
