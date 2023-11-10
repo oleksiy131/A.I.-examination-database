@@ -21,6 +21,7 @@ public class ExamQuestion {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    private boolean isAiGenerated = false;
 
     @Column(columnDefinition = "TEXT")
     private String questionText;
@@ -114,6 +115,16 @@ public class ExamQuestion {
     public void setQuestionType(QuestionType questionType) {
         this.questionType = questionType;
     }
+
+
+	public boolean isAiGenerated() {
+		return isAiGenerated;
+	}
+
+
+	public void setAiGenerated(boolean isAiGenerated) {
+		this.isAiGenerated = isAiGenerated;
+	}
 	
 	
     

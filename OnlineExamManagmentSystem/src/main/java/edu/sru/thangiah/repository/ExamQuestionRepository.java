@@ -15,5 +15,6 @@ public interface ExamQuestionRepository extends JpaRepository<ExamQuestion, Long
     List<Integer> findAllDistinctChapters();
     
     List<ExamQuestion> findQuestionsByChapter(int chapter);
+	void save(List<ExamQuestion> aiQuestions);
 
 }
