@@ -79,6 +79,25 @@
         form input[type="submit"]:hover {
             background-color: #004c3b;
         }
+        
+        .upload-button {
+            display: block;
+            width: max-content;
+            padding: 12px 20px;
+            margin: 20px auto;
+            background-color: #007055;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none; /* Remove underline from link */
+            text-align: center;
+        }
+
+        .upload-button:hover {
+            background-color: #004c3b;
+        }
 
     </style>
 
@@ -100,6 +119,8 @@
     <br><br>
     <input type="submit" value="Submit">
 </form>
+
+<a href="/instructor/exam/upload" class="upload-button">Upload Custom Chapter</a>
 
 <script>
         $(function(){

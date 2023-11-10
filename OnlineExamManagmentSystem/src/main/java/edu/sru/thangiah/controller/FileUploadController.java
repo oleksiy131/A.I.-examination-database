@@ -42,7 +42,7 @@ public class FileUploadController {
 
             // Generate the exam with ID 99, name 'AI Exam', and duration 15 minutes
             Exam exam = new Exam();
-            exam.setExamName("AI Exam"); // Set the exam name
+            exam.setExamName("Exam"); // Set the exam name
             exam.setDurationInMinutes(15); // Set the exam duration
             exam.setQuestions(uploadedQuestions); // Set only the uploaded questions to the exam
 

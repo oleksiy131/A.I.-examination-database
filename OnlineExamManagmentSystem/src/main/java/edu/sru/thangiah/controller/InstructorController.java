@@ -114,6 +114,13 @@ public class InstructorController {
         return "exam-landing-page";
     }
     
+    @GetMapping("/exam/upload")
+    public String showExamUploadLandingPage() {
+        return "exam-generation-from-file";
+    }
+    
+    
+    
     @PostMapping("/exam-landing-page")
     public String captureExamLandingPageData(
             @RequestParam(name = "manual", required = false) String generateManualExam,
