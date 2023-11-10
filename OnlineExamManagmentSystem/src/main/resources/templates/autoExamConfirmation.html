@@ -3,8 +3,8 @@
 <head>
     <title>Exam Generation Confirmation</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-
-<style>
+    
+    <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -13,7 +13,6 @@
             position: relative;
             color: #333;
             background-color: #f4f4f4;
-            /* Light background for better contrast */
         }
 
         h1 {
@@ -24,28 +23,28 @@
             margin: 0;
             border-bottom: 2px solid #004c3b;
         }
-        .container {
-            width: 80%;
-            margin: auto;
-            background-color: #fff;
+
+        .content-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .exam-info-container {
             padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px; /* Adjust as needed */
         }
-        .header {
-            background-color: #007055;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            margin: -20px -20px 20px -20px;
-        }
-        .exam-info {
-            margin-bottom: 20px;
-        }
+
         .exam-info h3 {
             margin: 0;
             padding-bottom: 10px;
             border-bottom: 1px solid #eee;
         }
+
         .question {
             background-color: #f9f9f9;
             padding: 10px;
@@ -53,56 +52,49 @@
             margin-bottom: 10px;
         }
     </style>
-   </head>
+</head>
 <body>
-
     <div id="nav-placeholder"></div>
 
+    <h1>Exam Generated Successfully</h1>
 
-    <!-- ... other body elements ... -->
+    <div class="content-container">
+        <div class="exam-info-container">
+            <div th:if="${generatedExamId != null}">
+                <p>Generated Exam Link: 
+                    <a th:href="@{'/exam/take/' + ${generatedExamId}}" 
+                       th:text="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
+                       target="_blank">Exam Link</a>
+                </p>
+                <p>Please copy the above link to share.</p>
+            </div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Exam Generated Successfully</h1>
-        </div>
-
-        <div th:if="${generatedExamId != null}">
-            <p>Generated Exam Link: 
-                <a th:href="@{'/exam/take/' + ${generatedExamId}}" 
-                   th:text="@{'http://localhost:8080/exam/take/' + ${generatedExamId}}" 
-                   target="_blank">Exam Link</a>
-            </p>
-            <p>Please copy the above link to share.</p>
-        </div>
-
-        <div class="exam-info">
-            <h3>Exam Details:</h3>
-            <p><strong>ID:</strong> <span th:text="${generatedExamId}"></span></p>
-            <p><strong>Duration:</strong> <span th:text="${examDetails.durationInMinutes} + ' minutes'"></span></p>
-        </div>
-        
-        <div>
-            <h3>Selected Questions:</h3>
-            <div th:each="question : ${selectedQuestions}">
-                <div class="question">
-                    <p th:text="${question.questionText}"></p>
-                    <!-- ... options ... -->
+            <div class="exam-info">
+                <h3>Exam Details:</h3>
+                <p><strong>ID:</strong> <span th:text="${generatedExamId}"></span></p>
+                <p><strong>Duration:</strong> <span th:text="${examDetails.durationInMinutes} + ' minutes'"></span></p>
+            </div>
+            
+            <div>
+                <h3>Selected Questions:</h3>
+                <div th:each="question : ${selectedQuestions}">
+                    <div class="question">
+                        <p th:text="${question.questionText}"></p>
+                        <!-- ... options ... -->
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <a href="/instructor/instructor_homepage">Back to Dashboard</a>
+            <a href="/instructor/instructor_homepage">Back to Dashboard</a>
+        </div>
     </div>
 
-    <!-- ... scripts ... -->
     <script>
- $(function () {
+        $(function () {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function () {
-                // Once the navbar content is loaded, remove any video elements from the loaded content
                 $("#nav-placeholder video").remove();
             });
         });
-</script>
-
+    </script>
 </body>
 </html>
