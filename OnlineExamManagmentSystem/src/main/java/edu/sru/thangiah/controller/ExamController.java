@@ -146,6 +146,9 @@ public class ExamController {
             return "error"; // Redirect to an error page or handle accordingly
         }
         Exam exam = optionalExam.get();
+        
+        // Now set the duration in the model
+        model.addAttribute("examDuration", exam.getDurationInMinutes());
 
         // Fetch selected questions from the database and add them to the exam
         List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()

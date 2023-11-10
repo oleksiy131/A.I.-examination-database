@@ -135,6 +135,7 @@ public class InstructorController {
 
         Exam savedExam = examRepository.save(exam);
         session.setAttribute("currentExamId", savedExam.getId());
+        
 
         if (generateManualExam != null) {
             return "redirect:/exam/selectChapter";
