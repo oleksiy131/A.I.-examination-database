@@ -3,7 +3,6 @@
 <head>
     <title>Exam Submissions</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,20 +14,28 @@
             background-color: #f4f4f4;
         }
 
-        .container {
-            width: 80%;
-            margin: auto;
-            background-color: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
         }
 
-        .header {
-            background-color: #007055;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            margin: -20px -20px 20px -20px;
+        .content-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .exam-table {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px; /* Adjust as needed */
         }
 
         table {
@@ -53,38 +60,38 @@
 <body>
     <div id="nav-placeholder"></div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Exam Submission Results</h1>
-        </div>
+    <h1>Exam Submission Results</h1>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Exam ID</th>
-                    <th>Exam Name</th>
-                    <th>User ID</th>
-                    <th>Full Name</th> 
-                    <th>Answers</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="submission : ${submissions}">
-                    <td th:text="${submission.exam.id}"></td>
-                    <td th:text="${submission.exam.examName}"></td>
-                    <td th:text="${submission.user.id}"></td>
-                    <td th:text="${submission.user.firstName + ' ' + submission.user.lastName}"></td>
-                    
-                    <td>
-                        <ul>
-                            <li th:each="answer : ${submission.userAnswers}" th:text="${answer}"></li>
-                        </ul>
-                    </td>
-                    <td th:text="${submission.score}"></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="content-container">
+        <div class="exam-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exam ID</th>
+                        <th>Exam Name</th>
+                        <th>User ID</th>
+                        <th>Full Name</th> 
+                        <th>Answers</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="submission : ${submissions}">
+                        <td th:text="${submission.exam.id}"></td>
+                        <td th:text="${submission.exam.examName}"></td>
+                        <td th:text="${submission.user.id}"></td>
+                        <td th:text="${submission.user.firstName + ' ' + submission.user.lastName}"></td>
+                        
+                        <td>
+                            <ul>
+                                <li th:each="answer : ${submission.userAnswers}" th:text="${answer}"></li>
+                            </ul>
+                        </td>
+                        <td th:text="${submission.score}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
