@@ -65,6 +65,12 @@ public class ExamController {
         this.examService = examService;
     }
     
+    @GetMapping("/submissions")
+    public String viewExamSubmissions(Model model) {
+        model.addAttribute("submissions", examSubmissionRepository.findAll());
+        return "examSubmissions"; 
+    }
+    
     
     @PostMapping("/manual-auto-generate")
     public ResponseEntity<String> generateExam(
