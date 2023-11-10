@@ -4,6 +4,8 @@ import java.io.IOException;
 //ExamQuestionService.java
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import edu.sru.thangiah.domain.ExamQuestion;
 
 public interface ExamQuestionService {
@@ -17,4 +19,8 @@ public interface ExamQuestionService {
     public List<Integer> getAllChapters();
     List<ExamQuestion> readBlanksFromFile() throws IOException;
 	List<ExamQuestion> generateFillInTheBlanksQuestions(int numBlanks) throws IOException;
-	List<ExamQuestion> readTrueFalseFromFile() throws IOException;}
+	List<ExamQuestion> readTrueFalseFromFile() throws IOException;
+    List<ExamQuestion> readAIQuestionsFromFile(MultipartFile file) throws IOException;
+
+}
+

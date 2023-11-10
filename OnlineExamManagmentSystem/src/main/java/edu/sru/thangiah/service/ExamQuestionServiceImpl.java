@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 
@@ -13,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +83,68 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
         }
         reader.close();
     }
+    
+    @Override
+    @Transactional
+    public List<ExamQuestion> readAIQuestionsFromFile(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            throw new IOException("Cannot parse empty file");
+        }
+
+        List<ExamQuestion> aiQuestions = new ArrayList<>();
+        Pattern questionPattern = Pattern.compile("^(\\d+)\\.\\s*(.*)");
+        Pattern optionPattern = Pattern.compile("^([A-D])\\)\\s*(.*)"); 
+        Pattern answerPattern = Pattern.compile("^Ans:\\s*([A-D])");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            ExamQuestion aiQuestion = null;
+
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                Matcher questionMatcher = questionPattern.matcher(line);
+                Matcher optionMatcher = optionPattern.matcher(line);
+                Matcher answerMatcher = answerPattern.matcher(line);
+
+                if (questionMatcher.matches()) {
+                    // Save the previous question before starting a new one
+                    if (aiQuestion != null) {
+                        aiQuestions.add(aiQuestion);
+                    }
+                    aiQuestion = new ExamQuestion();
+                    aiQuestion.setQuestionText(questionMatcher.group(2).trim());
+                    System.out.println("Question text set.");
+                    aiQuestion.setQuestionType(ExamQuestion.QuestionType.MULTIPLE_CHOICE);
+                } else if (optionMatcher.matches() && aiQuestion != null) {
+                    String optionLetter = optionMatcher.group(1);
+                    String optionText = optionMatcher.group(2).trim();
+                    // Set the option based on the letter
+                    if (optionLetter.equalsIgnoreCase("A")) aiQuestion.setOptionA(optionText);
+                    else if (optionLetter.equalsIgnoreCase("B")) aiQuestion.setOptionB(optionText);
+                    else if (optionLetter.equalsIgnoreCase("C")) aiQuestion.setOptionC(optionText);
+                    else if (optionLetter.equalsIgnoreCase("D")) aiQuestion.setOptionD(optionText);
+                    System.out.println("Set A.B.C.D.");
+                } else if (answerMatcher.matches() && aiQuestion != null) {
+                    aiQuestion.setCorrectAnswer(answerMatcher.group(1));
+                }
+            }
+
+            // Add the last question if it exists
+            if (aiQuestion != null) {
+                aiQuestions.add(aiQuestion);
+            }
+
+            // Save all questions to the repository at once
+            examQuestionRepository.saveAll(aiQuestions);
+        }
+
+        return aiQuestions;
+    }
+
+
+
+
+
 
     
     public List<ExamQuestion> readBlanksFromFile() throws IOException {        
@@ -202,4 +267,6 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 }
