@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,9 +111,19 @@ public class InstructorController {
     
     
     @GetMapping("/exam-landing-page")
-    public String showExamLandingPage() {
+    public String showExamLandingPage(Model model, HttpSession session) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String instructorUsername = auth.getName();
+        // Assuming you have a method in your service layer or repository to find an Instructor by username
+        Instructor instructor = instructorRepository.findByInstructorUsername(instructorUsername)
+        		.orElseThrow(() -> new UsernameNotFoundException("Instructor not found"));
+
+        Set<Course> courses = instructor.getCourses(); // Make sure your Instructor entity has a getCourses method
+        model.addAttribute("courses", courses);
         return "exam-landing-page";
     }
+
+
     
     @GetMapping("/exam/upload")
     public String showExamUploadLandingPage() {
@@ -129,29 +140,53 @@ public class InstructorController {
             @RequestParam("startDate") LocalDateTime startDate,
             @RequestParam("endDate") LocalDateTime endDate,
             @RequestParam("duration") int duration,
+            @RequestParam("courseId") Long courseId,
             HttpSession session) {
-        
-        Exam exam = new Exam();
-        exam.setExamName(examName);
-        exam.setStartTime(startDate);
-        exam.setEndTime(endDate);
-        exam.setDurationInMinutes(duration);
-        
-     // Log the duration to verify it's correct
-        System.out.println("Duration received: " + duration);
+    	
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		System.out.println(auth.getName());
+		System.out.println(auth.getPrincipal());
+		System.out.println(auth.getDetails());
+		
+		String instructorUsername = auth.getName();
 
-        Exam savedExam = examRepository.save(exam);
-        session.setAttribute("currentExamId", savedExam.getId());
-        
+		// Initialize the Exam object first
+	    Exam exam = new Exam();
+	    exam.setExamName(examName);
+	    exam.setStartTime(startDate);
+	    exam.setEndTime(endDate);
+	    exam.setDurationInMinutes(duration);
+	    
+	    // Fetch the course using the courseId, check if it's present and if the instructor matches
+	    Optional<Course> courseOptional = courseRepository.findById(courseId);
+	    if (courseOptional.isPresent()) {
+	        Course course = courseOptional.get();
+	        if (course.getInstructor().getInstructorUsername().equals(instructorUsername)) {
+	            exam.setCourse(course);
+	        } else {
+	            // Handle the case where the instructor is not associated with the course
+	            return "error";
+	        }
+	    } else {
+	        // Handle the case where the course is not found
+	        return "error";
+	    }
 
-        if (generateManualExam != null) {
-            return "redirect:/exam/selectChapter";
-        } else if (otherAction != null) {
-            return "redirect:/instructor/auto-generate";
-        } else {
-            return "error";
-        }
-    }
+	    // Log the duration to verify it's correct
+	    System.out.println("Duration received: " + duration);
+
+	    Exam savedExam = examRepository.save(exam);
+	    session.setAttribute("currentExamId", savedExam.getId());
+
+	    if (generateManualExam != null) {
+	        return "redirect:/exam/selectChapter";
+	    } else if (otherAction != null) {
+	        return "redirect:/instructor/auto-generate";
+	    } else {
+	        return "error";
+	    }
+	}
     
     
     @GetMapping("/auto-generate")
