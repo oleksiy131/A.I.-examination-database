@@ -115,6 +115,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
                     aiQuestion.setQuestionText(questionMatcher.group(2).trim());
                     System.out.println("Question text set.");
                     aiQuestion.setQuestionType(ExamQuestion.QuestionType.MULTIPLE_CHOICE);
+                    aiQuestion.setAiGenerated(true);
                 } else if (optionMatcher.matches() && aiQuestion != null) {
                     String optionLetter = optionMatcher.group(1);
                     String optionText = optionMatcher.group(2).trim();

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upload Questions and Generate Exam</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto !important;
+            position: relative;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+
+        .content-container {
+            margin: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        label, input {
+            margin: 5px;
+        }
+
+        input[type="submit"] {
+            margin-top: 10px;
+            padding: 5px 15px;
+            background-color: #008174;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #00695c;
+        }
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+
+    <h1>Upload Questions and Generate Exam</h1>
+
+    <div class="content-container">
+        <form th:action="@{/file/upload/new/exam}" method="post" enctype="multipart/form-data">
+            <label for="file">Upload Questions File:</label>
+            <input type="file" id="file" name="file" required><br><br>
+
+            <input type="submit" value="Upload and Generate Exam">
+        </form>
+    </div>
+
+    <script>
+        $(function () {
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function () {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
+        });
+    </script>
+</body>
+</html>
