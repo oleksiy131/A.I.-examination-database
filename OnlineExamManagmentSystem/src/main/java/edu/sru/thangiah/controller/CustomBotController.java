@@ -124,7 +124,7 @@ public class CustomBotController {
     
     
     private Map<String, Object> generateQuestion(String topic) {
-        String prompt = "Generate a multiple choice question on the topic of " + topic + ".";
+        String prompt = "Generate a multiple choice question on the topic of " + topic + ". Give me 4 options for each question.";
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGptResponse chatGptResponse = template.postForObject(apiURL, request, ChatGptResponse.class);
         String content = chatGptResponse.getChoices().get(0).getMessage().getContent();
