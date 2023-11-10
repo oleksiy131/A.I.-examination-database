@@ -16,6 +16,10 @@ public class Exam {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    private Course course;
+    
 
     public LocalDateTime getEndTime() {
 		return endTime;
@@ -74,6 +78,13 @@ public class Exam {
 		this.questions = questions;
 	}
 
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
     // Getters and setters
     
     

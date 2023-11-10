@@ -60,6 +60,14 @@
 
     <div class="content-container">
         <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return validateDuration()">
+            
+            <label for="course">Course:</label>
+				<select id="course" name="courseId">
+    				<option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
+				</select><br>
+
+            
+            
             <label for="examName">Exam Name:</label>
             <input type="text" id="examName" name="examName" oninput="updateUI()"><br><br>
 
