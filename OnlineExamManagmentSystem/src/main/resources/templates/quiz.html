@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A.I. Quiz</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    
     <style>
-    body {
+        body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
@@ -29,39 +29,97 @@
             justify-content: center;
             margin: 20px;
         }
-       </style>
+
+        .quiz-container {
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .question {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        .link-button, .upload-button {
+            background-color: #007055;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        .link-button:hover, .upload-button:hover {
+            background-color: #004c3b;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .upload-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .info-text-box {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
+    <h1>A.I. Generator</h1>
 
-<table id="quiz-table">
-    <tr>
-        <th>Question Number</th>
-        <th>Question</th>
-        <th>Choices</th>
-    </tr>
-    <tr th:each="question, stat : ${quizData}">
-        <td th:text="${stat.count}"></td>
-        <td th:text="${question.question}"></td>
-        <td>
-            <div th:each="choice, choiceStat : ${question.choices}" th:if="${!choice.isEmpty()}">
-                <input type="radio" th:name="'q' + ${stat.count}" th:value="${choice}" th:text="${choice}" /><br>
-                <hr th:if="${choiceStat.last}"/>
+    <div class="content-container">
+        <div class="quiz-container">
+            <h3>Generated Quiz Questions:</h3>
+            <div th:each="question, stat : ${quizData}">
+                <div class="question">
+                    <p th:text="${stat.count} + '. ' + ${question.question}"></p>
+                    <ul>
+                        <li th:each="choice : ${question.choices}" th:if="${!choice.isEmpty()}" th:text="${choice}"></li>
+                    </ul>
+                </div>
             </div>
-        </td>
-    </tr>
-</table>
 
-<button onclick="window.location.href='/bot/download'">Download as Excel</button>
-<button onclick="window.location.href='/bot/download/txt'">Download as Text</button>
+            <div class="button-container">
+                <a href="/bot/download" class="link-button" download>Download as Excel</a>
+                <a href="/bot/download/txt" class="link-button" download>Download as Text</a>
+                <a href="/instructor/instructor_homepage" class="link-button">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
 
-<form method="POST" action="/file/upload-questions" enctype="multipart/form-data">
-        <input type="file" name="file" required />
-        <button type="submit">Upload</button>
-    </form>
-    
-     <script>
+    <div class="upload-form">
+        <form method="POST" action="/file/upload-questions" enctype="multipart/form-data">
+            <input type="file" name="file" required />
+            <button type="submit" class="upload-button">Upload And Generate Exam</button>
+        </form>
+    </div>
+
+    <div class="info-text-box">
+        Upon uploading, the exam will be automatically generated with a 15-minute time limit.
+    </div>
+
+    <script>
         $(function () {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function () {
                 // Once the navbar content is loaded, remove any video elements from the loaded content
@@ -69,7 +127,5 @@
             });
         });
     </script>
-
-
 </body>
 </html>
