@@ -3,53 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             height: 100vh;
-            color: #333;
-        }
-
-        .home-background {
-            background-image: url('https://pbs.twimg.com/media/EWO_5adXgAUgXck.jpg:large');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7); /* Black background with opacity */
-            color: #ffffff; /* White text color */
-        }
-
-        .navbar {
-            /* Add your navbar styles here */
         }
 
         .error-container {
             text-align: center;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            max-width: 600px;
+            background-color: #fff;
+            border-radius: 5px;
             padding: 20px;
-            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .error-code {
             font-size: 6em;
             font-weight: bold;
+            color: #000000; /* Red color for the error code */
         }
 
         .error-message {
@@ -61,108 +38,34 @@
             margin-bottom: 20px;
         }
 
-      	.error-actions {
-            text-align: center;
+        .error-actions {
             margin-top: 30px;
         }
 
-        .error-actions a {
-            display: inline-block; 
-            text-decoration: none;
-            color: #fff;
-            background: #333;
-            padding: 10px 15px;
+        .error-actions button {
+            background-color: #007055; /* Blue background for the button */
+            color: #fff; /* White text color for the button */
+            border: none;
+            padding: 10px 20px;
             border-radius: 5px;
+            cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
-        .error-actions a:hover {
-            background: #555;
+        .error-actions button:hover {
+            background-color: #019270; /* Darker blue on hover */
         }
-
     </style>
 </head>
-<body class="home-background">
-    <div class="overlay">
-        <div class="navbar">
-     <!-- Home button -->
-        <div class="dropdown-nav">
-            <a th:href="@{/instructor/instructor_homepage}" class="dropbutton">
-            <i class="fas fa-home"></i> 
-        </a>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <div class="error-message">Oops! Page not found.</div>
+        <div class="error-detail">
+            The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
         </div>
-        <!-- Management button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Management</button>
-            <div class="dropdown-info">
-                <a href="/instructor/iv-class-import">Load a Class</a>
-                <a href="#">Classes</a>
-            </div>
-        </div>
-        <!-- Exam button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Exam Generation</button>
-            <div class="dropdown-info">
-                <a href="/bot/choose-topic">A.I. Exam Generation</a>
- 				<a href="/instructor/exam-landing-page">Regular Exam Creation</a>
- 				<a href="/instructor/exam-questions">Edit All Exam Questions</a>
- 				
-                
-            </div>
-        </div>
-        <!-- Grading button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Grades & Classes</button>
-            <div class="dropdown-info">
-                <!-- Example links for instructor's classes -->
-               <!-- <a href="#">Class 1</a> -->
-               <!-- <a href="#">Class 2</a> -->
-            </div>
-        </div>
-        <!-- Reporting -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Reporting</button>
-            <div class="dropdown-info">
-                <a href="#">Exam Information</a>
-                <a href="#">IP Address</a>
-            </div>
-        </div>
-        <!-- Database button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Database</button>
-            <div class="dropdown-info">
-                <a href="/instructor/iv-student-list">View All Students</a>
-                <a href="/instructor/iv-create-student">Add Students</a>
-                <a href="/instructor/associateIV">Assign Students</a>
-
-            </div>
-        </div>
-        <!-- Search Options -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Search Options</button>
-            <div class="dropdown-info">
-                <a href="#">View Details</a>
-            </div>
-        </div>
-        <div class="profile-nav">
-            <!-- Account options -->
-            <button class="dropbutton">Account</button>
-            <div class="dropdown-info">
-				<a href="/instructor/iv-account-management">Edit Account</a>
-                <a href="/logout">Logout</a>
-            </div>
-        </div>
-
-       <div class="error-container">
-            <div class="error-code">404</div>
-            <div class="error-message">Oops! Page not found.</div>
-            <div class="error-detail">
-                The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
-            </div>
-            <div class="error-actions">
-                <a href="/instructor/instructor_homepage">Take Me Back!</a>
-            </div>
-        </div>
+        <div class="error-actions">
+            <button type="button" onclick="history.back()">Take me back!</button>
         </div>
     </div>
 </body>

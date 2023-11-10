@@ -1,8 +1,11 @@
 package edu.sru.thangiah.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +25,7 @@ import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
@@ -40,6 +44,9 @@ public class StudentController
 	private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    private InstructorRepository instructorRepository;
 
 	public StudentController(StudentRepository studentRepository, CourseRepository courseRepository, UserRepository userRepository) {
         super();
@@ -187,4 +194,33 @@ public class StudentController
 	}
 	
 
+	@GetMapping("/sv-course-list")
+	public String showStudentCourses(Model model) {
+	    // retrieve the currently authenticated user's name
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String studentUser = auth.getName();
+
+	    // find the Student entity associated with the authenticated user
+	    Student student = studentRepository.findByStudentUsername(studentUser).orElse(null);
+
+	    // create an ArrayList to store course IDs
+	    List<Long> courseIds = new ArrayList<>();
+
+	    // get the set of courses associated with the student and extract their IDs
+	    Set<Course> studentCourses = student.getCourses();
+	    for (Course course : studentCourses) {
+	        Long courseId = course.getId(); 
+	        courseIds.add(courseId);
+	    }
+
+	    // retrieve the Course entities based on the extracted course IDs
+	    List<Course> courses = courseRepository.findAllById(courseIds);
+
+	    // add the list of courses to the model for rendering in the view
+	    model.addAttribute("courses", courses);
+
+	    return "sv-course-list";
+	}
+	
+	
 }
