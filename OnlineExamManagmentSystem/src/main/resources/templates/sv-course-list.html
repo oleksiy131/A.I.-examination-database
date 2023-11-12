@@ -70,15 +70,23 @@ $(function(){
             <tr>
                 <th>ID</th>
                 <th>Course Name</th>
-                <th>     </th>
+                <th>Exams</th>                
                 
             </tr>
         </thead>
         <tbody>
             <!-- Use Thymeleaf to iterate through the list of students -->
-            <tr th:each="courses : ${courses}">
-                <td th:text="${courses.id}"></td>
-                <td th:text="${courses.courseName}"></td>                
+            <tr th:each="course : ${courses}">
+                <td th:text="${course.id}"></td>
+                <td th:text="${course.courseName}"></td>     
+                  <td>
+                    <ul>
+    					<!-- Iterate over exams for each course -->
+    					<li th:each="exam : ${course.exams}">
+    						<a th:href="@{/exam/take/{id}(id=${exam.id})}" th:text="${exam.examName + ' - ' + #temporals.format(exam.startTime, 'yyyy-MM-dd HH:mm')}">Exam Link</a>
+						</li>
+					</ul>
+                </td>                  
             </tr>
         </tbody>
     </table>
