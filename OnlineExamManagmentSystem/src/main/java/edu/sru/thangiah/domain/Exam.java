@@ -3,6 +3,7 @@ package edu.sru.thangiah.domain;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,9 @@ public class Exam {
     @JoinColumn(name = "course_id")
     private Course course;
     
+    @Transient  // This annotation makes sure the field is not persisted in the database
+    private String formattedStartTime;
+    
 
     public LocalDateTime getEndTime() {
 		return endTime;
@@ -34,6 +38,12 @@ public class Exam {
 
     public Exam() {
         this.startTime = LocalDateTime.now(); // Sets the startTime to the current date and time.
+    }
+    
+ // Call this method to format the startTime when setting it or after retrieving from the database
+    public void formatStartTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        this.formattedStartTime = this.startTime.format(formatter);
     }
 
     // Getter and setter for startTime
@@ -85,6 +95,16 @@ public class Exam {
 	public void setCourse(Course course) {
 		this.course = course;
 	}
+
+	public String getFormattedStartTime() {
+		return formattedStartTime;
+	}
+
+	public void setFormattedStartTime(String formattedStartTime) {
+		this.formattedStartTime = formattedStartTime;
+	}
+	
+	
     // Getters and setters
     
     

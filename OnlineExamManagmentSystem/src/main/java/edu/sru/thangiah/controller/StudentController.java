@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -22,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.sru.thangiah.domain.Course;
+import edu.sru.thangiah.domain.Exam;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
+import edu.sru.thangiah.repository.ExamRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
@@ -42,6 +45,8 @@ public class StudentController
 	private UserRepository userRepository;
     @Autowired
 	private RoleRepository roleRepository;
+    @Autowired
+	private ExamRepository examRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     
@@ -203,21 +208,32 @@ public class StudentController
 	    // find the Student entity associated with the authenticated user
 	    Student student = studentRepository.findByStudentUsername(studentUser).orElse(null);
 
-	    // create an ArrayList to store course IDs
-	    List<Long> courseIds = new ArrayList<>();
-
-	    // get the set of courses associated with the student and extract their IDs
+	    // get the set of courses associated with the student
 	    Set<Course> studentCourses = student.getCourses();
+
+	    // Initialize a formatter
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+	    // retrieve the Course entities and their exams
 	    for (Course course : studentCourses) {
-	        Long courseId = course.getId(); 
-	        courseIds.add(courseId);
+	        // Fetch the exams for the current course
+	        Set<Exam> examsForCourse = examRepository.findByCourse(course);
+
+	        // Format the start time for each exam
+	        for (Exam exam : examsForCourse) {
+	            // Check if the exam has a startTime to avoid NullPointerException
+	            if (exam.getStartTime() != null) {
+	                String formattedStartTime = exam.getStartTime().format(formatter);
+	                exam.setFormattedStartTime(formattedStartTime); // Assuming there's a setter for formattedStartTime in the Exam class
+	            }
+	        }
+
+	        // Set the exams (with formatted start times) back to the course
+	        course.setExams(examsForCourse); // Assuming you have setExams in your Course class
 	    }
 
-	    // retrieve the Course entities based on the extracted course IDs
-	    List<Course> courses = courseRepository.findAllById(courseIds);
-
-	    // add the list of courses to the model for rendering in the view
-	    model.addAttribute("courses", courses);
+	    // add the list of courses (with their formatted exams) to the model for rendering in the view
+	    model.addAttribute("courses", studentCourses);
 
 	    return "sv-course-list";
 	}
