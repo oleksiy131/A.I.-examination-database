@@ -562,11 +562,36 @@ public class ScheduleManagerController {
     
     @PostMapping("/update/{id}")
     public String updateInstructorSMV(@PathVariable("id") long id, @Validated Instructor instructor, 
-      BindingResult result, Model model) {
+      BindingResult result, Model model, @RequestParam("newPassword") String newInstructorPassword, 
+	  @RequestParam("confirmPassword") String confirmInstructorPassword) {
         if (result.hasErrors()) {
         	instructor.setInstructorId(id);
-            return "update-user";
+            return "smv-edit-instructor";
         }
+        
+     // checking the user to exist and creating it if it does not already exist
+        User user = userRepository.findByUsername(instructor.getInstructorUsername())
+                .orElse(new User());  
+
+        // checking that both the password and the confirm password field are the same
+        if (!newInstructorPassword.isEmpty() && !confirmInstructorPassword.isEmpty()) {
+            if (!newInstructorPassword.equals(confirmInstructorPassword)) {
+                model.addAttribute("passwordError", "Passwords do not match");
+                return "smv-edit-instructor";
+            }
+            
+            String encryptedPassword = passwordEncoder.encode(newInstructorPassword);
+            instructor.setInstructorPassword(confirmInstructorPassword);
+            
+            // updating the users password
+            user.setPassword(encryptedPassword);
+        }
+
+        // updating the users username and email to match the student
+        user.setUsername(instructor.getInstructorUsername());
+        user.setEmail(instructor.getInstructorEmail());
+        userRepository.save(user);  // Save the user to userRepository
+        
         
         // Debugging: Print the received student data
         System.out.println("Received Instructor Data:");
@@ -1062,7 +1087,7 @@ public class ScheduleManagerController {
 				student.setStudentPassword(hashedPassword);
 
 				// Check if the student already exists in the database
-				Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
+				Optional<Student> existingStudent = studentRepository.findByStudentUsername(student.getStudentUsername());
 				if (!existingStudent.isPresent()) {
 					// Student does not exist, save it
 					studentRepository.save(student);
@@ -1070,7 +1095,32 @@ public class ScheduleManagerController {
 					// Associate the student with the course
 					student.getCourses().add(course);
 					studentRepository.save(student);
-				} else {
+				} else if(existingStudent.isPresent()){
+					// create an ArrayList to store course IDs
+				    List<Long> courseIds = new ArrayList<>();
+				    
+				    Student studentUpdate = studentRepository.findByStudentUsername(student.getStudentUsername()).orElse(null);
+				    
+					Set<Course> studentCourses = studentUpdate.getCourses();
+				    for (Course courseCheck : studentCourses) {
+				        Long courseIdCheck = courseCheck.getId(); 
+				        courseIds.add(courseIdCheck);
+				    }
+
+				    // retrieve the Course entities based on the extracted course IDs
+				    //List<Course> courses = courseRepository.findAllById(courseIds);
+				    
+				    System.out.println(courseIds);
+				    
+				    for(int j = 0; j < courseIds.size(); j++) {
+				    	if (!courseIds.contains(course.getId())) {
+				          
+				    		studentUpdate.getCourses().add(course);
+							studentRepository.save(studentUpdate);
+				        }
+				    }
+				    
+					
 					System.out.println("Console LOG: Student Id is already present in the database");
 				}
 
