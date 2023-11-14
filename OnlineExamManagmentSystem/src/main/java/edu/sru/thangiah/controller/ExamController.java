@@ -156,8 +156,17 @@ public class ExamController {
             return "error"; // Handle error scenario
         }
 
-        List<Long> selectedQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
-        System.out.println("Final selected question IDs: " + selectedQuestionIds);
+        // Retrieve existing question IDs from the session
+        List<Long> existingQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
+        if (existingQuestionIds == null) {
+            existingQuestionIds = new ArrayList<>();
+        }
+
+        // Add the currently selected questions to the existing ones
+        List<Long> currentSelectedQuestionIds = examDetails.getSelectedExamQuestionIds();
+        if (currentSelectedQuestionIds != null && !currentSelectedQuestionIds.isEmpty()) {
+            existingQuestionIds.addAll(currentSelectedQuestionIds);
+        }
 
         Optional<Exam> optionalExam = examRepository.findById(examId);
         if (!optionalExam.isPresent()) {
@@ -166,8 +175,9 @@ public class ExamController {
         }
         Exam exam = optionalExam.get();
 
-        if (selectedQuestionIds != null && !selectedQuestionIds.isEmpty()) {
-            List<ExamQuestion> questions = selectedQuestionIds.stream()
+        if (!existingQuestionIds.isEmpty()) {
+            List<ExamQuestion> questions = existingQuestionIds.stream()
+                    .distinct() // Remove duplicate question IDs
                     .map(examQuestionService::getExamQuestionById)
                     .collect(Collectors.toList());
 
@@ -185,9 +195,10 @@ public class ExamController {
         model.addAttribute("examDuration", exam.getDurationInMinutes());
         model.addAttribute("selectedQuestions", exam.getQuestions());
 
-        // Redirect to the confirmation page..
+        // Redirect to the confirmation page
         return "examGeneratedConfirmation";
     }
+
 
     
 
