@@ -41,6 +41,7 @@ import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
 import edu.sru.thangiah.service.ExamService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 
 @Controller
 @RequestMapping("/exam")
@@ -124,56 +125,82 @@ public class ExamController {
         model.addAttribute("selectedQuestions", exam.get().getQuestions());
         return "autoExamConfirmation"; 
     }
+    
+    @PostMapping("/addMoreChapters")
+    public String addMoreChapters(@ModelAttribute("examDetails") ExamDetails examDetails,
+                                  HttpSession session) {
+        List<Long> existingQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
+        if (existingQuestionIds == null) {
+            existingQuestionIds = new ArrayList<>();
+        }
 
+        List<Long> newSelectedQuestionIds = examDetails.getSelectedExamQuestionIds();
+        if (newSelectedQuestionIds != null && !newSelectedQuestionIds.isEmpty()) {
+            existingQuestionIds.addAll(newSelectedQuestionIds);
+        }
+
+        session.setAttribute("selectedQuestionIds", existingQuestionIds);
+        System.out.println("Updated question IDs in session: " + existingQuestionIds);
+
+        return "redirect:/exam/selectChapter"; // Redirect to the chapter selection page
+    }
     
     
+    @Transactional
     @PostMapping("/generate")
-    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails, 
-                               Model model, 
-                               HttpSession session) {
-        // Fetch the exam ID from the session
+    public String generateExam(@ModelAttribute("examDetails") ExamDetails examDetails,
+                               HttpSession session, Model model) {
         Long examId = (Long) session.getAttribute("currentExamId");
         if (examId == null) {
-            // Handle error: No exam ID available
-            return "error"; // Redirect to an error page or handle accordingly
+            System.out.println("Error: Exam ID is null");
+            return "error"; // Handle error scenario
         }
 
-        List<Long> selectedExamQuestionIds = examDetails.getSelectedExamQuestionIds();
-        if (selectedExamQuestionIds == null || selectedExamQuestionIds.isEmpty()) {
-            System.out.println("Selected questions are empty bruh");
-            // Handle the case where no questions were selected
-            return "redirect:/path-to-question-selection"; 
+        // Retrieve existing question IDs from the session
+        List<Long> existingQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
+        if (existingQuestionIds == null) {
+            existingQuestionIds = new ArrayList<>();
         }
 
-        // Fetch the existing exam instead of creating a new one
+        // Add the currently selected questions to the existing ones
+        List<Long> currentSelectedQuestionIds = examDetails.getSelectedExamQuestionIds();
+        if (currentSelectedQuestionIds != null && !currentSelectedQuestionIds.isEmpty()) {
+            existingQuestionIds.addAll(currentSelectedQuestionIds);
+        }
+
         Optional<Exam> optionalExam = examRepository.findById(examId);
         if (!optionalExam.isPresent()) {
-            // Handle the case where the exam does not exist
-            return "error"; // Redirect to an error page or handle accordingly
+            System.out.println("Error: Exam not found for ID " + examId);
+            return "error"; // Handle exam not found scenario
         }
         Exam exam = optionalExam.get();
-        
-        // Now set the duration in the model
-        model.addAttribute("examDuration", exam.getDurationInMinutes());
 
-        // Fetch selected questions from the database and add them to the exam
-        List<ExamQuestion> selectedQuestions = selectedExamQuestionIds.stream()
-                .map(examQuestionService::getExamQuestionById)
-                .collect(Collectors.toList());
-        exam.setQuestions(selectedQuestions);
+        if (!existingQuestionIds.isEmpty()) {
+            List<ExamQuestion> questions = existingQuestionIds.stream()
+                    .distinct() // Remove duplicate question IDs
+                    .map(examQuestionService::getExamQuestionById)
+                    .collect(Collectors.toList());
 
-        // Save the updated exam to the database
-        examRepository.save(exam);
+            exam.setQuestions(questions);
+            examRepository.save(exam);
+            System.out.println("Exam saved with questions count: " + exam.getQuestions().size());
+        } else {
+            System.out.println("No questions selected for the exam.");
+        }
 
-        // Add the exam ID to the model for the confirmation page
+        session.removeAttribute("selectedQuestionIds"); // Clear the session attribute
+
+        // Add necessary attributes to the model for the confirmation page
         model.addAttribute("generatedExamId", exam.getId());
+        model.addAttribute("examDuration", exam.getDurationInMinutes());
+        model.addAttribute("selectedQuestions", exam.getQuestions());
 
-        // Add the list of selected questions to the model
-        model.addAttribute("selectedQuestions", selectedQuestions); // This line ensures the selected questions are passed to the view
-
-        // Return the view that confirms the exam generation
-        return "examGeneratedConfirmation"; // Redirect to a confirmation page
+        // Redirect to the confirmation page
+        return "examGeneratedConfirmation";
     }
+
+
+    
 
     @GetMapping("/{id}/link")
     public String showExamLink(@PathVariable Long id, Model model) {
@@ -195,20 +222,29 @@ public class ExamController {
     
     
 
-    // Method to display chapter selection. This method will need a corresponding HTML file to display options.
     @GetMapping("/selectChapter")
-    public String selectChapter(Model model) {
-        // Assuming you have a service method that can retrieve all available chapters.
+    public String selectChapter(Model model, HttpSession session) {
+        // Ensure there's an ongoing exam creation process
+        Long examId = (Long) session.getAttribute("currentExamId");
+        if (examId == null) {
+            return "error"; // Handle error scenario
+        }
+
         List<Integer> chapters = examService.getAllChapters();
         model.addAttribute("chapters", chapters);
-        return "selectChapter"; // This is a Thymeleaf template that needs to be created.
+        return "selectChapter";
     }
-    
-    // Method to handle chapter selection and redirect to exam generation.
+
     @PostMapping("/selectChapter")
-    public String handleChapterSelection(@RequestParam("selectedChapter") int chapter, RedirectAttributes redirectAttributes) {
+    public String handleChapterSelection(@RequestParam("selectedChapter") int chapter, 
+                                         HttpSession session, RedirectAttributes redirectAttributes) {
+        Long examId = (Long) session.getAttribute("currentExamId");
+        if (examId == null) {
+            return "error"; // Handle error scenario
+        }
+
         redirectAttributes.addFlashAttribute("selectedChapter", chapter);
-        return "redirect:/exam/generateExam"; // This redirects to the exam generation method.
+        return "redirect:/exam/generateExam"; // Assuming this endpoint fetches questions for the selected chapter
     }
     
     @GetMapping("/generateExam")
@@ -527,5 +563,4 @@ public class ExamController {
 
         return "submit-answers"; 
     }
-
 }
