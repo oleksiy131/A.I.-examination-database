@@ -61,11 +61,12 @@
     <div class="content-container">
         <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return validateDuration()">
             
-            <label for="course">Course:</label>
+            
+            <label for="course">Your Course:</label>
 				<select id="course" name="courseId">
     				<option th:each="course : ${courses}" th:value="${course.id}" th:text="${course.courseName}"></option>
-				</select><br>
-
+				</select><br><br>
+			
             
             
             <label for="examName">Exam Name:</label>
