@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList; 
 
 import java.util.List;
@@ -974,6 +975,25 @@ public class InstructorController {
 		    System.out.println("Path Variable ID: " + id);
 		    
 		    return "iv-instructor-edit-confirmation"; 
+		}
+	    
+	    
+	    @GetMapping("/iv-course-list")
+		public String showInstructorCourses(Model model) {
+		    // retrieve the currently authenticated user's name
+		    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		    String instructorUser = auth.getName();
+
+		    // find the instructor entity associated with the authenticated user
+		    Instructor instructor = instructorRepository.findByInstructorUsername(instructorUser).orElse(null);
+
+		    // retrieve the Course entities based on the extracted the instructor
+		    List<Course> courses = courseRepository.findAllByInstructor(instructor);
+
+		    // add the list of courses to the model for rendering in the view
+		    model.addAttribute("courses", courses);
+
+		    return "iv-course-list";
 		}
 }
 
