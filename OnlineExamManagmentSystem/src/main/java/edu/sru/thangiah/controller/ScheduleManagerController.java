@@ -1136,6 +1136,8 @@ public class ScheduleManagerController {
 					rolesList.add(roles);
 					user.setRoles(rolesList);
 					userRepository.save(user);
+				    student.setUser(user);  // setting the association of the student to user 
+				    studentRepository.save(student); // saving that association 
 				} else {
 					System.out.println("Console LOG: User Id is already present in the database");
 				}
