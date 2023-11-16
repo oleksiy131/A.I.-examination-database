@@ -59,28 +59,45 @@
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-        var durationInMinutes = [[${exam.durationInMinutes}]];
-        console.log("Exam duration in minutes (from Thymeleaf):", durationInMinutes);
-        var totalSeconds = durationInMinutes * 60;
+    var durationInMinutes = [[${exam.durationInMinutes}]];
+    console.log("Exam duration in minutes (from Thymeleaf):", durationInMinutes);
+    var totalSeconds = durationInMinutes * 60;
+    var countdown;
 
-            function updateTimer() {
-                var timerElement = document.getElementById('timer');
-                var minutes = Math.floor(totalSeconds / 60);
-                var seconds = totalSeconds % 60;
+    function updateTimer() {
+        var timerElement = document.getElementById('timer');
+        var minutes = Math.floor(totalSeconds / 60);
+        var seconds = totalSeconds % 60;
 
-                timerElement.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+        timerElement.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
 
-                if (totalSeconds <= 0) {
-                    clearInterval(countdown);
-                    alert('Time is up!');
-                } else {
-                    totalSeconds--;
-                }
-            }
+        if (totalSeconds <= 0) {
+            clearInterval(countdown);
+            alert('Time is up!');
+            // Trigger submission after 1 additional minute of negative time
+            countdown = setInterval(forceSubmission, 1000);
+        } else {
+            totalSeconds--;
+        }
+    }
 
-            var countdown = setInterval(updateTimer, 1000);
-            updateTimer();
-        });
+    function forceSubmission() {
+        if (totalSeconds <= -300) {
+            clearInterval(countdown);
+            document.getElementById('examForm').submit();
+        } else {
+            totalSeconds--;
+            var timerElement = document.getElementById('timer');
+            var minutes = Math.floor(-totalSeconds / 60);
+            var seconds = -totalSeconds % 60;
+
+            timerElement.textContent = '-' + minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+        }
+    }
+
+    countdown = setInterval(updateTimer, 1000);
+    updateTimer();
+});
     </script>
 </head>
 <body>
@@ -90,7 +107,7 @@
         <div class="timer" id="timer"></div>
 
         <!-- Start of the form -->
-        <form th:action="@{/exam/submit/{id}(id=${exam.id})}" method="post">
+        <form th:action="@{/exam/submit/{id}(id=${exam.id})}" method="post" id="examForm">
             <div th:each="question, iterStat : ${exam.questions}" class="question">
                 <h2 th:text="${question.questionText}"></h2>
                 <div th:if="${question.questionType == T(edu.sru.thangiah.domain.ExamQuestion.QuestionType).FILL_IN_THE_BLANK}">
