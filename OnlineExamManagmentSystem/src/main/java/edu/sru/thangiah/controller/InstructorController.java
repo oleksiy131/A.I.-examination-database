@@ -775,82 +775,109 @@ public class InstructorController {
 	            //this section adds the students id's, names, emails, generates usernames and default password
 	            
 	            try {
-	                for (int i = 8; i <= sheet.getLastRowNum(); i++) {
-	                    Row row = sheet.getRow(i);
-	                    if (row == null) {  // null check
-	                        System.out.println("Encountered null row. Stopping processing.");
-	                        break; // This will exit the loop when a null row is encountered.
-	                    }
-	                    
-	                    Student student = new Student();
-	                    String StuFirstName;
-	                    String StuLastName;
-	                    long StudentID;
-	                    String studentEmail;
-	                    
-	                    if (row.getCell(0) != null) {
-	                        StudentID = (long) row.getCell(0).getNumericCellValue();
-	                        System.out.println(StudentID);
-	                        student.setStudentId(StudentID);
-	                    }
-	                    
-	                    if (row.getCell(1) != null) {
-	                        String StudentName = row.getCell(1).getStringCellValue();
-	                        String[] StudentNames = extractNames(StudentName);
-	                        StuFirstName = StudentNames[1];
-	                        StuLastName = StudentNames[0];
-	                        student.setStudentFirstName(StuFirstName);
-	                        student.setStudentLastName(StuLastName);
-	                    }
-	                    if (row.getCell(2) != null) {
-	                        studentEmail = row.getCell(2).getStringCellValue();
-	                        System.out.println(studentEmail);
-	                        student.setStudentEmail(studentEmail);
-	                        String username = parseEmail(studentEmail);
-	                        student.setStudentUsername(username);
-	                        System.out.println(username);
-	                    }
-	                    
-	                    Roles roles = roleRepository.findById(2L).orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
-	            		List<Roles> rolesList = new ArrayList<>();
-	            		rolesList.add(roles);
-	            		student.setRoles(rolesList);
+	    			for (int i = 8; i <= sheet.getLastRowNum(); i++) {
+	    				Row row = sheet.getRow(i);
+	    				if (row == null) { // null check
+	    					System.out.println("Encountered null row. Stopping processing.");
+	    					break; // This will exit the loop when a null row is encountered.
+	    				}
 
-	                    student.setStudentPassword("student");
-	                    String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
-	                    student.setStudentPassword(hashedPassword);
+	    				Student student = new Student();
+	    				String StuFirstName;
+	    				String StuLastName;
+	    				long StudentID;
+	    				String studentEmail;
 
-	                    // Check if the student already exists in the database
-	                    Optional<Student> existingStudent = studentRepository.findById(student.getStudentId());
-	                    if (!existingStudent.isPresent()) {
-	                        // Student does not exist, save it
-	                        studentRepository.save(student);
+	    				if (row.getCell(0) != null) {
+	    					StudentID = (long) row.getCell(0).getNumericCellValue();
+	    					System.out.println(StudentID);
+	    					student.setStudentId(StudentID);
+	    				}
 
-	                        // Associate the student with the course
-	                        student.getCourses().add(course);
-	                        studentRepository.save(student);
-	                    } else {
-	                        System.out.println("Console LOG: Student Id is already present in the database");
-	                    }
-	                    
-	                    Optional<User> existingUser = userRepository.findById(student.getStudentId());
-	                    if (!existingUser.isPresent()) {
-		                    User user = new User();
-		                    user.setEmail(student.getStudentEmail());
-		                    user.setFirstName(student.getStudentFirstName());
-		                    user.setLastName(student.getStudentLastName());
-		                    user.setUsername(student.getStudentUsername());
-		                    user.setPassword(hashedPassword);
-		                    user.setEnabled(true);
-		                    rolesList.add(roles);
-		            		user.setRoles(rolesList);
-		                    userRepository.save(user);
-	                    }
-	                    else {
-	                    	System.out.println("Console LOG: User Id is already present in the database");
-	                    }                    
-	                    
-	                }
+	    				if (row.getCell(1) != null) {
+	    					String StudentName = row.getCell(1).getStringCellValue();
+	    					String[] StudentNames = extractNames(StudentName);
+	    					StuFirstName = StudentNames[1];
+	    					StuLastName = StudentNames[0];
+	    					student.setStudentFirstName(StuFirstName);
+	    					student.setStudentLastName(StuLastName);
+	    				}
+	    				if (row.getCell(2) != null) {
+	    					studentEmail = row.getCell(2).getStringCellValue();
+	    					System.out.println(studentEmail);
+	    					student.setStudentEmail(studentEmail);
+	    					String username = parseEmail(studentEmail);
+	    					student.setStudentUsername(username);
+	    					System.out.println(username);
+	    				}
+
+	    				Roles roles = roleRepository.findById(2L)
+	    						.orElseThrow(() -> new RuntimeException("Role with ID 4 not found"));
+	    				List<Roles> rolesList = new ArrayList<>();
+	    				rolesList.add(roles);
+	    				student.setRoles(rolesList);
+
+	    				student.setStudentPassword("student" + student.getStudentId());
+	    				String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
+	    				student.setStudentPassword(hashedPassword);
+
+	    				// Check if the student already exists in the database
+	    				Optional<Student> existingStudent = studentRepository.findByStudentUsername(student.getStudentUsername());
+	    				if (!existingStudent.isPresent()) {
+	    					// Student does not exist, save it
+	    					studentRepository.save(student);
+
+	    					// Associate the student with the course
+	    					student.getCourses().add(course);
+	    					studentRepository.save(student);
+	    				} else if(existingStudent.isPresent()){
+	    					// create an ArrayList to store course IDs
+	    				    List<Long> courseIds = new ArrayList<>();
+	    				    
+	    				    Student studentUpdate = studentRepository.findByStudentUsername(student.getStudentUsername()).orElse(null);
+	    				    
+	    					Set<Course> studentCourses = studentUpdate.getCourses();
+	    				    for (Course courseCheck : studentCourses) {
+	    				        Long courseIdCheck = courseCheck.getId(); 
+	    				        courseIds.add(courseIdCheck);
+	    				    }
+
+	    				    // retrieve the Course entities based on the extracted course IDs
+	    				    //List<Course> courses = courseRepository.findAllById(courseIds);
+	    				    
+	    				    System.out.println(courseIds);
+	    				    
+	    				    for(int j = 0; j < courseIds.size(); j++) {
+	    				    	if (!courseIds.contains(course.getId())) {
+	    				          
+	    				    		studentUpdate.getCourses().add(course);
+	    							studentRepository.save(studentUpdate);
+	    				        }
+	    				    }
+	    				    
+	    					
+	    					System.out.println("Console LOG: Student Id is already present in the database");
+	    				}
+
+	    				Optional<User> existingUser = userRepository.findByUsername(student.getStudentUsername());
+	    				if (!existingUser.isPresent()) {
+	    					User user = new User();
+	    					user.setEmail(student.getStudentEmail());
+	    					user.setFirstName(student.getStudentFirstName());
+	    					user.setLastName(student.getStudentLastName());
+	    					user.setUsername(student.getStudentUsername());
+	    					user.setPassword(hashedPassword);
+	    					user.setEnabled(true);
+	    					rolesList.add(roles);
+	    					user.setRoles(rolesList);
+	    					userRepository.save(user);
+	    				    student.setUser(user);  // setting the association of the student to user 
+	    				    studentRepository.save(student); // saving that association 
+	    				} else {
+	    					System.out.println("Console LOG: User Id is already present in the database");
+	    				}
+
+	    			}
 
 	                return "redirect:/instructor/iv-upload-success";
 
