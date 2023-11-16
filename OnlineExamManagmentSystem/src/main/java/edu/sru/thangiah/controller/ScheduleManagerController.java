@@ -673,6 +673,8 @@ public class ScheduleManagerController {
             newUser.setEnabled(true);
 
             userRepository.save(newUser);
+            student.setUser(newUser);  // setting the association of the student to user 
+		    studentRepository.save(student);
 
 	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
 	        return "smv-upload-success";
