@@ -3,6 +3,7 @@ package edu.sru.thangiah.controller;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.sru.thangiah.domain.Course;
 import edu.sru.thangiah.domain.Exam;
+import edu.sru.thangiah.domain.ExamSubmissionEntity;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.CourseRepository;
 import edu.sru.thangiah.repository.ExamRepository;
+import edu.sru.thangiah.repository.ExamSubmissionRepository;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
+import edu.sru.thangiah.web.dto.CourseGradeDTO;
 
 @Controller
 @RequestMapping("/student/course")
@@ -49,6 +53,8 @@ public class StudentController
 	private ExamRepository examRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ExamSubmissionRepository examSubmissionRepository;
     
     @Autowired
     private InstructorRepository instructorRepository;
@@ -238,5 +244,77 @@ public class StudentController
 	    return "sv-course-list";
 	}
 	
+	@Transactional
+	@GetMapping("/sv-grade-list")
+	public String showStudentGrades(Model model) {
+	    // Retrieve the currently authenticated user's name
+	    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	    String studentUsername = auth.getName();
+	    System.out.println("Authenticated username: " + studentUsername);
+
+	    
+	    // Find the User entity associated with the authenticated username
+	    User user = userRepository.findByUsername(studentUsername).orElse(null);
+	    System.out.println("Found user: " + user);
+
+
+	    // Create a data structure to hold the courses along with the exams and scores
+	    List<CourseGradeDTO> courseGrades = new ArrayList<>();
+
+	    // Check if the user is not null
+	    if (user != null) {
+	        // Find the Student entity associated with the User entity
+	    	Optional<Student> studentOpt = studentRepository.findByUserId(user.getId());
+	        System.out.println("Found student: " + studentOpt);
+
+
+	     // Check if the student is present
+	        if (studentOpt.isPresent()) {
+	            Student student = studentOpt.get();
+	            // Get the set of courses associated with the student
+	            Set<Course> studentCourses = student.getCourses();
+	            System.out.println("Number of courses found for student: " + studentCourses.size());
+
+
+	            // Iterate over the courses and compile the grades
+	            for (Course course : studentCourses) {
+	                CourseGradeDTO courseGrade = new CourseGradeDTO();
+	                courseGrade.setCourseName(course.getCourseName());
+	                System.out.println("Processing course: " + course.getCourseName());
+
+
+	                // Retrieve the exams for this course
+	                Set<Exam> exams = examRepository.findByCourse(course);
+	                System.out.println("Number of exams found for course: " + exams.size());
+
+
+	                // Compile exam grades for the student
+	                for (Exam exam : exams) {
+	                    ExamSubmissionEntity submission = examSubmissionRepository.findByUser_IdAndExam_Id(user.getId(), exam.getId());
+	                    Integer score = submission != null ? submission.getScore() : null;
+	                    System.out.println("Exam: " + exam.getExamName() + ", Score: " + score);
+	                    courseGrade.addExamGrade(exam.getExamName(), score);
+	                }
+
+	                courseGrades.add(courseGrade);
+	            }
+	        }
+	    } 
+	    else 
+	    	{
+	        System.out.println("User not found for username: " + studentUsername);
+	    }
+
+	    // Log the size of the courseGrades list after processing
+	    System.out.println("Number of course grades: " + courseGrades.size());
+
+	    // Add the list of CourseGradeDTOs to the model for rendering in the view
+	    model.addAttribute("courseGrades", courseGrades);
+
+	    return "sv-grade-list";
+	}
+
+
+
 	
 }

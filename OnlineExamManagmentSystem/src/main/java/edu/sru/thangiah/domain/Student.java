@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -80,6 +81,9 @@ public class Student {
     @Column(name = "enabled")
     private boolean enabled = true;
     
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
 	public Long getStudentId() {
 		return studentId;
@@ -153,9 +157,16 @@ public class Student {
 		this.enabled = enabled;
 	}
 
-	public Student(long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
-			String studentEmail, String studentPassword, String studentUsername, float creditsTaken,
-			List<Roles> roles) {
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+	    this.user = user;
+	}
+	
+	public Student(Long studentId, Set<Course> courses, String studentFirstName, String studentLastName,
+			String studentEmail, String studentPassword, String studentUsername, float creditsTaken, List<Roles> roles,
+			User user) {
 		super();
 		this.studentId = studentId;
 		this.courses = courses;
@@ -166,6 +177,7 @@ public class Student {
 		this.studentUsername = studentUsername;
 		this.creditsTaken = creditsTaken;
 		this.roles = roles;
+		this.user = user;
 	}
 
 	public Student() {
@@ -175,17 +187,4 @@ public class Student {
 	    this.enabled = !this.enabled;
 	}
 
-
-	public void setUser(User Student) {
-		this.studentFirstName = Student.getFirstName();
-	    this.studentLastName = Student.getLastName();
-	    this.studentEmail = Student.getEmail();
-	    this.studentPassword = Student.getPassword();
-	    this.studentUsername = Student.getUsername();
-	    this.roles = Student.getRoles();		
-	}
-
-
-
-	
 }

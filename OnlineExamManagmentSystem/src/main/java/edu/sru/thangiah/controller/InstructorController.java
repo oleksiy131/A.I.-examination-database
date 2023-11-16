@@ -676,6 +676,8 @@ public class InstructorController {
                     newUser.setRoles(rolesList); 
                     newUser.setEnabled(true);
                     userRepository.save(newUser);
+                    student.setUser(newUser);  // setting the association of the student to user 
+				    studentRepository.save(student);
                 } else {
                     // Handle the case when the student already exists, if needed
                 }
