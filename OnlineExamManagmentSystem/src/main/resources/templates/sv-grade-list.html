@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            text-align: center;
+            background-color: #007055;
+            color: #fff;
+            padding: 5px;
+            margin: 0;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #007055;
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+         h4{
+			text-align: center;
+		}
+    </style>
+    
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+</head>
+
+<div id="nav-placeholder">
+
+</div>
+
+<script>
+$(function(){
+  $("#nav-placeholder").load("/student/course/student_homepage");
+});
+</script>
+
+<body>
+    <br>
+    <h1>Your Courses and Exam Scores</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Course Name</th>
+                <th>Exams</th>
+                <th>Scores</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Iterate over the list of course grades -->
+            <tr th:each="courseGrade : ${courseGrades}">
+                <td th:text="${courseGrade.courseName}">Course Name Placeholder</td>
+                <td>
+                    <ul>
+                        <!-- Iterate over exam grades for each course -->
+                        <li th:each="examGrade : ${courseGrade.examGrades}" th:text="${examGrade.examName}">Exam Name Placeholder</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <!-- Display the score for each exam, or 'Not available' if null -->
+                        <li th:each="examGrade : ${courseGrade.examGrades}" th:text="${examGrade.score != null ? examGrade.score : 'Not available'}">Score Placeholder</li>
+                    </ul>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+
+</html>
