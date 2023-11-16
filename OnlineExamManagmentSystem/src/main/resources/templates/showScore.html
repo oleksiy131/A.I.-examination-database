@@ -18,8 +18,15 @@
         </li>
     </ul>
 </div>
+
     <div th:if="${incorrectQuestions.size() == 0}">
         <p>Congratulations! You answered all questions correctly.</p>
+    </div>
+    
+        <!-- Conditional button based on user role -->
+    <div>
+        <a th:if="${userRole == 'INSTRUCTOR'}" href="/instructor/instructor_homepage" class="btn">Return to Instructor Homepage</a>
+        <a th:if="${userRole == 'STUDENT'}" href="/student/course/student_homepage" class="btn">Return to Student Homepage</a>
     </div>
 </body>
 </html>

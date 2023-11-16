@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -375,11 +376,17 @@ public class ExamController {
 
                 // Save the exam submission to the database
                 saveExamSubmission(examSubmission, userId);
+                
+                String userRole = authentication.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .findFirst()
+                        .orElse("");
 
              // Add attributes to the model for the view
                 model.addAttribute("score", totalScore);
                 model.addAttribute("totalQuestions", exam.getQuestions().size());
                 model.addAttribute("incorrectQuestions", incorrectQuestions);
+                model.addAttribute("userRole", userRole);
 
                 return "showScore"; 
             } else {
