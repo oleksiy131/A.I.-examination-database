@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import edu.sru.thangiah.domain.Student;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -52,6 +54,9 @@ public class User implements UserDetails{
     @NonNull
     @Column(name = "username")
     private String username;
+    
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private Student student;
 
     @NonNull
     @Column(name = "verification_code")
@@ -173,6 +178,19 @@ public class User implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", verified=" + verified +
+                ", enabled=" + enabled +
+                '}';
+    }
 
 	public User(){}
 
@@ -191,4 +209,16 @@ public class User implements UserDetails{
     public void setVerified(boolean verified) {
         this.verified = true;
     }
+
+
+	public Student getStudent() {
+		return student;
+	}
+
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+    
+    
 }
