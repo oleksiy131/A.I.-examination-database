@@ -236,6 +236,19 @@ public class InstructorController {
 
         return "redirect:/exam/selectChapter";
     }
+    
+    @GetMapping("/remove-selected-question/{id}")
+    public String removeSelectedQuestion(@PathVariable Long id, HttpSession session) {
+        List<Long> selectedQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
+        if (selectedQuestionIds != null) {
+            selectedQuestionIds.remove(id);
+            session.setAttribute("selectedQuestionIds", selectedQuestionIds);
+        }
+
+        // Redirect back to the question selection page
+        return "redirect:/exam/selectChapter";
+    }
+
 
 
 

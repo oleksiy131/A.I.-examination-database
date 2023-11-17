@@ -40,12 +40,33 @@
         input[type="submit"]:hover, input[type="button"]:hover {
             background-color: #004c3b;
         }
+        .selected-questions {
+            background-color: #eee;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .selected-question {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
     <h2>Generate Exam From Selected Questions</h2>
+    
+    <!-- Display already selected questions -->
+<div class="selected-questions" th:if="${selectedQuestions != null && !selectedQuestions.isEmpty()}">
+    <h3>Already Selected Questions:</h3>
+    <div th:each="question : ${selectedQuestions}" class="selected-question">
+        <span th:text="${question.questionText}">Question Text</span>
+        <!-- Edit and Remove links -->
+        <a th:href="@{'/instructor/exam-questions/edit/' + ${question.id}}">Edit</a>
+        <a th:href="@{'/instructor/remove-selected-question/' + ${question.id}}">Remove</a>
+    </div>
+</div>
+
 
     <div th:if="${generatedExamId != null}">
         <p>Generated Exam Link: 

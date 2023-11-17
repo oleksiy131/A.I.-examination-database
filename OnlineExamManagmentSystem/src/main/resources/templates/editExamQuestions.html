@@ -62,6 +62,23 @@
             min-width: 0; /* Override any browser-specific minimum widths */
             width: 100%; /* Specify a width that will fit the container */
         }
+        
+        .back-button {
+            display: block;
+            width: max-content;
+            padding: 10px 15px;
+            margin: 10px 0;
+            background-color: #007055;
+            color: white;
+            text-align: center;
+            text-decoration: none; 
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .back-button:hover {
+            background-color: #005c43;
+        }
     </style>
 </head>
 <body>
@@ -101,7 +118,20 @@
         </div>
     </form>
     
+    <a class="back-button" onclick="goBack()">Go Back</a>
+    
     <script>
+        $(document).ready(function() {
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
+        });
+        
+        function goBack() {
+            window.history.back();
+        }
+
         $(document).ready(function() {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
                 // Once the navbar content is loaded, remove any video elements from the loaded content

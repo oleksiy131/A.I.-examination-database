@@ -249,12 +249,25 @@ public class ExamController {
     }
     
     @GetMapping("/generateExam")
-    public String generateExam(@ModelAttribute("selectedChapter") int chapter, Model model) {
+    public String generateExam(@ModelAttribute("selectedChapter") int chapter, Model model, HttpSession session) {
         // Generate questions based on the selected chapter.
         List<ExamQuestion> questions = examService.generateQuestionsForChapter(chapter);
         model.addAttribute("questions", questions);
-        return "generateExam"; // This is a Thymeleaf template that needs to be created.
+
+        // Retrieve the selected question IDs from the session
+        List<Long> selectedQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
+        if (selectedQuestionIds != null && !selectedQuestionIds.isEmpty()) {
+            // Fetch the corresponding ExamQuestion objects
+            List<ExamQuestion> selectedQuestions = selectedQuestionIds.stream()
+                .map(examQuestionService::getExamQuestionById)
+                .collect(Collectors.toList());
+
+            model.addAttribute("selectedQuestions", selectedQuestions);
+        }
+
+        return "generateExam"; // This is your Thymeleaf template
     }
+
 
     @GetMapping("/{id}")
     public String takeExamz(@PathVariable Long id, Model model) {
