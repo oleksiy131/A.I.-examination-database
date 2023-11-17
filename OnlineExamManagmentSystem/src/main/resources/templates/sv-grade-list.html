@@ -5,46 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course List</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+         body {
+            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            overflow-y: auto !important;
+            position: relative;
+            color: #333;
             background-color: #f4f4f4;
         }
 
         h1 {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             text-align: center;
-            background-color: #007055;
+            background-color: rgba(0, 112, 85, 0.7);
             color: #fff;
-            padding: 5px;
+            padding: 15px;
             margin: 0;
+            border-bottom: 2px solid #004c3b;
         }
 
         table {
             border-collapse: collapse;
-            width: 80%;
-            margin: 20px auto;
+            width: 90%;
+            margin: 0 auto;
             background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         th, td {
-            text-align: left;
-            padding: 10px;
+            text-align: center;
+            padding: 15px;
             border-bottom: 1px solid #ddd;
         }
 
         th {
             background-color: #007055;
             color: #fff;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f5f5f5;
         }
 
         tr:hover {
-            background-color: #f5f5f5;
+            background-color: #d4e2d4;
         }
-         h4{
-			text-align: center;
-		}
+
+        a {
+            color: #007055;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #005f73;
+            text-decoration: underline;
+        }
     </style>
     
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -62,8 +81,8 @@ $(function(){
 </script>
 
 <body>
-    <br>
     <h1>Your Courses and Exam Scores</h1>
+    <br>
 
     <table>
         <thead>
