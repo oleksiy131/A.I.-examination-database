@@ -131,8 +131,13 @@ public class InstructorController {
         return "exam-generation-from-file";
     }
     
-    
-    
+    @GetMapping("/all-exams")
+    public String viewAllExams(Model model) {
+        List<Exam> allExams = examRepository.findAll(); 
+        model.addAttribute("exams", allExams);
+        return "listExams";
+    }
+
     @PostMapping("/exam-landing-page")
     public String captureExamLandingPageData(
             @RequestParam(name = "manual", required = false) String generateManualExam,

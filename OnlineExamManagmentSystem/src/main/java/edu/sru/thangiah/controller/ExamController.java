@@ -73,6 +73,21 @@ public class ExamController {
         return "examSubmissions"; 
     }
     
+    @GetMapping("/details/{id}")
+    public String viewExamDetails(@PathVariable Long id, Model model) {
+        Exam exam = examService.getExamById(id); // Implement this method in your service
+        if (exam == null) {
+            return "redirect:/exam/all-exams"; // Redirect or show an error page
+        }
+        model.addAttribute("exam", exam);
+        model.addAttribute("generatedExamId", exam.getId());
+        model.addAttribute("examDuration", exam.getDurationInMinutes());
+        model.addAttribute("selectedQuestions", exam.getQuestions());
+        // Add other necessary attributes, like exam questions
+        return "examDetails"; 
+    }
+
+    
     
     @PostMapping("/manual-auto-generate")
     public ResponseEntity<String> generateExam(
