@@ -56,7 +56,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 
 
     private void loadQuestionsFromFile(int chapter) throws IOException {
-        String filePath = "classpath:static/chapter-" + chapter + ".txt";
+        String filePath = "classpath:chapters/chapter-" + chapter + ".txt";
         Resource resource = resourceLoader.getResource(filePath);
         InputStream inputStream = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -149,7 +149,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 
     
     public List<ExamQuestion> readBlanksFromFile() throws IOException {        
-        String filePath = "classpath:static/Blanks.txt";
+        String filePath = "classpath:chapters/Blanks.txt";
         InputStream inputStream = resourceLoader.getResource(filePath).getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         List<ExamQuestion> blanksQuestions = new ArrayList<>();
@@ -183,7 +183,7 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 
     
     public List<ExamQuestion> readTrueFalseFromFile() throws IOException {
-        String filePath = "classpath:static/true-false.txt";
+        String filePath = "classpath:chapters/true-false.txt";
         Resource resource = resourceLoader.getResource(filePath);
         InputStream inputStream = resource.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

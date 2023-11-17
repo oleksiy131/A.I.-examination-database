@@ -132,6 +132,6 @@ public class SearchController {
             model.addAttribute("students", List.of()); 
         }
 
-        return "student-list"; 
+        return "iv-student-list"; 
     }
 }

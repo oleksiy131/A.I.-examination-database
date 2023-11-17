@@ -77,9 +77,15 @@
                 background-position: -100% 0;
             }
         }
+ 		
+        .button-container {
+            display: flex;
+            justify-content: center; /* Align buttons to center */
+            gap: 10px; /* Spacing between buttons */
+        }
 
         button {
-            display: block;
+            display: inline-block; 
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #4CAF50;
@@ -92,6 +98,14 @@
 
         button:hover {
             background-color: #388E3C;
+        }
+        
+        #goBack {
+            background-color: #D32F2F; /* Red color */
+        }
+
+        #goBack:hover {
+            background-color: #C62828;
         }
 
     </style>
@@ -110,8 +124,13 @@
         <div class="progress-container">
             <div id="progressBar"></div>
         </div>
-        
-        <button id="confirmButton">Yes, proceed</button>
+		
+		<!-- Button container to align buttons horizontally -->
+        <div class="button-container">
+            <button id="confirmButton">Yes, proceed</button>
+            <button id="goBack">No, take me back!</button>
+        </div>
+
     </div>
 
     <!-- JavaScript to periodically fetch the progress and update the progress bar -->
@@ -130,6 +149,10 @@
         document.getElementById('confirmButton').addEventListener('click', function() {
             window.location.href = '/bot/quiz';
             updateProgressBar();  // Start updating the progress bar
+        });
+		
+		document.getElementById('goBack').addEventListener('click', function() {
+            window.location.href = '/bot/choose-topic';
         });
     </script>
 

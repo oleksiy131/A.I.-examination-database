@@ -131,8 +131,13 @@ public class InstructorController {
         return "exam-generation-from-file";
     }
     
-    
-    
+    @GetMapping("/all-exams")
+    public String viewAllExams(Model model) {
+        List<Exam> allExams = examRepository.findAll(); 
+        model.addAttribute("exams", allExams);
+        return "listExams";
+    }
+
     @PostMapping("/exam-landing-page")
     public String captureExamLandingPageData(
             @RequestParam(name = "manual", required = false) String generateManualExam,
@@ -236,6 +241,19 @@ public class InstructorController {
 
         return "redirect:/exam/selectChapter";
     }
+    
+    @GetMapping("/remove-selected-question/{id}")
+    public String removeSelectedQuestion(@PathVariable Long id, HttpSession session) {
+        List<Long> selectedQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
+        if (selectedQuestionIds != null) {
+            selectedQuestionIds.remove(id);
+            session.setAttribute("selectedQuestionIds", selectedQuestionIds);
+        }
+
+        // Redirect back to the question selection page
+        return "redirect:/exam/selectChapter";
+    }
+
 
 
 

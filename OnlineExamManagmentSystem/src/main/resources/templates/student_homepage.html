@@ -4,9 +4,27 @@
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
 
+	<style>
+	body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        position: relative;
+        height: 100vh;
+        color: #333;
+    }
+    
+	 .home-background {
+        background-image: url('https://pbs.twimg.com/media/EWO_5adXgAUgXck.jpg:large');
+        background-size: cover;
+        background-position: center;
+        opacity: 0.9;
+    }
+	</style>
 </head>
 
-<body>
+<body class="home-background">
     <!-- This div sets up a class called navbar that holds all the buttons. -->
     <div class="navbar">
 <!-- Home button -->
