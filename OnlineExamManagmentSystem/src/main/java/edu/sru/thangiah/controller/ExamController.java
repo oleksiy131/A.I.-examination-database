@@ -86,9 +86,8 @@ public class ExamController {
         // Add other necessary attributes, like exam questions
         return "examDetails"; 
     }
-
     
-    
+   
     @PostMapping("/manual-auto-generate")
     public ResponseEntity<String> generateExam(
             @RequestParam("chapter") int chapter, 
