@@ -67,6 +67,29 @@ public class ExamController {
         this.examService = examService;
     }
     
+    @GetMapping("/edit/{id}")
+    public String editExam(@PathVariable Long id, Model model) {
+        Exam exam = examService.getExamById(id);
+        if (exam == null) {
+            return "redirect:/error"; // Or handle the error appropriately
+        }
+
+        List<ExamQuestion> allQuestions = examService.getAllExamQuestions(); // Assuming this method exists
+        model.addAttribute("exam", exam);
+        model.addAttribute("allQuestions", allQuestions);
+        model.addAttribute("selectedQuestions", exam.getQuestions());
+
+        return "editExam";
+    }
+    
+    @PostMapping("/updateQuestions")
+    public String updateExamQuestions(@RequestParam("examId") Long examId, @RequestParam("questionIds") List<Long> questionIds) {
+        examService.updateExamQuestions(examId, questionIds);
+        return "redirect:/exam/details/" + examId;
+    }
+
+
+    
     @GetMapping("/delete/{id}")
     public String deleteExam(@PathVariable Long id) {
         // Logic to delete the exam

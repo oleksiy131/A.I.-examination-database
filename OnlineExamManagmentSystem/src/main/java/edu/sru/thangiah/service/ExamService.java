@@ -243,6 +243,27 @@ public class ExamService {
             System.out.println("Exam with ID " + examId + " not found.");
         }
     }
+    
+    public List<ExamQuestion> getAllExamQuestions() {
+        return examQuestionRepository.findAll();
+    }
+    
+    public void updateExamQuestions(Long examId, List<Long> questionIds) {
+        Optional<Exam> examOptional = examRepository.findById(examId);
+        if (!examOptional.isPresent()) {
+            throw new RuntimeException("Exam not found"); // Handle this case as per your application's requirement
+        }
+
+        Exam exam = examOptional.get();
+        List<ExamQuestion> updatedQuestions = questionIds.stream()
+                                                         .map(examQuestionRepository::findById)
+                                                         .filter(Optional::isPresent)
+                                                         .map(Optional::get)
+                                                         .collect(Collectors.toList());
+        exam.setQuestions(updatedQuestions);
+        examRepository.save(exam);
+    }
+
 
 
     

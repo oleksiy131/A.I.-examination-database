@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Exam</title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto !important;
+            position: relative;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            text-align: center;
+            background-color: rgba(0, 112, 85, 0.7);
+            color: #fff;
+            padding: 15px;
+            margin: 0;
+            border-bottom: 2px solid #004c3b;
+        }
+
+        .content-container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .question-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        label {
+            display: block;
+            padding: 5px;
+        }
+        input[type='submit'], a {
+    		background-color: #007055; /* Dark green color to match header */
+    		color: white;
+    		padding: 10px 15px;
+    		text-align: center;
+   			text-decoration: none;
+    		display: inline-block;
+    		font-size: 16px;
+    		margin: 4px 2px;
+    		cursor: pointer;
+    		border: none;
+    		border-radius: 5px;
+    		transition: background-color 0.3s ease;
+		}
+
+		a:hover, input[type='submit']:hover {
+    		background-color: #004c3b; /* Slightly darker green for hover effect */
+		}
+		.loading-message {
+    		text-align: center;
+    		padding: 10px;
+    		margin-top: 10px;
+    		color: #333;
+    		background-color: rgba(255, 255, 255, 0.9);
+    		border-radius: 5px;
+    		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+    </style>
+</head>
+<body>
+    <div id="nav-placeholder"></div>
+
+    <h1>Exam Management</h1>
+
+    <div class="content-container">
+        <h2 th:text="${exam.examName} + ' - Exam-Editing Form'"></h2>
+
+		<div class="loading-message">Please be patient while all the questions are loaded from the database</div>
+		
+        <form th:action="@{/exam/updateQuestions}" method="post" class="form-section">
+            <input type="hidden" th:value="${exam.id}" name="examId"/>
+
+            <h3>All Available Questions:</h3>
+            <div class="question-list">
+                <div th:each="question, iterStat : ${allQuestions}">
+                    <label>
+                        <input type="checkbox" th:id="${'question' + iterStat.index}" th:value="${question.id}" name="questionIds"
+                               th:checked="${selectedQuestions.contains(question)}"/>
+                        <span th:text="${question.questionText}">Question Text</span>
+                    </label>
+                </div>
+            </div>
+
+            <input type="submit" value="Update Exam"/>
+        </form>
+
+        <a href="/instructor/all-exams">Cancel</a>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
+                // Once the navbar content is loaded, remove any video elements from the loaded content
+                $("#nav-placeholder video").remove();
+            });
+        });
+    </script>
+</body>
+</html>
