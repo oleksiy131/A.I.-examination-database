@@ -12,6 +12,7 @@ import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.Question;
 import edu.sru.thangiah.repository.ExamQuestionRepository;
 import edu.sru.thangiah.repository.ExamRepository;
+import edu.sru.thangiah.repository.ExamSubmissionRepository;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -37,6 +38,9 @@ public class ExamService {
     
     @Autowired
     private ExamQuestionRepository examQuestionRepository;
+    
+    @Autowired
+    private ExamSubmissionRepository examSubmissionRepository;
 
     private List<Question> allQuestions = new ArrayList<>();
 
@@ -223,6 +227,23 @@ public class ExamService {
         // Assumes you have a method in your repository to find questions by chapter.
         return examQuestionRepository.findQuestionsByChapter(chapter);
     }
+    
+    public void deleteExam(Long examId) {
+        Optional<Exam> examOptional = examRepository.findById(examId);
+        if (examOptional.isPresent()) {
+            Exam exam = examOptional.get();
+
+            // Delete associated exam submissions
+            examSubmissionRepository.deleteByExam(exam);
+
+            // Delete the exam
+            examRepository.delete(exam);
+            System.out.println("Deleted exam with ID: " + examId);
+        } else {
+            System.out.println("Exam with ID " + examId + " not found.");
+        }
+    }
+
 
     
 

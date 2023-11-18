@@ -67,6 +67,14 @@ public class ExamController {
         this.examService = examService;
     }
     
+    @GetMapping("/delete/{id}")
+    public String deleteExam(@PathVariable Long id) {
+        // Logic to delete the exam
+        examService.deleteExam(id);
+        return "redirect:/instructor/all-exams";
+    }
+
+    
     @GetMapping("/submissions")
     public String viewExamSubmissions(Model model) {
         model.addAttribute("submissions", examSubmissionRepository.findAll());
