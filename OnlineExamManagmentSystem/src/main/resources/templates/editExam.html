@@ -72,6 +72,16 @@
     		border-radius: 5px;
     		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 		}
+		.button-container {
+    		text-align: center; /* Center the image */
+    		padding: 20px; /* Add some padding */
+   		 	margin-top: 20px; /* Space above the container */
+		}
+
+		.button-container img {
+    		max-width: 100px; /* Adjust size as needed */
+    		height: auto; /* Maintain aspect ratio */
+		}
     </style>
 </head>
 <body>
@@ -82,7 +92,9 @@
     <div class="content-container">
         <h2 th:text="${exam.examName} + ' - Exam-Editing Form'"></h2>
 
-		<div class="loading-message">Please be patient while all the questions are loaded from the database</div>
+		<div class="loading-message">Please be patient while all the questions are loaded from the database
+									<br> You will see a confirmation once the form is fully loaded.</div>
+									
 		
         <form th:action="@{/exam/updateQuestions}" method="post" class="form-section">
             <input type="hidden" th:value="${exam.id}" name="examId"/>
@@ -97,6 +109,10 @@
                     </label>
                 </div>
             </div>
+            
+            <div class="button-container">
+    		<img src="https://i0.wp.com/www.safetysuppliesunlimited.net/wp-content/uploads/2020/06/ISO473AP.jpg?fit=288%2C288&ssl=1" alt="Check Mark">
+			</div>
 
             <input type="submit" value="Update Exam"/>
         </form>
