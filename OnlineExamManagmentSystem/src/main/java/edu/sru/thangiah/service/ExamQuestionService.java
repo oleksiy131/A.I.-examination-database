@@ -21,6 +21,6 @@ public interface ExamQuestionService {
 	List<ExamQuestion> generateFillInTheBlanksQuestions(int numBlanks) throws IOException;
 	List<ExamQuestion> readTrueFalseFromFile() throws IOException;
     List<ExamQuestion> readAIQuestionsFromFile(MultipartFile file) throws IOException;
-
+	List<ExamQuestion> findQuestionsContainingText(String searchText);
 }
 
