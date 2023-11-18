@@ -11,7 +11,7 @@
             overflow-y: auto !important;
             position: relative;
             color: #333;
-            background-color: #f4f4f4; /* Light background for better contrast */
+            background-color: #f4f4f4;
         }
 
         h1 {
@@ -22,35 +22,90 @@
             margin: 0;
             border-bottom: 2px solid #004c3b;
         }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007055;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        a {
+            color: #007055;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .add-button {
+            display: block;
+            width: max-content;
+            padding: 10px 20px;
+            margin: 20px auto;
+            background-color: #007055;
+            color: #fff;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .add-button:hover {
+            background-color: #005c43;
+        }
     </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
-
     <h1>List of Exam Questions</h1>
+
     <table>
-        <tr>
-            <th>Question Text</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-        <tr th:each="examQuestion : ${examQuestions}">
-            <td th:text="${examQuestion.questionText}"></td>
-            <td><a th:href="@{/instructor/exam-questions/edit/{id}(id=${examQuestion.id})}">Edit</a></td>
-            <td><a th:href="@{/instructor/exam-questions/delete/{id}(id=${examQuestion.id})}">Delete</a></td>
-        </tr>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Question Text</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="examQuestion : ${examQuestions}">
+                <td th:text="${examQuestion.id}"></td>
+                <td th:text="${examQuestion.questionText}"></td>
+                <td><a th:href="@{/instructor/exam-questions/edit/{id}(id=${examQuestion.id})}">Edit</a></td>
+                <td><a th:href="@{/instructor/exam-questions/delete/{id}(id=${examQuestion.id})}">Delete</a></td>
+            </tr>
+        </tbody>
     </table>
-    <a href="/instructor/exam-questions/new">Add New Exam Question</a>
+
+    <a href="/instructor/exam-questions/new" class="add-button">Add New Exam Question</a>
     
     <script>
         $(document).ready(function() {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
-                // Once the navbar content is loaded, remove any video elements from the loaded content
                 $("#nav-placeholder video").remove();
             });
         });
     </script>
-    
 </body>
 </html>
