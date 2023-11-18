@@ -92,7 +92,10 @@
                 </div>
             </div>
 
-            <a href="/instructor/instructor_homepage">Back to Dashboard</a>
+            <!-- Edit Exam Link -->
+            <a th:href="@{'/exam/edit/' + ${exam.id}}" class="edit-exam-link">Edit Exam</a>
+            <!-- Go Back Link -->
+            <a href="/instructor/all-exams" class="go-back-link">Go Back</a>
         </div>
     </div>
 
