@@ -72,12 +72,36 @@
         .add-button:hover {
             background-color: #005c43;
         }
+        
+                .search-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .search-container label,
+        .search-container input[type="text"],
+        .search-container button {
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
     <div id="nav-placeholder"></div>
 
     <h1>List of Exam Questions</h1>
+    
+    <!-- Search form -->
+    <div class="search-container">
+        <form th:action="@{/exam-question/search}" method="GET">
+            <label for="searchType">Search by:</label>
+            <select id="searchType" name="searchType">
+                <option value="id">ID</option>
+                <option value="text">Question Text</option>
+            </select>
+            <input type="text" id="searchParam" name="searchParam" placeholder="Enter search value">
+            <button type="submit">Search</button>
+        </form>
+    </div>
 
     <table>
         <thead>

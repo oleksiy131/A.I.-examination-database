@@ -270,6 +270,11 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	 @Override
+	    public List<ExamQuestion> findQuestionsContainingText(String searchText) {
+	        return examQuestionRepository.findByQuestionTextContainingIgnoreCase(searchText);
+	    }
 
 
 }

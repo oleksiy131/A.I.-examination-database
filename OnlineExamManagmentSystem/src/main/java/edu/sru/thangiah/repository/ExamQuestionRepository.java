@@ -1,6 +1,7 @@
 package edu.sru.thangiah.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,7 @@ public interface ExamQuestionRepository extends JpaRepository<ExamQuestion, Long
     
     List<ExamQuestion> findQuestionsByChapter(int chapter);
 	void save(List<ExamQuestion> aiQuestions);
+    List<ExamQuestion> findByQuestionTextContainingIgnoreCase(String searchText);
+    Optional<ExamQuestion> findById(Long id);
 
 }

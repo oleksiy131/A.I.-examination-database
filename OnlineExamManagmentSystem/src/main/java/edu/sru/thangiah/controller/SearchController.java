@@ -1,5 +1,6 @@
 package edu.sru.thangiah.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.sru.thangiah.domain.ExamQuestion;
 import edu.sru.thangiah.domain.Instructor;
 import edu.sru.thangiah.domain.ScheduleManager;
 import edu.sru.thangiah.domain.Student;
 import edu.sru.thangiah.repository.InstructorRepository;
 import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
+import edu.sru.thangiah.service.ExamQuestionService;
 
 @Controller
 public class SearchController {
@@ -29,6 +32,9 @@ public class SearchController {
 
     @Autowired
     private StudentRepository studentRepository;
+    
+    @Autowired
+    private ExamQuestionService examQuestionService;
     
     @Autowired
     private InstructorRepository instructorRepository;
@@ -134,4 +140,31 @@ public class SearchController {
 
         return "iv-student-list"; 
     }
+    
+    @GetMapping("/exam-question/search")
+    public String searchExamQuestions(
+        @RequestParam("searchType") String searchType,
+        @RequestParam("searchParam") String searchParam,
+        Model model
+    ) {
+        List<ExamQuestion> questions = new ArrayList<>();
+        if ("id".equalsIgnoreCase(searchType)) {
+            try {
+                Long id = Long.parseLong(searchParam);
+                ExamQuestion question = examQuestionService.getExamQuestionById(id);
+                if (question != null) {
+                    questions.add(question);
+                }
+            } catch (NumberFormatException e) {
+                // Handle invalid ID format (e.g., non-numeric)
+            }
+        } else if ("text".equalsIgnoreCase(searchType)) {
+            questions = examQuestionService.findQuestionsContainingText(searchParam);
+        }
+        model.addAttribute("examQuestions", questions);
+        return "listExamQuestions"; 
+    }
+
+
+
 }
