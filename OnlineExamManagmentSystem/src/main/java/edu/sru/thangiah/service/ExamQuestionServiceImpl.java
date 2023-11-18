@@ -38,14 +38,16 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
     // Load questions from the text files only once when the application starts.
     @PostConstruct
     public void initializeQuestions() {
-        for (int chapter = 1; chapter <= 9; chapter++) { // assuming there are 9 chapters
-            try {
-                loadQuestionsFromFile(chapter);
-            } catch (IOException e) {
-                e.printStackTrace();
+        if (examQuestionRepository.count() == 0) { // Check if the database is empty
+            for (int chapter = 1; chapter <= 9; chapter++) { // assuming there are 9 chapters
+                try {
+                    loadQuestionsFromFile(chapter);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
-}
+    }
     
     // Method to read and parse fill-in-the-blank questions when the 'Generate Exam' is clicked
     @Transactional
