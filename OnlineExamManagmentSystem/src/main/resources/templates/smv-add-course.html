@@ -4,6 +4,90 @@
     <meta charset="UTF-8">
     <title>Add Course</title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+         <style>
+		.home {
+		    display: flex;
+		    justify-content: center;
+		    align-items: center; 
+		    height: 100%; 
+		}
+		
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px;
+        }
+        h4{
+			text-align: center;
+		}
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            margin: 20px auto;
+            background-color: #007055;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #019270;
+        }
+        
+        #cancelButton {
+    		display: block;
+    		margin: 20px auto;
+    		background-color: #007055; 
+    		color: #fff;
+    		padding: 10px 20px;
+    		border: none;
+    		border-radius: 3px;
+    		font-size: 18px;
+    		cursor: pointer;
+    		text-align: center;
+		}
+
+		#cancelButton:hover {
+		    background-color: #e74c3c; 
+		}
+    </style>
 </head>
 
 <div id="nav-placeholder">
@@ -14,16 +98,19 @@
 $(function(){
   $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
 });
+
+    // Add history back function to the cancel button
+    document.getElementById('cancelButton').addEventListener('click', function() {
+        history.back();
+    });
 </script>
 
-<br>
-<br>
-<br>
+
 
 <body>
-    <h1>Add Course</h1>
+    <h2>Add Course</h2>
     <!-- Change the form action to point to the server-side controller -->
-    <form action="/schedule-manager/add-courseSM" method="post">
+    <form action="/schedule-manager/add-courseSM" method="post" style="max-width: 400px; margin: 0 auto; background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
         <label for="courseId">Course ID:</label>
         <input type="text" id="courseId" name="id" required><br><br>
         
@@ -31,6 +118,7 @@ $(function(){
         <input type="text" id="courseName" name="courseName" required><br><br>
         
         <input type="submit" value="Add Course">
+        <input type="button" id="cancelButton" value="Cancel" onclick="history.back();">
     </form>
 
     <div id="message">
