@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -647,34 +648,40 @@ public class ScheduleManagerController {
 	        // Check if the student with the given username already exists
 	        if (studentRepository.findByStudentUsername(student.getStudentUsername()).isPresent()) {
 	            redirectAttributes.addFlashAttribute("errorMessage", "Student with given username already exists.");
-	            return "redirect:/create";
+	            return "redirect:/schedule-manager/create-students";
 	        }
+	        
+	        // Check if a User with the provided ID already exists
+	        if (userRepository.findById(student.getStudentId()).isPresent()) {
+	            redirectAttributes.addFlashAttribute("errorMessage", "User with given ID already exists.");
+	            return "redirect:/create-students";
+	        }
+	        
+	        // Create and save the corresponding User
+	        User newUser = new User();
+	        newUser.setId(student.getStudentId()); 
+	        newUser.setUsername(student.getStudentUsername());
+	        newUser.setFirstName(student.getStudentFirstName()); 
+	        newUser.setLastName(student.getStudentLastName()); 
+	        newUser.setEmail(student.getStudentEmail()); 
+	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
+	        newUser.setPassword(hashedPassword);
+	        newUser.setEnabled(true);
 
-	        // Fetch the role with ID 2 and set it to the student
+	        // Fetch the role with ID 2 and set it to the user
 	        Roles roles = roleRepository.findById(2L)
 	            .orElseThrow(() -> new RuntimeException("Role with ID 2 not found"));
-	        List<Roles> rolesList = new ArrayList<>();
-            rolesList.add(roles);
-            student.setRoles(rolesList);
+	        newUser.setRoles(Collections.singletonList(roles));
+            
+            
+	     // Save the User to the database
+	        newUser = userRepository.save(newUser);
+	        
+	        student.setStudentPassword(hashedPassword);
 
-	        // Save the new student
+	        // Assign the User to the Student and save the Student
+	        student.setUser(newUser);
 	        studentRepository.save(student);
-
-	        // Create and save the corresponding user
-	        User newUser = new User();
-	        newUser.setId(student.getStudentId());
-	        newUser.setUsername(student.getStudentUsername());
-	        String hashedPassword = passwordEncoder.encode(student.getStudentPassword());
-		    newUser.setPassword(hashedPassword);
-	        newUser.setRoles(rolesList);
-
-
-            // Set enabled for the user as well
-            newUser.setEnabled(true);
-
-            userRepository.save(newUser);
-            student.setUser(newUser);  // setting the association of the student to user 
-		    studentRepository.save(student);
 
 	        redirectAttributes.addFlashAttribute("successMessage", "Student and corresponding user added successfully.");
 	        return "smv-upload-success";
