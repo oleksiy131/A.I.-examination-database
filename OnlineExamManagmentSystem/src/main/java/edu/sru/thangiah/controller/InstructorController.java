@@ -447,13 +447,15 @@ public class InstructorController {
 		// find the instructor entity associated with the authenticated user
 		Instructor instructor = instructorRepository.findByInstructorUsername(instructorUser).orElse(null);
 
-		List<Course> courses = courseRepository.findAllByInstructor(instructor);
+		if (instructor != null) {
+	        List<Course> courses = courseRepository.findAllByInstructor(instructor);
 
+	        // Fetch students associated with the courses of the instructor
+	        List<Student> students = studentRepository.findAllByCoursesIn(courses);
 
-		List<Student> students = (List<Student>) studentRepository.findAll();
-
-		// Add the list of students to the model for rendering in the HTML template
-		model.addAttribute("students", students);
+	        // Add the list of students to the model for rendering in the HTML template
+	        model.addAttribute("students", students);
+	    }
 
 		// Return the name of the HTML template to be displayed
 		return "iv-student-list";
