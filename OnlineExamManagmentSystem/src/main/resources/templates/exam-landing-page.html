@@ -53,13 +53,14 @@
     </style>
 </head>
 
+
 <body>
     <div id="nav-placeholder"></div>
 
     <h1>Exam Creation Form</h1>
 
     <div class="content-container">
-        <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return validateDuration(); validateStartDate(); validateEndDate()">
+        <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return updateUI(); validateDuration(); validateStartDate(); validateEndDate()">
             
             
             <label for="course">Your Course:</label>
@@ -98,17 +99,30 @@
     </div>
 
     <script>
+		
+		window.onload = function() {
+    		updateUI(); 
+		};
+		
         function updateUI() {
             var name = document.getElementById('examName').value;
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
             var duration = document.getElementById('duration').value;
 
+            var courseSelected = document.getElementById('course').value;
+
+            // checking if the course isn't selected
+              if (courseSelected === "") {
+                  disableInputs(true); // grey out inputs if there are no courses
+            } else {
+                disableInputs(false); // allow inputs if there are courses
 
             document.getElementById('infoName').textContent = 'Exam Name: ' + name;
             document.getElementById('infoDates').textContent = 'Start Date: ' + startDate + ' - End Date: ' + endDate;
             document.getElementById('infoDuration').textContent = 'Duration: ' + duration + ' minutes';
         }
+      }
         
         function validateStartDate() {
         var startDate = new Date(document.getElementById('startDate').value);
@@ -145,6 +159,15 @@
             }
             return true; // allow submission if duration is corect
         }
+
+    function disableInputs(isDisabled) {
+            var inputs = document.querySelectorAll('input, select'); 
+
+            inputs.forEach(function (input) {
+            input.disabled = isDisabled; 
+          
+          });
+}
        
 
         $(function () {
