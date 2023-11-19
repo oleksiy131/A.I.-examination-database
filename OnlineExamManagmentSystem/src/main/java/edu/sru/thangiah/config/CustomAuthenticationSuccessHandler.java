@@ -63,7 +63,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 this.setDefaultTargetUrl("/schedule-manager/schedule_manager_homepage");
                 break;
             default:
-                this.setDefaultTargetUrl("/navbar"); 
+                this.setDefaultTargetUrl("/index"); 
         }
 
         try {

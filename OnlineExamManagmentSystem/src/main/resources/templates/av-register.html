@@ -56,18 +56,21 @@
             height: 36px;
         }
 
-        input[type="submit"] {
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
+		input[type="submit"],
+		.btn-cancel {
+    		background-color: #007BFF;
+    		color: #fff;
+    		border: none;
+    		padding: 10px 20px;
+    		border-radius: 3px;
+    		cursor: pointer;
+    		width: auto; 
+		}
 
-        input[type="submit"]:hover {
-            background-color: #0056b3;
-        }
+       input[type="submit"]:hover,
+		.btn-cancel:hover {
+    		background-color: #0056b3;
+		}
         
         #nav-placeholder {
             width: 100%;
@@ -119,6 +122,8 @@ $(function(){
             <input type="password" id="password" name="managerPassword" required>
             
             <input type="submit" value="Register">
+			<button type="button" class="btn-cancel" onclick="history.back();">Cancel</button>
+            
         </form>
     </div>
 </body>
