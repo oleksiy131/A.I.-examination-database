@@ -99,6 +99,21 @@
             margin-top: 10px;
             font-weight: bold;
         }
+        
+        .cancel-button {
+    		background-color: #3498db;
+    		color: #fff;
+    		border: none;
+   		 	padding: 10px 20px;
+    		margin-top: 10px;
+    		cursor: pointer;
+    		border-radius: 5px;
+    		transition: background-color 0.3s ease;
+		}
+
+		.cancel-button:hover {
+    		background-color: #e74c3c;
+		}
     </style>
 </head>
 <div id="nav-placeholder">
@@ -129,6 +144,7 @@ $(function(){
             <label for="file" class="custom-file-upload">Choose File</label>
             <input type="file" name="file" id="file" accept=".xlsx, .xls" class="file-upload" onchange="displaySelectedFile()">
             <button type="submit" class="upload-button">Upload</button>
+            <button type="button" class="cancel-button" onclick="history.back();">Cancel</button>
             <div id="selected-file" class="selected-file"></div>
         </form>
     </div>
