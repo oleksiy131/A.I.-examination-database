@@ -703,8 +703,14 @@ public class ScheduleManagerController {
             return "smv-update-user";
         }
         
+        Student Updatestudent = studentRepository.findByStudentUsername(student.getStudentUsername()).orElse(null);
+        
+        Set<Course> studentCourses = Updatestudent.getCourses();
+        
+        System.out.println(studentCourses);
+        
      // checking the user to exist and creating it if it does not already exist
-        User user = userRepository.findByUsername(student.getStudentUsername())
+        User user = userRepository.findByUsername(Updatestudent.getStudentUsername())
                 .orElse(new User());  
 
         // checking that both the password and the confirm password field are the same
@@ -715,30 +721,29 @@ public class ScheduleManagerController {
             }
             
             String encryptedPassword = passwordEncoder.encode(newStudentPassword);
-            student.setStudentPassword(encryptedPassword);
+            Updatestudent.setStudentPassword(encryptedPassword);
             
             // updating the users password
             user.setPassword(encryptedPassword);
         }
 
         // updating the users username and email to match the student
-        user.setUsername(student.getStudentUsername());
-        user.setEmail(student.getStudentEmail());
+        user.setUsername(Updatestudent.getStudentUsername());
+        user.setEmail(Updatestudent.getStudentEmail());
         userRepository.save(user);  // Save the user to userRepository
 
         
         // Debugging: Print the received student data
         System.out.println("Received Student Data:");
-        System.out.println("ID: " + student.getStudentId());
-        System.out.println("First Name: " + student.getStudentFirstName());
-        System.out.println("Last Name: " + student.getStudentLastName());
-        System.out.println("Email: " + student.getStudentEmail());
-        System.out.println("Path Variable ID: " + id);
+        System.out.println("ID: " + Updatestudent.getStudentId());
+        System.out.println("First Name: " + Updatestudent.getStudentFirstName());
+        System.out.println("Last Name: " + Updatestudent.getStudentLastName());
+        System.out.println("Email: " + Updatestudent.getStudentEmail());
+        System.out.println("Path Variable ID: " + Updatestudent.getStudentId());
         
-//        student.setStudentId(id);
-//        student.setRole(student.getRole());
-//        student.setStudentPassword(student.getStudentPassword());
-        studentRepository.save(student);
+        Updatestudent.getCourses().addAll(studentCourses);
+        
+        studentRepository.save(Updatestudent);
         return "smv-edit-confirmation";
     }
 	
