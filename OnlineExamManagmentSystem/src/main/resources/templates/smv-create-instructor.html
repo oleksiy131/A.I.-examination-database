@@ -72,6 +72,23 @@
         input[type="submit"]:hover {
             background-color: #2980b9;
         }
+        
+         input[type="button"]#cancelButton {
+            display: block;
+            margin: 20px auto;
+            background-color: #007055; 
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 3px;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        input[type="button"]#cancelButton:hover {
+            background-color: #e74c3c; /* Red color on hover */
+        }
     </style>
    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -89,6 +106,22 @@
 $(function(){
   $("#nav-placeholder").load("/schedule-manager/schedule_manager_homepage");
 });
+
+  $(document).ready(function () {
+            $('#id').on('input', function () {
+                var value = parseInt($(this).val());
+                if (value < 0) {
+                    $('#id').val('');
+                    $('#negative-id-message').text('The ID cannot be negative.');
+                } else {
+                    $('#negative-id-message').text('');
+                }
+            });
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            history.back();
+        });
 </script>
 
 <body>
@@ -96,8 +129,10 @@ $(function(){
     <h2>Create Instructor</h2>
 
     <form action="/schedule-manager/add" method="post">
-        <label for="id">ID:</label>
-        <input type="text" id="id" name="instructorId" required>
+ 		<label for="id">ID:</label>
+        <input type="number" id="id" name="instructorId" required>
+        <span id="negative-id-message" style="color: red;"></span>
+
 
         <label for="firstName">First Name:</label>
         <input type="text" id="firstName" name="instructorFirstName" required>
@@ -115,6 +150,8 @@ $(function(){
         <input type="text" id="username" name="instructorUsername" required>
 
         <input type="submit" value="Create Instructor">
+        <input type="button" id="cancelButton" value="Cancel" onclick="history.back();">
+        
     </form>
     
 </body>
