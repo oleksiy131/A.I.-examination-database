@@ -100,11 +100,15 @@ public class ExamController {
 
     
     @GetMapping("/delete/{id}")
-    public String deleteExam(@PathVariable Long id) {
-        // Logic to delete the exam
-        examService.deleteExam(id);
+    public String deleteExam(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        boolean isDeleted = examService.deleteExam(id);
+        if (!isDeleted) {
+            // Add an attribute indicating the exam couldn't be deleted
+            redirectAttributes.addFlashAttribute("deleteError", "Exam with submissions cannot be deleted.");
+        }
         return "redirect:/instructor/all-exams";
     }
+
 
     
     @GetMapping("/submissions")
@@ -117,7 +121,7 @@ public class ExamController {
     public String viewExamDetails(@PathVariable Long id, Model model) {
         Exam exam = examService.getExamById(id); // Implement this method in your service
         if (exam == null) {
-            return "redirect:/exam/all-exams"; // Redirect or show an error page
+            return "redirect:/instructor/all-exams"; // Redirect or show an error page
         }
         model.addAttribute("exam", exam);
         model.addAttribute("generatedExamId", exam.getId());

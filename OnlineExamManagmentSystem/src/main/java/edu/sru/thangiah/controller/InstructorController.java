@@ -139,11 +139,12 @@ public class InstructorController {
     }
     
     @GetMapping("/all-exams")
-    public String viewAllExams(Model model) {
-        List<Exam> allExams = examRepository.findAll(); 
-        model.addAttribute("exams", allExams);
+    public String showAllExams(Model model) {
+        List<Exam> exams = examService.getAllExamsWithSubmissionCount();
+        model.addAttribute("exams", exams);
         return "listExams";
     }
+
 
     @PostMapping("/exam-landing-page")
     public String captureExamLandingPageData(

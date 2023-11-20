@@ -87,7 +87,10 @@
             <!-- Exam actions -->
             <div class="exam-actions">
                 <a th:href="@{'/exam/details/' + ${exam.id}}" class="button">View Details</a>
-                <a th:href="@{'/exam/delete/' + ${exam.id}}" class="button delete-button" onclick="return confirm('Are you sure you want to delete this exam?');">Delete</a>
+                <a th:href="@{'/exam/delete/' + ${exam.id}}" class="button delete-button" 
+                   th:if="${exam.submissionCount == 0}" 
+                   onclick="return confirm('Are you sure you want to delete this exam?');">Delete</a>
+                <span th:if="${exam.submissionCount > 0}">Cannot delete (has submissions)</span>
             </div>
         </div>
     </div>
@@ -95,7 +98,6 @@
     <script>
         $(document).ready(function() {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function() {
-                // Once the navbar content is loaded, remove any video elements from the loaded content
                 $("#nav-placeholder video").remove();
             });
         });

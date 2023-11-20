@@ -228,21 +228,28 @@ public class ExamService {
         return examQuestionRepository.findQuestionsByChapter(chapter);
     }
     
-    public void deleteExam(Long examId) {
+    public boolean deleteExam(Long examId) {
         Optional<Exam> examOptional = examRepository.findById(examId);
         if (examOptional.isPresent()) {
             Exam exam = examOptional.get();
 
-            // Delete associated exam submissions
-            examSubmissionRepository.deleteByExam(exam);
+            // Check if there are any submissions for this exam
+            if (examSubmissionRepository.countByExam(exam) > 0) {
+                System.out.println("Cannot delete exam with ID: " + examId + " as it has submissions.");
+                return false; // Indicate that the exam cannot be deleted
+            }
 
-            // Delete the exam
+            // If no submissions, delete the exam
             examRepository.delete(exam);
             System.out.println("Deleted exam with ID: " + examId);
+            return true; // Indicate successful deletion
         } else {
             System.out.println("Exam with ID " + examId + " not found.");
+            return false;
         }
     }
+
+
     
     public List<ExamQuestion> getAllExamQuestions() {
         return examQuestionRepository.findAll();
@@ -263,6 +270,16 @@ public class ExamService {
         exam.setQuestions(updatedQuestions);
         examRepository.save(exam);
     }
+    
+    public List<Exam> getAllExamsWithSubmissionCount() {
+        List<Exam> exams = examRepository.findAll();
+        for (Exam exam : exams) {
+            int count = (int) examSubmissionRepository.countByExam(exam);
+            exam.setSubmissionCount(count);
+        }
+        return exams;
+    }
+
 
 
 
