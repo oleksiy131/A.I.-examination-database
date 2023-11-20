@@ -70,7 +70,7 @@
     <h1>Exam Creation Form</h1>
 
     <div class="content-container">
-        <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return updateUI(); validateDuration(); validateStartDate(); validateEndDate()">
+		<form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return formValidation()">
             
             
             <label for="course">Your Course:</label>
@@ -84,23 +84,20 @@
             <input type="text" id="examName" name="examName" oninput="updateUI()"><br><br>
 
             <label for="startDate">Start Date:</label>
-			<input type="datetime-local" id="startDate" name="startDate" required>
+			<input type="datetime-local" id="startDate" name="startDate" required oninput="updateUI()">
 			<span id="startDate-message" class="error-message"></span><br><br>
 
 			<label for="endDate">End Date:</label>
-			<input type="datetime-local" id="endDate" name="endDate" required>
+			<input type="datetime-local" id="endDate" name="endDate" required oninput="updateUI()">
 			<span id="endDate-message" class="error-message"></span><br><br>
 
 			<label for="duration">Duration (in minutes):</label>
-			<input type="number" id="duration" name="duration" required>
+			<input type="number" id="duration" name="duration" required oninput="updateUI()">
 			<span id="duration-message" class="error-message"></span><br><br>
 
             <input type="submit" name="manual" value="Manual Exam Generation">
             <input type="submit" name="auto" value="Automatic Exam Generation">
         </form>
-        
-        <div id="popup" style="display: none; position: absolute; background-color: #007055; color: #fff; padding: 5px 10px; border: 1px solid rgb(0, 0, 0); white-space: nowrap;">
-	</div>
 	
 
         <div id="examInfo">
@@ -192,11 +189,12 @@
             return true;
         }
     }
-
-    // Add event listeners for real-time validation
-    document.getElementById('startDate').addEventListener('change', validateStartDate);
-    document.getElementById('endDate').addEventListener('change', validateEndDate);
-    document.getElementById('duration').addEventListener('change', validateDuration);
+    
+    // Add input event listeners for real-time UI updates
+	document.getElementById('startDate').addEventListener('input', validateStartDate);
+	document.getElementById('endDate').addEventListener('input', validateEndDate);
+	document.getElementById('duration').addEventListener('input', validateDuration);
+    
 
     function disableInputs(isDisabled) {
             var inputs = document.querySelectorAll('input, select'); 
@@ -205,8 +203,21 @@
             input.disabled = isDisabled; 
           
           });
-}
-       
+	}
+       function formValidation() {
+   		 	var isStartDateValid = validateStartDate();
+   		 	var isEndDateValid = validateEndDate();
+    		var isDurationValid = validateDuration();
+
+    			// If all validations are true, update the UI and allow form submission.
+    		if (isStartDateValid && isEndDateValid && isDurationValid) {
+        		updateUI();
+        		return true; // Proceed with form submission.
+    		} else {
+        		// Prevent form submission if validations fail.
+        		return false;
+    		}
+		}
 
         $(function () {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function () {
