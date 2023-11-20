@@ -12,4 +12,12 @@ public class ExamQuestionDisplay {
     private String questionText;
     private String userAnswer;
     private String correctAnswerText;
+    
+    public String getCorrectAnswerText() {
+        return correctAnswerText;
+    }
+
+    public void setCorrectAnswerText(String correctAnswerText) {
+        this.correctAnswerText = correctAnswerText;
+    }
 }

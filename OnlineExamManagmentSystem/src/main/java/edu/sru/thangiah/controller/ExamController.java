@@ -1,6 +1,7 @@
 package edu.sru.thangiah.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.ExamSubmission;
 import edu.sru.thangiah.domain.ExamSubmissionEntity;
 import edu.sru.thangiah.domain.Question;
+import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.ExamRepository;
 import edu.sru.thangiah.repository.ExamSubmissionRepository;
@@ -406,7 +408,7 @@ public class ExamController {
 
 
     @PostMapping("/submit/{id}")
-    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model) {
+    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model, Principal principal) {
         Exam exam = examService.getExamById(id);
 
         if (exam != null) {
@@ -418,12 +420,17 @@ public class ExamController {
             for (ExamQuestion question : exam.getQuestions()) {
                 String userAnswer = userAnswers.get(question.getId());
                 String userAnswerText = getAnswerText(question, userAnswer);
+                
+             // Determine the user's role and add it to the model
+                String userRole = determineUserRole(principal.getName());
+                model.addAttribute("userRole", userRole);
 
+                
                 ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
                 displayQuestion.setId(question.getId());
                 displayQuestion.setQuestionText(question.getQuestionText());
                 displayQuestion.setUserAnswer(userAnswerText);
-                displayQuestion.setCorrectAnswerText(getCorrectAnswerText(question));
+                displayQuestion.setCorrectAnswerText(question.getCorrectAnswerText());
                 
                 if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                     totalScore++;
@@ -435,6 +442,7 @@ public class ExamController {
             model.addAttribute("score", totalScore);
             model.addAttribute("totalQuestions", exam.getQuestions().size());
             model.addAttribute("incorrectQuestions", displayQuestions);
+            
 
             return "showScore"; // Thymeleaf template to display the score and answers
         } else {
@@ -483,6 +491,22 @@ public class ExamController {
             default:
                 return "Invalid Option";
         }
+    }
+    
+    private String determineUserRole(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            for (Roles role : user.getRoles()) {
+                if ("STUDENT".equals(role.getName())) {
+                    return "STUDENT";
+                } else if ("INSTRUCTOR".equals(role.getName())) {
+                    return "INSTRUCTOR";
+                }
+                // Add more role checks if needed
+            }
+        }
+        return "UNKNOWN"; // Default or unknown role
     }
 
 
