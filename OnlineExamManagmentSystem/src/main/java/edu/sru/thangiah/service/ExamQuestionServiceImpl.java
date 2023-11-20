@@ -1,6 +1,7 @@
 package edu.sru.thangiah.service;
 
 import edu.sru.thangiah.domain.ExamQuestion;
+import edu.sru.thangiah.domain.ExamQuestionDisplay;
 import edu.sru.thangiah.repository.ExamQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -19,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -226,6 +228,47 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
 
         reader.close();
         return trueFalseQuestions;
+    }
+    
+    public List<ExamQuestionDisplay> transformForDisplay(List<ExamQuestion> questions, Map<Long, String> userAnswers) {
+        List<ExamQuestionDisplay> displayQuestions = new ArrayList<>();
+        for (ExamQuestion question : questions) {
+            ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
+            displayQuestion.setId(question.getId());
+            displayQuestion.setQuestionText(question.getQuestionText());
+            displayQuestion.setUserAnswer(userAnswers.get(question.getId()));
+            displayQuestion.setCorrectAnswerText(getCorrectAnswerText(question));
+            displayQuestions.add(displayQuestion);
+        }
+        return displayQuestions;
+    }
+    
+    private String getCorrectAnswerText(ExamQuestion question) {
+        switch (question.getQuestionType()) {
+            case MULTIPLE_CHOICE:
+                return getOptionText(question, question.getCorrectAnswer());
+            case TRUE_FALSE:
+                return question.getCorrectAnswer().equals("A") ? "True" : "False";
+            case FILL_IN_THE_BLANK:
+                return question.getCorrectAnswer();
+            default:
+                return "Invalid Answer";
+        }
+    }
+    
+    private String getOptionText(ExamQuestion question, String optionLetter) {
+        switch (optionLetter) {
+            case "A":
+                return question.getOptionA();
+            case "B":
+                return question.getOptionB();
+            case "C":
+                return question.getOptionC();
+            case "D":
+                return question.getOptionD();
+            default:
+                return "Invalid Option";
+        }
     }
 
 

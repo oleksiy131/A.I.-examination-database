@@ -14,7 +14,7 @@
         <li th:each="question : ${incorrectQuestions}">
             <p><strong>Question:</strong> <span th:text="${question.questionText}"></span></p>
             <p><strong>Your Answer:</strong> <span th:text="${question.userAnswer}"></span></p> <!-- This line displays the user's answer -->
-            <p><strong>Correct Answer:</strong> <span th:text="${question.correctAnswer}"></span></p>
+            <p><strong>Correct Answer:</strong> <span th:text="${question.correctAnswerText}"></span></p>
         </li>
     </ul>
 </div>
