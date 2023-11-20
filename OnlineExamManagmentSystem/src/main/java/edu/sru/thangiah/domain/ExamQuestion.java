@@ -52,6 +52,42 @@ public class ExamQuestion {
                 ", questionType=" + questionType +
                 '}';
     }
+    
+ // Method to return correct answer text based on question type
+    public String getCorrectAnswerText() {
+        switch (this.questionType) {
+            case MULTIPLE_CHOICE:
+            	switch (this.correctAnswer) {
+                case "A":
+                    return this.optionA;
+                case "B":
+                    return this.optionB;
+                case "C":
+                    return this.optionC;
+                case "D":
+                    return this.optionD;
+                default:
+                    return "Invalid answer";
+            }
+            case TRUE_FALSE:
+                return this.correctAnswer.equals("A") ? "True" : "False";
+            case FILL_IN_THE_BLANK:
+                return this.correctAnswer; 
+            default:
+                return "Invalid Answer";
+        }
+    }
+
+    // Helper method to get the option text based on the option letter (A, B, C, D)
+    private String getOptionText(String optionLetter) {
+        switch (optionLetter) {
+            case "A": return this.optionA;
+            case "B": return this.optionB;
+            case "C": return this.optionC;
+            case "D": return this.optionD;
+            default: return "Invalid Option";
+        }
+    }
 
     
 	public Long getId() {

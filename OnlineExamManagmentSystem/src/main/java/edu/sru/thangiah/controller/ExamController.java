@@ -31,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.sru.thangiah.domain.Exam;
 import edu.sru.thangiah.domain.ExamDetails;
 import edu.sru.thangiah.domain.ExamQuestion;
+import edu.sru.thangiah.domain.ExamQuestionDisplay;
 import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.ExamSubmission;
 import edu.sru.thangiah.domain.ExamSubmissionEntity;
@@ -406,73 +407,97 @@ public class ExamController {
 
     @PostMapping("/submit/{id}")
     public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model) {
-        // Retrieve the exam by ID from the repository
         Exam exam = examService.getExamById(id);
 
         if (exam != null) {
-            // Check if the exam's duration is still valid
-            if (isExamDurationValid(exam)) {
-                // Parse the form parameters to retrieve question IDs and corresponding user answers
-                Map<Long, String> userAnswers = new HashMap<>();
-                for (Map.Entry<String, String> entry : formParams.entrySet()) {
-                    // Assuming the formParams keys are in the format "answers[questionId]"
-                    String key = entry.getKey();
-                    if (key.startsWith("answers[")) {
-                        String questionIdStr = key.substring(key.indexOf('[') + 1, key.indexOf(']'));
-                        Long questionId = Long.parseLong(questionIdStr);
-                        userAnswers.put(questionId, entry.getValue());
-                    }
-                }
+            Map<Long, String> userAnswers = extractUserAnswers(formParams);
 
-                // Calculate the total score and identify incorrect questions
-                int totalScore = 0;
-                List<ExamQuestion> incorrectQuestions = new ArrayList<>();
-                for (ExamQuestion question : exam.getQuestions()) {
-                    String userAnswer = userAnswers.get(question.getId());
-                    if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
-                        totalScore++;
-                    } else {
-                        // If the answer is incorrect, set the user's answer for review and add to the list
-                        question.setUserAnswer(userAnswer);
-                        incorrectQuestions.add(question);
-                    }
-                }
+            int totalScore = 0;
+            List<ExamQuestionDisplay> displayQuestions = new ArrayList<>();
 
-                // Obtain the authenticated user's ID
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                Long userId = getUserIdFromAuthentication(authentication);
+            for (ExamQuestion question : exam.getQuestions()) {
+                String userAnswer = userAnswers.get(question.getId());
+                String userAnswerText = getAnswerText(question, userAnswer);
 
-                // Create an ExamSubmission object and populate it with data
-                ExamSubmission examSubmission = new ExamSubmission();
-                examSubmission.setUserId(userId);
-                examSubmission.setExamId(id);
-                examSubmission.setAnswers(new ArrayList<>(userAnswers.values()));
-                examSubmission.setScore(totalScore);
-
-                // Save the exam submission to the database
-                saveExamSubmission(examSubmission, userId);
+                ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
+                displayQuestion.setId(question.getId());
+                displayQuestion.setQuestionText(question.getQuestionText());
+                displayQuestion.setUserAnswer(userAnswerText);
+                displayQuestion.setCorrectAnswerText(getCorrectAnswerText(question));
                 
-                String userRole = authentication.getAuthorities().stream()
-                        .map(GrantedAuthority::getAuthority)
-                        .findFirst()
-                        .orElse("");
-
-             // Add attributes to the model for the view
-                model.addAttribute("score", totalScore);
-                model.addAttribute("totalQuestions", exam.getQuestions().size());
-                model.addAttribute("incorrectQuestions", incorrectQuestions);
-                model.addAttribute("userRole", userRole);
-
-                return "showScore"; 
-            } else {
-                model.addAttribute("message", "The exam has expired.");
+                if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
+                    totalScore++;
+                } else {
+                    displayQuestions.add(displayQuestion); // Add only incorrect questions
+                }
             }
+
+            model.addAttribute("score", totalScore);
+            model.addAttribute("totalQuestions", exam.getQuestions().size());
+            model.addAttribute("incorrectQuestions", displayQuestions);
+
+            return "showScore"; // Thymeleaf template to display the score and answers
         } else {
             model.addAttribute("message", "Exam not found.");
+            return "error"; // Error page template
         }
-
-        return "error"; // This can be a generic error page or specific to this context
     }
+
+    private String getAnswerText(ExamQuestion question, String answer) {
+        switch (question.getQuestionType()) {
+            case MULTIPLE_CHOICE:
+                return getOptionText(question, answer);
+            case TRUE_FALSE:
+                return answer.equals("A") ? "True" : "False";
+            case FILL_IN_THE_BLANK:
+                return answer;
+            default:
+                return "Invalid Answer";
+        }
+    }
+
+    
+    private String getCorrectAnswerText(ExamQuestion question) {
+        switch (question.getQuestionType()) {
+            case MULTIPLE_CHOICE:
+                return getOptionText(question, question.getCorrectAnswer());
+            case TRUE_FALSE:
+                return question.getCorrectAnswer().equals("A") ? "True" : "False";
+            case FILL_IN_THE_BLANK:
+                return question.getCorrectAnswer();
+            default:
+                return "Invalid Answer";
+        }
+    }
+
+    private String getOptionText(ExamQuestion question, String optionLetter) {
+        switch (optionLetter) {
+            case "A":
+                return question.getOptionA();
+            case "B":
+                return question.getOptionB();
+            case "C":
+                return question.getOptionC();
+            case "D":
+                return question.getOptionD();
+            default:
+                return "Invalid Option";
+        }
+    }
+
+
+    private Map<Long, String> extractUserAnswers(Map<String, String> formParams) {
+        Map<Long, String> userAnswers = new HashMap<>();
+        for (Map.Entry<String, String> entry : formParams.entrySet()) {
+            String key = entry.getKey();
+            if (key.startsWith("answers[")) {
+                Long questionId = Long.parseLong(key.substring(key.indexOf('[') + 1, key.indexOf(']')));
+                userAnswers.put(questionId, entry.getValue());
+            }
+        }
+        return userAnswers;
+    }
+
 
 
  // Helper method to obtain the authenticated user's ID
