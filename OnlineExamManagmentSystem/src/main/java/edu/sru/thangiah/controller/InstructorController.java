@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -1063,9 +1064,16 @@ public class InstructorController {
 
 		    // retrieve the Course entities based on the extracted the instructor
 		    List<Course> courses = courseRepository.findAllByInstructor(instructor);
+		    
+		    Map<Long, Long> courseStudentCountMap = new HashMap<>();
+		    for (Course course : courses) {
+		        Long studentCount = Long.valueOf(course.getStudents().size());
+		        courseStudentCountMap.put(course.getId(), studentCount); // Use course ID as key
+		    }
 
-		    // add the list of courses to the model for rendering in the view
+		    model.addAttribute("courseCounts", courseStudentCountMap);
 		    model.addAttribute("courses", courses);
+
 
 		    return "iv-course-list";
 		}

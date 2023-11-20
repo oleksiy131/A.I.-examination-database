@@ -74,6 +74,7 @@ $(function(){
             <tr>
                 <th>ID</th>
 				<th>Course Name</th>
+                <th>Student Count</th> 
                 <th>Edit</th>
                 <th>Delete</th>
                 
@@ -81,9 +82,10 @@ $(function(){
         </thead>
         <tbody>
             <!-- Use Thymeleaf to iterate through the list of students -->
-            <tr th:each="course : ${course}">
+            <tr th:each="course : ${courses}">
                 <td th:text="${course.id}"></td>
                 <td th:text="${course.courseName}"></td>
+                <td th:text="${courseCounts[course.id]}"></td> 
                 <td><a th:href="@{/schedule-manager/smv-edit-class/{id}(id=${course.id})}">Edit</a></td>
                   <td>
                 <a class="delete-link" th:href="@{/schedule-manager/delete/{id}(id=${course.id})}" onclick="return confirm('Are you sure?')">Delete</a>
