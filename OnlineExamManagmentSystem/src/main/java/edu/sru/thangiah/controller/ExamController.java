@@ -428,7 +428,7 @@ public class ExamController {
                 if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                     totalScore++;
                 } else {
-                    displayQuestions.add(displayQuestion); // Add only incorrect questions
+                    displayQuestions.add(displayQuestion); 
                 }
             }
 
