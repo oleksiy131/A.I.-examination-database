@@ -343,6 +343,7 @@ public class InstructorController {
     
 	@GetMapping("/students")
 	public String showStudentList(Model model) {
+			
 		// Retrieve the list of students from the repository
 		List<Student> students = (List<Student>) studentRepository.findAll();
 
@@ -371,28 +372,58 @@ public class InstructorController {
         return "iv-edit-student";
     }
 	
-	@PostMapping("/update/{id}")
-    public String updateStudent(@PathVariable("id") long id, @Validated Student student, 
-      BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            student.setStudentId(id);
-            return "update-user";
-        }
-        
-        // Debugging: Print the received student data
-        System.out.println("Received Student Data:");
-        System.out.println("ID: " + student.getStudentId());
-        System.out.println("First Name: " + student.getStudentFirstName());
-        System.out.println("Last Name: " + student.getStudentLastName());
-        System.out.println("Email: " + student.getStudentEmail());
-        System.out.println("Path Variable ID: " + id);
-        
-//        student.setStudentId(id);
-//        student.setRole(student.getRole());
-//        student.setStudentPassword(student.getStudentPassword());
-        studentRepository.save(student);
-        return "iv-edit-confirmation";
-    }
+	   @PostMapping("/iv-update/{id}")
+	    public String updateStudentIV(@PathVariable("id") long id, @Validated Student student, 
+	    	      BindingResult result, Model model, @RequestParam("newPassword") String newStudentPassword, 
+	    		  @RequestParam("confirmPassword") String confirmStudentPassword) {
+	    	        if (result.hasErrors()) {
+	    	            student.setStudentId(id);
+	    	            return "iv-update-user";
+	    	        }
+	    	        
+	    	        Student Updatestudent = studentRepository.findByStudentUsername(student.getStudentUsername()).orElse(null);
+	    	        
+	    	        Set<Course> studentCourses = Updatestudent.getCourses();
+	    	        
+	    	        System.out.println(studentCourses);
+	    	        
+	    	     // checking the user to exist and creating it if it does not already exist
+	    	        User user = userRepository.findByUsername(Updatestudent.getStudentUsername())
+	    	                .orElse(new User());  
+
+	    	        // checking that both the password and the confirm password field are the same
+	    	        if (!newStudentPassword.isEmpty() && !confirmStudentPassword.isEmpty()) {
+	    	            if (!newStudentPassword.equals(confirmStudentPassword)) {
+	    	                model.addAttribute("passwordError", "Passwords do not match");
+	    	                return "iv-edit-student";
+	    	            }
+	    	            
+	    	            String encryptedPassword = passwordEncoder.encode(newStudentPassword);
+	    	            Updatestudent.setStudentPassword(encryptedPassword);
+	    	            
+	    	            // updating the users password
+	    	            user.setPassword(encryptedPassword);
+	    	        }
+
+	    	        // updating the users username and email to match the student
+	    	        user.setUsername(Updatestudent.getStudentUsername());
+	    	        user.setEmail(Updatestudent.getStudentEmail());
+	    	        userRepository.save(user);  // Save the user to userRepository
+
+	    	        
+	    	        // Debugging: Print the received student data
+	    	        System.out.println("Received Student Data:");
+	    	        System.out.println("ID: " + Updatestudent.getStudentId());
+	    	        System.out.println("First Name: " + Updatestudent.getStudentFirstName());
+	    	        System.out.println("Last Name: " + Updatestudent.getStudentLastName());
+	    	        System.out.println("Email: " + Updatestudent.getStudentEmail());
+	    	        System.out.println("Path Variable ID: " + Updatestudent.getStudentId());
+	    	        
+	    	        Updatestudent.getCourses().addAll(studentCourses);
+	    	        
+	    	        studentRepository.save(Updatestudent);
+	        return "iv-edit-confirmation";
+	    }
 	
 	@GetMapping("/student/delete/{id}")
     public String deleteStudent(@PathVariable("id") long id, Model model) {
@@ -409,11 +440,22 @@ public class InstructorController {
 	
 	@GetMapping("/iv-student-list")
 	public String showStudentsListIV(Model model) {
-		// Retrieve the list of students from the repository
-		List<Student> students = (List<Student>) studentRepository.findAll();
 
-		// Add the list of students to the model for rendering in the HTML template
-		model.addAttribute("students", students);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		String instructorUser = auth.getName();
+
+		// find the instructor entity associated with the authenticated user
+		Instructor instructor = instructorRepository.findByInstructorUsername(instructorUser).orElse(null);
+
+		if (instructor != null) {
+	        List<Course> courses = courseRepository.findAllByInstructor(instructor);
+
+	        // Fetch students associated with the courses of the instructor
+	        List<Student> students = studentRepository.findAllByCoursesIn(courses);
+
+	        // Add the list of students to the model for rendering in the HTML template
+	        model.addAttribute("students", students);
+	    }
 
 		// Return the name of the HTML template to be displayed
 		return "iv-student-list";
@@ -499,28 +541,6 @@ public class InstructorController {
 	        return "redirect:/fail";
 	    }
 	}
-    @PostMapping("/iv-update/{id}")
-    public String updateStudentIV(@PathVariable("id") long id, @Validated Student student, 
-      BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            student.setStudentId(id);
-            return "iv-update-user";
-        }
-        
-        // Debugging: Print the received student data
-        System.out.println("Received Student Data:");
-        System.out.println("ID: " + student.getStudentId());
-        System.out.println("First Name: " + student.getStudentFirstName());
-        System.out.println("Last Name: " + student.getStudentLastName());
-        System.out.println("Email: " + student.getStudentEmail());
-        System.out.println("Path Variable ID: " + id);
-        
-//        student.setStudentId(id);
-//        student.setRole(student.getRole());
-//        student.setStudentPassword(student.getStudentPassword());
-        studentRepository.save(student);
-        return "iv-edit-confirmation";
-    }
     
 	@GetMapping("/associateIV")
 	public String associateStudentWithCourseFormIV(Model model) {

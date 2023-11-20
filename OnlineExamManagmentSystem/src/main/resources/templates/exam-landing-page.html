@@ -71,6 +71,7 @@
 
     <div class="content-container">
 		<form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return formValidation()">
+
             
             
             <label for="course">Your Course:</label>
@@ -133,10 +134,12 @@
             document.getElementById('infoDuration').textContent = 'Duration: ' + duration + ' minutes';
         }
       }
+
       
       function displayError(inputId, messageId, message) {
         document.getElementById(messageId).textContent = message;
         document.getElementById(inputId).classList.add('error-input');
+
     }
 
     function clearError(inputId, messageId) {
@@ -196,6 +199,7 @@
 	document.getElementById('duration').addEventListener('input', validateDuration);
     
 
+
     function disableInputs(isDisabled) {
             var inputs = document.querySelectorAll('input, select'); 
 
@@ -218,6 +222,7 @@
         		return false;
     		}
 		}
+
 
         $(function () {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function () {

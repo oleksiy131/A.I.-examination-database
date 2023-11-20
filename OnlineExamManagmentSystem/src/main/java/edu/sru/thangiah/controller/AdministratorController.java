@@ -37,6 +37,7 @@ import edu.sru.thangiah.service.EmailService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -437,50 +438,55 @@ public class AdministratorController {
 	
 	@Transactional
 	@PostMapping("/av-update/{id}")
-    public String updateStudentAV(@PathVariable("id") long id, @Validated Student student, 
-      BindingResult result, Model model, @RequestParam("newPassword") String newStudentPassword, 
-	  @RequestParam("confirmPassword") String confirmStudentPassword) {
-        if (result.hasErrors()) {
-            student.setStudentId(id);
-            return "av-edit-student";
-        }
-        // Fetch the user (or create a new one if not found)
-        User user = userRepository.findByUsername(student.getStudentUsername())
-                .orElse(new User());  
+	public String updateStudentAV(@PathVariable("id") long id, @Validated Student student, BindingResult result,
+			Model model, @RequestParam("newPassword") String newStudentPassword,
+			@RequestParam("confirmPassword") String confirmStudentPassword) {
+		if (result.hasErrors()) {
+			student.setStudentId(id);
+			return "av-edit-student";
+		}
+		
+		Student Updatestudent = studentRepository.findByStudentUsername(student.getStudentUsername()).orElse(null);
 
-        // Only process password if both fields are not empty
-        if (!newStudentPassword.isEmpty() && !confirmStudentPassword.isEmpty()) {
-            // Validate the new password and confirm password
-            if (!newStudentPassword.equals(confirmStudentPassword)) {
-                model.addAttribute("passwordError", "Passwords do not match");
-                return "av-edit-student";
-            }
-            
-            String encryptedPassword = passwordEncoder.encode(newStudentPassword);
-            student.setStudentPassword(encryptedPassword);
-            
-            // Update user's password
-            user.setPassword(encryptedPassword);
-        }
+		Set<Course> studentCourses = Updatestudent.getCourses();
 
-        // Update other user properties
-        user.setUsername(student.getStudentUsername());
-        user.setEmail(student.getStudentEmail());
-        userRepository.save(user);  // Save the user to userRepository
+		System.out.println(studentCourses);
 
-        // Save the student
-        studentRepository.save(student);
-        
-        // Debugging: Print the received student data
-        System.out.println("Received Student Data:");
-        System.out.println("ID: " + student.getStudentId());
-        System.out.println("First Name: " + student.getStudentFirstName());
-        System.out.println("Last Name: " + student.getStudentLastName());
-        System.out.println("Email: " + student.getStudentEmail());
-        System.out.println("Path Variable ID: " + id);
-        
-        return "av-edit-confirmation";
-    }
+		// checking the user to exist and creating it if it does not already exist
+		User user = userRepository.findByUsername(Updatestudent.getStudentUsername()).orElse(new User());
+
+		// checking that both the password and the confirm password field are the same
+		if (!newStudentPassword.isEmpty() && !confirmStudentPassword.isEmpty()) {
+			if (!newStudentPassword.equals(confirmStudentPassword)) {
+				model.addAttribute("passwordError", "Passwords do not match");
+				return "av-edit-student";
+			}
+
+			String encryptedPassword = passwordEncoder.encode(newStudentPassword);
+			Updatestudent.setStudentPassword(encryptedPassword);
+
+			// updating the users password
+			user.setPassword(encryptedPassword);
+		}
+
+		// updating the users username and email to match the student
+		user.setUsername(Updatestudent.getStudentUsername());
+		user.setEmail(Updatestudent.getStudentEmail());
+		userRepository.save(user); // Save the user to userRepository
+
+		// Debugging: Print the received student data
+		System.out.println("Received Student Data:");
+		System.out.println("ID: " + Updatestudent.getStudentId());
+		System.out.println("First Name: " + Updatestudent.getStudentFirstName());
+		System.out.println("Last Name: " + Updatestudent.getStudentLastName());
+		System.out.println("Email: " + Updatestudent.getStudentEmail());
+		System.out.println("Path Variable ID: " + Updatestudent.getStudentId());
+
+		Updatestudent.getCourses().addAll(studentCourses);
+
+		studentRepository.save(Updatestudent);
+		return "av-edit-confirmation";
+	}
 	
 	@GetMapping("/student/delete/{id}")
 	@PreAuthorize("hasRole('ADMINISTRATOR')")
