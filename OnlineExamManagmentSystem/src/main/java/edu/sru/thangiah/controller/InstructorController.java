@@ -51,6 +51,7 @@ import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
+import edu.sru.thangiah.service.ExamService;
 import edu.sru.thangiah.service.ExcelExportService;
 import jakarta.servlet.http.HttpSession;
 import edu.sru.thangiah.repository.UserRepository;
@@ -69,6 +70,8 @@ public class InstructorController {
 	private ScheduleManagerRepository scheduleManagerRepository;
 	@Autowired
 	private ExcelExportService excelExportService;
+	@Autowired
+	private ExamService examService;
 	
 	@RequestMapping("/instructor_homepage")
 	public String showInstructorHomepage() {
@@ -105,10 +108,14 @@ public class InstructorController {
             // Handle the exception appropriately
             e.printStackTrace();
         }
-       
+
+        // Add chapters to the model
+        List<Integer> chapters = examService.getAllChapters();
+        model.addAttribute("chapters", chapters);
+
         return "listExamQuestions";
     }
-    
+
     
     
     @GetMapping("/exam-landing-page")

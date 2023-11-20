@@ -67,6 +67,15 @@ public class ExamController {
         this.examService = examService;
     }
     
+    
+    @GetMapping("/exam-questions/filterByChapter")
+    public String filterExamQuestionsByChapter(@RequestParam("selectedChapter") int chapter, Model model) {
+        List<ExamQuestion> questions = examService.generateQuestionsForChapter(chapter);
+        model.addAttribute("examQuestions", questions);
+        model.addAttribute("chapters", examService.getAllChapters());
+        return "listExamQuestions"; 
+    }
+    
     @GetMapping("/edit/{id}")
     public String editExam(@PathVariable Long id, Model model) {
         Exam exam = examService.getExamById(id);
