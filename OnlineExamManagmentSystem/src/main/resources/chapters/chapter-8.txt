@@ -1,0 +1,399 @@
+1.	The following are all mobile computing devices EXCEPT:
+A.	laptop computers.
+B.	automobile anti-lock brake systems.
+C.	cellular telephones.
+D.	personal digital assistants.
+Ans: B	
+
+
+2.	Which of the following is NOT a feature of mobile computing with cell phones and PDAs?
+A.	Availability of personal information management software at all times
+B.	Ability to communicate while away from the office or home
+C.	Fast and inexpensive Internet access relative to desktop computing
+D.	Convenience for frequent travelers
+Ans: C	
+
+
+3.	If you want a mobile computing device that recognizes handwritten characters as a standard feature, your best option is a:
+A.	cellular phone.
+B.	laptop computer.
+C.	personal information management system.
+D.	tablet PC.
+Ans: D	
+
+4.	The least expensive mobile communication device is a:
+A.	PDA.
+B.	pager.
+C.	cell phone.
+D.	MP3 player.
+Ans: B	
+
+5.	The type of pager that includes a keyboard is a(n):
+A.	alphanumeric pager.
+B.	numeric pager.
+C.	two-way pager.
+D.	voice pager.
+Ans: C	
+
+
+6.	In terms of pager communication, the word channel refers to a(n):
+A.	frequency.
+B.	unique code.
+C.	pager ID.
+D.	receiver.
+Ans: A	
+7.	The operating system of a cell phone resides in:
+A.	volatile memory.
+B.	the CPU.
+C.	virtual memory.
+D.	read-only memory.
+Ans: D	
+
+
+8.	Symbian is:
+A.	a popular line of cell phones.
+B.	the brand name for a sophisticated PDA.
+C.	an operating system for cell phones.
+D.	one of the leading two-way paging devices.
+Ans: C	
+
+
+9.	Execution of the operating system instructions within a cell phone is accomplished by:
+A.	internal memory chips.
+B.	the CPU.
+C.	the transceiver.
+D.	a ROM chip.
+Ans: B	
+
+
+10.	Translating the voice input from the microphone into signals that the CPU can understand is accomplished via a cell phone’s:
+A.	analog to digital converter chip.
+B.	digital signal processor.
+C.	base transceiver.
+D.	RAM chip.
+Ans: A	
+
+11.	The purpose of a cell phone’s digital signal processor is to:
+A.	act as a modem by converting signals from analog to digital and vice versa.
+B.	compress or decompress signals.
+C.	process signals by transporting them to a mobile switching center.
+D.	amplify and translate digital signals.
+Ans: B	
+
+12.	Each cell in a cellular network is centered around a:
+A.	mobile switching center.
+B.	signal transmission line.
+C.	cellular central office.
+D.	base transceiver station.
+Ans: D	
+
+
+13.	A mobile switching center decides which cell your cell phone belongs in by:
+A.	using a GPS system to determine its geographical location.
+B.	monitoring the signal strength between the cell phone and a base station.
+C.	selecting the cell with the lowest current call volume.
+D.	locating the short message service on the Internet backbone.
+Ans: B	
+
+
+14.	Store-and-forward technology facilitates:
+A.	cell phone text messaging.
+B.	inexpensive walkie-talkie communications.
+C.	portable MP3 file storage.
+D.	file transfer between PDAs and desktop computers.
+Ans: A	
+
+15.	Unlike SMS, MMS provides capabilities for:
+A.	call forwarding and call waiting.
+B.	cell overlapping.
+C.	audio and video transmission.
+D.	cell phone text messaging.
+Ans: C	
+
+16.	WML is a:
+A.	wireless Internet service provider.
+B.	special browser for cell phones and PDAs.
+C.	format for representing wireless multimedia files.
+D.	language for displaying web content on handheld devices.
+Ans: D	
+
+
+17.	In order to support mobile web browsing, phone companies offering cell phone calling plans usually double 
+as: 
+A.	microbrowsers.
+B.	wireless ISPs.
+C.	FTP sites.
+D.	servers for pagers.
+Ans: B	
+
+
+18.	A popular format for storing high-quality music files is: 
+A.	WML.
+B.	P2P.
+C.	MP3.
+D.	MMC.
+Ans: C	
+
+19.	The ____________ rate of digital conversion of music content will affect the size and quality of the MP3 
+file. 
+A.	sampling
+B.	data transfer
+C.	flash conversion
+D.	synchronization
+Ans: A	
+
+
+20.	A flash card is an example of a: 
+A.	volatile memory chip.
+B.	non-volatile memory chip.
+C.	volatile magnetic disk.
+D.	non-volatile magnetic disk.
+Ans: B	
+
+
+21.	A durable, matchbook-sized flash card that holds up to 4GB is called: 
+A.	Compact Flash.
+B.	SmartMedia.
+C.	Secure Digital.
+D.	Memory Stick.
+Ans: A	
+
+
+22.	A fast flash card that offers encryption capabilities is called: 
+A.	Compact Flash.
+B.	SmartMedia.
+C.	Secure Digital.
+D.	Memory Stick.
+Ans: C	
+
+
+23.	The advantage of a FireWire port over a USB port for file transfer to MP3 devices is: 
+A.	size.
+B.	security.
+C.	storage capacity.
+D.	speed.
+Ans: D	
+
+
+24.	The success and popularity of the MP3 site called Napster and its clones was made possible largely because 
+of: 
+A.	large storehouses of centrally located MP3 files.
+B.	the use of peer-to-peer file sharing.
+C.	direct links to the web sites of major recording studios.
+D.	approval of the music industry and recoding artists.
+Ans: B	
+
+25.	In the future, computing technology will be woven directly into our clothing via flexible synthetic “yarns” 
+called : 
+A.	digital threads.
+B.	yarn chips.
+C.	textile processors.
+D.	electrotextiles.
+Ans: D	
+
+
+26.	Most PDAs include a stylus for the purpose of: 
+A.	user input.
+B.	memory storage.
+C.	instruction processing.
+D.	data transfer.
+Ans: A	
+
+
+27.	The ____________ text system requires special input notation when you handwrite your input to a PDA. 
+A.	MS Transcriber
+B.	Graffiti
+C.	Blueboard
+D.	Palmcode
+Ans: B	
+
+
+28.	OMAP, Xscale, and Dragonball are all examples of: 
+A.	tablet computer operating systems.
+B.	MP3 devices.
+C.	PDA processors.
+D.	global positioning systems.
+Ans: C	
+
+
+29.	All of the following are advantages of the Palm OS over the PocketPC operating system EXCEPT: 
+A.	lower memory requirements.
+B.	more support of third-party application vendors.
+C.	lower cost.
+D.	internal support for MP3 and video clip processing.
+Ans: D	
+
+
+30.	The operating system in a PDA is stored in: 
+A.	magnetic disk.
+B.	random access memory.
+C.	read only memory.
+D.	flash memory.
+Ans: C	
+
+
+31.	Unlike a desktop or laptop computer, most PDAs do not include: 
+A.	a central processing unit.
+B.	an internal hard drive.
+C.	an infrared port.
+D.	wireless networking capabilities.
+Ans: B	
+
+
+32.	When a PDA is turned off, battery power is used to: 
+A.	execute programs in the background.
+B.	keep ROM from erasing.
+C.	make the CPU continue executing instructions.
+D.	maintain the contents of RAM.
+Ans: D	
+
+
+33.	Adding storage capacity to most PDAs requires the use of: 
+A.	flash cards.
+B.	floppy disks.
+C.	expansion slots.
+D.	internal hard drives.
+Ans: A	
+
+
+34.	The type of rechargeable battery used in newer PDAs is typically a(n): 
+A.	AAA.
+B.	nine volt.
+C.	lithium ion.
+D.	AA.
+Ans: C	
+
+
+35.	By placing your PDA in a ____________, you can connect it to the USB port of a desktop computer in 
+order to synchronize files.
+A.	flash card
+B.	cradle
+C.	microdrive
+D.	Bluetooth synchronizer
+Ans: B	
+
+
+36.	Wireless file transfer without the need for line-of-sight is accomplished using:
+A.	IrDA.
+B.	USB.
+C.	Bluetooth.
+D.	flash cards.
+Ans: C	
+
+
+37.	The standard used for enabling handheld devices such as PDAs to connect to the Internet in a wireless 
+environment is called:
+A.	WAP.
+B.	WiFi.
+C.	802.11.
+D.	FTP.
+Ans: A	
+
+
+38.	____________ is a technology that allows a PDA to obtain a subset of web site information, often 
+eliminating unnecessary graphics and links, in order to reduce bandwidth and storage requirements.
+A.	Wireless access protocol
+B.	Microbrowsing
+C.	Page reduction
+D.	Web clipping
+Ans: D	
+
+
+39.	Blueboard is:
+A.	PDA software that enables multiple users to simultaneously draw on a common “surface.”
+B.	a technology that allows wireless connectivity between devices without line-of-sight.
+C.	a method for improving performance of Internet access for handheld devices.
+D.	the name of a PDA hardware accessory.
+Ans: A	
+
+
+40.	The satellites that comprise the Global Positioning System are run and operated by the:
+A.	National Weather Service.
+B.	U.S. military.
+C.	United Nations.
+D.	GPS Consortium.
+Ans: B	
+
+
+41.	The main characteristic of a tablet PC is its:
+A.	advanced handwriting recognition.
+B.	portable keyboard and mouse.
+C.	ability to fit in a person’s pocket.
+D.	use of nanotechnology.
+Ans: A	
+
+
+42.	Which of the following products is a CPU for tablet PCs?
+A.	Verichip
+B.	PEG-NZ90
+C.	Crusoe 5800
+D.	Intel Xscale
+Ans: C	
+
+
+43.	Which of the following statements about Tablet PCs is FALSE?
+A.	They can run any Windows XP application.
+B.	They typically include built-in CD drives.
+C.	They have processing power comparable to desktop computers.
+D.	They support speech-recognition.
+Ans: B	
+
+
+44.	The Intel Centrino package includes all of the following components EXCEPT the:
+A.	Intel 855 chipset.
+B.	Intel-Pro wireless network connection.
+C.	Intel Xscale CPU.
+D.	Intel Pentium M processor.
+Ans: C	
+
+
+45.	The Intel Pentium-M series is particularly well-suited for mobile computing because of its:
+A.	low power consumption.
+B.	wireless networking capability.
+C.	hot-swapping features.
+D.	PDA and cell phone compatibility.
+Ans: A	
+
+
+46.	A laptop operating system’s ____________ settings support such functions as automatically shutting down 
+the hard drive and putting the computer into hibernation mode.
+A.	hardware control profile
+B.	auto-stop management
+C.	battery configuration
+D.	power management profile
+Ans: D	
+
+
+47.	The type of laptop battery that is NOT subject to memory effects is:
+A.	nickel based.
+B.	magnesium alloy.
+C.	lithium ion.
+D.	nine-volt.
+Ans: C	
+
+
+48.	Which of the following notebook upgrades will be most likely to improve battery life?
+A.	Installing a zip drive
+B.	Adding more RAM
+C.	Switching from lithium-based to nickel-based batteries
+D.	Adding more hard disk capacity
+Ans: B	
+
+
+
+
+49.	Unlike typical desktops, a typical laptop computer has an externally visible slot into which you can insert 
+a(n) ____________ for external devices such as modems or wireless adapters.
+A.	PC card
+B.	flash card
+C.	battery
+D.	expansion card
+Ans: A	
+
+
+50.	All of the following are true about a desktop computer compared to laptop EXCEPT:
+A.	desktop systems are more reliable.
+B.	desktop systems are a better value.
+C.	laptop computers typically last longer than desktop systems.
+D.	laptop computers offer fewer expandability options.
+Ans: C	

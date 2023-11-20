@@ -1,0 +1,427 @@
+1. According to Moore’s law:
+A. computer prices will decrease dramatically every year.
+B. memory storage size will double every year.
+C. hard disk space will increase into the terabyte range within a decade.
+D. CPU capacity will double every 18 months.
+Ans: D	
+
+
+2. The portion of the CPU that coordinates the activities of other components of the computer is the:
+A. motherboard.
+B. coordination board.
+C. control unit.
+D. ALU.
+Ans: C	
+
+
+3. Mathematical calculations and comparison decisions are performed by the:
+A. numerical calculator.
+B. central calculation unit.
+C. control unit.
+D. ALU.
+Ans: D	
+
+
+4. The terms megahertz and gigahertz refer to the number of ____________ per second that a CPU can perform.
+A. machine cycles
+B. arithmetic calculations
+C. video updates
+D. program instructions
+Ans: A	
+
+
+5. CPU usage refers to the:
+A. percentage of program instructions that use the CPU.
+B. amount of time during a machine cycle involved in CPU activities.
+C. percentage of time that the CPU is actively working.
+D. number of CPUs that are installed on the computer.
+Ans: C	
+
+
+6. In Windows XP, the clock speed of your system’s CPU can be found in the:
+A. Task Manager’s Performance tab.
+B. System Properties dialog for My Computer.
+C. Computer Management option from the Control Panel.
+D. System Information utility available from the Accessories programs.
+Ans: B	
+
+
+7. There is an economic advantage when upgrading your computer to purchase:
+A. the fastest CPU on the market.
+B. an entirely new motherboard.
+C. a CPU slightly slower than the fastest on the market.
+D. a CPU with multiple arithmetic logic units.
+Ans: C	
+
+
+8. A separate expansion card containing a CPU is called a:
+A. piggyback card.
+B. CPU supplement.
+C. chip frame.
+D. daughterboard.
+Ans: D	
+
+
+9. The cooling device that helps to cool a CPU is called a:
+A. heat sink.
+B. CPU cooling system.
+C. system fan.
+D. thermostat.
+Ans: A	
+
+
+10. Volatile storage refers to:
+A. changes to data as updates are made to the storage device.
+B. loss of data on the storage device when power is shut off.
+C. the ability of the storage device to be dynamically installed and removed.
+D. the propensity for a storage device’s quality to degrade over time.
+Ans: B	
+
+
+11. The time it takes a CPU to retrieve data from RAM is typically a few:
+A. milliseconds.
+B. microseconds.
+C. nanoseconds.
+D. picoseconds.
+Ans: C	
+
+
+12. The terms SIMMs, DIMMs, and RIMMs refer to different types of:
+A. motherboards.
+B. processing units.
+C. disk drives.
+D. memory cards.
+Ans: D	
+
+
+
+
+
+
+
+
+13. In Windows XP, the amount of available memory that the system has at a particular moment can be found in the:
+A. Task Manager’s Performance tab.
+B. System Properties dialog for My Computer.
+C. Computer Management option from the Control Panel.
+D. System Information utility available from the Accessories programs.
+Ans: A	
+
+
+14. The portion of memory that is used for the operating system, and that represents the minimal possible RAM that must be available in order for the computer to run, is called ____________ RAM.
+A. physical
+B. operating
+C. kernel
+D. task
+Ans: C	
+
+
+15. The ratio of speed between accessing data from virtual memory vs. accessing data from physical memory is approximately:
+A. 100 : 1.
+B. 1,000 : 1.
+C. 1,000,000 : 1.
+D. 1,000,000,000 : 1.
+Ans: C	
+
+
+16. If your computer is memory bound, it means that:
+A. it contains more RAM than is necessary.
+B. there is not enough RAM for the processing demands.
+C. the CPU is performing too many fetches of data from RAM in a typical machine cycle.
+D. the CPU needs a replacement SIMMs chip.
+Ans: B	
+
+
+17. The PF Usage portion of the Task Manager’s performance tab indicates the:
+A. processing frequency of the CPU.
+B. size of the page file in virtual memory.
+C. number of page swaps per second that are taking place.
+D. total RAM that is installed on the system.
+Ans: B
+
+
+18. Which of the following is the fastest magnetic storage device?
+A. DRAM
+B. Zip drive
+C. Hard disk
+D. Flash card
+Ans: C	
+
+
+
+
+
+19. On a hard disk, a sector is a(n):
+A. pie-shaped wedge.
+B. concentric circle.
+C. catalog used to keep track of files.
+D. address identifying the location of a file.
+Ans: A	
+
+
+20. Low-level formatting of a hard disk will:
+A. initialize the file allocation table.
+B. reallocate data in order to make disk access more efficient.
+C. defragment the disk.
+D. create tracks and sectors on the magnetic surface.
+Ans: D	
+
+
+21. ____________ time refers to the amount of time that it takes for the read/write head to position over the correct track.
+A. Access
+B. Latency
+C. Seek
+D. Transfer
+Ans: C	
+
+
+22. The spin rate of the hard disk drive will affect ____________ time of a read or write.
+A. cycle
+B. latency
+C. seek
+D. transfer
+Ans: B	
+
+
+23. Read/write heads are located on a hard disk drive’s:
+A. track.
+B. sector.
+C. platter.
+D. arm.
+Ans: D	
+
+
+24. A read/write head should never come closer to the disk platter than approximately:
+A. 0.5 microinches.
+B. one millimeter.
+C. the width of a human hair.
+D. a quarter inch.
+Ans: A	
+
+
+
+
+
+
+
+25. Windows XP requires approximately ____________ bytes of hard disk space.
+A. 100 million
+B. 500 million
+C. 1.5 billion
+D. 3 billion
+Ans: C
+
+
+26. IDE and SCSI refer to different types of:
+A. RAM chips.
+B. hard disk drives.
+C. data ports.
+D. memory cards.
+Ans: B	
+
+
+27. The main advantage of an SCSI drive over an IDE drive is:
+A. speed.
+B. storage capacity.
+C. cost.
+D. ease of use.
+Ans: A	
+
+
+28. Which of the following portable storage devices is likely to have the greatest storage capacity?
+A. Zip disk
+B. CD
+C. Flash card
+D. DVD
+Ans: D	
+
+
+29. Which of the following is a magnetic storage device?
+A. Zip disk
+B. CD
+C. Flash card
+D. DVD
+Ans: A	
+
+
+30. Pits in the medium and use of high-speed lasers are characteristic of:
+A. floppy disk drives.
+B. DVD drives
+C. flash cards.
+D. RAM chips.
+Ans: B	
+
+
+
+
+
+
+
+31. Which of the following is an optical storage medium that allows storage of data multiple times?
+A. Zip disk
+B. DVD
+C. CD-RW
+D. Flash card
+Ans: C	
+
+
+32. 
+When reporting the speed of a CD-RW drive as 40x12x48, the order of the speeds is:
+A. record --> rewrite --> playback.
+B. record --> playback --> rewrite.
+C. playback --> rewrite --> record.
+D. playback --> record --> rewrite.
+Ans: A	
+
+
+33. For a CD, a speed of 40x means:
+A. 40,000 bytes per second.
+B. 6,000 kilobytes per second.
+C. 80 megabytes per second.
+D. 12,000 kilobytes per second.
+Ans: B	
+
+
+34. Some flash memory comes in a stick that plugs directly into a(n) ____________, eliminating the need for a separate card reader.
+A. DRAM chip
+B. RAM reading device
+C. USB port.
+D. expansion card
+Ans: C	
+
+
+35. The device contained within the system unit that converts binary data into the images that display on the monitor is called a:
+A. CRT.
+B. video card.
+C. image processor.
+D. VRAM device.
+Ans: B	
+
+
+36. 
+The minimum amount of VRAM recommended for serious computer gaming is:
+A. 16 MB.
+B. 24 MB.
+C. 64 MB.
+D. 128 MB.
+Ans: C	
+
+
+
+
+
+37. Bit depth refers to the:
+A. density of pits in an optical storage device.
+B. allowable range of values that a byte can represent.
+C. data transfer speed of a video card.
+D. space allocated for representing pixel colors.
+Ans: D	
+
+
+38. A 256-color mode monitor requires ____________ bit(s) for representing each pixel’s color.
+A. 1
+B. 8
+C. 24
+D. 256
+Ans: B	
+
+
+39. If a CRT and an LCD monitor are both stated as being 21 inches, then:
+A. the relative viewing sizes of the CRT and LCD depend on the manufacturer.
+B. the CRT’s viewing size is equal to the LCD’s viewing size.
+C. the CRT’s viewing size is larger than the LCD’s viewing size.
+D. the CRT’s viewing size is smaller than the LCD’s viewing size.
+Ans: D	
+
+
+40. Increasing the resolution of a monitor will:
+A. decrease the size of the images.
+B. increase the size of the images.
+C. result in a faster refresh rate.
+D. result in a slower refresh rate.
+Ans: A	
+
+
+41. ____________ speakers do not require an external power source.
+A. Amplified
+B. Plug and play
+C. Dolby
+D. Unamplified
+Ans: D	
+
+
+42. A subwoofer enables the speaker to better reproduce:
+A. low-frequency sounds.
+B. low-volume sounds. 
+C. high-frequency sounds.
+D. high-volume sounds. 
+Ans: A	
+
+
+43. The computer system’s sound card will be located:
+A. in the speakers.
+B. on the motherboard. 
+C. in a USB port.
+D. in a drive bay. 
+Ans: B	
+
+44. Enabling true surround sound in your computer’s audio system requires the use of:
+A. amplified speakers.
+B. 3D sound cards. 
+C. subwoofers.
+D. Dolby 5.1 sound cards. 
+Ans: D	
+
+
+45. The fastest download of a digital camera’s pictures onto a computer’s hard drive will be accomplished via a(n) ____________ port.
+A. serial
+B. USB 1.1
+C. FireWire
+D. Ethernet 
+Ans: C	
+
+
+46. Connecting to the Internet using a cable modem is best accomplished via a(n) ____________ port.
+A. serial
+B. USB 1.1
+C. Firewire
+D. Ethernet 
+Ans: D	
+
+
+47. Although serial ports are being phased out, they are still adequate for connecting:
+A. printers.
+B. external 56K modems.
+C. Zip drives.
+D. external cable modems. 
+Ans: B	
+
+
+48. Another term for IEEE 1394 is:
+A. IrDA.
+B. USB.
+C. FireWire.
+D. Bluetooth. 
+Ans: C	
+
+
+49. Radio wave transmission is a feature of ____________ ports.
+A. IrDA
+B. MIDI
+C. USB 2
+D. Bluetooth
+Ans: D	
+
+
+
+
+
+50. ____________ ports are used for connecting electronic synthesizers to computers.
+A. IrDA
+B. MIDI
+C. USB 2
+D. Bluetooth
+Ans: B	
+
+
+

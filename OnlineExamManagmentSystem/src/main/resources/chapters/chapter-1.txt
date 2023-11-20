@@ -1,0 +1,249 @@
+38. This provides the fuel for a computer system.
+A. People
+B. Data
+C. Hardware
+D. Software
+Ans: B
+
+
+56. Operating systems form the foundation of the system software category of 
+A. software.
+B. hardware.
+C. processing.
+D. applications.
+Ans: A
+
+
+
+
+1. Retail employees typically use ____________ terminals to process sales transactions.
+A. sales processing
+B. transaction point
+C. automatic teller
+D. point of sale
+Ans: D
+
+
+1. The process of ____________ involves automated study of consumer buying patterns in order to support marketing, inventory replenishment, and pricing decisions.
+A. transaction processing
+B. data mining
+C. simulation
+D. information processing
+Ans: B
+
+
+1. The engineering discipline that involves construction of molecularly-sized computing devices is called: 
+A. nanotechnology.
+B. molecular processing.
+C. silicon grafting.
+D. nanoscience.
+Ans: A
+
+
+1. The prefix that stands for “billionth” is: 
+A. giga.
+B. tera.
+C. nano.
+D. peta.
+Ans: C
+
+
+1. A small biomedical device currently on the market that can be implanted underneath the skin for identification purposes is called the: 
+A. Identitron.
+B. Verichip.
+C. Digicard.
+D. Nanoguard.
+Ans: B
+
+
+1. The four main functions of a computer are: 
+A. input, processing, output, and storage.
+B. learning, thinking, intelligence, and virtuosity.
+C. data, information, bits, and bytes.
+D. hardware, software, modeling, and operations.
+Ans: A
+
+
+1. The primary purpose of a computer is to process _____________ and convert it into information. 
+A. electricity
+B. data
+C. raw material
+D. a bit
+Ans: B
+
+
+1. Bit refers to a: 
+A. computer language.
+B. CPU instruction.
+C. 0 or 1 value.
+D. digital representation of an alphabetic character.
+Ans: C
+
+
+1. There are ____________ bits in a byte. 
+A. two
+B. four
+C. six
+D. eight
+Ans: D
+
+
+1. In computer language, each letter, number, and an array of special characters consist of:
+A. 8 kilobytes.
+B. 8 bytes.
+C. a bit.
+D. 8 bits.
+Ans: D
+
+
+1. Which of the following is the correct sequence of smallest to largest unit of storage size? 
+A. megabyte --> terabyte --> gigabyte --> kilobyte --> petabyte
+B. kilobyte --> megabyte --> gigabyte --> terabyte --> petabyte
+C. kilobyte --> megabyte --> gigabyte --> petabyte --> terabyte
+D. kilobyte --> megabyte --> petabyte --> terabyte --> gigabyte
+Ans: B
+
+
+1. The prefix kilo refers to approximately: 
+A. one thousand.
+B. one million.
+C. one hundred.
+D. one billion.
+Ans: A
+
+
+1. Computers work in: 
+A. machine linguistics.
+B. binary language.
+C. HTML code.
+D. bit language.
+Ans: B
+ 
+
+
+1. The “brains” of the computer which executes the instructions, is called the: 
+A. CPU.
+B. RAM.
+C. motherboard.
+D. system unit.
+Ans: A
+
+
+1. Instructions and data that are about to be processed by the CPU are located in:  
+A. a CD-ROM.
+B. RAM.
+C. the hard disk.
+D. the motherboard.
+Ans: B
+
+
+1. The circuitry that includes the CPU and memory chips is located on the:   
+A. system unit.
+B. operating system.
+C. motherboard.
+D. computer platform.
+Ans: C
+
+ 
+1. All of the following are considered to be storage devices EXCEPT a:   
+A. floppy disk.
+B. CPU.
+C. CD.
+D. hard disk drive.
+Ans: B
+
+1. What is the correct association between a hardware component and a computer function?   
+A. Monitor --> input
+B. Mouse --> input
+C. CPU --> storage
+D. Hard disk --> processing
+Ans: B
+
+
+1. The main difference between application and system software is that:   
+A. application software is composed of program instructions but system software is not.
+B. application software is stored in memory whereas system software is only in the CPU.
+C. system software is unnecessary whereas application software must be present on the computer.
+D. system software manages hardware whereas application software performs user tasks.
+Ans: D
+
+
+1. A document created in a word processing program or a budget created in a spreadsheet are both examples of documents created in:
+A. application software.
+B. system software.
+C. an operating system.
+D. a Windows platform.
+Ans: A
+
+
+1. Which of the following is an example of system software?   
+A. Word processor
+B. Operating system
+C. Management information system
+D. Spreadsheet 
+Ans: B
+
+
+1. The term that refers to computers that provide resources to other computers in a network is:   
+A. server.
+B. mainframe.
+C. platform.
+D. resource provider.
+Ans: A
+
+
+1. A scientific institution performing intensive mathematical operations for a complex model that requires extremely powerful computing capabilities will most likely use a(n):   
+A. supercomputer.
+B. PC.
+C. mainframe.
+D. ISP.
+Ans: A
+
+1.	All of the following are examples of real security and privacy risks EXCEPT:
+A.	hackers.
+B.	spam.
+C.	viruses.
+D.	identity theft.
+Ans: B
+
+5.	The ability to recover and read deleted or damaged files from a criminal’s computer is an example of a law enforcement specialty called:
+A.	robotics.
+B.	simulation.
+C.	computer forensics.
+D.	animation.
+Ans: C
+
+6.	Which of the following is NOT one of the four major data processing functions of a computer?
+A.	gathering data
+B.	processing data into information
+C.	analyzing the data or information
+D.	storing the data or information
+Ans: C
+
+8.	Surgeons can perform delicate operations by manipulating devices through computers instead of manually. This technology is known as:
+A.	robotics.
+B.	computer forensics.
+C.	simulation.
+D.	forecasting.
+Ans: A
+
+9.	Technology no longer protected by copyright, available to everyone, is considered to be:
+A.	proprietary.
+B.	open.
+C.	experimental.
+D.	in the public domain.
+Ans: A
+
+10.	____________ is the study of molecules and structures whose size ranges from 1 to 100 nanometers.
+A.	Nanoscience
+B.	Microelectrodes
+C.	Computer forensics
+D.	Artificial intelligence
+Ans: A
+
+13.	The name for the way that computers manipulate data into information is called:
+A.	programming.
+B.	processing.
+C.	storing.
+D.	organizing.
+Ans: B
