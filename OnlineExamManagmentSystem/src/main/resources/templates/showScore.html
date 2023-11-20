@@ -1,32 +1,113 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Exam Score</title>
+    <title>Exam Score Report</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #007055;
+        }
+
+        .score-report {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .score-report p {
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #007055;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+        .footer a {
+            color: #007055;
+            text-decoration: none;
+            border: 1px solid #007055;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            background-color: #007055;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Exam Score</h1>
-    <p>Your score is: <strong th:text="${score}"></strong> out of <strong th:text="${totalQuestions}"></strong></p>
+    <div class="header">
+        <h1>Exam Score Report</h1>
+    </div>
 
-    <h2>Review your answers</h2>
-    <div th:if="${incorrectQuestions.size() > 0}">
-    <p>The following questions were answered incorrectly:</p>
-    <ul>
-        <li th:each="question : ${incorrectQuestions}">
-            <p><strong>Question:</strong> <span th:text="${question.questionText}"></span></p>
-            <p><strong>Your Answer:</strong> <span th:text="${question.userAnswer}"></span></p> <!-- This line displays the user's answer -->
-            <p><strong>Correct Answer:</strong> <span th:text="${question.correctAnswer}"></span></p>
-        </li>
-    </ul>
-</div>
+    <div class="score-report">
+        <p>Your score is: <strong th:text="${score}"></strong> out of <strong th:text="${totalQuestions}"></strong></p>
+    </div>
+
+    <table class="table" th:if="${incorrectQuestions.size() > 0}">
+        <thead>
+            <tr>
+                <th>Question</th>
+                <th>Your Answer</th>
+                <th>Correct Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="question : ${incorrectQuestions}">
+                <td th:text="${question.questionText}"></td>
+                <td th:text="${question.userAnswer}"></td>
+                <td th:text="${question.correctAnswerText}"></td>
+            </tr>
+        </tbody>
+    </table>
 
     <div th:if="${incorrectQuestions.size() == 0}">
         <p>Congratulations! You answered all questions correctly.</p>
     </div>
-    
-        <!-- Conditional button based on user role -->
-    <div>
-        <a th:if="${userRole == 'INSTRUCTOR'}" href="/instructor/instructor_homepage" class="btn">Return to Instructor Homepage</a>
-        <a th:if="${userRole == 'STUDENT'}" href="/student/course/student_homepage" class="btn">Return to Student Homepage</a>
+
+    <div class="footer">
+        <a th:if="${userRole == 'INSTRUCTOR'}" href="/instructor/instructor_homepage">Return to Instructor Homepage</a>
+        <a th:if="${userRole == 'STUDENT'}" href="/student/course/student_homepage">Return to Student Homepage</a>
     </div>
 </body>
 </html>
