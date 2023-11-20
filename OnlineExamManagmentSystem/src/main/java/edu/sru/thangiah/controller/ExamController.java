@@ -197,7 +197,7 @@ public class ExamController {
         session.setAttribute("selectedQuestionIds", existingQuestionIds);
         System.out.println("Updated question IDs in session: " + existingQuestionIds);
 
-        return "redirect:/exam/selectChapter"; // Redirect to the chapter selection page
+        return "redirect:/exam/selectChapter"; 
     }
     
     
@@ -298,9 +298,13 @@ public class ExamController {
             return "error"; // Handle error scenario
         }
 
+        // Store the selected chapter in the session
+        session.setAttribute("lastSelectedChapter", chapter);
+
         redirectAttributes.addFlashAttribute("selectedChapter", chapter);
-        return "redirect:/exam/generateExam"; // Assuming this endpoint fetches questions for the selected chapter
+        return "redirect:/exam/generateExam";
     }
+
     
     @GetMapping("/generateExam")
     public String generateExam(@ModelAttribute("selectedChapter") int chapter, Model model, HttpSession session) {

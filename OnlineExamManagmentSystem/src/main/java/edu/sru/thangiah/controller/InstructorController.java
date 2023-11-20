@@ -250,16 +250,21 @@ public class InstructorController {
     }
     
     @GetMapping("/remove-selected-question/{id}")
-    public String removeSelectedQuestion(@PathVariable Long id, HttpSession session) {
+    public String removeSelectedQuestion(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         List<Long> selectedQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
         if (selectedQuestionIds != null) {
             selectedQuestionIds.remove(id);
             session.setAttribute("selectedQuestionIds", selectedQuestionIds);
         }
 
-        // Redirect back to the question selection page
-        return "redirect:/exam/selectChapter";
+        // Retrieve the last selected chapter from the session
+        Integer lastSelectedChapter = (Integer) session.getAttribute("lastSelectedChapter");
+        
+        // Redirect back to the question selection page with the last selected chapter
+        redirectAttributes.addAttribute("selectedChapter", lastSelectedChapter);
+        return "redirect:/exam/generateExam";
     }
+
 
 
 
