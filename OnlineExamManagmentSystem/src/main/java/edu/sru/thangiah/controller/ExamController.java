@@ -72,7 +72,7 @@ public class ExamController {
         List<ExamQuestion> questions = examService.generateQuestionsForChapter(chapter);
         model.addAttribute("examQuestions", questions);
         model.addAttribute("chapters", examService.getAllChapters());
-        return "listExamQuestions"; // Modify this to the name of your view file
+        return "listExamQuestions"; 
     }
 
     
