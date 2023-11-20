@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -1219,16 +1221,23 @@ public class ScheduleManagerController {
 		
 		@GetMapping("/smv-class-list")
 		public String showClassListSMV(Model model) {
-			// Retrieve the list of students from the repository
-			List<Course> course = (List<Course>) courseRepository.findAll();
+		    // Retrieve the list of all courses from the repository
+		    List<Course> courses = (List<Course>) courseRepository.findAll();
 
-			// Add the list of students to the model for rendering in the HTML template
-			model.addAttribute("course", course);
+		    // Create a map to hold the course IDs and their respective student counts
+		    Map<Long, Long> courseStudentCountMap = new HashMap<>();
+		    for (Course course : courses) {
+		        Long studentCount = Long.valueOf(course.getStudents().size()); // Get the size of the student set
+		        courseStudentCountMap.put(course.getId(), studentCount); // Use course ID as key
+		    }
 
-			// Return the name of the HTML template to be displayed
-			return "smv-class-list";
-		}
-		
+		    // Add the courses and their counts to the model
+		    model.addAttribute("courses", courses);
+		    model.addAttribute("courseCounts", courseStudentCountMap);
+
+		    // Return the name of the HTML template to be displayed
+		    return "smv-class-list";
+		}		
 		
 		@GetMapping("/smv-edit-class/{id}")
 		public String showUpdateClassSMV(@PathVariable("id") long id, Model model) {
