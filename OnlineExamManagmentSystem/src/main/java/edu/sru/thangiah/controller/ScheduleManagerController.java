@@ -654,7 +654,7 @@ public class ScheduleManagerController {
 	        // Check if a User with the provided ID already exists
 	        if (userRepository.findById(student.getStudentId()).isPresent()) {
 	            redirectAttributes.addFlashAttribute("errorMessage", "User with given ID already exists.");
-	            return "redirect:/create-students";
+	            return "redirect:/schedule-manager/create-students";
 	        }
 	        
 	        // Create and save the corresponding User

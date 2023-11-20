@@ -38,7 +38,7 @@
         /* Styles for the form */
         form {
             flex: 1;
-            margin-right: 20px; /* Add some space between the form and the information */
+            margin-right: 20px; 
         }
 
         /* Styles for the exam information */
@@ -50,6 +50,16 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             min-width: 150px; /* Ensure it doesn't get too narrow */
         }
+        
+        .error-input {
+    		border-color: red;
+		}
+
+		.error-message {
+		    color: red;
+		    font-size: 12px;
+		}
+        
     </style>
 </head>
 
@@ -60,7 +70,8 @@
     <h1>Exam Creation Form</h1>
 
     <div class="content-container">
-        <form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return updateUI(); validateDuration(); validateStartDate(); validateEndDate()">
+		<form th:action="@{/instructor/exam-landing-page}" method="post" onsubmit="return formValidation()">
+
             
             
             <label for="course">Your Course:</label>
@@ -74,20 +85,20 @@
             <input type="text" id="examName" name="examName" oninput="updateUI()"><br><br>
 
             <label for="startDate">Start Date:</label>
-            <input type="datetime-local" id="startDate" name="startDate" onchange="updateUI(); validateStartDate()"><br><br>
+			<input type="datetime-local" id="startDate" name="startDate" required oninput="updateUI()">
+			<span id="startDate-message" class="error-message"></span><br><br>
 
-            <label for="endDate">End Date:</label>
-            <input type="datetime-local" id="endDate" name="endDate" onchange="updateUI(); validateEndDate()"><br><br>
+			<label for="endDate">End Date:</label>
+			<input type="datetime-local" id="endDate" name="endDate" required oninput="updateUI()">
+			<span id="endDate-message" class="error-message"></span><br><br>
 
-            <label for="duration">Duration (in minutes):</label>
-            <input type="number" id="duration" name="duration" oninput="updateUI(); validateDuration()"><br><br>
+			<label for="duration">Duration (in minutes):</label>
+			<input type="number" id="duration" name="duration" required oninput="updateUI()">
+			<span id="duration-message" class="error-message"></span><br><br>
 
             <input type="submit" name="manual" value="Manual Exam Generation">
             <input type="submit" name="auto" value="Automatic Exam Generation">
         </form>
-        
-        <div id="popup" style="display: none; position: absolute; background-color: #007055; color: #fff; padding: 5px 10px; border: 1px solid rgb(0, 0, 0); white-space: nowrap;">
-	</div>
 	
 
         <div id="examInfo">
@@ -123,42 +134,71 @@
             document.getElementById('infoDuration').textContent = 'Duration: ' + duration + ' minutes';
         }
       }
-        
-        function validateStartDate() {
-        var startDate = new Date(document.getElementById('startDate').value);
-        var currentDate = new Date();
 
-        if (startDate < currentDate) {
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('popup').textContent = 'Start date cannot be before the current date.';
-        } else {
-            document.getElementById('popup').style.display = 'none';
-        }
+      
+      function displayError(inputId, messageId, message) {
+        document.getElementById(messageId).textContent = message;
+        document.getElementById(inputId).classList.add('error-input');
+
     }
 
-    function validateEndDate() {
+    function clearError(inputId, messageId) {
+        document.getElementById(messageId).textContent = '';
+        document.getElementById(inputId).classList.remove('error-input');
+    }
+        
+       function validateStartDate() {
+    		var startDateInput = document.getElementById('startDate').value;
+    		var startDate = new Date(startDateInput);
+    		var currentDate = new Date();
+
+    		console.log('Start Date:', startDate);
+   		 	console.log('Current Date:', currentDate);
+
+    		if (startDate < currentDate) {
+        		displayError('startDate', 'startDate-message', 'Start date cannot be before the current date.');
+        		return false;
+    		} else {
+     		   clearError('startDate', 'startDate-message');
+        		return true;
+    		}
+		}
+
+ function validateEndDate() {
         var startDate = new Date(document.getElementById('startDate').value);
         var endDate = new Date(document.getElementById('endDate').value);
 
         if (endDate <= startDate) {
-            document.getElementById('popup').style.display = 'block';
-            document.getElementById('popup').textContent = 'End date must be after the start date.';
+            displayError('endDate', 'endDate-message', 'End date must be after the start date.');
+            return false;
         } else {
-            document.getElementById('popup').style.display = 'none';
+            clearError('endDate', 'endDate-message');
+            return true;
         }
     }
 
 		function validateDuration() {
-            var duration = parseInt(document.getElementById("duration").value, 10);
-            if (!(duration > 0)) {
-                // show  popup
-                document.getElementById("popup").style.display = "block";
-                document.getElementById('popup').textContent = 'The duration cannot be 0 or negative.';
-                // stopr form submission
-                return false;
-            }
-            return true; // allow submission if duration is corect
+        var durationInput = document.getElementById("duration");
+        var duration = parseInt(durationInput.value, 10);
+
+        if (isNaN(duration) || duration <= 0) {
+            displayError('duration', 'duration-message', 'The duration must be a positive number.');
+            return false;
+        } else if (duration < 10) {
+            displayError('duration', 'duration-message', 'The minimum amount of duration for an exam is 10 minutes.');
+            return false;
+        } else {
+            clearError('duration', 'duration-message');
+            return true;
         }
+    }
+    
+    // Add input event listeners for real-time UI updates
+	document.getElementById('startDate').addEventListener('input', validateStartDate);
+	document.getElementById('endDate').addEventListener('input', validateEndDate);
+	document.getElementById('duration').addEventListener('input', validateDuration);
+    
+
 
     function disableInputs(isDisabled) {
             var inputs = document.querySelectorAll('input, select'); 
@@ -167,8 +207,22 @@
             input.disabled = isDisabled; 
           
           });
-}
-       
+	}
+       function formValidation() {
+   		 	var isStartDateValid = validateStartDate();
+   		 	var isEndDateValid = validateEndDate();
+    		var isDurationValid = validateDuration();
+
+    			// If all validations are true, update the UI and allow form submission.
+    		if (isStartDateValid && isEndDateValid && isDurationValid) {
+        		updateUI();
+        		return true; // Proceed with form submission.
+    		} else {
+        		// Prevent form submission if validations fail.
+        		return false;
+    		}
+		}
+
 
         $(function () {
             $("#nav-placeholder").load("/instructor/instructor_homepage", function () {
