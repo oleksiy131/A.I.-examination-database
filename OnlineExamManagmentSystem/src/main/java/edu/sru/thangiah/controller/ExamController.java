@@ -152,9 +152,8 @@ public class ExamController {
         }
         Exam exam = existingExam.get();
 
-        List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
-        List<ExamQuestion> trueFalseQuestions = examQuestionService.readTrueFalseFromFile();
-        trueFalseQuestions = trueFalseQuestions.subList(0, Math.min(numTrueFalse, trueFalseQuestions.size()));
+        List<ExamQuestion> blanksQuestions = examQuestionService.getRandomFillInTheBlanksQuestions(numBlanks);
+        List<ExamQuestion> trueFalseQuestions = examQuestionService.getRandomTrueFalseQuestions(numTrueFalse);
         List<ExamQuestion> allQuestionsForChapter = examQuestionService.generateQuestionsForChapter(chapter);
         List<ExamQuestion> multipleChoiceQuestions = allQuestionsForChapter.stream()
                 .filter(q -> q.getOptionA() != null && q.getOptionB() != null && q.getOptionC() != null && q.getOptionD() != null)
@@ -171,6 +170,7 @@ public class ExamController {
 
         return ResponseEntity.ok().body(String.valueOf(exam.getId()));
     }
+
     
     @GetMapping("/confirmation/{examId}")
     public String confirmExam(@PathVariable Long examId, Model model) {
