@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,6 +52,7 @@ import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.ScheduleManagerRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.service.ExamQuestionService;
+import edu.sru.thangiah.service.ExamService;
 import edu.sru.thangiah.service.ExcelExportService;
 import jakarta.servlet.http.HttpSession;
 import edu.sru.thangiah.repository.UserRepository;
@@ -69,6 +71,8 @@ public class InstructorController {
 	private ScheduleManagerRepository scheduleManagerRepository;
 	@Autowired
 	private ExcelExportService excelExportService;
+	@Autowired
+	private ExamService examService;
 	
 	@RequestMapping("/instructor_homepage")
 	public String showInstructorHomepage() {
@@ -105,10 +109,14 @@ public class InstructorController {
             // Handle the exception appropriately
             e.printStackTrace();
         }
-       
+
+        // Add chapters to the model
+        List<Integer> chapters = examService.getAllChapters();
+        model.addAttribute("chapters", chapters);
+
         return "listExamQuestions";
     }
-    
+
     
     
     @GetMapping("/exam-landing-page")
@@ -132,11 +140,12 @@ public class InstructorController {
     }
     
     @GetMapping("/all-exams")
-    public String viewAllExams(Model model) {
-        List<Exam> allExams = examRepository.findAll(); 
-        model.addAttribute("exams", allExams);
+    public String showAllExams(Model model) {
+        List<Exam> exams = examService.getAllExamsWithSubmissionCount();
+        model.addAttribute("exams", exams);
         return "listExams";
     }
+
 
     @PostMapping("/exam-landing-page")
     public String captureExamLandingPageData(
@@ -243,16 +252,21 @@ public class InstructorController {
     }
     
     @GetMapping("/remove-selected-question/{id}")
-    public String removeSelectedQuestion(@PathVariable Long id, HttpSession session) {
+    public String removeSelectedQuestion(@PathVariable Long id, HttpSession session, RedirectAttributes redirectAttributes) {
         List<Long> selectedQuestionIds = (List<Long>) session.getAttribute("selectedQuestionIds");
         if (selectedQuestionIds != null) {
             selectedQuestionIds.remove(id);
             session.setAttribute("selectedQuestionIds", selectedQuestionIds);
         }
 
-        // Redirect back to the question selection page
-        return "redirect:/exam/selectChapter";
+        // Retrieve the last selected chapter from the session
+        Integer lastSelectedChapter = (Integer) session.getAttribute("lastSelectedChapter");
+        
+        // Redirect back to the question selection page with the last selected chapter
+        redirectAttributes.addAttribute("selectedChapter", lastSelectedChapter);
+        return "redirect:/exam/generateExam";
     }
+
 
 
 
@@ -1063,9 +1077,16 @@ public class InstructorController {
 
 		    // retrieve the Course entities based on the extracted the instructor
 		    List<Course> courses = courseRepository.findAllByInstructor(instructor);
+		    
+		    Map<Long, Long> courseStudentCountMap = new HashMap<>();
+		    for (Course course : courses) {
+		        Long studentCount = Long.valueOf(course.getStudents().size());
+		        courseStudentCountMap.put(course.getId(), studentCount); // Use course ID as key
+		    }
 
-		    // add the list of courses to the model for rendering in the view
+		    model.addAttribute("courseCounts", courseStudentCountMap);
 		    model.addAttribute("courses", courses);
+
 
 		    return "iv-course-list";
 		}

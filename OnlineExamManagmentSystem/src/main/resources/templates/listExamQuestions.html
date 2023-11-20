@@ -90,6 +90,16 @@
 
     <h1>List of Exam Questions</h1>
     
+    <!-- Chapter selection form -->
+    <form th:action="@{/exam/exam-questions/filterByChapter}" method="GET" class="search-container">
+        <label for="chapter">Filter by chapter:</label>
+        <select id="chapter" name="selectedChapter">
+            <option value="">Select Chapter</option>
+            <option th:each="chapter : ${chapters}" th:value="${chapter}" th:text="${'Chapter ' + chapter}"></option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    
     <!-- Search form -->
     <div class="search-container">
         <form th:action="@{/exam-question/search}" method="GET">

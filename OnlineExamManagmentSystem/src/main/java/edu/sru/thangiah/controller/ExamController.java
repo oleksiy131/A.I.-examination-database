@@ -67,6 +67,15 @@ public class ExamController {
         this.examService = examService;
     }
     
+    @GetMapping("/exam-questions/filterByChapter")
+    public String filterExamQuestionsByChapter(@RequestParam("selectedChapter") int chapter, Model model) {
+        List<ExamQuestion> questions = examService.generateQuestionsForChapter(chapter);
+        model.addAttribute("examQuestions", questions);
+        model.addAttribute("chapters", examService.getAllChapters());
+        return "listExamQuestions"; 
+    }
+
+    
     @GetMapping("/edit/{id}")
     public String editExam(@PathVariable Long id, Model model) {
         Exam exam = examService.getExamById(id);
@@ -91,11 +100,15 @@ public class ExamController {
 
     
     @GetMapping("/delete/{id}")
-    public String deleteExam(@PathVariable Long id) {
-        // Logic to delete the exam
-        examService.deleteExam(id);
+    public String deleteExam(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        boolean isDeleted = examService.deleteExam(id);
+        if (!isDeleted) {
+            // Add an attribute indicating the exam couldn't be deleted
+            redirectAttributes.addFlashAttribute("deleteError", "Exam with submissions cannot be deleted.");
+        }
         return "redirect:/instructor/all-exams";
     }
+
 
     
     @GetMapping("/submissions")
@@ -108,7 +121,7 @@ public class ExamController {
     public String viewExamDetails(@PathVariable Long id, Model model) {
         Exam exam = examService.getExamById(id); // Implement this method in your service
         if (exam == null) {
-            return "redirect:/exam/all-exams"; // Redirect or show an error page
+            return "redirect:/instructor/all-exams"; // Redirect or show an error page
         }
         model.addAttribute("exam", exam);
         model.addAttribute("generatedExamId", exam.getId());
@@ -188,7 +201,7 @@ public class ExamController {
         session.setAttribute("selectedQuestionIds", existingQuestionIds);
         System.out.println("Updated question IDs in session: " + existingQuestionIds);
 
-        return "redirect:/exam/selectChapter"; // Redirect to the chapter selection page
+        return "redirect:/exam/selectChapter"; 
     }
     
     
@@ -289,9 +302,13 @@ public class ExamController {
             return "error"; // Handle error scenario
         }
 
+        // Store the selected chapter in the session
+        session.setAttribute("lastSelectedChapter", chapter);
+
         redirectAttributes.addFlashAttribute("selectedChapter", chapter);
-        return "redirect:/exam/generateExam"; // Assuming this endpoint fetches questions for the selected chapter
+        return "redirect:/exam/generateExam";
     }
+
     
     @GetMapping("/generateExam")
     public String generateExam(@ModelAttribute("selectedChapter") int chapter, Model model, HttpSession session) {
