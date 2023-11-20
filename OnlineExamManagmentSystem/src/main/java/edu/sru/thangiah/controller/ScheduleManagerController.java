@@ -1204,6 +1204,15 @@ public class ScheduleManagerController {
 		public String deleteClassSMV(@PathVariable("id") long id, Model model) {
 		    Course course = courseRepository.findById(id)
 		      .orElseThrow(() -> new IllegalArgumentException("Invalid course Id:" + id));
+
+		    Set<Student> students = course.getStudents();
+		    
+		    for (Student student : students) {
+		        student.getCourses().remove(course); 
+		    }
+
+		    course.getStudents().clear();
+
 		    courseRepository.delete(course);
 		    return "smv-edit-class-confirmation";
 		}
@@ -1219,6 +1228,8 @@ public class ScheduleManagerController {
 			// Return the name of the HTML template to be displayed
 			return "smv-class-list";
 		}
+		
+		
 		@GetMapping("/smv-edit-class/{id}")
 		public String showUpdateClassSMV(@PathVariable("id") long id, Model model) {
 		    Course course = courseRepository.findById(id)
