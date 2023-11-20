@@ -33,7 +33,13 @@ public class CourseGradeDTO {
 
 
 
-	public void addExamGrade(String examName, Integer score) {
-        this.examGrades.add(new ExamGradeDTO(examName, score));
+	// Method to add an exam grade with exam name and score
+    public void addExamGrade(String examName, Integer score, Integer totalQuestions) {
+        this.examGrades.add(new ExamGradeDTO(examName, score, totalQuestions));
+    }
+
+    // Overloaded method to add an ExamGradeDTO object directly
+    public void addExamGrade(ExamGradeDTO examGrade) {
+        this.examGrades.add(examGrade);
     }
 }

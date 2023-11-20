@@ -64,6 +64,16 @@
             color: #005f73;
             text-decoration: underline;
         }
+        ul {
+    		list-style-type: none; /* Removes the bullet points */
+    		padding-left: 0; /* Removes padding on the left side, adjust as needed */
+    		margin: 0; /* Removes margin, adjust as needed */
+		}
+
+		li {
+		    padding: 5px 0; /* Adds some padding to each list item, adjust as needed */
+		}
+        
     </style>
     
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
@@ -79,7 +89,6 @@ $(function(){
   $("#nav-placeholder").load("/student/course/student_homepage");
 });
 </script>
-
 <body>
     <h1>Your Courses and Exam Scores</h1>
     <br>
@@ -90,6 +99,8 @@ $(function(){
                 <th>Course Name</th>
                 <th>Exams</th>
                 <th>Scores</th>
+                <th>Percentage</th>
+                <th>Letter Grades</th>
             </tr>
         </thead>
         <tbody>
@@ -105,12 +116,25 @@ $(function(){
                 <td>
                     <ul>
                         <!-- Display the score for each exam, or 'Not available' if null -->
-                        <li th:each="examGrade : ${courseGrade.examGrades}" th:text="${examGrade.score != null ? examGrade.score : 'Not available'}">Score Placeholder</li>
+						<li th:each="examGrade : ${courseGrade.examGrades}"
+    						th:text="${examGrade.score != null ? examGrade.getFormattedScore() : 'Not available'}">Score Placeholder</li>                   </ul>
+                </td>
+                <td>
+                    <ul>
+                        <!-- Display the percentage for each exam -->
+                        <li th:each="examGrade : ${courseGrade.examGrades}"
+                            th:text="${examGrade.getPercentage()}">Percentage Placeholder</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <!-- Display the letter grade for each exam -->
+                        <li th:each="examGrade : ${courseGrade.examGrades}"
+                            th:text="${examGrade.getLetterGrade()}">Letter Grade Placeholder</li>
                     </ul>
                 </td>
             </tr>
         </tbody>
     </table>
 </body>
-
 </html>

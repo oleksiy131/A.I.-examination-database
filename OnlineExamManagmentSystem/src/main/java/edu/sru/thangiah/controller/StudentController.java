@@ -36,6 +36,7 @@ import edu.sru.thangiah.repository.RoleRepository;
 import edu.sru.thangiah.repository.StudentRepository;
 import edu.sru.thangiah.repository.UserRepository;
 import edu.sru.thangiah.web.dto.CourseGradeDTO;
+import edu.sru.thangiah.web.dto.ExamGradeDTO;
 
 @Controller
 @RequestMapping("/student/course")
@@ -290,10 +291,15 @@ public class StudentController
 
 	                // Compile exam grades for the student
 	                for (Exam exam : exams) {
-	                    ExamSubmissionEntity submission = examSubmissionRepository.findByUser_IdAndExam_Id(user.getId(), exam.getId());
-	                    Integer score = submission != null ? submission.getScore() : null;
-	                    System.out.println("Exam: " + exam.getExamName() + ", Score: " + score);
-	                    courseGrade.addExamGrade(exam.getExamName(), score);
+	                	 ExamSubmissionEntity submission = examSubmissionRepository.findByUser_IdAndExam_Id(user.getId(), exam.getId());
+	                     Integer score = submission != null ? submission.getScore() : null;
+	                     // Here, retrieve the total number of questions for the exam
+	                     Integer totalQuestions = exam.getQuestions() != null ? exam.getQuestions().size() : 0;
+	                     System.out.println("Exam: " + exam.getExamName() + ", Score: " + score + ", Total Questions: " + totalQuestions);
+	                     // Create a new ExamGradeDTO with the total number of questions
+	                     ExamGradeDTO examGradeDTO = new ExamGradeDTO(exam.getExamName(), score, totalQuestions);
+	                     // Add the ExamGradeDTO to the courseGrade
+	                     courseGrade.addExamGrade(examGradeDTO);
 	                }
 
 	                courseGrades.add(courseGrade);
