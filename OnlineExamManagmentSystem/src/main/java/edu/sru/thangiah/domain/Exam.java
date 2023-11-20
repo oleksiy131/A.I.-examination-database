@@ -11,7 +11,8 @@ public class Exam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    private int submissionCount;
     private String examName;
     private int durationInMinutes;
     private LocalDateTime startTime;
@@ -102,6 +103,14 @@ public class Exam {
 
 	public void setFormattedStartTime(String formattedStartTime) {
 		this.formattedStartTime = formattedStartTime;
+	}
+
+	public int getSubmissionCount() {
+		return submissionCount;
+	}
+
+	public void setSubmissionCount(int submissionCount) {
+		this.submissionCount = submissionCount;
 	}
 	
 	

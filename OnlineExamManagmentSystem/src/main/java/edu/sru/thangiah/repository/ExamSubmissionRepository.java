@@ -12,5 +12,7 @@ public interface ExamSubmissionRepository extends JpaRepository<ExamSubmissionEn
     
     @Transactional
     void deleteByExam(Exam exam);
+    
+    long countByExam(Exam exam);
 
 }
