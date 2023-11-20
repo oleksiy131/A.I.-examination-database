@@ -417,10 +417,12 @@ public class ExamController {
 
             for (ExamQuestion question : exam.getQuestions()) {
                 String userAnswer = userAnswers.get(question.getId());
+                String userAnswerText = getAnswerText(question, userAnswer);
+
                 ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
                 displayQuestion.setId(question.getId());
                 displayQuestion.setQuestionText(question.getQuestionText());
-                displayQuestion.setUserAnswer(userAnswer);
+                displayQuestion.setUserAnswer(userAnswerText);
                 displayQuestion.setCorrectAnswerText(getCorrectAnswerText(question));
                 
                 if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
@@ -440,6 +442,20 @@ public class ExamController {
             return "error"; // Error page template
         }
     }
+
+    private String getAnswerText(ExamQuestion question, String answer) {
+        switch (question.getQuestionType()) {
+            case MULTIPLE_CHOICE:
+                return getOptionText(question, answer);
+            case TRUE_FALSE:
+                return answer.equals("A") ? "True" : "False";
+            case FILL_IN_THE_BLANK:
+                return answer;
+            default:
+                return "Invalid Answer";
+        }
+    }
+
     
     private String getCorrectAnswerText(ExamQuestion question) {
         switch (question.getQuestionType()) {

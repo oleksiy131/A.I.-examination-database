@@ -9,21 +9,21 @@
 
     <h2>Review your answers</h2>
     <div th:if="${incorrectQuestions.size() > 0}">
-    <p>The following questions were answered incorrectly:</p>
-    <ul>
-        <li th:each="question : ${incorrectQuestions}">
-            <p><strong>Question:</strong> <span th:text="${question.questionText}"></span></p>
-            <p><strong>Your Answer:</strong> <span th:text="${question.userAnswer}"></span></p> <!-- This line displays the user's answer -->
-            <p><strong>Correct Answer:</strong> <span th:text="${question.correctAnswerText}"></span></p>
-        </li>
-    </ul>
-</div>
+        <p>The following questions were answered incorrectly:</p>
+        <ul>
+            <li th:each="question : ${incorrectQuestions}">
+                <p><strong>Question:</strong> <span th:text="${question.questionText}"></span></p>
+                <p><strong>Your Answer:</strong> <span th:text="${question.userAnswer}"></span></p>
+                <p><strong>Correct Answer:</strong> <span th:text="${question.correctAnswerText}"></span></p>
+            </li>
+        </ul>
+    </div>
 
     <div th:if="${incorrectQuestions.size() == 0}">
         <p>Congratulations! You answered all questions correctly.</p>
     </div>
     
-        <!-- Conditional button based on user role -->
+    <!-- Conditional button based on user role -->
     <div>
         <a th:if="${userRole == 'INSTRUCTOR'}" href="/instructor/instructor_homepage" class="btn">Return to Instructor Homepage</a>
         <a th:if="${userRole == 'STUDENT'}" href="/student/course/student_homepage" class="btn">Return to Student Homepage</a>
