@@ -408,13 +408,15 @@ public class ExamController {
 
 
     @PostMapping("/submit/{id}")
-    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model, Principal principal) {
+    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model, Principal principal, Authentication authentication) {
         Exam exam = examService.getExamById(id);
 
         if (exam != null) {
             Map<Long, String> userAnswers = extractUserAnswers(formParams);
+            List<String> userAnswersList = new ArrayList<>(userAnswers.values()); // Assuming order is maintained
+            int totalScore = calculateTotalScore(exam, userAnswers);
 
-            int totalScore = 0;
+           // int totalScore = 0;
             List<ExamQuestionDisplay> displayQuestions = new ArrayList<>();
 
             for (ExamQuestion question : exam.getQuestions()) {
@@ -432,12 +434,22 @@ public class ExamController {
                 displayQuestion.setUserAnswer(userAnswerText);
                 displayQuestion.setCorrectAnswerText(question.getCorrectAnswerText());
                 
-                if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
-                    totalScore++;
-                } else {
+                if (!question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                     displayQuestions.add(displayQuestion); // Add only incorrect questions
                 }
             }
+            
+         // Save the exam submission
+            ExamSubmission examSubmission = new ExamSubmission(); // Assuming you have a constructor or setters to set properties
+            examSubmission.setExamId(id); // Make sure you set the exam ID here as well
+            examSubmission.setAnswers(userAnswersList);
+            examSubmission.setScore(totalScore);
+            
+            // Obtain the user ID. This should be the actual logged-in user's ID.
+            Long userId = getUserIdFromAuthentication(authentication);
+            
+            // Call the method to save the exam submission
+            saveExamSubmission(examSubmission, userId);
 
             model.addAttribute("score", totalScore);
             model.addAttribute("totalQuestions", exam.getQuestions().size());
