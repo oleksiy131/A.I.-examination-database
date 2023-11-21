@@ -98,8 +98,9 @@
                     <ul>
                         <!-- Iterate over exams for each course -->
                         <li th:each="exam : ${course.exams}">
-                            <a th:href="@{/exam/take/{id}(id=${exam.id})}" th:text="${exam.examName + ' - ' + #temporals.format(exam.startTime, 'yyyy-MM-dd HH:mm')}">Exam Link</a>
-                        </li>
+    						<span th:if="${examTakenMap[exam.id]}" th:text="${exam.examName} + ' - (TAKEN)'"></span>
+    						<a th:unless="${examTakenMap[exam.id]}" th:href="@{/exam/take/{id}(id=${exam.id})}" th:text="${exam.examName + ' - ' + (exam.formattedStartTime != null ? exam.formattedStartTime : '')}">Exam Link</a>
+						</li>
                     </ul>
                 </td>                  
             </tr>
