@@ -87,7 +87,7 @@
                                 <li th:each="answer : ${submission.userAnswers}" th:text="${answer}"></li>
                             </ul>
                         </td>
-                        <td th:text="${submission.score}"></td>
+        				<td th:text="${submission.score + '/' + submission.exam.questions.size()}"></td>
                     </tr>
                 </tbody>
             </table>
