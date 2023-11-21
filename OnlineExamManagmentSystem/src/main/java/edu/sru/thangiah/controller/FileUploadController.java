@@ -50,13 +50,12 @@ public class FileUploadController {
             // Read questions from file and get the list of persisted questions
             List<ExamQuestion> uploadedQuestions = examQuestionService.readAIQuestionsFromFile(file);
 
-            // Generate the exam with ID 99, name 'AI Exam', and duration 15 minutes
             Exam exam = new Exam();
             exam.setExamName("Exam"); // Set the exam name
             exam.setDurationInMinutes(15); // Set the exam duration
             exam.setQuestions(uploadedQuestions); // Set only the uploaded questions to the exam
 
-            // Save the exam to the database using the ExamRepository
+            // Save the exam to the database
             examRepository.save(exam);
 
             // Add attributes to the model for the confirmation page
@@ -96,7 +95,7 @@ public class FileUploadController {
             Optional<Exam> optionalExam = examRepository.findById(examId);
             if (!optionalExam.isPresent()) {
                 redirectAttributes.addFlashAttribute("message", "Exam not found");
-                return "redirect:/error"; // Redirect to an error page or handle accordingly
+                return "redirect:/error"; 
             }
             Exam exam = optionalExam.get();
 
@@ -104,7 +103,7 @@ public class FileUploadController {
             List<ExamQuestion> uploadedQuestions = examQuestionService.readAIQuestionsFromFile(file);
             if (uploadedQuestions.isEmpty()) {
                 redirectAttributes.addFlashAttribute("message", "No questions found in the file");
-                return "redirect:/upload"; // Redirect to the upload page or handle accordingly
+                return "redirect:/upload"; 
             }
 
             // Update the existing exam with new questions
@@ -121,7 +120,7 @@ public class FileUploadController {
         } catch (Exception e) {
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("message", "Failed to upload file and update exam: " + e.getMessage());
-            return "redirect:/upload-path"; // Replace with your actual upload page path
+            return "redirect:/upload-path"; 
         }
     }
 
