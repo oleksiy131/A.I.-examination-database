@@ -6,6 +6,8 @@ import edu.sru.thangiah.repository.ExamQuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,15 +43,97 @@ public class ExamQuestionServiceImpl implements ExamQuestionService {
     @PostConstruct
     public void initializeQuestions() {
         if (examQuestionRepository.count() == 0) { // Check if the database is empty
-            for (int chapter = 1; chapter <= 9; chapter++) { // assuming there are 9 chapters
+            // Load multiple-choice questions
+            for (int chapter = 1; chapter <= 9; chapter++) {
                 try {
                     loadQuestionsFromFile(chapter);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+
+            // Load true/false questions
+            try {
+                loadTrueFalseQuestions(); // Revised method to load once
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            // Load fill-in-the-blanks questions
+            try {
+                loadBlanksQuestions(); // Revised method to load once
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
+    public List<ExamQuestion> getRandomTrueFalseQuestions(int numQuestions) {
+        Pageable limit = PageRequest.of(0, numQuestions);
+        return examQuestionRepository.findRandomQuestionsByType(ExamQuestion.QuestionType.TRUE_FALSE, limit);
+    }
+
+    public List<ExamQuestion> getRandomFillInTheBlanksQuestions(int numQuestions) {
+        Pageable limit = PageRequest.of(0, numQuestions);
+        return examQuestionRepository.findRandomQuestionsByType(ExamQuestion.QuestionType.FILL_IN_THE_BLANK, limit);
+    }
+    
+    private void loadTrueFalseQuestions() throws IOException {
+        String filePath = "classpath:chapters/true-false.txt";
+        Resource resource = resourceLoader.getResource(filePath);
+        InputStream inputStream = resource.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        Pattern questionPattern = Pattern.compile("^(\\d+)\\.\\s+(.*)$");
+        Pattern answerPattern = Pattern.compile("^Ans:\\s+([AB])$");
+        String line;
+        ExamQuestion question = null;
+
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+            Matcher questionMatcher = questionPattern.matcher(line);
+            if (questionMatcher.matches()) {
+                question = new ExamQuestion();
+                question.setQuestionText(questionMatcher.group(2));
+                question.setQuestionType(ExamQuestion.QuestionType.TRUE_FALSE);
+                question.setOptionA("True");
+                question.setOptionB("False");
+            } else if (question != null) {
+                Matcher answerMatcher = answerPattern.matcher(line);
+                if (answerMatcher.matches()) {
+                    question.setCorrectAnswer(answerMatcher.group(1));
+                    examQuestionRepository.save(question);
+                }
+            }
+        }
+
+        reader.close();
+    }
+    private void loadBlanksQuestions() throws IOException {
+        String filePath = "classpath:chapters/Blanks.txt";
+        InputStream inputStream = resourceLoader.getResource(filePath).getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        Pattern pattern = Pattern.compile("^(\\d+)\\. (.*)");
+        String line;
+        ExamQuestion question = null;
+
+        while ((line = reader.readLine()) != null) {
+            Matcher matcher = pattern.matcher(line.trim());
+            if (matcher.matches()) {
+                question = new ExamQuestion();
+                question.setQuestionText(matcher.group(2));
+                question.setQuestionType(ExamQuestion.QuestionType.FILL_IN_THE_BLANK);
+            } else if (line.startsWith("Ans:")) {
+                if (question != null) {
+                    question.setCorrectAnswer(line.substring(4).trim());
+                    examQuestionRepository.save(question);
+                }
+            }
+        }
+
+        reader.close();
+    }
+
+
     
     // Method to read and parse fill-in-the-blank questions when the 'Generate Exam' is clicked
     @Transactional

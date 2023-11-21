@@ -23,6 +23,7 @@
         background-position: center;
         opacity: 0.9;
     }
+    
 </style>
 
 </head>
@@ -39,63 +40,39 @@
         </div>
         <!-- Management button -->
         <div class="dropdown-nav">
-            <button class="dropbutton">Management</button>
+            <button class="dropbutton">Class Management</button>
             <div class="dropdown-info">
-                <a href="/instructor/iv-class-import">Load a Class</a>
-                
+                <a href="/instructor/iv-student-list">View All Students</a><br>
+                <a href="/instructor/iv-create-student">Add Students</a><br>
+                <a href="/instructor/associateIV">Assign Students</a><br>
+               	<a href="/instructor/iv-course-list">Classes</a>
+   
             </div>
         </div>
         <!-- Exam button -->
         <div class="dropdown-nav">
-            <button class="dropbutton">Exam Generation</button>
+            <button class="dropbutton">Exam Management</button>
             <div class="dropdown-info">
-                <a href="/bot/choose-topic">A.I. Exam Generation</a>
- 				<a href="/instructor/exam-landing-page">Regular Exam Creation</a>
- 				<a href="/instructor/exam-questions">Edit All Exam Questions</a>
- 				
-                
+ 				<a href="/instructor/exam-landing-page">Regular Exam Generation</a><br>            
+                <a href="/bot/choose-topic">A.I. Exam Generation</a><br>
+ 				<a href="/instructor/exam-questions">View/Edit All Questions</a><br>
+                <a href="/instructor/all-exams">View All Exams</a>               
+   
             </div>
         </div>
         <!-- Grading button -->
         <div class="dropdown-nav">
-            <button class="dropbutton">Grades & Classes</button>
+            <button class="dropbutton">Grades</button>
             <div class="dropdown-info">
                 <!-- Example links for instructor's classes -->
-               <a href="/exam/submissions">Exam Submissions</a>
-               <a href="/instructor/all-exams">Exam List</a>               
-               <a href="/instructor/iv-course-list">Classes</a>
-            </div>
-        </div>
-        <!-- Reporting -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Reporting</button>
-            <div class="dropdown-info">
-                <a href="#">Exam Information</a>
-                <a href="#">IP Address</a>
-            </div>
-        </div>
-        <!-- Database button -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Database</button>
-            <div class="dropdown-info">
-                <a href="/instructor/iv-student-list">View All Students</a>
-                <a href="/instructor/iv-create-student">Add Students</a>
-                <a href="/instructor/associateIV">Assign Students</a>
-
-            </div>
-        </div>
-        <!-- Search Options -->
-        <div class="dropdown-nav">
-            <button class="dropbutton">Search Options</button>
-            <div class="dropdown-info">
-                <a href="#">View Details</a>
+               <a href="/exam/submissions">View Exam Submissions</a>
             </div>
         </div>
         <div class="profile-nav">
             <!-- Account options -->
             <button class="dropbutton">Account</button>
             <div class="dropdown-info">
-				<a href="/instructor/iv-account-management">Edit Account</a>
+				<a href="/instructor/iv-account-management">Edit Account</a><br>
                 <a href="/logout">Logout</a>
             </div>
         </div>

@@ -154,9 +154,8 @@ public class ExamController {
         }
         Exam exam = existingExam.get();
 
-        List<ExamQuestion> blanksQuestions = examQuestionService.generateFillInTheBlanksQuestions(numBlanks);
-        List<ExamQuestion> trueFalseQuestions = examQuestionService.readTrueFalseFromFile();
-        trueFalseQuestions = trueFalseQuestions.subList(0, Math.min(numTrueFalse, trueFalseQuestions.size()));
+        List<ExamQuestion> blanksQuestions = examQuestionService.getRandomFillInTheBlanksQuestions(numBlanks);
+        List<ExamQuestion> trueFalseQuestions = examQuestionService.getRandomTrueFalseQuestions(numTrueFalse);
         List<ExamQuestion> allQuestionsForChapter = examQuestionService.generateQuestionsForChapter(chapter);
         List<ExamQuestion> multipleChoiceQuestions = allQuestionsForChapter.stream()
                 .filter(q -> q.getOptionA() != null && q.getOptionB() != null && q.getOptionC() != null && q.getOptionD() != null)
@@ -173,6 +172,7 @@ public class ExamController {
 
         return ResponseEntity.ok().body(String.valueOf(exam.getId()));
     }
+
     
     @GetMapping("/confirmation/{examId}")
     public String confirmExam(@PathVariable Long examId, Model model) {
@@ -413,7 +413,7 @@ public class ExamController {
 
         if (exam != null) {
             Map<Long, String> userAnswers = extractUserAnswers(formParams);
-            List<String> userAnswersList = new ArrayList<>(userAnswers.values()); // Assuming order is maintained
+            List<String> userAnswersList = new ArrayList<>(userAnswers.values());
             int totalScore = calculateTotalScore(exam, userAnswers);
 
            // int totalScore = 0;
@@ -422,25 +422,26 @@ public class ExamController {
             for (ExamQuestion question : exam.getQuestions()) {
                 String userAnswer = userAnswers.get(question.getId());
                 String userAnswerText = getAnswerText(question, userAnswer);
-                
-             // Determine the user's role and add it to the model
+                            
+                // Determine the user's role and add it to the model
                 String userRole = determineUserRole(principal.getName());
                 model.addAttribute("userRole", userRole);
 
-                
                 ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
                 displayQuestion.setId(question.getId());
                 displayQuestion.setQuestionText(question.getQuestionText());
                 displayQuestion.setUserAnswer(userAnswerText);
                 displayQuestion.setCorrectAnswerText(question.getCorrectAnswerText());
-                
-                if (!question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
+                            
+                if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
+                    totalScore++;
+                } else {
                     displayQuestions.add(displayQuestion); // Add only incorrect questions
                 }
             }
             
          // Save the exam submission
-            ExamSubmission examSubmission = new ExamSubmission(); // Assuming you have a constructor or setters to set properties
+            ExamSubmission examSubmission = new ExamSubmission(); 
             examSubmission.setExamId(id); // Make sure you set the exam ID here as well
             examSubmission.setAnswers(userAnswersList);
             examSubmission.setScore(totalScore);
@@ -456,7 +457,7 @@ public class ExamController {
             model.addAttribute("incorrectQuestions", displayQuestions);
             
 
-            return "showScore"; // Thymeleaf template to display the score and answers
+            return "showScore"; 
         } else {
             model.addAttribute("message", "Exam not found.");
             return "error"; // Error page template
