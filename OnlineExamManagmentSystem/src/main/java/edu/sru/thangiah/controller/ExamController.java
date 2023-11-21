@@ -37,6 +37,7 @@ import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.ExamSubmission;
 import edu.sru.thangiah.domain.ExamSubmissionEntity;
 import edu.sru.thangiah.domain.Question;
+
 import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.ExamRepository;
@@ -413,7 +414,7 @@ public class ExamController {
 
         if (exam != null) {
             Map<Long, String> userAnswers = extractUserAnswers(formParams);
-            List<String> userAnswersList = new ArrayList<>(userAnswers.values());
+            List<String> userAnswersList = new ArrayList<>(userAnswers.values()); // Assuming order is maintained
             int totalScore = calculateTotalScore(exam, userAnswers);
 
            // int totalScore = 0;
@@ -422,26 +423,25 @@ public class ExamController {
             for (ExamQuestion question : exam.getQuestions()) {
                 String userAnswer = userAnswers.get(question.getId());
                 String userAnswerText = getAnswerText(question, userAnswer);
-                            
-                // Determine the user's role and add it to the model
+                
+             // Determine the user's role and add it to the model
                 String userRole = determineUserRole(principal.getName());
                 model.addAttribute("userRole", userRole);
 
+                
                 ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
                 displayQuestion.setId(question.getId());
                 displayQuestion.setQuestionText(question.getQuestionText());
                 displayQuestion.setUserAnswer(userAnswerText);
                 displayQuestion.setCorrectAnswerText(question.getCorrectAnswerText());
-                            
-                if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
-                    totalScore++;
-                } else {
+                
+                if (!question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                     displayQuestions.add(displayQuestion); // Add only incorrect questions
                 }
             }
             
          // Save the exam submission
-            ExamSubmission examSubmission = new ExamSubmission(); 
+            ExamSubmission examSubmission = new ExamSubmission(); // Assuming you have a constructor or setters to set properties
             examSubmission.setExamId(id); // Make sure you set the exam ID here as well
             examSubmission.setAnswers(userAnswersList);
             examSubmission.setScore(totalScore);
@@ -457,7 +457,7 @@ public class ExamController {
             model.addAttribute("incorrectQuestions", displayQuestions);
             
 
-            return "showScore"; 
+            return "showScore"; // Thymeleaf template to display the score and answers
         } else {
             model.addAttribute("message", "Exam not found.");
             return "error"; // Error page template
