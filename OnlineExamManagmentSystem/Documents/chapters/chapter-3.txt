@@ -1,0 +1,405 @@
+1.	According to the U.S. Census Bureau, approximately what percentage of American homes are connected to 
+the Internet?
+A.	20%
+B.	40%
+C.	70%
+D.	90%
+Ans: B	
+
+
+2.	The original purpose for creating the Internet was:
+A.	military communications.
+B.	personal and family communications.
+C.	online shopping.
+D.	education.
+Ans: A	
+
+
+3.	The project originating the computer network that eventually evolved into the modern-day Internet was 
+called:
+A.	NSFNet. 
+B.	CERNNet. 
+C.	ARPANET.
+D.	Intranet.
+Ans: C	
+
+
+4.	The Internet started very small and simple with having a network of only ____________ computers.
+A.	two
+B.	three 
+C.	four
+D.	ten
+Ans: C	
+
+
+5.	The World Wide Web (WWW) is:
+A.	a synonym for “the Internet.” 
+B.	the software that is used to send data over the Internet. 
+C.	the part of the Internet that facilitates transfer of files. 
+D.	the part of the Internet that uses hyperlinks.
+Ans: D	
+
+
+6.	A web browser runs on a(n) ___________ computer.
+A.	modem 
+B.	server 
+C.	IP 
+D.	client
+Ans: D	
+
+
+7.	The main artery of the Internet, consisting of its largest and fastest pathway, is called the:
+A.	Internet protocol. 
+B.	TCP. 
+C.	backbone. 
+D.	main network.
+Ans: C	
+
+
+
+8.	A set of four numbers separated by dots that identifies a computer on the Internet is called a(n):
+A.	IP address. 
+B.	URL. 
+C.	domain name. 
+D.	web site.
+Ans: A	
+
+
+9.	The following are all broadband connections EXCEPT:
+A.	DSL. 
+B.	ISDN. 
+C.	cable. 
+D.	dial-up.
+Ans: D	
+
+10.	The computer that receives requests and sends back responses is called a:
+A.	browser. 
+B.	server. 
+C.	backbone. 
+D.	client.
+Ans: B	
+
+
+11.	The process of converting an analog telephone signal into a digital computer signal is called:
+A.	signal conversion. 
+B.	modulation. 
+C.	demodulation. 
+D.	signal transfer.
+Ans: C	
+
+12.	The process of converting a digital computer signal into an analog telephone signal is called:
+A.	signal conversion. 
+B.	modulation. 
+C.	demodulation. 
+D.	signal transfer.
+Ans: B	
+
+
+13.	The device that allows computers to send data along telephone lines is called a(n):
+A.	modem. 
+B.	processor. 
+C.	telephone. 
+D.	Ethernet card.
+Ans: A	
+
+
+14.	The term 56k, when applied to modems, refers to:
+A.	memory capacity. 
+B.	data transfer rate. 
+C.	signal conversion technique. 
+D.	buswidth.
+Ans: B	
+
+
+15.	Which of the following is an advantage of dial-up over broadband Internet connections?
+A.	Speed of data transfer over the Internet
+B.	Ability to simultaneously use the telephone while using the Internet
+C.	Lower cost 
+D.	Download speed
+Ans: C	
+
+
+
+16.	Which of the following is the slowest broadband connection option that many think will soon become 
+obsolete?
+A.	ISDN
+B.	Dial-up
+C.	Cable
+D.	DSL
+Ans: A	
+
+
+17.	The following Internet connection options all use telephone lines EXCEPT:
+A.	ISDN.
+B.	dial-up.
+C.	cable.
+D.	DSL.
+Ans: C	
+
+18.	Which of the following Internet connection options is most likely to result in degradation of data transfer 
+speeds due to users sharing the same lines?
+A.	ISDN
+B.	Dial-up
+C.	Cable
+D.	DSL
+Ans: C	
+
+
+19.	With digital subscriber lines, the purpose of the modem is to: 
+A.	modulate digital signals into analog for transfer along the twisted pair cable.
+B.	route signals to the proper “lane” within the twisted pair cable.
+C.	demodulate analog signals into digital for receiving data from the coaxial cable.
+D.	facilitate call-waiting to enable users to talk on the telephone while using the Internet.
+Ans: B	
+
+
+20.	Proximity of the central office is an important consideration with the ____________ Internet connection 
+option.
+A.	DSL
+B.	satellite
+C.	cable
+D.	ISDN
+Ans: A	
+
+21.	With cable modems:
+A.	sending data is faster than receiving data.
+B.	receiving data is faster than sending data.
+C.	sending data and receiving data are approximately the same speed.
+D.	it is impossible to send data.
+Ans: B	
+
+
+22.	Which of the following is the correct association between an Internet connection option and the most likely 
+type of transmission medium to use?
+A.	DSL --> microwave
+B.	Cable --> coaxial
+C.	Satellite --> infrared
+D.	ISDN --> coaxial
+Ans: B	
+
+
+23.	The transmission of data from a satellite dish to a computer is accomplished via:
+A.	coaxial cable.
+B.	twisted pair cable.
+C.	microwave radiation.
+D.	infrared radiation.
+Ans: A	
+
+24.	If you want to maximize the speed at which web pages and files will be downloaded and displayed on your 
+browser, the best Internet connection option is:
+A.	ADSL.
+B.	SDSL.
+C.	ISDN.
+D.	satellite.
+Ans: A	
+
+25.	If you want to maximize the speed at which requests will be sent from your browser to the Internet 
+provider, the best Internet connection option is:
+A.	ADSL.
+B.	SDSL.
+C.	cable.
+D.	satellite.
+Ans: B	
+
+26.	The type of transmission wire that transports data at close to the speed of light is:
+A.	infrared radiation.
+B.	twisted pair cable.
+C.	coaxial cable.
+D.	fiber optic cable.
+Ans: D	
+
+
+27.	Powerline technology:
+A.	is slower than fiber optic technology.
+B.	requires installation of special wires and cables.
+C.	is likely to be more expensive than traditional broadband approaches.
+D.	would offer a connection in every room with a power outlet.
+Ans: D	
+
+
+28.	An ISP is a:
+A.	computer that serves as a gateway to the Internet.
+B.	company that provides Internet access.
+C.	software product that enables client computers to connect to the Internet.
+D.	device that is necessary for transmitting information over the Internet.
+Ans: B	
+
+
+29.	By managing the communications lines that make up the main transmission media of the Internet, 
+companies like AT&T, Sprint, and MCI act as:
+A.	Internet service providers to end-users like you and me.
+B.	online service providers to end-users like you and me.
+C.	backbone providers.
+D.	web browsing software publishers.
+Ans: C	
+
+
+30.	Which of the following categories do AOL and MSN belong to?
+A.	Internet service providers
+B.	Online service providers
+C.	Backbone providers
+D.	Web browsing providers
+Ans: B	
+
+31.	The web browser that integrates seamlessly with Microsoft Office applications is:
+A.	Netscape.
+B.	Opera.
+C.	Internet Explorer.
+D.	Lynx.
+Ans: C	
+
+
+32.	Free access to AOL’s Instant Messenger is provided along with the web browser:
+A.	Netscape.
+B.	Opera.
+C.	Internet Explorer.
+D.	Lynx.
+Ans: A	
+
+
+33.	In the URL http://www.prenhall.com, the portion labeled http is the:
+A.	host.
+B.	domain name.
+C.	protocol.
+D.	top-level domain.
+Ans: C	
+
+34.	In the URL http://www.prenhall.com, the portion labeled .com is the:
+A.	host.
+B.	domain name.
+C.	protocol.
+D.	top-level domain.
+Ans: D	
+
+
+35.	The set of rules that establish how documents should be interpreted when transmitted over the Internet is 
+called a(n):
+A.	ISP.
+B.	protocol.
+C.	domain.
+D.	hyperlink.
+Ans: B	
+
+
+36.	A hyperlink can be identified in a web page because it usually is:
+A.	preceded with the text http://.
+B.	blinking or highlighted.
+C.	shown as a URL in the text.
+D.	underlined and blue in color.
+Ans: D	
+
+
+37.	The web sites that a user has recently accessed from a given browser is stored in the browser’s:
+A.	breadcrumb list.
+B.	history list.
+C.	recent sites list.
+D.	hyperlink list.
+Ans: B	
+
+
+38.	Yahoo! is an example of a:
+A.	web browser.
+B.	search engine.
+C.	crawler.
+D.	subject directory.
+Ans: D	
+
+
+39.	The purpose of a spider is to:
+A.	find web sites that have changed since the user’s last search.
+B.	serve as a storage facility for indexed web sites.
+C.	trace through hyperlink paths to read and collect web pages.
+D.	help to narrow or expand a search for a user.
+Ans: C	
+
+
+40.	Which of the following Boolean keywords or symbols will result in narrowing (rather than expanding) the 
+list of items found in a search?
+A.	AND
+B.	OR
+C.	*
+D.	+
+Ans: A	
+
+
+41.	Which of the following methods of web searching involves starting with major categories, then narrowing 
+in on successively more specific subcategories until finding a list of specific web sites?
+A.	Search engines
+B.	Boolean operations
+C.	Subject directories
+D.	History lists
+Ans: C	
+
+
+42.	Plagiarism becomes a copyright violation if:
+A.	you cite your sources.
+B.	you plagiarize for economic gain.
+C.	you use plagiarized material to cheat on a term paper.
+D.	you use plagiarized material in a PowerPoint presentation.
+Ans: B	
+
+43.	Which of the following Internet-based communication methods is most similar to conducting a private
+telephone conversation with a single person?
+A.	E-mail
+B.	Chat room
+C.	Instant messaging
+D.	Newsgroup
+Ans: C	
+
+44.	Which of the following is NOT an advantage of web-based e-mail accounts over client-based e-mail 
+accounts?
+A.	Lower cost
+B.	Higher storage capacity
+C.	Accessibility when traveling
+D.	Availability via browsers
+Ans: B	
+
+
+45.	The filtering feature of many client-based e-mail systems enables the user to:
+A.	prevent all forms of pornography.
+B.	prevent children from accessing inappropriate web sites.
+C.	reduce exposure to unwanted spam mail. 
+D.	maintain lists of contacts to allow sending of group e-mail messages.
+Ans: C	
+
+
+46.	An online auction house like eBay falls into the ____________ category of e-commerce.
+A.	B2B
+B.	B2C
+C.	C2B
+D.	C2C
+Ans: D	
+
+47.	Online retail web sites such as Amazon.com fall into the ___________ category of e-commerce.
+A.	B2B
+B.	B2C
+C.	C2B
+D.	C2C
+Ans: B	
+
+
+48.	When a company uses the web to conduct business with its supplier, this falls into the ____________ 
+category of e-commerce.
+A.	B2B
+B.	B2C
+C.	C2B
+D.	C2C
+Ans: A	
+
+
+49.	Which of the following statements about a cookie is FALSE?
+A.	It provides convenience to a user by saving him or her the effort of retyping information into web 
+forms.
+B.	It has the potential to provide companies with information you don’t want to share.
+C.	It is stored in a company’s database at its web site.
+D.	It will not contain any virus or worm that could harm your computer.
+Ans: C	
+
+50.	The advantage of streaming audio or video is that it:
+A.	makes it easier to store audio and video files after downloading them.
+B.	speeds up the download process by compressing files.
+C.	automatically imports the plug-ins required for listening or viewing the files.
+D.	allows users to listen or view during the download process.
+Ans: D	
+
+

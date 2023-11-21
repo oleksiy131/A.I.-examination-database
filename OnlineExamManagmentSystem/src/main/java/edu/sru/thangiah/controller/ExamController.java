@@ -1,6 +1,7 @@
 package edu.sru.thangiah.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +37,7 @@ import edu.sru.thangiah.domain.ExamResult;
 import edu.sru.thangiah.domain.ExamSubmission;
 import edu.sru.thangiah.domain.ExamSubmissionEntity;
 import edu.sru.thangiah.domain.Question;
+import edu.sru.thangiah.model.Roles;
 import edu.sru.thangiah.model.User;
 import edu.sru.thangiah.repository.ExamRepository;
 import edu.sru.thangiah.repository.ExamSubmissionRepository;
@@ -406,37 +408,56 @@ public class ExamController {
 
 
     @PostMapping("/submit/{id}")
-    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model) {
+    public String submitExam(@PathVariable Long id, @RequestParam Map<String, String> formParams, Model model, Principal principal, Authentication authentication) {
         Exam exam = examService.getExamById(id);
 
         if (exam != null) {
             Map<Long, String> userAnswers = extractUserAnswers(formParams);
+            List<String> userAnswersList = new ArrayList<>(userAnswers.values());
+            int totalScore = calculateTotalScore(exam, userAnswers);
 
-            int totalScore = 0;
+           // int totalScore = 0;
             List<ExamQuestionDisplay> displayQuestions = new ArrayList<>();
 
             for (ExamQuestion question : exam.getQuestions()) {
                 String userAnswer = userAnswers.get(question.getId());
                 String userAnswerText = getAnswerText(question, userAnswer);
+                            
+                // Determine the user's role and add it to the model
+                String userRole = determineUserRole(principal.getName());
+                model.addAttribute("userRole", userRole);
 
                 ExamQuestionDisplay displayQuestion = new ExamQuestionDisplay();
                 displayQuestion.setId(question.getId());
                 displayQuestion.setQuestionText(question.getQuestionText());
                 displayQuestion.setUserAnswer(userAnswerText);
-                displayQuestion.setCorrectAnswerText(getCorrectAnswerText(question));
-                
+                displayQuestion.setCorrectAnswerText(question.getCorrectAnswerText());
+                            
                 if (question.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                     totalScore++;
                 } else {
-                    displayQuestions.add(displayQuestion); 
+                    displayQuestions.add(displayQuestion); // Add only incorrect questions
                 }
             }
+            
+         // Save the exam submission
+            ExamSubmission examSubmission = new ExamSubmission(); 
+            examSubmission.setExamId(id); // Make sure you set the exam ID here as well
+            examSubmission.setAnswers(userAnswersList);
+            examSubmission.setScore(totalScore);
+            
+            // Obtain the user ID. This should be the actual logged-in user's ID.
+            Long userId = getUserIdFromAuthentication(authentication);
+            
+            // Call the method to save the exam submission
+            saveExamSubmission(examSubmission, userId);
 
             model.addAttribute("score", totalScore);
             model.addAttribute("totalQuestions", exam.getQuestions().size());
             model.addAttribute("incorrectQuestions", displayQuestions);
+            
 
-            return "showScore"; // Thymeleaf template to display the score and answers
+            return "showScore"; 
         } else {
             model.addAttribute("message", "Exam not found.");
             return "error"; // Error page template
@@ -483,6 +504,22 @@ public class ExamController {
             default:
                 return "Invalid Option";
         }
+    }
+    
+    private String determineUserRole(String username) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            for (Roles role : user.getRoles()) {
+                if ("STUDENT".equals(role.getName())) {
+                    return "STUDENT";
+                } else if ("INSTRUCTOR".equals(role.getName())) {
+                    return "INSTRUCTOR";
+                }
+                // Add more role checks if needed
+            }
+        }
+        return "UNKNOWN"; // Default or unknown role
     }
 
 

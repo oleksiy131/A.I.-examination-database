@@ -1,0 +1,397 @@
+1. The standard computer keyboard is configured using the ____________ layout.
+A. Dvorak
+B. QWERTY
+C. control
+D. dot-matrix
+Ans: B	
+
+
+2. The most commonly used keys in the Dvorak keyboard layout are located in the:
+A. far right area of the keyboard.
+B. top row.
+C. middle row.
+D. function key area.
+Ans: C	
+
+
+3. On computers using Microsoft Windows XP, holding the Windows key down and pressing the letter E will: 
+A. start Windows Explorer.
+B. display the Start menu.
+C. execute Microsoft Windows.
+D. run Windows Help.
+Ans: A	
+
+30. A bracket, a crosshair, and an arrow are all ways that this can display.
+A. Function keys
+B. Text cursor
+C. Mouse cursor
+D. Numeric keys
+Ans: C
+
+4. 
+The insert, caps lock, and num lock keys are all examples of ____________ keys.
+A. control
+B. function
+C. toggle
+D. shortcut
+Ans: C	
+
+31. Which of the following is not one of the basic mouse operations?
+A. Triple click
+B. Drag
+C. Right click
+D. Left click
+Ans: A
+
+5. The copy, cut, and paste features use keyboard shortcuts with the ____________ key and a keyboard letter.
+A. Shift
+B. Windows
+C. Alt
+D. Ctrl
+Ans: D	
+
+
+82. This type of monitor uses a variety of technologies, the most common being LCD.
+A. RGB
+B. Passive
+C. Flat-panel
+D. Presentation
+Ans: C
+
+74. This is an addressable point on the screen.
+A. Pitch
+B. Dot pitch
+C. Bit
+D. Pixel
+Ans: D
+
+
+32. The function of this mouse operation varies between software packages, but it is often used to call up a menu of options related to the current activity.
+A. Left click
+B. Right click
+C. Double-click
+D. Drag
+Ans: B
+
+33. At this time, this remains the most popular point-and-draw device.
+A. Trackpoint
+B. Trackpad
+C. Digitizer tablet
+D. Mouse
+Ans: D
+
+
+7. The traditional mouse requires a mouse pad to provide friction for its:
+A. touchpad.
+B. tracker.
+C. optical sensor.
+D. rollerball.
+Ans: D	
+
+
+8. The standard input device for a PDA is a:
+A. stylus.
+B. touch pad.
+C. keyboard.
+D. trackball mouse.
+Ans: A	
+
+9. The flicker effect of a cathode ray tube is controlled by its:
+A. resolution.
+B. refresh rate.
+C. dot pitch.
+D. data transfer rate.
+Ans: B	
+
+
+10. A monitor with high dot pitch will have:
+A. a relatively large number of pixels.
+B. a high number of possible colors in its display.
+C. wide gaps between pixels.
+D. relatively fast recharging of the pixels’ illumination.
+Ans: C	
+
+
+11. The larger the number of pixels of a computer monitor, the higher its:
+A. resolution.
+B. refresh rate.
+C. dot pitch.
+D. data transfer rate.
+Ans: A	
+
+
+12. The maximum complete electron scans of current CRT monitors is ____________ times per second.
+A. 25
+B. 50
+C. 75
+D. 100
+Ans: C	
+
+
+13. Electron beam scanning is a characteristic of:
+A. laser printers.
+B. flat panel monitors.
+C. cathode ray tubes.
+D. liquid crystal display.
+Ans: C	
+
+14. The type of output device that utilizes a fluorescent panel for generating light waves is a(n):
+A. CRT monitor.
+B. inkjet printer.
+C. laser printer.
+D. LCD monitor.
+Ans: D	
+
+
+15. The main advantage of active matrix over passive matrix technology is that active matrix panels:
+A. have higher screen resolution.
+B. can selectively recharge individual pixels.
+C. cost less than passive matrix panels.
+D. require less power consumption than passive matrix panels.
+Ans: B		
+
+
+16. The following are all advantages of LCD over CRT monitors EXCEPT:
+A. wider viewing area relative to size of the monitor.
+B. less likely to cause eyestrain.
+C. more friendly to the environment.
+D. wider viewing angle.
+Ans: D	
+
+
+17. The fastest and quietest type of printer is a(n):
+A. dot-matrix printer.
+B. inkjet printer.
+C. laser printer.
+D. plotter.
+Ans: C	
+
+
+18. The type of large printer that can most accurately produce images requiring precise, continuous lines is a(n):
+A. plotter.
+B. inkjet printer.
+C. laser printer.
+D. dot-matrix printer.
+Ans: A	
+
+
+19. Which of the following printers is characterized by melting wax-based ink onto ordinary paper?
+A. Dot-matrix
+B. Inkjet
+C. Laser
+D. Thermal
+Ans: D	
+
+
+20. A laser printer works by:
+A. removing static electrical charge from a metal drum.
+B. utilizing drop-on-demand technology.
+C. striking the paper with hammer-like keys.
+D. a process called direct-thermal printing.
+Ans: A	
+
+21. The principle advantage of adding memory to a printer is to increase:
+A. resolution.
+B. print speed.
+C. number of colors in output.
+D. dpi.
+Ans: B	
+
+
+22. The resolution of a printer is measured in terms of:
+A. pixel density.
+B. dot pitch.
+C. hertz.
+D. dpi.
+Ans: D	
+
+
+23. The box that contains the central electronic components of a computer as well as its power source and main storage devices is called the:
+A. CPU.
+B. motherboard.
+C. system unit.
+D. module.
+Ans: C	
+
+
+24. Many computers include a restart button on the front panel; pressing it will cause the system to perform a:
+A. cold boot.
+B. warm boot.
+C. power down.
+D. system abort.
+Ans: B	
+
+
+25. The power-saving mode that allows the computer to be restarted by simply pressing a key on the keyboard is called:
+A. standby.
+B. warm boot.
+C. power management.
+D. cold boot.
+Ans: A	
+
+
+26. Which of the following types of drives will be housed in an internal drive bay?
+A. Hard drive
+B. Floppy drive
+C. Zip drive
+D. CD-ROM drive
+Ans: A	
+
+
+27. If you want to use your computer for creating digital movies, it is best to include a:
+A. CD-ROM drive.
+B. DVD drive.
+C. CD-RW drive.
+D. DVD+RW drive.
+Ans: D	
+
+28. 
+Which of the following is most similar in function and purpose to a floppy disk drive?
+A. CD-ROM drive
+B. Zip drive
+C. Hard disk drive
+D. Flash drive
+
+
+
+29. Which of the following ports is most likely to be used for connecting a printer to your computer?
+A. Serial
+B. Parallel
+C. Ethernet
+D. FireWire
+Ans: B	
+
+
+30. What type of port sends data one bit at a time?
+A. Serial
+B. Parallel
+C. USB
+D. FireWire
+Ans: A	
+
+
+31. A standard phone jack can be inserted into a(n) ____________ port.
+A. Ethernet
+B. USB
+C. FireWire
+D. modem
+Ans: D	
+
+
+
+32. A network interface card is used in conjunction with a(n):
+A. modem port.
+B. Ethernet port.
+C. parallel port.
+D. USB port.
+Ans: B	
+
+
+33. Expansion cards plug into slots on the:
+A. motherboard.
+B. CPU.
+C. system unit.
+D. drive bay.
+Ans: A	
+
+
+34. The ____________ controls the functions of the hardware and executes software instructions.
+A. motherboard
+B. central processing unit
+C. system execution chip
+D. RAM chip
+Ans: B	
+
+
+35. Which of the following is considered to be volatile storage?
+A. Hard disk storage
+B. Flash memory
+C. Read only memory
+D. Random access memory
+Ans: D	
+
+
+
+36. The time that it takes the CPU to transfer an instruction or a piece of data from RAM is a few: 
+A. picoseconds.
+B. milliseconds.
+C. microseconds.
+D. nanoseconds.
+Ans: D	
+
+
+37. The instructions that a computer needs in order to start up are located in: 
+A. the hard drive.
+B. RAM.
+C. ROM.
+D. flash memory.
+Ans: C	
+
+
+38. The purpose of a video card is to provide a connection between the computer and a(n): 
+A. DVD drive.
+B. external VCR.
+C. monitor.
+D. digital camera.
+Ans: C	
+
+
+39. Storage capacities in the hundreds of gigabytes are characteristic of: 
+A. random access memory.
+B. hard disk drives.
+C. Zip drives.
+D. flash memory.
+Ans: B	
+
+
+40. 
+According to OSHA, the number of U.S. workers suffering from musculoskeletal disorders from computer use each year is approximately: 
+A. 500,000.
+B. 1,000,000.
+C. 2,000,000.
+D. 10,000,000.
+Ans: C	
+
+
+41. The acronym that refers to injuries that can result from excessive typing on computer keyboards is: 
+A. DPI.
+B. ERA.
+C. BPS.
+D. RSI.
+Ans: D	
+
+
+42. Which of the following actions is NOT conducive to proper ergonomic computer use? 
+A. Placing the monitor 20–50 degrees below your line of site
+B. Typing at the keyboard with a 20-degree bend of the wrist
+C. Making sure no light is directly shining onto the computer screen
+D. Typing with the forearms parallel to the floor
+Ans: B	
+
+
+43. The acronym OLED refers to a: 
+A. new type of output display technology.
+B. technique for ergonomic enhancement.
+C. high-speed processing chip.
+D. high-capacity non-volatile storage device.
+Ans: A	
+
+
+44. 
+The type of computer screen that you can unroll when you need it and roll back up to store it uses what kind of material for producing light? 
+A. Liquid crystals
+B. Magnesium oxide
+C. Organic compounds
+D. Fluorescent film
+Ans: C	
+
+
+45. A(n) ____________ display is a display that is lighter than an LCD display, retains its image after the power is turned off, and may, in the future, be common in mobile computing devices. 
+A. standby
+B. FOLED
+C. active matrix
+D. bistable
+Ans: D	
+
+
+

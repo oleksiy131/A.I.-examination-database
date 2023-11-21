@@ -1,0 +1,63 @@
+17.  The AutoSum button () can sum cells in a column, but not a row.
+a.	True
+b.	False
+Ans: B
+
+18.  You can use the mouse to change the height of a row.
+a.	True
+b.	False
+Ans: A
+
+
+19.  You can change the width of multiple columns at the same time.
+a.	True
+b.	False
+Ans: A
+
+
+20.  You enter a function using parentheses instead of an equal sign.
+a.	True
+b.	False
+Ans: B
+
+
+21.  You can select a Currency style for worksheet values using the Formatting toolbar or the Format, Cells command.
+a.	True
+b.	False
+Ans: A
+
+
+22.  You can select whether or not to print the gridlines on a worksheet.
+a.	True
+b.	False
+Ans: A
+
+
+23.  Excel adjusts the height of a row automatically when you make changes to the font sizes used in that row.
+a.	True
+b.	False 
+Ans: B
+
+
+24.  As you type information into a cell, the cell pointer automatically moves to the next cell to the right when you press . 
+a.	True
+b.	False 
+Ans: B
+
+
+25.  In spellcheck, if a word is spelled correctly and not frequently used, click the Add button to add it to the custom dictionary. 
+a.	True
+b.	False 
+Ans: A
+
+
+26.  To enter the SUM function into a cell, you can type the expression or click the AutoSum button. 
+a.	True
+b.	False 
+Ans: A
+
+
+28. You can rotate text in a cell to any angle or orientation. 
+a.	True
+b.	False
+Ans: A

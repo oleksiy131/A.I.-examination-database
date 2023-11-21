@@ -6,6 +6,10 @@ import java.util.List;
 public class CourseGradeDTO {
     private String courseName;
     private List<ExamGradeDTO> examGrades = new ArrayList<>();
+    
+    private Integer totalScore = 0;
+    private Integer totalPossibleScore = 0;
+    private Double percentage = 0.0;
 
    
 
@@ -42,4 +46,57 @@ public class CourseGradeDTO {
     public void addExamGrade(ExamGradeDTO examGrade) {
         this.examGrades.add(examGrade);
     }
+    
+    // Call this method to update the total score and percentage after adding all exam grades
+    public void calculateTotalScoreAndPercentage() {
+        for (ExamGradeDTO examGrade : examGrades) {
+            if (examGrade.getScore() != null) {
+                totalScore += examGrade.getScore();
+                totalPossibleScore += examGrade.getTotalQuestions();
+            }
+        }
+        if (totalPossibleScore > 0) {
+            percentage = (double) totalScore / totalPossibleScore * 100;
+        }
+    }
+
+
+
+	public Integer getTotalScore() {
+		return totalScore;
+	}
+
+
+
+	public void setTotalScore(Integer totalScore) {
+		this.totalScore = totalScore;
+	}
+
+
+
+	public Integer getTotalPossibleScore() {
+		return totalPossibleScore;
+	}
+
+
+
+	public void setTotalPossibleScore(Integer totalPossibleScore) {
+		this.totalPossibleScore = totalPossibleScore;
+	}
+
+
+
+	public Double getPercentage() {
+		return percentage;
+	}
+
+
+
+	public void setPercentage(Double percentage) {
+		this.percentage = percentage;
+	}
+    
+    
+
+    
 }

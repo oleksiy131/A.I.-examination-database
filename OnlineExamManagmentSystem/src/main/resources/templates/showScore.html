@@ -105,9 +105,12 @@
         <p>Congratulations! You answered all questions correctly.</p>
     </div>
 
-    <div class="footer">
-        <a th:if="${userRole == 'INSTRUCTOR'}" href="/instructor/instructor_homepage">Return to Instructor Homepage</a>
-        <a th:if="${userRole == 'STUDENT'}" href="/student/course/student_homepage">Return to Student Homepage</a>
-    </div>
+<div class="footer">
+    <form th:action="@{${userRole == 'INSTRUCTOR' ? '/instructor/instructor_homepage' : (userRole == 'STUDENT' ? '/student/course/student_homepage' : '#')}}"
+          method="get">
+        <button type="submit">Return to Homepage</button>
+    </form>
+</div>
+
 </body>
 </html>
