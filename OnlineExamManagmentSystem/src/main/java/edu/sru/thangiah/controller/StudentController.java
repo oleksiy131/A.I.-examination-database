@@ -2,7 +2,10 @@ package edu.sru.thangiah.controller;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -220,6 +223,9 @@ public class StudentController
 
 	    // Initialize a formatter
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	    
+        Map<Long, Boolean> examTakenMap = new HashMap<>();
+
 
 	    // retrieve the Course entities and their exams
 	    for (Course course : studentCourses) {
@@ -228,8 +234,12 @@ public class StudentController
 
 	        // Format the start time for each exam
 	        for (Exam exam : examsForCourse) {
-	            // Check if the exam has a startTime to avoid NullPointerException
-	            if (exam.getStartTime() != null) {
+	        	
+	         // If a submission exists, mark the exam as taken
+	            boolean hasTaken = examSubmissionRepository.existsByUser_IdAndExam_Id(student.getUser().getId(), exam.getId());
+	            examTakenMap.put(exam.getId(), hasTaken);
+
+	            if (exam.getStartTime() != null && !hasTaken) {
 	                String formattedStartTime = exam.getStartTime().format(formatter);
 	                exam.setFormattedStartTime(formattedStartTime); // Assuming there's a setter for formattedStartTime in the Exam class
 	            }
@@ -237,10 +247,13 @@ public class StudentController
 
 	        // Set the exams (with formatted start times) back to the course
 	        course.setExams(examsForCourse); // Assuming you have setExams in your Course class
+
 	    }
 
 	    // add the list of courses (with their formatted exams) to the model for rendering in the view
 	    model.addAttribute("courses", studentCourses);
+        model.addAttribute("examTakenMap", examTakenMap);
+
 
 	    return "sv-course-list";
 	}
