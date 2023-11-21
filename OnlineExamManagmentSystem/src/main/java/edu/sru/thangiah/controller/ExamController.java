@@ -117,7 +117,11 @@ public class ExamController {
     
     @GetMapping("/submissions")
     public String viewExamSubmissions(Model model) {
-        model.addAttribute("submissions", examSubmissionRepository.findAll());
+    	List<ExamSubmissionEntity> submissions = examSubmissionRepository.findAll();
+        submissions.forEach(submission -> {
+            submission.getExam().getQuestions().size(); 
+        });
+        model.addAttribute("submissions", submissions);
         return "examSubmissions"; 
     }
     
