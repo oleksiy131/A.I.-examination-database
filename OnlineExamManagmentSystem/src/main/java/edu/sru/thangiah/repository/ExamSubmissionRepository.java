@@ -15,4 +15,6 @@ public interface ExamSubmissionRepository extends JpaRepository<ExamSubmissionEn
     
     long countByExam(Exam exam);
 
+    boolean existsByUser_IdAndExam_Id(Long userId, Long examId);
+
 }
