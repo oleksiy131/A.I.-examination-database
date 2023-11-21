@@ -101,6 +101,8 @@ $(function(){
                 <th>Scores</th>
                 <th>Percentage</th>
                 <th>Letter Grades</th>
+                <th>Overall Score</th>
+                
             </tr>
         </thead>
         <tbody>
@@ -133,6 +135,7 @@ $(function(){
                             th:text="${examGrade.getLetterGrade()}">Letter Grade Placeholder</li>
                     </ul>
                 </td>
+                <td th:text="${courseGrade.percentage} + '%'">Overall Score Placeholder</td>
             </tr>
         </tbody>
     </table>

@@ -301,7 +301,8 @@ public class StudentController
 	                     // Add the ExamGradeDTO to the courseGrade
 	                     courseGrade.addExamGrade(examGradeDTO);
 	                }
-
+	                
+	                courseGrade.calculateTotalScoreAndPercentage();
 	                courseGrades.add(courseGrade);
 	            }
 	        }
