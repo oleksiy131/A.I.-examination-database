@@ -388,7 +388,7 @@ public class ExamController {
         return "error"; // The name of the error view template
     }
 
-    @GetMapping("/exam/{id}/link")
+    @GetMapping("/{id}/link")
     public String generateExamLink(@PathVariable Long id, Model model) {
         // Get the exam details from the database using the provided id
         Exam exam = examRepository.findById(id).orElse(null);
