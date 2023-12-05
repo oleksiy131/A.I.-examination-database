@@ -1,4 +1,4 @@
-```markdown
+
 # A.I. University Exam Generation System
 
 This repository contains the source code for a University Exam Generation System. The system is designed to streamline the process of creating and managing exams, including question selection, exam generation, and export functionalities.
@@ -14,7 +14,7 @@ This repository contains the source code for a University Exam Generation System
 ## Installation
 
 To set up the project locally, follow these steps:
-```
+
 1. Clone the repository
 2. Navigate to the project directory:
    ```bash
