@@ -14,7 +14,7 @@ This repository contains the source code for a University Exam Generation System
 ## Installation
 
 To set up the project locally, follow these steps:
-
+```
 1. Clone the repository
 2. Navigate to the project directory:
    ```bash
@@ -71,5 +71,4 @@ For any queries, you can reach out to me.
 
 Thank you for checking out our project!
 
-```
 ```
